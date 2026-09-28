@@ -31,6 +31,19 @@ const POI_COLOR: Record<string, string> = {
 };
 
 export function installImages(map: MLMap) {
+  // figure decorative del modellino (non rappresentano presenze reali)
+  const DRESS = ['#8a6d4c', '#3f7f93', '#b94a5a', '#6f8f4e', '#d9a441', '#7c5e9a'];
+  for (let k = 0; k < 6; k++) {
+    const { c, g } = canvas(20, 40);
+    const r = rng(101 + k);
+    g.fillStyle = 'rgba(43,42,39,0.18)'; g.beginPath(); g.ellipse(10, 37, 6, 2, 0, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#3b3a37'; g.fillRect(6.5, 26, 2.6, 10); g.fillRect(10.9, 26, 2.6, 10);
+    g.fillStyle = DRESS[k]; g.beginPath(); g.moveTo(4.5, 27); g.lineTo(15.5, 27); g.lineTo(14, 13); g.lineTo(6, 13); g.closePath(); g.fill();
+    g.strokeStyle = '#2b2a27'; g.lineWidth = 1.2; g.stroke();
+    g.fillStyle = ['#f0cfa8', '#c99a6b', '#8d5a3b'][Math.floor(r() * 3)]; g.beginPath(); g.arc(10, 8.5, 4.3, 0, Math.PI * 2); g.fill(); g.stroke();
+    if (k % 3 === 1) { g.fillStyle = '#e9d8b4'; g.fillRect(5, 3.4, 10, 2.2); g.strokeRect(5, 3.4, 10, 2.2); }
+    add(map, `npc-${k}`, c, 2);
+  }
   // grana della carta
   {
     const { c, g } = canvas(128, 128);

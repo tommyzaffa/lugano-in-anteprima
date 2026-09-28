@@ -16,14 +16,14 @@ Separato da ciò che è già implementato (in fondo).
 
 8. ~~Terreno swisstopo swissALTI3D~~ — fatto (`npm run data:terrain-ch`). Resta: zoom 15–16 del terreno per il dettaglio in città.
 9. **Densità del catalogo**: più luoghi fuori dal centro (Pregassona, Canobbio, Davesco-Soragno, Muzzano, Melide), attività stagionali, laboratori, impianti sportivi; foto con diritti chiari.
-10. **Sentieri**: dati SchweizMobil/Wanderland (se riutilizzabili) per durate ufficiali e condizioni; segnaletica gialla/bianco-rosso-bianco sulla mappa.
+10. **Sentieri**: colori della segnaletica sulla mappa fatti (da sac_scale OSM, con legenda); restano i dati SchweizMobil/Wanderland (se riutilizzabili) per durate ufficiali e condizioni.
 11. ~~Rotte dei battelli da OSM~~ — fatto (69 tratte su 70). Resta: confronto con i dati di percorso SNL, se resi disponibili.
 12. **Lingue**: inglese e tedesco completi (dizionari e contenuti del catalogo).
 13. **Accessibilità**: dati di accessibilità delle fermate (BAV/SBB) e degli ingressi — il meccanismo c'è (`data/catalog/stop-access.yaml`, oggi con la stazione di Melide, fonte ufficiale); servono i dati completi delle FFS/UFT; percorsi per sedia a rotelle con pendenze misurate.
 14. ~~Vista eventi sulla mappa~~ — fatto: segnaposti, filtri per giorno e categoria, ricerca, giornata costruita attorno a un evento.
 15. ~~Voto degli amici con proposta in testa e commenti brevi~~ — fatto (nome facoltativo, commento ≤ 140 caratteri visibile a chi ha il link, riepilogo per chi l'ha creato). Resta: moderazione dei commenti da parte del creatore.
 16. **Modalità «siamo già qui» nella simulazione**: ricalcolo da posizione GPS reale e ora attuale durante l'uscita, non solo dal modulo.
-17. **Personaggi**: più pose e animazioni (seduti al ristorante, foto al belvedere) e folla decorativa dichiarata.
+17. ~~Pose dei personaggi e folla decorativa dichiarata~~ — fatto (tavolo, macchina fotografica, visita, relax; figure fisse nelle piazze, dichiarate decorative). Resta: animazioni più ricche.
 
 ## P3 — fase successiva
 

@@ -158,6 +158,9 @@ export default function MapView({ onFallback }: Props) {
       map.addLayer({ id: 'places-landmark', type: 'symbol', source: 'places', minzoom: 11.5, filter: ['has', 'landmark'], layout: { 'icon-image': ['concat', 'lm-', ['get', 'landmark']], 'icon-size': ['interpolate', ['linear'], ['zoom'], 11.5, 0.35, 14, 0.6, 17, 0.9], 'icon-anchor': 'bottom', 'icon-allow-overlap': true, 'icon-ignore-placement': true, 'symbol-sort-key': 1 } });
       map.addLayer({ id: 'places-dot', type: 'symbol', source: 'places', minzoom: 12.5, filter: ['!', ['has', 'landmark']], layout: { 'icon-image': ['get', 'icon'], 'icon-size': ['interpolate', ['linear'], ['zoom'], 12.5, 0.55, 16, 0.9], 'icon-allow-overlap': true, 'icon-ignore-placement': true } });
       map.addLayer({ id: 'places-label', type: 'symbol', source: 'places', minzoom: 13, layout: { 'text-field': ['get', 'name'], 'text-font': ['Open Sans Semibold'], 'text-size': ['interpolate', ['linear'], ['zoom'], 13, 10.5, 17, 13.5], 'text-offset': [0, 0.9], 'text-anchor': 'top', 'text-max-width': 9, 'text-optional': true }, paint: { 'text-color': '#3b2a1f', 'text-halo-color': '#fbf6ea', 'text-halo-width': 1.8 } });
+      // figure decorative del modellino: poche, fisse, uguali a ogni ora (non sono presenze reali)
+      map.addSource('npc', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+      map.addLayer({ id: 'npc', type: 'symbol', source: 'npc', minzoom: 16, layout: { 'icon-image': ['get', 'icon'], 'icon-size': ['interpolate', ['linear'], ['zoom'], 16, 0.8, 18, 1.3, 19.5, 1.9], 'icon-anchor': 'bottom', 'icon-allow-overlap': true, 'icon-ignore-placement': true }, paint: { 'icon-opacity': ['interpolate', ['linear'], ['zoom'], 16, 0, 16.5, 0.85] } });
       // POI OSM non curati (esplorazione)
       map.addSource('osm-pois', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       map.addLayer({ id: 'osm-pois', type: 'symbol', source: 'osm-pois', minzoom: 14, layout: { 'icon-image': ['concat', 'poi-', ['get', 'cls']], 'icon-size': 0.7, 'text-field': ['get', 'name'], 'text-font': ['Open Sans Italic'], 'text-size': 10, 'text-offset': [0, 1], 'text-anchor': 'top', 'text-optional': true }, paint: { 'text-color': '#5d574c', 'text-halo-color': '#fbf6ea', 'text-halo-width': 1.2 } });
@@ -190,6 +193,7 @@ export default function MapView({ onFallback }: Props) {
           type: 'FeatureCollection',
           features: res.places.map((p) => ({ type: 'Feature', properties: { id: p.id, name: p.name.replace(/\s*\(.*?\)\s*/g, ''), icon: placeIconFor(p.category), ...(landmarkFor(p.id, p.category) ? { landmark: landmarkFor(p.id, p.category) } : {}) }, geometry: { type: 'Point', coordinates: [p.lon, p.lat] } })),
         });
+        (map.getSource('npc') as GeoJSONSource).setData(decorativeCrowd(res.places));
       } catch (e) { useApp.getState().notify('Luoghi del catalogo non disponibili: la mappa resta esplorabile.', 'error'); }
       setReady(true);
     });
@@ -339,7 +343,7 @@ export default function MapView({ onFallback }: Props) {
     const markers = people.map((person, i) => {
       const el = document.createElement('div');
       el.className = 'character';
-      el.innerHTML = `${avatarSvg(person, 36)}<div class="bubble" hidden></div><div class="name">${escapeHtml(person.name)}</div>`;
+      el.innerHTML = `${avatarSvg(person, 36)}<div class="prop" aria-hidden="true"></div><div class="bubble" hidden></div><div class="name">${escapeHtml(person.name)}</div>`;
       el.setAttribute('role', 'img');
       el.setAttribute('aria-label', `Personaggio: ${person.name}`);
       el.dataset.name = person.name;
@@ -379,12 +383,22 @@ export default function MapView({ onFallback }: Props) {
     m.groupEl.style.display = !riding && aggregated ? '' : 'none';
     if (!riding && aggregated) m.group.setLngLat(st.position);
     const now = Date.now();
+    // posa durante l'attività: dipende dal tipo di tappa (solo presentazione, nessun dato inventato)
+    const stop = st.scene === 'activity' && st.stopIndex != null ? planRef.current?.stops[st.stopIndex] : null;
+    const pose = !stop || moving ? '' : poseFor(stop.category);
     m.people.forEach((mk, i) => {
       const el = m.els[i];
       const visible = !riding && !aggregated;
       el.style.display = visible ? '' : 'none';
       if (!visible) return;
       mk.setLngLat(st.position);
+      if (el.dataset.pose !== pose) {
+        el.dataset.pose = pose;
+        const prop = el.querySelector('.prop') as HTMLElement;
+        // un solo oggetto di scena per gruppo (tavolo, macchina fotografica, ombrellone), sul primo personaggio
+        prop.innerHTML = pose && i === 0 ? propSvg(pose) : '';
+        el.classList.toggle('posing', !!pose);
+      }
       el.classList.toggle('walking', moving && !reduced && useSim.getState().playing);
       el.classList.toggle('flip', Math.cos(((st.bearing - 90) * Math.PI) / 180) < 0);
       const b = bubbles.find((x) => x.speaker === el.dataset.name && x.until > now);
@@ -392,6 +406,45 @@ export default function MapView({ onFallback }: Props) {
       if (b && useApp.getState().settings.dialogues) { bub.hidden = false; if (bub.textContent !== b.text) bub.textContent = b.text; } else bub.hidden = true;
     });
   }
+}
+
+/**
+ * Figure decorative attorno a piazze, parchi e borghi del catalogo: posizioni pseudo-casuali ma
+ * deterministiche (dipendono solo dall'identificativo del luogo), mai legate all'ora o all'affluenza.
+ */
+function decorativeCrowd(places: { id: string; category: string; lon: number; lat: number; entrance?: { lon: number; lat: number } }[]): GeoJSON.FeatureCollection {
+  const features: GeoJSON.Feature[] = [];
+  for (const p of places) {
+    if (!(['park', 'playground', 'market', 'village'].includes(p.category) || ['piazza-riforma', 'via-nassa'].includes(p.id))) continue;
+    let h = 0;
+    for (const ch of p.id) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+    const rnd = () => { h = (h * 1103515245 + 12345) >>> 0; return (h >>> 8) / 16777216; };
+    const n = 3 + Math.floor(rnd() * 3);
+    const c = p.entrance ?? p;
+    for (let i = 0; i < n; i++) {
+      const a = rnd() * Math.PI * 2, d = 5 + rnd() * 13; // metri
+      features.push({ type: 'Feature', properties: { icon: `npc-${Math.floor(rnd() * 6)}` }, geometry: { type: 'Point', coordinates: [c.lon + (Math.cos(a) * d) / 77300, c.lat + (Math.sin(a) * d) / 111200] } });
+    }
+  }
+  return { type: 'FeatureCollection', features };
+}
+
+function poseFor(category: string): string {
+  if (['restaurant', 'cafe', 'bar', 'gelato'].includes(category)) return 'eat';
+  if (['viewpoint', 'summit', 'lift'].includes(category)) return 'photo';
+  if (['museum', 'culture', 'church', 'show', 'workshop'].includes(category)) return 'visit';
+  if (['park', 'lido', 'playground', 'village'].includes(category)) return 'rest';
+  return '';
+}
+
+/** Piccoli oggetti di scena disegnati accanto al gruppo durante le attività. */
+function propSvg(pose: string): string {
+  const s = 'stroke="#2b2a27" stroke-width="1.6" stroke-linejoin="round"';
+  if (pose === 'eat') return `<svg viewBox="0 0 40 26" width="40" height="26"><ellipse cx="20" cy="9" rx="17" ry="6" fill="#fbf6ea" ${s}/><path d="M8 11 L8 24 M32 11 L32 24" ${s}/><circle cx="14" cy="8" r="2.4" fill="#fff" ${s}/><path d="M24 4 h4 v5 h-4z" fill="#c8643c" ${s}/></svg>`;
+  if (pose === 'photo') return `<svg viewBox="0 0 26 20" width="26" height="20"><rect x="2" y="5" width="22" height="13" rx="2.5" fill="#3b3a37" ${s}/><rect x="8" y="2" width="8" height="4" rx="1" fill="#3b3a37" ${s}/><circle cx="13" cy="11.5" r="4.2" fill="#9fc3cf" ${s}/><circle cx="20.5" cy="8" r="1.2" fill="#fbf6ea"/></svg>`;
+  if (pose === 'visit') return `<svg viewBox="0 0 26 24" width="26" height="24"><rect x="2" y="2" width="22" height="17" fill="#e9d8b4" ${s}/><rect x="5" y="5" width="16" height="11" fill="#9fc3cf" ${s}/><path d="M5 16 L11 10 L15 13 L21 7 L21 16Z" fill="#6f8f4e"/><path d="M13 19 v4" ${s}/></svg>`;
+  if (pose === 'rest') return `<svg viewBox="0 0 34 30" width="34" height="30"><path d="M3 12 Q17 0 31 12Z" fill="#c8643c" ${s}/><path d="M9 12 Q17 6 25 12" fill="none" stroke="#fbf6ea" stroke-width="2"/><path d="M17 12 V29" ${s}/></svg>`;
+  return '';
 }
 
 function formation(i: number, n: number): [number, number] {
