@@ -70,7 +70,8 @@ export function buildPlan(ctx: PlanContext, data: DataStore, steps: PlannedStep[
       if (arrival > c.fixedStart - 3 * 60_000) return { problem: { code: 'late_event', stepIndex: i, message: `Arrivo alle ${hhmm(arrival)}: troppo tardi per ${c.event?.title} delle ${hhmm(c.fixedStart)}` } };
       start = c.fixedStart; end = c.fixedEnd!;
       checks.push({ id: 'event', label: 'Evento', status: c.occ?.timeCertain ? 'ok' : 'uncertain', detail: `${c.event?.title}: ${hhmm(c.fixedStart)}–${hhmm(c.fixedEnd!)}${c.occ?.timeCertain ? '' : ' (orario non confermato)'}` });
-      checks.push({ id: 'demo', label: 'Dato dimostrativo', status: 'uncertain', detail: 'Evento di esempio (fixture): non rappresenta l\'agenda reale.' });
+      if (c.event?.demo) checks.push({ id: 'demo', label: 'Dato dimostrativo', status: 'uncertain', detail: 'Evento di esempio (fixture): non rappresenta l\'agenda reale.' });
+      else if (c.event?.url) checks.push({ id: 'source', label: 'Fonte', status: 'ok', detail: `Calendario ufficiale Lugano Eventi: ${c.event.url}` });
     } else {
       const sched = c.place.schedules.find((s) => s.kind === 'public');
       if (sched) {

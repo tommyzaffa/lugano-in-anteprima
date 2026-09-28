@@ -18,8 +18,9 @@ services:
     envVars:
       - key: ADMIN_TOKEN
         generateValue: true
+      # previsioni reali, gratuite e senza chiave (Open-Meteo, uso non commerciale)
       - key: WEATHER_PROVIDER
-        value: demo
+        value: open-meteo
       - key: AI_PROVIDER
         value: none
       # CPU ridotta: più margine prima di interrompere una pianificazione

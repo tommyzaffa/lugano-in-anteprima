@@ -7,7 +7,7 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import { DataStore } from '../src/server/data.ts';
 import { openDb } from '../src/server/db.ts';
 import { createApi } from '../src/server/api.ts';
-import { ensureAdminToken } from '../src/server/config.ts';
+import { ensureAdminToken, config } from '../src/server/config.ts';
 import { planAlternatives } from '../src/server/planner/index.ts';
 import { GroupRequest, type Plan } from '../src/shared/types.ts';
 
@@ -15,6 +15,8 @@ const av = { color: '#c0392b', accent: '#fff', hat: 'none', accessory: 'none', h
 let app: ReturnType<typeof createApi>;
 let alts: Plan[];
 beforeAll(async () => {
+  // funzione disattivata di default: qui si verifica il comportamento quando viene riattivata
+  config.sharing = true;
   const data = new DataStore(); data.load();
   app = createApi(data, openDb(':memory:'));
   const r = await planAlternatives(GroupRequest.parse({
@@ -31,6 +33,15 @@ const json = (method: string, path: string, body?: unknown, headers: Record<stri
   app.request(path, { method, headers: { 'Content-Type': 'application/json', ...headers }, body: body ? JSON.stringify(body) : undefined });
 
 describe('salvataggio e condivisione', () => {
+  it('disattivati di default: l\'API rifiuta salvataggi, programmi e link condivisi', async () => {
+    config.sharing = false;
+    try {
+      expect((await json('POST', '/api/plans', { title: 'x', data: {} })).status).toBe(404);
+      expect((await app.request('/api/plans/abc')).status).toBe(404);
+      expect((await app.request('/api/share/abc')).status).toBe(404);
+      expect((await (await app.request('/api/meta')).json()).features).toEqual({ sharing: false });
+    } finally { config.sharing = true; }
+  });
   it('link condiviso oscurato, voto con commento ripulito, revoca', async () => {
     const saved = await (await json('POST', '/api/plans', { title: 'Sabato', data: { alternatives: alts, current: alts[0], branches: [] } })).json();
     expect(saved.id).toBeTruthy();

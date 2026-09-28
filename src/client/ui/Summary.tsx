@@ -16,6 +16,7 @@ import type { Plan } from '../../shared/types.ts';
 interface Reval { checkedAt: string; status: string; expired: boolean; items: { severity: string; stopId?: string; message: string }[] }
 
 export default function Summary({ planOverride, readOnly }: { planOverride?: Plan; readOnly?: boolean }) {
+  const sharing = useApp((s) => !!s.meta?.features?.sharing);
   const current = useApp((s) => s.plan());
   const plan = planOverride ?? current;
   const set = useApp((s) => s.set);
@@ -54,8 +55,8 @@ export default function Summary({ planOverride, readOnly }: { planOverride?: Pla
         <button className="btn-ghost" onClick={() => copy(planToText(plan))}>Copia testo</button>
         <button className="btn-ghost" onClick={() => void makePostcard(plan)}>Cartolina</button>
         {!readOnly ? <>
-          <button className="btn-ghost" onClick={() => void savePlan()}>Salva</button>
-          <button className="btn-ghost" onClick={() => setShare(true)}>Condividi</button>
+          {sharing ? <button className="btn-ghost" onClick={() => void savePlan()}>Salva</button> : null}
+          {sharing ? <button className="btn-ghost" onClick={() => setShare(true)}>Condividi</button> : null}
           <button className="btn-ghost" onClick={() => set({ view: 'sim' })}>Torna alla simulazione</button>
         </> : null}
       </div>

@@ -214,6 +214,10 @@ export const CatalogEvent = z.object({
     label: z.string().optional(),
   })).default([]),
   suitability: z.object({ occasions: z.array(Occasion).default([]), minAge: z.number().optional(), indoor: z.boolean().default(false), noise: z.enum(['quiet', 'moderate', 'loud', 'unknown']).default('unknown'), alcohol: z.enum(['none', 'available', 'central']).default('none') }).default({ occasions: [], indoor: false, noise: 'unknown', alcohol: 'none' }),
+  /** mostra o esposizione di lunga durata: visitabile negli orari della sede, senza appuntamenti */
+  ongoing: z.object({ from: YMD, to: YMD }).optional(),
+  /** scheda ufficiale dell'evento */
+  url: z.string().optional(),
   demo: z.boolean().default(false),
   evidence: z.array(Evidence).default([]),
 });

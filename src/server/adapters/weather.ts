@@ -49,7 +49,7 @@ export const openMeteo: WeatherProvider = {
     url.searchParams.set('timezone', 'Europe/Zurich');
     url.searchParams.set('start_date', date);
     url.searchParams.set('end_date', target.plus({ days: 1 }).toFormat('yyyy-MM-dd'));
-    const res = await fetch(url, { signal: AbortSignal.timeout(6000) });
+    const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
     if (!res.ok) throw new Error(`Open-Meteo ${res.status}`);
     const j: any = await res.json();
     const h = j.hourly ?? {};
@@ -60,7 +60,8 @@ export const openMeteo: WeatherProvider = {
       precipProb: h.precipitation_probability?.[i] ?? null,
       code: h.weather_code?.[i] ?? null,
     }));
-    const rainHours = hours.filter((x: any) => (x.precipProb ?? 0) >= 60 || (x.precipMm ?? 0) >= 1).length;
+    // sintesi della sola giornata richiesta (la previsione comprende anche il giorno dopo, per le serate oltre mezzanotte)
+    const rainHours = hours.filter((x: any) => x.time.startsWith(date) && ((x.precipProb ?? 0) >= 60 || (x.precipMm ?? 0) >= 1)).length;
     return {
       source: 'Open-Meteo (modelli MeteoSvizzera ICON-CH e globali)', status: 'live', fetchedAt: new Date().toISOString(), horizonDays: HORIZON_DAYS, hours,
       summary: rainHours ? `Possibile pioggia (${rainHours} ore con probabilità elevata)` : 'Nessuna pioggia significativa prevista',

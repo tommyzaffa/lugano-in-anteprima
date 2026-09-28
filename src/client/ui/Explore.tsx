@@ -154,7 +154,7 @@ export function EventsView() {
       <div className="seg" role="tablist">
         {([['today', 'Oggi'], ['tomorrow', 'Domani'], ['week', 'Settimana']] as const).map(([k, v]) => <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{v}</button>)}
       </div>
-      <div className="notice demo"><Badge kind="demo">DEMO</Badge> {data?.notice ?? 'Calendario dimostrativo.'}</div>
+      {data?.demo === false ? <div className="notice">{data.notice}</div> : <div className="notice demo"><Badge kind="demo">DEMO</Badge> {data?.notice ?? 'Calendario dimostrativo.'}</div>}
       <input type="search" placeholder="Cerca per titolo, luogo o descrizione…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Cerca negli eventi" />
       {categories.length > 1 ? <div className="chips">{categories.map((c) => <Chip key={c} on={cats.includes(c)} onClick={() => setCats((x) => x.includes(c) ? x.filter((y) => y !== c) : [...x, c])}>{EVENT_CAT[c] ?? c}</Chip>)}</div> : null}
       <label className="check"><input type="checkbox" checked={showOff} onChange={(e) => setShowOff(e.target.checked)} /> Mostra anche annullati, rinviati ed esauriti</label>
@@ -168,7 +168,7 @@ export function EventsView() {
                 <strong>{o.title}</strong> {o.status !== 'scheduled' ? <Badge kind="bad">{({ cancelled: 'annullato', sold_out: 'esaurito', postponed: 'rinviato' } as any)[o.status]}</Badge> : null}
                 <div className="muted">{EVENT_CAT[o.category] ?? o.category ?? ''}{o.placeName ? ` · ${o.placeName}` : ''}{o.note ? ` · ${o.note}` : ''}</div>
                 <div className="row wrap">
-                  <button className="link" onClick={() => set({ placeCard: o.placeId })}>Scheda del luogo</button>
+                  {o.url ? <a className="link" href={o.url} target="_blank" rel="noopener noreferrer">Scheda ufficiale</a> : <button className="link" onClick={() => set({ placeCard: o.placeId })}>Scheda del luogo</button>}
                   {o.status === 'scheduled' && Date.parse(o.start) > Date.now() ? <button className="link" onClick={() => planWith(o)}>Organizza una giornata con questo evento</button> : null}
                 </div>
               </div>

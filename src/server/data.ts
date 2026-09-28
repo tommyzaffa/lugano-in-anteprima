@@ -6,7 +6,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { DateTime } from 'luxon';
-import { Place, CatalogEvent, type Source, type EventOccurrence, type Evidence } from '../shared/types.ts';
+import { Place, CatalogEvent, Source, type EventOccurrence, type Evidence } from '../shared/types.ts';
 import { expandEvent } from '../shared/calendar.ts';
 import { Graph } from './routing/graph.ts';
 import { TransitNetwork } from './routing/transit.ts';
@@ -16,6 +16,14 @@ import { createHash } from 'node:crypto';
 
 /** Impronta stabile del dato di base di un luogo (per rilevare conflitti con le modifiche editoriali). */
 export function baseHash(p: unknown): string { return createHash('sha1').update(JSON.stringify(p)).digest('hex').slice(0, 12); }
+
+/**
+ * Origine degli eventi: «live» = calendario ufficiale importato (data/build/events-live.json),
+ * «demo» = fixture dimostrative del catalogo, «auto» = live se disponibile, altrimenti demo.
+ * EVENTS_SOURCE imposta il valore predefinito (i test unitari usano le fixture).
+ */
+export type EventsMode = 'auto' | 'live' | 'demo';
+export interface EventsSource { kind: 'live' | 'demo'; name: string; url?: string; fetchedAt?: string; windowTo?: string }
 
 export interface ExplorePoi { osm: string; cls: string; name: string; lon: number; lat: number; openingHours: string | null; website: string | null; wheelchair: string | null; cuisine: string | null }
 
@@ -39,8 +47,13 @@ export class DataStore {
   transit!: TransitNetwork;
   loadedAt = '';
   loadMs = 0;
+  eventsSource: EventsSource = { kind: 'demo', name: 'Fixture dimostrative' };
+  private eventsMode: EventsMode;
 
-  constructor(dir = 'data') { this.dir = dir; }
+  constructor(dir = 'data', opts: { events?: EventsMode } = {}) {
+    this.dir = dir;
+    this.eventsMode = opts.events ?? (process.env.EVENTS_SOURCE as EventsMode | undefined) ?? 'auto';
+  }
 
   load(db?: Db) {
     const t0 = Date.now();
@@ -51,6 +64,22 @@ export class DataStore {
     this.sources = cat.sources;
     this.basePlaces = cat.places.map((p: unknown) => Place.parse(p));
     this.baseEvents = cat.events.map((e: unknown) => CatalogEvent.parse(e));
+    this.eventsSource = { kind: 'demo', name: 'Fixture dimostrative' };
+    const liveFile = join(this.dir, 'build/events-live.json');
+    if (this.eventsMode !== 'demo' && existsSync(liveFile)) {
+      const live = read('build/events-live.json');
+      if (live.events?.length) {
+        // eventi reali: sostituiscono le fixture; le sedi nuove entrano come luoghi «solo tramite evento»
+        this.basePlaces.push(...live.venues.map((v: unknown) => Place.parse(v)));
+        this.baseEvents = live.events.map((e: unknown) => CatalogEvent.parse(e));
+        this.sources = [...this.sources.filter((s) => s.id !== live.source.id), Source.parse({
+          id: live.source.id, name: live.source.name, kind: 'official_site', url: live.source.url, license: live.source.license, reuse: 'restricted',
+          freshnessHours: { events: 48 }, acquiredAt: live.source.fetchedAt, note: `Calendario importato il ${live.source.fetchedAt.slice(0, 10)}, eventi fino al ${live.source.windowTo}. Ogni evento rimanda alla scheda ufficiale.`,
+        })];
+        this.eventsSource = { kind: 'live', name: live.source.name, url: live.source.url, fetchedAt: live.source.fetchedAt, windowTo: live.source.windowTo };
+      }
+    }
+    if (this.eventsMode === 'live' && this.eventsSource.kind !== 'live') throw new Error('Eventi reali richiesti ma data/build/events-live.json non è disponibile');
     const ex = read('build/explore.json');
     this.explore = ex.pois;
     this.amenities = ex.amenities;

@@ -2,6 +2,7 @@
  * Contesto di pianificazione: richiesta normalizzata, finestra temporale,
  * vincoli rigidi e preferenze, opzioni di viaggio e punti di partenza/arrivo.
  */
+import { weatherWindow } from '../../shared/weather.ts';
 import type { GroupRequest, LegPoint, WeatherSnapshot } from '../../shared/types.ts';
 import { requestWindow } from '../../shared/time.ts';
 import { budgetCap } from '../../shared/pricing.ts';
@@ -65,7 +66,8 @@ export function buildContext(req: GroupRequest, hints: TextHints, weather: Weath
   const dusk = new Date(w.start.toMillis());
   const duskAt = w.start.set({ hour: Math.floor(duskHour), minute: (duskHour % 1) * 60 }).toMillis();
   void dusk;
-  const rainLikely = !!weather && weather.status === 'live' && weather.hours.some((h) => (h.precipProb ?? 0) >= 60 || (h.precipMm ?? 0) >= 1);
+  // solo le ore del programma contano (la previsione scaricata copre due giorni)
+  const rainLikely = weather?.status === 'live' && (weatherWindow(weather, w.start.toMillis(), w.end.toMillis())?.rainHours ?? 0) > 0;
   return {
     req, hints,
     start: w.start.toMillis(), end: w.end.toMillis(), crossesMidnight: w.crossesMidnight,

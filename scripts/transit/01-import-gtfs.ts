@@ -188,7 +188,7 @@ async function main() {
   const out = {
     source: {
       name: 'Orario ufficiale svizzero GTFS (opentransportdata.swiss)',
-      url: 'https://data.opentransportdata.swiss/en/dataset/timetable-2026-gtfs2020',
+      url: `https://data.opentransportdata.swiss/en/dataset/${process.env.GTFS_DATASET ?? 'timetable-2026-gtfs2020'}`,
       license: 'Termini d\'uso opentransportdata.swiss (riutilizzo consentito con indicazione della fonte)',
       feedVersion: feedInfo.feed_version, feedStart: feedInfo.feed_start_date, feedEnd: feedInfo.feed_end_date,
       publisher: feedInfo.feed_publisher_name,

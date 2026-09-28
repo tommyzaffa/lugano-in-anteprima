@@ -16,7 +16,8 @@ export default defineConfig({
     trace: 'retain-on-failure',
   },
   webServer: {
-    command: `npm run build && ADMIN_TOKEN=e2e-admin-token DB_PATH=data/db/e2e.sqlite PORT=${PORT} npm start`,
+    // meteo ed eventi dimostrativi: i test non dipendono dalla rete né dal calendario del giorno
+    command: `npm run build && ADMIN_TOKEN=e2e-admin-token WEATHER_PROVIDER=demo EVENTS_SOURCE=demo DB_PATH=data/db/e2e.sqlite PORT=${PORT} npm start`,
     url: `http://127.0.0.1:${PORT}/api/health`,
     reuseExistingServer: false,
     timeout: 180_000,

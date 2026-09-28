@@ -53,6 +53,13 @@ export function createApi(data: DataStore, db: Db) {
     c.header('Referrer-Policy', 'no-referrer');
   });
 
+  // salvataggi e condivisione: disattivati per scelta (SAVE_AND_SHARE=true per riattivarli)
+  const sharingOff = async (c: Context, next: () => Promise<void>) => {
+    if (!config.sharing) return c.json({ error: 'disabled', message: 'Salvataggio e condivisione non sono attivi in questa versione.' }, 404);
+    await next();
+  };
+  for (const p of ['/api/plans', '/api/plans/*', '/api/share/*']) app.use(p, sharingOff);
+
   app.onError((err, c) => {
     console.error('[api]', err);
     return c.json({ error: 'internal', message: 'Errore interno del server.' }, 500);
@@ -69,7 +76,8 @@ export function createApi(data: DataStore, db: Db) {
     catalogVersion: data.catalogVersion,
     transit: { feedVersion: data.transit.feedVersion, range: data.transit.feedRange, source: data.transit.d.source.name },
     sources: data.sources,
-    integrations: integrations(),
+    integrations: integrations(data.eventsSource),
+    events: data.eventsSource,
     maxPeople: MAX_PEOPLE,
     demoMode: config.demoMode,
     ai: aiStatus(),
@@ -77,6 +85,7 @@ export function createApi(data: DataStore, db: Db) {
     today: DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd'),
     quickStarts: quickStarts(data),
     hosting: { ephemeralStorage: config.ephemeralStorage },
+    features: { sharing: config.sharing },
   }));
 
   // ---------------------------------------------------------------- catalogo ed esplorazione
@@ -88,7 +97,7 @@ export function createApi(data: DataStore, db: Db) {
     if ((from && !DateTime.fromISO(from, { zone: TZ }).isValid) || (to && !DateTime.fromISO(to, { zone: TZ }).isValid)) return badDate(c);
     const f = from ? DateTime.fromISO(from, { zone: TZ }) : null;
     const t = to ? DateTime.fromISO(to, { zone: TZ }) : null;
-    const places = [...data.places.values()].map((p) => {
+    const places = [...data.places.values()].filter((p) => !p.tags.includes('sede-eventi')).map((p) => {
       const pub = p.schedules.find((s) => s.kind === 'public');
       let openDuring: 'open' | 'closed' | 'unknown' = 'unknown';
       if (pub && f && t) {
@@ -134,11 +143,26 @@ export function createApi(data: DataStore, db: Db) {
     const from = DateTime.fromISO(qf ?? DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd'), { zone: TZ }).startOf('day');
     const qdays = Number(c.req.query('days') ?? 7);
     const days = Number.isFinite(qdays) ? Math.max(0, Math.min(31, Math.floor(qdays))) : 7;
-    const occ = data.occurrences(from, from.plus({ days }).endOf('day')).map((o) => {
+    const to = from.plus({ days }).endOf('day');
+    const occ = data.occurrences(from, to).map((o) => {
       const pl = data.place(o.placeId);
-      return { ...o, placeName: pl?.name, lon: pl?.entrance.lon ?? pl?.lon, lat: pl?.entrance.lat ?? pl?.lat, category: data.events.get(o.eventId)?.category, description: data.events.get(o.eventId)?.description };
+      const ev = data.events.get(o.eventId);
+      return { ...o, placeName: pl?.name, lon: pl?.entrance.lon ?? pl?.lon, lat: pl?.entrance.lat ?? pl?.lat, category: ev?.category, description: ev?.description, url: ev?.url, free: ev?.prices.some((p) => p.unit === 'free') ?? false };
     });
-    return c.json({ from: from.toFormat('yyyy-MM-dd'), days, demo: true, notice: 'Calendario dimostrativo: fixture di esempio, non è l\'agenda reale di Lugano.', occurrences: occ });
+    // mostre ed esposizioni in corso nel periodo (senza appuntamenti: orari della sede)
+    const a = from.toFormat('yyyy-MM-dd'), b = to.toFormat('yyyy-MM-dd');
+    const ongoing = [...data.events.values()].filter((e) => e.ongoing && e.ongoing.from <= b && e.ongoing.to >= a).map((e) => {
+      const pl = data.place(e.placeId);
+      return { eventId: e.id, title: e.title, placeId: e.placeId, placeName: pl?.name, lon: pl?.entrance.lon ?? pl?.lon, lat: pl?.entrance.lat ?? pl?.lat, from: e.ongoing!.from, to: e.ongoing!.to, category: e.category, description: e.description, url: e.url };
+    }).sort((x, y) => x.to.localeCompare(y.to));
+    const src = data.eventsSource;
+    return c.json({
+      from: a, days, demo: src.kind === 'demo', source: src,
+      notice: src.kind === 'live'
+        ? `Eventi dal calendario ufficiale ${src.name}, aggiornato il ${src.fetchedAt?.slice(0, 10)}. Prima di andare verificate sulla scheda ufficiale.`
+        : 'Calendario dimostrativo: fixture di esempio, non è l\'agenda reale di Lugano.',
+      occurrences: occ, ongoing,
+    });
   });
 
   app.get('/api/stops', (c) => {
@@ -373,7 +397,7 @@ export function createApi(data: DataStore, db: Db) {
       priceStatus: statusCount((p) => (p.prices.some((x) => x.status === 'unknown') ? 'unknown' : p.prices.every((x) => x.status === 'known') ? 'known' : 'estimate')),
       accessStatus: statusCount((p) => p.accessibility.evidence.status),
       stale: places.flatMap((p) => p.evidence.filter((e) => data.isStale(e, 'general')).map((e) => ({ id: p.id, field: e.field }))),
-      sources: data.sources, sourceHealth: db.sourceHealth(), integrations: integrations(),
+      sources: data.sources, sourceHealth: db.sourceHealth(), integrations: integrations(data.eventsSource),
       reportsOpen: db.listReports('open').length,
       conflicts: data.conflicts,
     });

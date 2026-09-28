@@ -4,7 +4,7 @@ async function waitMap(page: Page) {
   await page.waitForFunction(() => { const c = document.querySelector('.maplibregl-canvas') as HTMLCanvasElement | null; return !!c && c.width > 0; }, null, { timeout: 30_000 });
 }
 
-test('flusso principale: modulo → proposte → simulazione → decisione → riepilogo → salvataggio → condivisione revocabile', async ({ page, browser }) => {
+test('flusso principale: modulo → proposte → simulazione → decisione → riepilogo → esportazioni', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByText('Racconta la giornata che vuoi vivere')).toBeVisible();
   await expect(page.locator('.demo-pill')).toContainText('DEMO');
@@ -48,31 +48,11 @@ test('flusso principale: modulo → proposte → simulazione → decisione → r
   // piano B per la pioggia: alternative al coperto o spiegazione che non servono
   await page.getByRole('button', { name: /Prepara le alternative al coperto/ }).click();
   await expect(page.locator('.planb-list, .planb p.muted')).toBeVisible({ timeout: 15_000 });
-  // salvataggio e condivisione
-  await page.locator('.summary-actions').getByRole('button', { name: 'Salva', exact: true }).click();
-  await expect(page.locator('.toast')).toContainText('salvato');
-  await expect(page).toHaveURL(/\/p\/[\w-]+#k=/);
-  await page.locator('.summary-actions').getByRole('button', { name: 'Condividi', exact: true }).click();
-  await page.getByRole('button', { name: 'Crea link' }).click();
-  const link = await page.locator('.share-link input').inputValue();
-  expect(link).toMatch(/\/s\/[\w-]+$/);
-  // il link condiviso non contiene la partenza se nascosta
-  const other = await browser.newPage();
-  await other.goto(link);
-  await expect(other.locator('.share-view')).toBeVisible();
-  await other.getByLabel('Nome (facoltativo)').fill('Sara');
-  await other.getByLabel('Commento breve (facoltativo)').fill('Questa mi piace, rientro comodo');
-  await other.locator('.share-view .alt-card').first().getByRole('button', { name: /Voto/ }).click();
-  await expect(other.locator('.toast')).toContainText('Voto registrato');
-  await expect(other.locator('.share-view .alt-card').first()).toContainText('in testa');
-  await expect(other.locator('.vote-comment').first()).toContainText('rientro comodo');
-  await expect(other.locator('.vote-comment').first()).toContainText('Sara');
-  await expect(other.getByRole('button', { name: 'Il vostro voto (1)' })).toBeVisible();
-  // revoca
-  await page.locator('.share-list').getByRole('button', { name: 'revoca' }).first().click();
-  await expect(page.locator('.toast')).toContainText('revocato');
-  await other.reload();
-  await expect(other.getByText('revocato')).toBeVisible();
+  // salvataggio e condivisione disattivati: restano le esportazioni sul dispositivo
+  await expect(page.locator('.summary-actions').getByRole('button', { name: 'Salva', exact: true })).toHaveCount(0);
+  await expect(page.locator('.summary-actions').getByRole('button', { name: 'Condividi', exact: true })).toHaveCount(0);
+  await expect(page.locator('.summary-actions').getByRole('button', { name: /calendario/ })).toBeVisible();
+  expect((await page.request.post('/api/plans', { data: { title: 'x', data: {} } })).status()).toBe(404);
 });
 
 test('modulo manuale: 3 persone generano 3 personaggi; oltre 12 persone il limite è spiegato', async ({ page }) => {

@@ -1,0 +1,91 @@
+# Aggiornamento automatico dei dati: nessun intervento manuale.
+# Ogni aggiornamento è pubblicato solo se il controllo dei dati (tests/data-smoke.test.ts) passa;
+# il commit su main fa ripartire il deploy su Render. In caso di errore GitHub avvisa via email
+# e il sito resta con i dati precedenti.
+name: Aggiornamento dati
+
+on:
+  schedule:
+    - cron: '17 4 * * *'        # ogni giorno: eventi
+    - cron: '37 4 * * 1'        # ogni lunedì: orario dei mezzi (scaricato solo se serve)
+    - cron: '7 3 2 1,4,7,10 *'  # ogni trimestre: mappa OpenStreetMap e dati derivati
+  workflow_dispatch:
+    inputs:
+      compito:
+        description: Cosa aggiornare
+        type: choice
+        options: [eventi, orario, mappa, sonda]
+        default: eventi
+      forza:
+        description: Forza lo scaricamento anche se i dati sembrano aggiornati
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: aggiornamento-dati
+  cancel-in-progress: false
+
+jobs:
+  aggiorna:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Compito
+        id: compito
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then c="${{ inputs.compito }}"
+          elif [ "${{ github.event.schedule }}" = "37 4 * * 1" ]; then c=orario
+          elif [ "${{ github.event.schedule }}" = "7 3 2 1,4,7,10 *" ]; then c=mappa
+          else c=eventi; fi
+          echo "c=$c" >> "$GITHUB_OUTPUT"
+          echo "Compito: $c"
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci --no-audit --no-fund
+
+      - name: Sonda delle fonti (solo log)
+        if: steps.compito.outputs.c == 'sonda'
+        run: npm run data:probe
+
+      - name: Eventi
+        if: steps.compito.outputs.c == 'eventi'
+        run: npm run data:events
+
+      - name: Orario dei mezzi
+        if: steps.compito.outputs.c == 'orario'
+        env:
+          FORCE: ${{ inputs.forza && '1' || '0' }}
+        run: npm run data:gtfs-auto
+
+      - name: Mappa OpenStreetMap
+        if: steps.compito.outputs.c == 'mappa'
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq osmium-tool
+          npm run data:osm
+          npm run data:build
+          npm run data:diff || true
+
+      - name: Controllo dei dati
+        if: steps.compito.outputs.c != 'sonda'
+        run: npx vitest run tests/data-smoke.test.ts
+
+      - name: Pubblica
+        if: steps.compito.outputs.c != 'sonda'
+        run: |
+          git config user.name "Aggiornamento dati"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A data public
+          if git diff --cached --quiet; then echo "Nessuna modifica da pubblicare."; exit 0; fi
+          git diff --cached --stat | tail -5
+          git commit -q -m "Dati: aggiornamento automatico (${{ steps.compito.outputs.c }}, $(date -u +%F))"
+          for i in 1 2 3; do git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0; sleep $((i * 10)); done
+          exit 1

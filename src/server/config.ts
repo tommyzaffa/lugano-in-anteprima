@@ -31,6 +31,8 @@ export const config = {
   allowIndexing: env('ALLOW_INDEXING') === 'true',
   /** Disco non persistente (es. piano gratuito di Render): salvataggi e link condivisi possono sparire a ogni riavvio. */
   ephemeralStorage: env('EPHEMERAL_STORAGE') === 'true',
+  /** Salvataggio sul server, link condivisi e voto degli amici: disattivati salvo SAVE_AND_SHARE=true. */
+  sharing: env('SAVE_AND_SHARE') === 'true',
   dataDir: env('DATA_DIR', 'data')!,
   dbPath: env('DB_PATH', 'data/db/lugano.sqlite')!,
   adminToken: env('ADMIN_TOKEN'),
@@ -45,7 +47,8 @@ export const config = {
     dailyTokenBudget: num('AI_DAILY_TOKEN_BUDGET', 400000),
   },
   weather: {
-    provider: env('WEATHER_PROVIDER', 'demo') as 'open-meteo' | 'demo' | 'none',
+    // previsioni reali di default (gratuite, senza chiave); senza rete lo stato è «non disponibile», mai inventato
+    provider: env('WEATHER_PROVIDER', 'open-meteo') as 'open-meteo' | 'demo' | 'none',
     openMeteoUrl: env('OPEN_METEO_URL', 'https://api.open-meteo.com/v1/forecast'),
   },
   transitLive: {

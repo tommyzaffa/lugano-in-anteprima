@@ -84,7 +84,7 @@ export default function Home() {
       </div>
       <div className="home-links">
         <button className="link" onClick={() => set({ view: 'events' })}>Eventi: oggi, domani, settimana</button>
-        {saved.length ? <button className="link" onClick={() => set({ view: 'saved' })}>Programmi salvati ({saved.length})</button> : null}
+        {saved.length && meta?.features?.sharing ? <button className="link" onClick={() => set({ view: 'saved' })}>Programmi salvati ({saved.length})</button> : null}
         <button className="link" onClick={() => set({ view: 'about' })}>Dati, fonti e limiti</button>
       </div>
       {meta ? (

@@ -35,10 +35,11 @@ export async function savePlan(): Promise<{ id: string; token: string } | null> 
 export function SaveShareButtons() {
   const [share, setShare] = useState(false);
   const set = useApp((s) => s.set);
+  const sharing = useApp((s) => !!s.meta?.features?.sharing);
   return (
     <div className="save-share">
-      <button className="btn-ghost" onClick={() => void savePlan()}>Salva</button>
-      <button className="btn-ghost" onClick={() => setShare(true)}>Condividi</button>
+      {sharing ? <button className="btn-ghost" onClick={() => void savePlan()}>Salva</button> : null}
+      {sharing ? <button className="btn-ghost" onClick={() => setShare(true)}>Condividi</button> : null}
       <button className="btn-ghost" onClick={() => set({ view: 'summary' })}>Riepilogo pratico</button>
       {share ? <ShareDialog onClose={() => setShare(false)} /> : null}
     </div>

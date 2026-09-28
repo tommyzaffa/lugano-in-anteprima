@@ -80,7 +80,7 @@ export default function App() {
         <nav className="topnav" aria-label="Navigazione principale">
           <button onClick={() => nav('explore')} aria-current={view === 'explore'}>Esplora</button>
           <button onClick={() => nav('events')} aria-current={view === 'events'}>Eventi</button>
-          <button onClick={() => nav('saved')} aria-current={view === 'saved'}>Salvati</button>
+          {meta?.features?.sharing ? <button onClick={() => nav('saved')} aria-current={view === 'saved'}>Salvati</button> : null}
           <button onClick={() => nav('settings')} aria-current={view === 'settings'} aria-label="Impostazioni">⚙︎</button>
         </nav>
       </header>

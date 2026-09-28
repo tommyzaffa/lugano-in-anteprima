@@ -124,6 +124,11 @@ export function selectCandidates(ctx: PlanContext, data: DataStore): CandidateRe
   };
 
   // ------------------------------------------------------------------ luoghi
+  const ongoingAt = new Map<string, string[]>();
+  for (const ev of data.events.values()) {
+    if (!ev.ongoing || ev.ongoing.from > ctx.req.date || ev.ongoing.to < ctx.req.date) continue;
+    ongoingAt.set(ev.placeId, [...(ongoingAt.get(ev.placeId) ?? []), ev.title]);
+  }
   for (const p of data.places.values()) {
     if (p.plannable === 'no') { exclude('non pianificabile', p.id); continue; }
     if (p.plannable === 'events') continue; // entra solo tramite evento
@@ -151,7 +156,12 @@ export function selectCandidates(ctx: PlanContext, data: DataStore): CandidateRe
     const t = sumCosts(costs, ctx.people);
     if (ctx.avoid.has('expensive') && t.perPersonMin > 60) { exclude('troppo costoso', p.id); continue; }
     if (ctx.strictBudget && ctx.cap != null && t.min > ctx.cap) { exclude('supera il budget da solo', p.id); continue; }
-    const { s, reasons } = score(p, p.moods, p.suitability.occasions, p.tags);
+    const scored = score(p, p.moods, p.suitability.occasions, p.tags);
+    const reasons = scored.reasons;
+    let s = scored.s;
+    // mostre ed esposizioni in corso nel luogo (dal calendario): un motivo in più per andarci
+    const shows = ongoingAt.get(p.id);
+    if (shows?.length) { s += ctx.moods.has('cultural') ? 1.5 : 0.6; reasons.push(`In corso: ${shows.slice(0, 2).join(' · ')}`); }
     const stay = stayFor(ctx, p.visit.min, p.visit.typical, p.visit.max);
     const warnings: string[] = [];
     if (!hoursKnown) warnings.push('Orari non disponibili: da verificare prima di andare');
@@ -191,14 +201,14 @@ export function selectCandidates(ctx: PlanContext, data: DataStore): CandidateRe
     const { s, reasons } = score(p, ev.moods, ev.suitability.occasions, ev.tags);
     reasons.unshift(`Evento in programma: ${fmt(s0)}${occ.end ? `–${fmt(e0)}` : ''}${occ.timeCertain ? '' : ' (orario non confermato)'}`);
     const durMin = Math.round((Math.min(e0, ctx.end) - s0) / 60000);
-    const warnings = ['Evento dimostrativo (fixture): non è l\'agenda reale'];
+    const warnings = ev.demo ? ['Evento dimostrativo (fixture): non è l\'agenda reale'] : [];
     if (!occ.timeCertain) warnings.push('Orario dell\'evento non confermato');
     if (t.unknownEssential) warnings.push('Costo non disponibile');
     out.push({
       key: `${ev.id}@${occ.sessionId}`, kind: 'event', place: p, event: ev, occ,
       base: s + 2 - (occ.timeCertain ? 0 : 1.5), stay: { min: Math.min(durMin, 45), typ: durMin, max: durMin },
       fixedStart: s0, fixedEnd: Math.min(e0, ctx.end), prices: ev.prices, costMin: t.min, costMax: t.max, unknownEssential: t.unknownEssential > 0,
-      meal: null, reasons, warnings, dataQuality: 'demo', hoursKnown: occ.timeCertain, indoor: ev.suitability.indoor,
+      meal: null, reasons, warnings, dataQuality: ev.demo ? 'demo' : occ.timeCertain ? 'verified' : 'estimate', hoursKnown: occ.timeCertain, indoor: ev.suitability.indoor,
       mustSee: mustSee.has(ev.id), themes: ['serata', ...(THEME_OF[p.category] ?? [])],
     });
   }

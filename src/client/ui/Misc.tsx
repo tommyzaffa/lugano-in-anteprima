@@ -96,7 +96,7 @@ export function About() {
   return (
     <div className="about">
       <h2>Dati, fonti e limiti</h2>
-      <div className="notice demo">Prototipo dimostrativo, in sviluppo: non è un servizio ufficiale della Città di Lugano né di Lugano Region. Luoghi, strade, sentieri e orari dei mezzi vengono da dati reali; eventi e meteo sono esempi, i prezzi sono stime. L'app non prenota né acquista nulla.{meta.hosting?.ephemeralStorage ? ' In questa demo pubblica i programmi salvati e i link condivisi possono sparire quando il server si riavvia.' : ''}</div>
+      <div className="notice demo">Prototipo dimostrativo, in sviluppo: non è un servizio ufficiale della Città di Lugano né di Lugano Region. Luoghi, strade, sentieri e orari dei mezzi vengono da dati reali; eventi e meteo sono esempi, i prezzi sono stime. L'app non prenota né acquista nulla.{meta.hosting?.ephemeralStorage && meta.features?.sharing ? ' In questa demo pubblica i programmi salvati e i link condivisi possono sparire quando il server si riavvia.' : ''}</div>
       <p>Area coperta: {meta.perimeter.sizeKm.width}×{meta.perimeter.sizeKm.height} km. Include comuni distinti (Lugano, Paradiso, Melide, Massagno, Sorengo, Muzzano, Collina d'Oro, Canobbio e altri) e il confine con l'Italia (Campione d'Italia, Monte Boglia): non sono tutti quartieri del Comune di Lugano.</p>
       <h3>Integrazioni</h3>
       <ul className="integrations">
