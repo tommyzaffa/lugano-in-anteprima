@@ -17,7 +17,7 @@ test('accessibilità: home, modulo, proposte, simulazione, esplora senza violazi
   await page.getByRole('button', { name: 'Torna all\'inizio' }).click();
   await page.getByText('Serata fra amici').click();
   await page.getByRole('button', { name: 'Proponi programmi' }).click();
-  await expect(page.getByRole('heading', { name: /^\d proposte$/ })).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByRole('heading', { name: /^\d propost[ae]$/ })).toBeVisible({ timeout: 60_000 });
   expect(await violations(page)).toEqual([]);
   await page.locator('.alt-card').first().getByRole('button', { name: 'Scegli e simula' }).click();
   await expect(page.locator('.sim-controls')).toBeVisible();
@@ -46,7 +46,7 @@ test('tastiera: si arriva al modulo con Tab, il focus è visibile, i dialoghi si
   await page.getByRole('button', { name: 'Torna all\'inizio' }).click();
   await page.getByText('Serata fra amici').click();
   await page.getByRole('button', { name: 'Proponi programmi' }).click();
-  await expect(page.getByRole('heading', { name: /^\d proposte$/ })).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByRole('heading', { name: /^\d propost[ae]$/ })).toBeVisible({ timeout: 60_000 });
   await page.locator('.alt-card').first().getByRole('button', { name: 'Scegli e simula' }).click();
   await page.getByRole('button', { name: 'Cambia idea…' }).focus();
   await page.keyboard.press('Enter');

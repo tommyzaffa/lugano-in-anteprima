@@ -25,7 +25,7 @@ await audit('modulo riepilogo');
 await page.getByRole('button', { name: 'Torna all\'inizio' }).click();
 await page.getByText('Serata fra amici').click();
 await page.getByRole('button', { name: 'Proponi programmi' }).click();
-await page.getByRole('heading', { name: /^\d proposte$/ }).waitFor({ timeout: 60000 });
+await page.getByRole('heading', { name: /^\d propost[ae]$/ }).waitFor({ timeout: 60000 });
 await audit('proposte');
 await page.locator('.alt-card').first().getByRole('button', { name: 'Scegli e simula' }).click();
 await page.waitForTimeout(1500);

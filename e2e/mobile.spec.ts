@@ -8,7 +8,7 @@ test('telefono e movimento ridotto (scenario L): modulo, confronto, salto e salv
   await page.getByRole('button', { name: 'Torna all\'inizio' }).click();
   await page.getByText('Famiglia con passeggino').click();
   await page.getByRole('button', { name: 'Proponi programmi' }).click();
-  await expect(page.getByRole('heading', { name: /^\d proposte$/ })).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByRole('heading', { name: /^\d propost[ae]$/ })).toBeVisible({ timeout: 60_000 });
   await expect(page.locator('.compare')).toBeAttached();
   await page.locator('.alt-card').first().getByRole('button', { name: 'Scegli e simula' }).click();
   await expect(page.locator('.sim-controls')).toBeVisible();

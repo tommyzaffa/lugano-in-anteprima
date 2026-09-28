@@ -22,7 +22,7 @@ Separato da ciò che è già implementato (in fondo).
 13. **Accessibilità**: dati di accessibilità delle fermate (BAV/SBB) e degli ingressi — il meccanismo c'è (`data/catalog/stop-access.yaml`, oggi con la stazione di Melide, fonte ufficiale); servono i dati completi delle FFS/UFT; percorsi per sedia a rotelle con pendenze misurate.
 14. ~~Vista eventi sulla mappa~~ — fatto: segnaposti, filtri per giorno e categoria, ricerca, giornata costruita attorno a un evento.
 15. ~~Voto degli amici con proposta in testa e commenti brevi~~ — fatto (nome facoltativo, commento ≤ 140 caratteri visibile a chi ha il link, riepilogo per chi l'ha creato). Resta: moderazione dei commenti da parte del creatore.
-16. **Modalità «siamo già qui» nella simulazione**: ricalcolo da posizione GPS reale e ora attuale durante l'uscita, non solo dal modulo.
+16. ~~«Siamo in giro adesso» durante l'uscita~~ — fatto: il giorno del programma, dal riepilogo, si segnano le tappe fatte e si ricalcola il resto dall'ora reale e dalla posizione (solo se concessa).
 17. ~~Pose dei personaggi e folla decorativa dichiarata~~ — fatto (tavolo, macchina fotografica, visita, relax; figure fisse nelle piazze, dichiarate decorative). Resta: animazioni più ricche.
 
 ## P3 — fase successiva

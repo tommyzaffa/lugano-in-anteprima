@@ -25,7 +25,7 @@ const gl = await page.evaluate(() => { const c = document.createElement('canvas'
 await page.getByText('Serata fra amici').click();
 const tp = Date.now();
 await page.getByRole('button', { name: 'Proponi programmi' }).click();
-await page.getByRole('heading', { name: /^\d proposte$/ }).waitFor({ timeout: 60000 });
+await page.getByRole('heading', { name: /^\d propost[ae]$/ }).waitFor({ timeout: 60000 });
 const planMs = Date.now() - tp;
 await page.locator('.alt-card').first().getByRole('button', { name: 'Scegli e simula' }).click();
 await page.waitForTimeout(1500);

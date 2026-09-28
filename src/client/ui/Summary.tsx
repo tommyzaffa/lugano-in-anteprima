@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useApp } from '../store.ts';
-import { hhmm, fmtDuration, formatDateIt } from '../../shared/time.ts';
+import { hhmm, fmtDuration, formatDateIt, localToInstant } from '../../shared/time.ts';
 import { fmtRange } from '../../shared/pricing.ts';
 import { describeDay } from '../../shared/calendar.ts';
 import { planToIcs, planToText } from '../../shared/export.ts';
 import { send, track } from '../api.ts';
+import { runPlanning } from './planning-actions.ts';
 import { download, copy, Badge, EvidenceBadge, Spinner, SourceLink } from './common.tsx';
 import { LegLine, FeasibilityBadge, SourceBadge, TotalsLine } from './PlanDetail.tsx';
 import { savePlan, ShareDialog } from './SaveShare.tsx';
@@ -108,6 +109,7 @@ export default function Summary({ planOverride, readOnly }: { planOverride?: Pla
           <ul className="legs">{ret.legs.filter((l) => l.mode !== 'wait').map((l) => <LegLine key={l.id} leg={l} />)}</ul>
         </div>
       ) : null}
+      {!readOnly ? <OutingNow plan={plan} /> : null}
       <PlanBSection plan={plan} />
       <div className="sources-used">
         <h3>Fonti e limiti</h3>
@@ -120,6 +122,60 @@ export default function Summary({ planOverride, readOnly }: { planOverride?: Pla
         </ul>
       </div>
       {share ? <ShareDialog onClose={() => setShare(false)} /> : null}
+    </div>
+  );
+}
+
+/**
+ * «Siamo in giro adesso»: il giorno dell'uscita, ricalcola il resto del programma dall'ora reale e
+ * dalla posizione (solo se concessa), con le tappe non ancora fatte come obbligatorie.
+ */
+function OutingNow({ plan }: { plan: Plan }) {
+  const meta = useApp((s) => s.meta);
+  const today = meta?.today ?? new Date().toISOString().slice(0, 10);
+  const now = Date.now();
+  const [done, setDone] = useState<Set<string>>(() => new Set(plan.stops.filter((s) => Date.parse(s.end) <= now).map((s) => s.id)));
+  const [busy, setBusy] = useState(false);
+  if (plan.request.date !== today || now > Date.parse(plan.totals.endsAt)) return null;
+  const hhmmNow = (ms: number) => new Intl.DateTimeFormat('it-CH', { timeZone: 'Europe/Zurich', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date(ms));
+  const recompute = async () => {
+    setBusy(true);
+    const remaining = plan.stops.filter((s) => !done.has(s.id));
+    const visited = plan.stops.filter((s) => done.has(s.id));
+    const last = visited[visited.length - 1];
+    const fallback = last ? { kind: 'place' as const, label: `Ultima tappa: ${last.name}`, lon: (last.exit ?? last).lon, lat: (last.exit ?? last).lat, placeId: last.placeId } : plan.request.start;
+    const start = await new Promise<any>((resolve) => {
+      if (!navigator.geolocation) { resolve(fallback); return; }
+      navigator.geolocation.getCurrentPosition(
+        (p) => { track('geolocation_used'); resolve({ kind: 'geolocation', label: 'La mia posizione', lon: p.coords.longitude, lat: p.coords.latitude, sensitive: true }); },
+        () => { useApp.getState().notify(`Posizione non concessa: si riparte da ${fallback.label.replace(/^Ultima tappa: /, '')}.`, 'info'); resolve(fallback); },
+        { enableHighAccuracy: true, timeout: 8000 },
+      );
+    });
+    const startMs = Math.ceil(Date.now() / 300_000) * 300_000;
+    // orari sempre nel fuso di Zurigo, qualunque sia il fuso del dispositivo
+    const endMs = Math.max(localToInstant(today, plan.request.endTime).toMillis(), startMs + 90 * 60_000);
+    const draft = {
+      ...plan.request, date: today, startTime: hhmmNow(startMs), endTime: hhmmNow(Math.min(endMs, localToInstant(today, '23:59').toMillis())), start,
+      mustSee: [...new Set(remaining.map((s) => s.eventId ?? s.placeId).filter(Boolean) as string[])],
+      exclude: [...new Set([...plan.request.exclude, ...visited.map((s) => s.placeId)])],
+      locked: plan.request.locked.filter((l) => remaining.some((s) => s.placeId === l.placeId)),
+      resolutions: {},
+    };
+    useApp.setState({ draft: draft as any });
+    setBusy(false);
+    await runPlanning();
+  };
+  return (
+    <div className="outing-now no-print">
+      <h3>Siamo in giro adesso</h3>
+      <p className="hint">Oggi è il giorno del programma: segnate le tappe già fatte e ricalcolate il resto da dove siete, con l'ora reale. La posizione è usata solo se la concedete; altrimenti si riparte dall'ultima tappa fatta.</p>
+      <ul className="done-list">
+        {plan.stops.map((s) => (
+          <li key={s.id}><label className="check"><input type="checkbox" checked={done.has(s.id)} onChange={(e) => setDone((d) => { const n = new Set(d); if (e.target.checked) n.add(s.id); else n.delete(s.id); return n; })} /> {hhmm(s.start)} {s.name} <span className="muted">{done.has(s.id) ? 'fatta' : 'da fare'}</span></label></li>
+        ))}
+      </ul>
+      <button className="btn" disabled={busy || done.size === plan.stops.length} onClick={() => void recompute()}>{busy ? <Spinner /> : null} Ricalcola il resto da qui</button>
     </div>
   );
 }

@@ -368,6 +368,8 @@ thead th { font-family: var(--serif); }
 .vote-bar { height: 8px; background: var(--paper-2); border-radius: 999px; overflow: hidden; margin: .4rem 0; }
 .vote-bar span { display: block; height: 100%; background: var(--ok); }
 .vote-comment { margin: .35rem 0 0; padding: .3rem .6rem; border-left: 3px solid var(--line); font-size: .9rem; }
+.outing-now { border: 1.5px solid var(--gold); background: #fff8e8; border-radius: 12px; padding: .5rem .8rem; margin: .8rem 0; }
+.done-list { list-style: none; padding: 0; margin: .3rem 0 .6rem; }
 .planb { border: 1.5px dashed #9fc3cf; background: #f1f8fa; border-radius: 12px; padding: .5rem .8rem; margin: .8rem 0; }
 .planb h3 { margin-top: .2rem; }
 .planb-list { padding-left: 1.1rem; }

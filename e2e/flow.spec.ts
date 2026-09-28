@@ -12,7 +12,7 @@ test('flusso principale: modulo → proposte → simulazione → decisione → r
   await page.getByText('Serata fra amici').click();
   await expect(page.getByRole('heading', { name: 'Riepilogo' })).toBeVisible();
   await page.getByRole('button', { name: 'Proponi programmi' }).click();
-  await expect(page.getByRole('heading', { name: /^\d proposte$/ })).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByRole('heading', { name: /^\d propost[ae]$/ })).toBeVisible({ timeout: 60_000 });
   const cards = page.locator('.alt-card');
   expect(await cards.count()).toBeGreaterThanOrEqual(2);
   await expect(page.locator('.compare table')).toBeVisible();
@@ -86,7 +86,7 @@ test('modulo manuale: 3 persone generano 3 personaggi; oltre 12 persone il limit
   await page.getByRole('button', { name: /Culturale/ }).click();
   await page.getByRole('button', { name: 'Salta al riepilogo' }).click();
   await page.getByRole('button', { name: 'Proponi programmi' }).click();
-  await expect(page.getByRole('heading', { name: /^\d proposte$/ })).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByRole('heading', { name: /^\d propost[ae]$/ })).toBeVisible({ timeout: 60_000 });
   await page.locator('.alt-card').first().getByRole('button', { name: 'Scegli e simula' }).click();
   await page.getByRole('button', { name: 'Avvia' }).click();
   await page.waitForTimeout(2500);
@@ -129,7 +129,7 @@ test('eventi: calendario dimostrativo, ricerca, segnaposti e giornata costruita 
   await expect(page.locator('.toast')).toContainText('tappa obbligatoria');
   for (let i = 0; i < 6; i++) { const b = page.getByRole('button', { name: 'Avanti' }); if (await b.count()) await b.click(); }
   await page.getByRole('button', { name: 'Proponi programmi' }).click();
-  await expect(page.getByRole('heading', { name: /^\d proposte$/ })).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByRole('heading', { name: /^\d propost[ae]$/ })).toBeVisible({ timeout: 60_000 });
   for (const card of await page.locator('.alt-card').all()) await expect(card).toContainText(title.replace(' (demo)', ''));
 });
 
@@ -161,9 +161,32 @@ test('senza WebGL: vista semplificata con le stesse informazioni', async ({ page
   await expect(page.getByText('WebGL non è disponibile')).toBeVisible();
   await page.getByText('Due persone fra paesaggio e cultura').click();
   await page.getByRole('button', { name: 'Proponi programmi' }).click();
-  await expect(page.getByRole('heading', { name: /^\d proposte$/ })).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByRole('heading', { name: /^\d propost[ae]$/ })).toBeVisible({ timeout: 60_000 });
   await expect(page.locator('.fallback-svg')).toBeVisible();
   await page.locator('.alt-card').first().getByRole('button', { name: 'Scegli e simula' }).click();
   await page.getByRole('button', { name: 'Salta spostamento' }).click();
   await expect(page.locator('.text-state')).toBeVisible();
+});
+
+test('siamo in giro adesso: il giorno dell\'uscita si ricalcola il resto senza le tappe fatte', async ({ page, request }) => {
+  const meta = await (await request.get('/api/meta')).json();
+  // orologio del browser fissato a metà mattina del giorno del programma (fuso di Zurigo)
+  await page.clock.setFixedTime(new Date(`${meta.today}T10:40:00+02:00`));
+  await page.goto('/');
+  await page.getByText('Due persone fra paesaggio e cultura').click();
+  await page.getByRole('button', { name: 'Proponi programmi' }).click();
+  await expect(page.getByRole('heading', { name: /^\d propost[ae]$/ })).toBeVisible({ timeout: 60_000 });
+  await page.locator('.alt-card').first().getByRole('button', { name: 'Scegli e simula' }).click();
+  for (let i = 0; i < 5 && !(await page.getByRole('heading', { name: 'Fonti e limiti' }).count()); i++) {
+    await page.getByRole('button', { name: 'Vai al riepilogo' }).click();
+    const d = page.locator('.decision-box .decision-opt');
+    if (await d.count()) await d.first().click();
+  }
+  const box = page.locator('.outing-now');
+  await expect(box).toBeVisible();
+  const first = (await box.locator('li').first().textContent())!.replace(/^\s*\d{2}:\d{2}\s*/, '').replace(/\s*(fatta|da fare)\s*$/, '').trim();
+  await box.locator('input[type=checkbox]').first().check();
+  await box.getByRole('button', { name: 'Ricalcola il resto da qui' }).click();
+  await expect(page.getByRole('heading', { name: /^\d propost[ae]$|Nessun programma/ })).toBeVisible({ timeout: 60_000 });
+  for (const card of await page.locator('.alt-card').all()) await expect(card.locator('.alt-stops')).not.toContainText(first);
 });

@@ -16,7 +16,7 @@ export default function Results() {
   return (
     <div className="results">
       <div className="results-head">
-        <h2>{alts.length} proposte</h2>
+        <h2>{alts.length} {alts.length === 1 ? "proposta" : "proposte"}</h2>
         <button className="btn-ghost" onClick={() => set({ view: 'wizard' })}>Modifica richiesta</button>
       </div>
       {result.understood.length ? <div className="understood"><strong>Abbiamo capito:</strong> {result.understood.join(' · ')}</div> : null}

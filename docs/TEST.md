@@ -51,7 +51,7 @@ npm test
 npm run test:e2e
 ```
 
-**11 test, tutti superati** (desktop 1280×800 e mobile 390×844, Chrome con WebGL software):
+**12 test, tutti superati** (desktop 1280×800 e mobile 390×844, Chrome con WebGL software):
 
 1. Flusso principale: esempio → proposte (confronto, dettagli e verifiche) → simulazione (salta spostamento, prossima decisione, «vai al riepilogo» bloccato dalla decisione, scelta dell'alternativa con nuovo ramo) → riepilogo → verifica dei dati → piano B se piove → salvataggio (URL personale) → link di condivisione → voto da un altro browser → **revoca** e link non più accessibile.
 2. Modulo manuale: limite di 12 persone spiegato; 3 persone → 3 personaggi sulla mappa.
@@ -63,6 +63,8 @@ npm run test:e2e
 8. Schermi stretti (320 e 360 px): nessuno sbordamento orizzontale della pagina né della barra superiore; vista «Elenco» e ritorno alla mappa.
 9. **Accessibilità automatica** (axe-core, WCAG 2.1 A/AA): home, modulo, proposte, simulazione, esplorazione su desktop; home e modulo su telefono — **0 violazioni** (la tela WebGL è esclusa: le stesse informazioni sono nel pannello e nella vista elenco).
 10. **Tastiera**: il modulo si raggiunge con Tab, il focus è visibile, il dialogo «E se… piove» si apre da tastiera, tiene il focus, si chiude con Esc e riporta il focus al pulsante «Cambia idea…».
+
+11. **Siamo in giro adesso** (orologio del browser fissato al giorno del programma): tappa segnata come fatta esclusa, resto ricalcolato dall'ora reale.
 
 Audit completo su 9 viste: `node scripts/dev/a11y.mjs` (con il server di sviluppo avviato).
 
