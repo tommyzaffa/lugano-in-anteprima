@@ -10,7 +10,7 @@ Separato da ciò che è già implementato (in fondo).
 4. **Tariffe ufficiali** Arcobaleno e SNL con validità temporale (funicolari San Salvatore e Monte Brè già a listino, con abbonamenti applicati secondo il listino).
 5. **AI live**: configurare `AI_PROVIDER=anthropic`, misurare qualità e costi su un set di richieste reali, regolare `effort` e prompt; aggiungere un set di valutazione.
 6. **Meteo con licenza adatta** a un servizio pubblico (MeteoSvizzera OGD o abbonamento).
-7. **Aggiornamento periodico automatico** di OSM e GTFS con report delle differenze e controllo redazionale.
+7. **Aggiornamento periodico automatico** di OSM e GTFS: il comando c'è (`npm run data:update` = scarica, ricostruisce e scrive il report delle differenze in `data/reports/`; `npm run data:diff -- <commit>` per un confronto qualsiasi); resta da pianificarlo su un server con controllo redazionale prima del commit.
 
 ## P2 — estensioni vicine
 
@@ -30,7 +30,7 @@ Separato da ciò che è già implementato (in fondo).
 18. Database PostgreSQL/PostGIS per la versione pubblica, con backup e migrazioni.
 19. Account facoltativi per sincronizzare preferiti e programmi fra dispositivi (oggi solo su dispositivo e link).
 20. Partner commerciali con **separazione chiara** fra contenuti sponsorizzati e pertinenza (il campo `sponsored` è già nel modello).
-21. Statistiche del pilota più ricche (imbuto modulo → simulazione → salvataggio), sempre aggregate.
+21. ~~Imbuto d'uso nel pannello~~ — fatto (conteggi aggregati per giorno, dichiarati indicativi).
 22. Cartolina animata (breve sequenza del percorso).
 
 ## Già implementato (prima versione)

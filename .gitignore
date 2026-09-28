@@ -10,3 +10,4 @@ node_modules/
 playwright-report/
 public/vendor/
 test-results/
+data/reports/

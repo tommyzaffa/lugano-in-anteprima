@@ -163,6 +163,31 @@ const STAT_LABEL: Record<string, string> = {
   geolocation_used: 'Posizione usata (su richiesta)', surprise: '«Sorprendimi»', report_submitted: 'Segnalazioni di errore',
 };
 
+const INFEASIBLE: Record<string, string> = { must_see: 'tappa obbligatoria non possibile', window_short: 'finestra troppo breve', budget: 'budget', validation: 'nessuna combinazione valida', no_candidates: 'nessuna attività compatibile', combination: 'combinazione di vincoli', locked: 'tappa bloccata non inseribile' };
+function statLabel(k: string): string {
+  if (STAT_LABEL[k]) return STAT_LABEL[k];
+  if (k.startsWith('infeasible_')) return `Impossibile: ${INFEASIBLE[k.slice(11)] ?? k.slice(11).replace(/_/g, ' ')}`;
+  return k;
+}
+
+/** Imbuto d'uso del pilota (solo conteggi aggregati, nessun percorso individuale). */
+function Funnel({ totals }: { totals: Record<string, number> }) {
+  const steps: [string, string][] = [['plan_requested', 'Pianificazioni richieste'], ['plan_ok', 'Con proposte'], ['sim_started', 'Simulazioni avviate'], ['sim_finished', 'Simulazioni concluse'], ['plan_saved', 'Programmi salvati'], ['plan_shared', 'Condivisi']];
+  const first = totals[steps[0][0]] ?? 0;
+  if (!first) return <p className="muted">Imbuto d'uso: ancora nessuna pianificazione registrata.</p>;
+  return (
+    <div className="funnel" aria-label="Imbuto d'uso">
+      <h3>Imbuto d'uso (30 giorni)</h3>
+      {steps.map(([k, label]) => {
+        const n = totals[k] ?? 0;
+        const pct = Math.round((n / first) * 100);
+        return <div key={k} className="funnel-row"><span className="funnel-label">{label}</span><span className="funnel-bar"><span style={{ width: `${Math.min(100, pct)}%` }} /></span><span className="funnel-n">{n} <span className="muted">({pct}%)</span></span></div>;
+      })}
+      <p className="hint">Conteggi aggregati per giorno: non collegano fra loro le azioni di una stessa persona, quindi le percentuali sono indicative.</p>
+    </div>
+  );
+}
+
 function Stats({ headers }: { headers: Record<string, string> }) {
   const [s, setS] = useState<any>(null);
   useEffect(() => { void get<any>('/api/admin/stats', { headers }).then(setS); }, []);
@@ -172,7 +197,8 @@ function Stats({ headers }: { headers: Record<string, string> }) {
   return (
     <div>
       <p className="hint">{s.note}</p>
-      <div className="table-wrap"><table><thead><tr><th>Indicatore (30 giorni)</th><th>Totale</th></tr></thead><tbody>{Object.entries(totals).sort().map(([k, v]) => <tr key={k}><td>{STAT_LABEL[k] ?? k} <span className="muted">{k}</span></td><td>{v}</td></tr>)}</tbody></table></div>
+      <Funnel totals={totals} />
+      <div className="table-wrap"><table><thead><tr><th>Indicatore (30 giorni)</th><th>Totale</th></tr></thead><tbody>{Object.entries(totals).sort().map(([k, v]) => <tr key={k}><td>{statLabel(k)} <span className="muted">{k}</span></td><td>{v}</td></tr>)}</tbody></table></div>
       <h3>Consumi AI</h3>
       <p>Token oggi: {s.aiTokensToday}</p>
       {s.ai.length ? <div className="table-wrap"><table><thead><tr><th>Giorno</th><th>Modello</th><th>Uso</th><th>Esito</th><th>Chiamate</th><th>Input</th><th>Output</th><th>ms medi</th></tr></thead><tbody>{s.ai.map((a: any, i: number) => <tr key={i}><td>{a.day}</td><td>{a.model}</td><td>{a.purpose}</td><td>{a.status}</td><td>{a.calls}</td><td>{a.input ?? 0}</td><td>{a.output ?? 0}</td><td>{Math.round(a.avg_ms)}</td></tr>)}</tbody></table></div> : <p className="muted">Nessuna chiamata AI registrata.</p>}

@@ -95,6 +95,15 @@ Restano «da verificare» (i siti consultati non riportano orari): gli altri par
 
 Eventi: ricorrenze settimanali con intervallo di validità (nessuna occorrenza dopo la fine della stagione), eccezioni per data (annullato, rinviato, esaurito), eventi su più giorni con sessioni distinte, eventi oltre mezzanotte e nella notte del cambio d'ora, eventi con orario incerto. **Sono tutti fixture dimostrative** e l'app lo dice ovunque.
 
+## Aggiornamento dei dati
+
+```bash
+npm run data:update            # scarica OSM e GTFS, ricostruisce tutto e scrive il report
+npm run data:diff -- <commit>  # solo il report, rispetto a un commit qualsiasi (predefinito HEAD)
+```
+
+Il report (`data/reports/aggiornamento-AAAA-MM-GG.md`, non versionato) elenca luoghi spostati di oltre 20 m, orari OSM cambiati, stato di verifica cambiato, prezzi, accessibilità e siti modificati, luoghi ed eventi aggiunti o rimossi, fermate e linee nuove o scomparse, tratte approssimate in aumento, feed scaduto, variazioni della rete pedonale oltre il 5%. Le modifiche editoriali non vengono mai sovrascritte: i conflitti compaiono nel pannello.
+
 ## Scadenze e rivalidazione
 
 Politica per fonte in `data/catalog/sources.yaml` (ore): OSM orari 2160, redazione orari 720 e prezzi 1440, stime prezzi 2160, GTFS trasporti 336, meteo 3. Il pannello editoriale segnala i dati oltre scadenza.

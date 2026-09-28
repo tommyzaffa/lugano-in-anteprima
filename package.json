@@ -23,7 +23,9 @@
     "data:build": "npm run data:map && npm run data:graphs && npm run data:transit && npm run data:catalog",
     "data:all": "npm run data:perimeter && npm run data:osm && npm run data:terrain && npm run data:terrain-ch && npm run data:gtfs && npm run data:build",
     "test:all": "vitest run && playwright test",
-    "data:terrain-ch": "node --max-old-space-size=8192 --import tsx scripts/geo/06-swissalti3d.ts"
+    "data:terrain-ch": "node --max-old-space-size=8192 --import tsx scripts/geo/06-swissalti3d.ts",
+    "data:diff": "node --max-old-space-size=8192 --import tsx scripts/data/diff-report.ts",
+    "data:update": "npm run data:osm && npm run data:gtfs && npm run data:build && npm run data:diff"
   },
   "keywords": [],
   "author": "",

@@ -348,6 +348,10 @@ thead th { font-family: var(--serif); }
 .reval { margin: .8rem 0; }
 .reval li.blocking { color: var(--bad); } .reval li.warning { color: var(--warn); }
 .sources-used { font-size: .86rem; color: var(--ink-soft); }
+.funnel { margin: .6rem 0 1rem; }
+.funnel-row { display: grid; grid-template-columns: 11rem 1fr 6rem; align-items: center; gap: .6rem; margin: .25rem 0; font-size: .92rem; }
+.funnel-bar { height: 12px; background: var(--paper-2); border-radius: 999px; overflow: hidden; }
+.funnel-bar span { display: block; height: 100%; background: var(--lake); }
 .legend { margin: .4rem 0; font-size: .9rem; }
 .legend summary { cursor: pointer; font-weight: 600; min-height: 32px; display: flex; align-items: center; }
 .legend ul { list-style: none; padding: 0; margin: .3rem 0; }
