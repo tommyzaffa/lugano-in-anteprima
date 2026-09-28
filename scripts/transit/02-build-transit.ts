@@ -196,6 +196,57 @@ function boatPath(from: { lon: number; lat: number }, to: { lon: number; lat: nu
   return [[from.lon, from.lat], ...coords, [to.lon, to.lat]];
 }
 
+// ------------------------------------------------------------ rotte dei battelli da OpenStreetMap (route=ferry)
+// Grafo delle rotte disegnate in OSM: nodi alle coordinate (estremi coincidenti o entro 40 m uniti),
+// archi lungo le linee. Una tratta GTFS lo usa se entrambe le fermate sono a meno di 350 m dalla rete
+// e il percorso non è molto più lungo di quello calcolato sulla griglia d'acqua.
+const ferries: { coords: [number, number][] }[] = JSON.parse(readFileSync('data/build/osm/ferries.json', 'utf8'));
+const fNodes: [number, number][] = [];
+const fKey = new Map<string, number>();
+const fAdj: [number, number][][] = [];
+const fNode = (c: [number, number]) => {
+  const k = `${c[0].toFixed(6)},${c[1].toFixed(6)}`;
+  let i = fKey.get(k);
+  if (i == null) { i = fNodes.length; fNodes.push(c); fAdj.push([]); fKey.set(k, i); }
+  return i;
+};
+const fLink = (u: number, v: number) => { if (u === v) return; const d = haversine(fNodes[u][0], fNodes[u][1], fNodes[v][0], fNodes[v][1]); fAdj[u].push([v, d]); fAdj[v].push([u, d]); };
+const fEnds: number[] = [];
+for (const f of ferries) {
+  let prevN = -1;
+  for (const c of f.coords) { const n = fNode(c); if (prevN >= 0) fLink(prevN, n); prevN = n; }
+  fEnds.push(fNode(f.coords[0]), fNode(f.coords[f.coords.length - 1]));
+}
+for (let i = 0; i < fEnds.length; i++) for (let j = i + 1; j < fEnds.length; j++) {
+  const u = fEnds[i], v = fEnds[j];
+  if (u !== v && haversine(fNodes[u][0], fNodes[u][1], fNodes[v][0], fNodes[v][1]) < 40) fLink(u, v);
+}
+function ferryPath(from: { lon: number; lat: number }, to: { lon: number; lat: number }): { coords: [number, number][]; lengthM: number } | null {
+  const near = (p: { lon: number; lat: number }) => fNodes.map((c, i) => [i, haversine(p.lon, p.lat, c[0], c[1])] as [number, number]).filter(([, d]) => d < 350).sort((x, y) => x[1] - y[1]).slice(0, 6);
+  const sa = near(from), sb = near(to);
+  if (!sa.length || !sb.length) return null;
+  const dist = new Float64Array(fNodes.length).fill(Infinity);
+  const prev = new Int32Array(fNodes.length).fill(-1);
+  const q = new TinyQueue<[number, number]>([], (x, y) => x[0] - y[0]);
+  for (const [i, d] of sa) { const c = d * 3; if (c < dist[i]) { dist[i] = c; q.push([c, i]); } } // i raccordi costano di più delle rotte
+  const goal = new Map(sb.map(([i, d]) => [i, d * 3]));
+  let best = -1, bestCost = Infinity;
+  while (q.length) {
+    const [du, u] = q.pop()!;
+    if (du > dist[u] || du >= bestCost) continue;
+    const g = goal.get(u);
+    if (g != null && du + g < bestCost) { bestCost = du + g; best = u; }
+    for (const [v, w] of fAdj[u]) if (du + w < dist[v]) { dist[v] = du + w; prev[v] = u; q.push([du + w, v]); }
+  }
+  if (best < 0) return null;
+  const path: [number, number][] = [];
+  for (let c = best; c !== -1; c = prev[c]) path.push(fNodes[c]);
+  path.reverse();
+  const coords: [number, number][] = [[from.lon, from.lat], ...path, [to.lon, to.lat]];
+  return { coords, lengthM: coords.slice(1).reduce((acc, p, i) => acc + haversine(coords[i][0], coords[i][1], p[0], p[1]), 0) };
+}
+let ferryUsed = 0, gridUsed = 0;
+
 // ------------------------------------------------------------ geometrie delle tratte
 const BUS_SPEED: Record<string, number> = { motorway: 22, trunk: 18, primary: 12, secondary: 11, tertiary: 10, unclassified: 8, residential: 7, living_street: 4, service: 5, busway: 10, road: 7 };
 const busCost = (e: EdgeView) => e.lengthM / (BUS_SPEED[e.cls] ?? 7);
@@ -226,7 +277,12 @@ function segment(mode: Mode, ai: number, bi: number): number {
   let res: { coords: [number, number][]; lengthM: number } | null = null;
   if (mode === 'bus') res = routeOn(road, a, b, busCost, 80, 8) ?? routeOn(roadIgnoringDir, a, b, busCostAnyDir, 120, 8);
   else if (mode === 'train' || mode === 'funicular') res = routeOn(rail, a, b, railCost, 250, 10);
-  else if (mode === 'boat') { const c = boatPath(a, b); if (c) res = { coords: c, lengthM: c.slice(1).reduce((s, p, i) => s + haversine(c[i][0], c[i][1], p[0], p[1]), 0) }; }
+  else if (mode === 'boat') {
+    const c = boatPath(a, b);
+    const grid = c ? { coords: c, lengthM: c.slice(1).reduce((s, p, i) => s + haversine(c[i][0], c[i][1], p[0], p[1]), 0) } : null;
+    const fp = ferryPath(a, b);
+    if (fp && (!grid || fp.lengthM <= grid.lengthM * 1.35)) { res = fp; ferryUsed++; } else { res = grid; if (grid) gridUsed++; }
+  }
   let approx = false;
   if (!res) {
     approx = true; approxCount++;
@@ -261,6 +317,7 @@ for (const t of raw.trips) {
   trips.push({ p, s: t.service, h: t.headsign, n: t.shortName, id: t.id, t: times, pk: t.pickup, dr: t.dropoff, f: t.freq });
 }
 console.log(`Pattern ${patterns.length}, segmenti ${segments.length} (approssimati ${approxCount}), corse ${trips.length}, ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+console.log(`Battelli: ${ferryUsed} tratte sulle rotte OSM (${fNodes.length} nodi da ${ferries.length} linee), ${gridUsed} sulla griglia d'acqua`);
 const approxByMode: Record<string, number> = {};
 for (const s of segments) if (s.approx) approxByMode[s.mode] = (approxByMode[s.mode] ?? 0) + 1;
 console.log('Segmenti approssimati per modo:', approxByMode);

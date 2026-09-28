@@ -38,7 +38,7 @@ npm run data:all
 | Tile vettoriali | `scripts/geo/04-build-map.ts` — classificazione, ritaglio al buffer, geojson-vt + vt-pbf | `public/tiles/lugano/` (2081 tile z8–16, 13,5 MB) + `data/build/osm/*` |
 | Grafi | `scripts/geo/05-build-graphs.ts` | grafo pedonale (40 642 nodi, 46 266 archi, 2 509 km), stradale per i bus, ferroviario/funicolari |
 | Orario | `scripts/data/fetch-gtfs.sh` + `scripts/transit/01-import-gtfs.ts` | 1 185 fermate, 74 linee, 55 078 corse nell'area |
-| Rete trasporti | `scripts/transit/02-build-transit.ts` | 533 schemi di corsa, 1 641 tratte con geometria reale (3 approssimate, fuori perimetro), interscambi a piedi normali e senza gradini |
+| Rete trasporti | `scripts/transit/02-build-transit.ts` | 533 schemi di corsa, 1 641 tratte con geometria reale (3 approssimate, fuori perimetro), interscambi a piedi normali e senza gradini. Battelli: 69 tratte su 70 seguono le rotte `route=ferry` di OSM (59 linee unite in un grafo); l'ultima usa un percorso calcolato sull'acqua (griglia di 30 m lontana dalle rive), mai una retta sulla terraferma |
 | Catalogo | `scripts/catalog/build-catalog.ts` | 87 luoghi curati, 14 eventi demo, 980 POI OSM per l'esplorazione, 34 489 indirizzi per la ricerca locale |
 
 Tempi misurati: download ~2 minuti; `npm run data:build` ~8 secondi.

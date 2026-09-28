@@ -17,7 +17,7 @@ Separato da ciò che è già implementato (in fondo).
 8. ~~Terreno swisstopo swissALTI3D~~ — fatto (`npm run data:terrain-ch`). Resta: zoom 15–16 del terreno per il dettaglio in città.
 9. **Densità del catalogo**: più luoghi fuori dal centro (Pregassona, Canobbio, Davesco-Soragno, Muzzano, Melide), attività stagionali, laboratori, impianti sportivi; foto con diritti chiari.
 10. **Sentieri**: dati SchweizMobil/Wanderland (se riutilizzabili) per durate ufficiali e condizioni; segnaletica gialla/bianco-rosso-bianco sulla mappa.
-11. **Rotte dei battelli** dalle relazioni OSM `route=ferry` o dai dati SNL invece della griglia d'acqua.
+11. ~~Rotte dei battelli da OSM~~ — fatto (69 tratte su 70). Resta: confronto con i dati di percorso SNL, se resi disponibili.
 12. **Lingue**: inglese e tedesco completi (dizionari e contenuti del catalogo).
 13. **Accessibilità**: dati di accessibilità delle fermate (BAV/SBB) e degli ingressi; percorsi per sedia a rotelle con pendenze misurate.
 14. **Vista eventi sulla mappa** con filtri per giorno e categoria; ricerca per testo nel calendario.
