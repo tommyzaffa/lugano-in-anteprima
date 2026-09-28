@@ -25,9 +25,9 @@ export default function SimControls() {
           <div className="speed" role="group" aria-label="Velocità">
             {([1, 4, 10] as const).map((s) => <button key={s} className={speed === s ? 'on' : ''} onClick={() => setSpeed(s)} aria-pressed={speed === s}>{s}×</button>)}
           </div>
-          <button className="ctl" onClick={skipMove} disabled={st.finished || !!st.pendingDecision} title="Raggiunge la fine dello spostamento con tutte le conseguenze">⏭<span>{tr('sim.skipMove')}</span></button>
-          <button className="ctl" onClick={nextDecision} disabled={st.finished}>◆<span>{tr('sim.nextDecision')}</span></button>
-          <button className="ctl" onClick={goToSummary}>☰<span>{tr('sim.summary')}</span></button>
+          <button className="ctl" onClick={skipMove} disabled={st.finished || !!st.pendingDecision} title="Raggiunge la fine dello spostamento con tutte le conseguenze" aria-label={tr('sim.skipMove')}>⏭<span>{tr('sim.skipMove')}</span></button>
+          <button className="ctl" onClick={nextDecision} disabled={st.finished} aria-label={tr('sim.nextDecision')}>◆<span>{tr('sim.nextDecision')}</span></button>
+          <button className="ctl" onClick={goToSummary} aria-label={tr('sim.summary')}>☰<span>{tr('sim.summary')}</span></button>
         </div>
         <div className="spent" title="Spesa simulata maturata: non è un addebito reale">
           <span className="k">Spesa simulata</span>

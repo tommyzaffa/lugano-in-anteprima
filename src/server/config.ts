@@ -59,7 +59,7 @@ export const config = {
   },
   rateLimit: {
     planPerMinute: num('RATE_LIMIT_PLAN_PER_MIN', 12),
-    generalPerMinute: num('RATE_LIMIT_GENERAL_PER_MIN', 240),
+    generalPerMinute: num('RATE_LIMIT_GENERAL_PER_MIN', 600),
   },
   demoMode: true, // calcolato all'avvio: vero se mancano integrazioni live
 };

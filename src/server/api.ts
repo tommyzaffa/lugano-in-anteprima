@@ -39,7 +39,8 @@ function limited(c: Context, key: string, perMinute: number): boolean {
 export function createApi(data: DataStore, db: Db) {
   const app = new Hono();
 
-  app.use('*', async (c, next) => {
+  // limiti solo sull'API: tile, glifi e file statici non sono conteggiati
+  app.use('/api/*', async (c, next) => {
     if (limited(c, 'general', config.rateLimit.generalPerMinute)) return c.json({ error: 'rate_limited', message: 'Troppe richieste: riprovate fra un minuto.' }, 429);
     await next();
     c.header('X-Content-Type-Options', 'nosniff');
