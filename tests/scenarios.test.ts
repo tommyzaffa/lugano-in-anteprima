@@ -208,3 +208,15 @@ describe('accessibilità delle fermate', () => {
     }
   });
 });
+
+describe('eventi obbligatori', () => {
+  it('un evento serale scelto come tappa obbligatoria è in ogni proposta (o il programma è dichiarato impossibile)', async () => {
+    const r = await plan({ date: '2026-10-01', startTime: '10:00', endTime: '23:59', moods: [], mustSee: ['jazz-in-bess-demo'] });
+    const alts = ok(r);
+    for (const p of alts) expect(p.stops.some((s) => s.eventId === 'jazz-in-bess-demo')).toBe(true);
+  });
+  it('nessuna proposta viene restituita senza tutte le tappe obbligatorie', async () => {
+    const r = await plan({ date: '2026-10-01', startTime: '10:00', endTime: '18:00', mustSee: ['musec', 'parco-ciani'] });
+    for (const p of ok(r)) for (const m of ['musec', 'parco-ciani']) expect(p.stops.some((s) => s.placeId === m)).toBe(true);
+  });
+});

@@ -171,10 +171,15 @@ export default function MapView({ onFallback }: Props) {
       map.addLayer({ id: 'route-walk', type: 'line', source: 'route', filter: ['!=', ['get', 'ride'], 1], layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': ['get', 'color'], 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 2.2, 16, 5], 'line-dasharray': [1.2, 1.1], 'line-opacity': ['case', ['==', ['get', 'done'], 1], 0.4, 1] } });
       map.addSource('stops', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       map.addLayer({ id: 'stops', type: 'symbol', source: 'stops', layout: { 'icon-image': ['get', 'icon'], 'icon-size': ['interpolate', ['linear'], ['zoom'], 10, 0.45, 15, 0.75], 'icon-anchor': ['case', ['==', ['get', 'kind'], 'stop'], 'bottom', ['==', ['get', 'kind'], 'start'], 'bottom-left', 'center'], 'icon-allow-overlap': true, 'text-field': ['case', ['==', ['get', 'kind'], 'stop'], ['concat', ['get', 'time'], ' · ', ['get', 'name']], ['==', ['get', 'kind'], 'decision'], '', ['get', 'name']], 'text-font': ['Open Sans Semibold'], 'text-size': 11.5, 'text-offset': [0, 0.6], 'text-anchor': 'top', 'text-optional': true, 'text-max-width': 10, 'symbol-sort-key': ['coalesce', ['get', 'n'], 0] }, paint: { 'text-color': '#2b2a27', 'text-halo-color': '#fbf6ea', 'text-halo-width': 2 } });
+      // eventi del calendario (vista Eventi)
+      map.addSource('event-pins', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+      map.addLayer({ id: 'event-pins', type: 'circle', source: 'event-pins', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 5, 15, 9], 'circle-color': ['case', ['==', ['get', 'status'], 'scheduled'], '#6b4f8a', '#a8352a'], 'circle-stroke-color': '#fbf6ea', 'circle-stroke-width': 2 } });
+      map.addLayer({ id: 'event-pins-label', type: 'symbol', source: 'event-pins', layout: { 'text-field': ['concat', ['get', 'time'], ' · ', ['get', 'title']], 'text-font': ['Open Sans Semibold'], 'text-size': 11.5, 'text-offset': [0, 1.1], 'text-anchor': 'top', 'text-max-width': 12, 'text-optional': true }, paint: { 'text-color': '#3f2c55', 'text-halo-color': '#fbf6ea', 'text-halo-width': 2 } });
+      map.on('click', 'event-pins', (e) => { const id = e.features?.[0]?.properties?.placeId; if (id) useApp.getState().set({ placeCard: id }); });
       map.on('click', 'places-dot', (e) => { const id = e.features?.[0]?.properties?.id; if (id) useApp.getState().set({ placeCard: id }); });
       map.on('click', 'places-landmark', (e) => { const id = e.features?.[0]?.properties?.id; if (id) useApp.getState().set({ placeCard: id }); });
       map.on('click', 'stops', (e) => { const id = e.features?.[0]?.properties?.id; if (id) useApp.getState().set({ placeCard: id }); });
-      for (const l of ['places-dot', 'places-landmark', 'stops']) {
+      for (const l of ['places-dot', 'places-landmark', 'stops', 'event-pins']) {
         map.on('mouseenter', l, () => { map.getCanvas().style.cursor = 'pointer'; });
         map.on('mouseleave', l, () => { map.getCanvas().style.cursor = ''; });
       }
@@ -296,6 +301,19 @@ export default function MapView({ onFallback }: Props) {
     if (!map || !ready) return;
     if (view !== 'sim' || settings.lighting === 'day') { applyPalette(map, PALETTES.day); lastPaletteRef.current = -1; }
   }, [view, ready, settings.lighting]);
+
+  // segnaposti degli eventi: visibili nella vista Eventi, inquadrati tutti insieme
+  const eventPins = useApp((s) => s.eventPins);
+  useEffect(() => {
+    const map = mapInstance;
+    if (!map || !ready) return;
+    const pins = view === 'events' ? eventPins : [];
+    (map.getSource('event-pins') as GeoJSONSource)?.setData({ type: 'FeatureCollection', features: pins.map((p) => ({ type: 'Feature', properties: { title: p.title, time: p.time, placeId: p.placeId, status: p.status }, geometry: { type: 'Point', coordinates: [p.lon, p.lat] } })) });
+    if (pins.length) {
+      const bb = boundsOf(pins.map((p) => [p.lon, p.lat] as [number, number]));
+      if (bb) map.fitBounds(bb, { padding: fitPadding(), maxZoom: 15, duration: settings.reducedMotion ? 0 : 700 });
+    }
+  }, [eventPins, view, ready]);
 
   // POI OSM nell'esplorazione libera
   const showOsm = useApp((s) => s.exploreFilter.showOsm);

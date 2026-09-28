@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useApp } from '../store.ts';
+import { useApp, defaultDraft } from '../store.ts';
 import { get } from '../api.ts';
 import { Chip, Badge, Spinner, Empty } from './common.tsx';
 import { CATEGORY } from '../i18n.ts';
@@ -87,11 +87,16 @@ export default function Explore() {
 
 function nextDay(d: string) { const x = new Date(`${d}T12:00:00Z`); x.setUTCDate(x.getUTCDate() + 1); return x.toISOString().slice(0, 10); }
 
+const EVENT_CAT: Record<string, string> = { concert: 'Concerti', festival: 'Feste e festival', party: 'Serate', show: 'Spettacoli', market: 'Mercati', cinema: 'Cinema', workshop: 'Laboratori', tour: 'Visite guidate', sport: 'Sport', exhibition: 'Mostre' };
+
 export function EventsView() {
   const meta = useApp((s) => s.meta);
   const set = useApp((s) => s.set);
   const [tab, setTab] = useState<'today' | 'tomorrow' | 'week'>('today');
   const [data, setData] = useState<any>(null);
+  const [q, setQ] = useState('');
+  const [cats, setCats] = useState<string[]>([]);
+  const [showOff, setShowOff] = useState(true);
   const today = meta?.today ?? new Date().toISOString().slice(0, 10);
   useEffect(() => {
     const from = tab === 'tomorrow' ? nextDay(today) : today;
@@ -99,6 +104,40 @@ export function EventsView() {
     setData(null);
     get<any>(`/api/events?from=${from}&days=${days - 1}`).then(setData).catch(() => setData({ occurrences: [], notice: 'Calendario non disponibile.' }));
   }, [tab, today]);
+  const categories = useMemo(() => [...new Set<string>((data?.occurrences ?? []).map((o: any) => o.category).filter(Boolean))].sort(), [data]);
+  const shown = useMemo(() => {
+    const needle = q.trim().toLowerCase();
+    return (data?.occurrences ?? []).filter((o: any) =>
+      (showOff || o.status === 'scheduled')
+      && (!cats.length || cats.includes(o.category))
+      && (!needle || `${o.title} ${o.placeName ?? ''} ${o.description ?? ''}`.toLowerCase().includes(needle)));
+  }, [data, q, cats, showOff]);
+  // segnaposti sulla mappa per gli eventi mostrati; si tolgono uscendo dalla vista
+  // un segnaposto per evento e luogo (la prima occorrenza in programma); nella settimana l'etichetta porta la data
+  const pins = useMemo(() => {
+    const byKey = new Map<string, any>();
+    for (const o of shown) {
+      if (o.lon == null) continue;
+      const k = `${o.eventId}@${o.placeId}`;
+      const prev = byKey.get(k);
+      if (!prev || (prev.status !== 'scheduled' && o.status === 'scheduled')) byKey.set(k, o);
+    }
+    return [...byKey.values()].map((o: any) => ({ id: o.sessionId, lon: o.lon, lat: o.lat, title: o.title, time: `${tab === 'week' ? `${o.start.slice(8, 10)}/${o.start.slice(5, 7)} ` : ''}${o.timeCertain ? hhmm(o.start) : '?'}`, placeId: o.placeId, status: o.status }));
+  }, [shown, tab]);
+  useEffect(() => { set({ eventPins: pins }); }, [pins, set]);
+  useEffect(() => () => set({ eventPins: [] }), [set]);
+  const planWith = (o: any) => {
+    const app = useApp.getState();
+    const base = app.draft ?? defaultDraft(today);
+    const date = o.start.slice(0, 10);
+    // la finestra della giornata deve contenere l'evento, con margine per arrivare e ripartire
+    const shift = (hm: string, min: number) => { const [h, m] = hm.split(':').map(Number); const t = Math.max(0, Math.min(23 * 60 + 59, h * 60 + m + min)); return `${String(Math.floor(t / 60)).padStart(2, '0')}:${String(t % 60).padStart(2, '0')}`; };
+    const evStart = hhmm(o.start), evEnd = o.end ? hhmm(o.end) : shift(evStart, 90);
+    const startTime = base.startTime > shift(evStart, -60) ? shift(evStart, -60) : base.startTime;
+    const endTime = evEnd < evStart ? '23:59' : base.endTime < shift(evEnd, 45) ? shift(evEnd, 45) : base.endTime;
+    app.set({ draft: { ...base, date, startTime, endTime, mustSee: [...new Set([...base.mustSee.filter((m) => !base.mustSeeLabels?.[m]), o.eventId])], mustSeeLabels: { [o.eventId]: `${o.title} (evento)` } }, view: 'wizard', placeCard: null });
+    app.notify(`«${o.title}» aggiunto come tappa obbligatoria per il ${date.split('-').reverse().join('.')}. Completate il modulo.`, 'ok');
+  };
   return (
     <div className="events">
       <h2>Eventi</h2>
@@ -106,15 +145,22 @@ export function EventsView() {
         {([['today', 'Oggi'], ['tomorrow', 'Domani'], ['week', 'Settimana']] as const).map(([k, v]) => <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{v}</button>)}
       </div>
       <div className="notice demo"><Badge kind="demo">DEMO</Badge> {data?.notice ?? 'Calendario dimostrativo.'}</div>
-      {!data ? <Spinner /> : !data.occurrences.length ? <Empty title="Nessun evento in questo periodo">Non inventiamo eventi per riempire una giornata vuota.</Empty> : (
+      <input type="search" placeholder="Cerca per titolo, luogo o descrizione…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Cerca negli eventi" />
+      {categories.length > 1 ? <div className="chips">{categories.map((c) => <Chip key={c} on={cats.includes(c)} onClick={() => setCats((x) => x.includes(c) ? x.filter((y) => y !== c) : [...x, c])}>{EVENT_CAT[c] ?? c}</Chip>)}</div> : null}
+      <label className="check"><input type="checkbox" checked={showOff} onChange={(e) => setShowOff(e.target.checked)} /> Mostra anche annullati, rinviati ed esauriti</label>
+      {data ? <p className="muted event-pins-status" role="status">{pins.length ? `${pins.length} ${pins.length === 1 ? 'evento segnato' : 'eventi segnati'} sulla mappa (viola; rosso se annullato, rinviato o esaurito).` : 'Nessun evento da segnare sulla mappa.'}</p> : null}
+      {!data ? <Spinner /> : !shown.length ? <Empty title={data.occurrences.length ? 'Nessun evento corrisponde ai filtri' : 'Nessun evento in questo periodo'}>{data.occurrences.length ? 'Provate a togliere un filtro.' : 'Non inventiamo eventi per riempire una giornata vuota.'}</Empty> : (
         <ul className="event-list">
-          {data.occurrences.map((o: any) => (
+          {shown.map((o: any) => (
             <li key={o.sessionId} className={o.status !== 'scheduled' ? 'off' : ''}>
               <div className="ev-time">{o.start.slice(8, 10)}/{o.start.slice(5, 7)} {o.timeCertain ? hhmm(o.start) : 'orario da confermare'}{o.end ? `–${hhmm(o.end)}` : ''}</div>
               <div className="ev-body">
                 <strong>{o.title}</strong> {o.status !== 'scheduled' ? <Badge kind="bad">{({ cancelled: 'annullato', sold_out: 'esaurito', postponed: 'rinviato' } as any)[o.status]}</Badge> : null}
-                <div className="muted">{o.placeName} {o.note ? `· ${o.note}` : ''}</div>
-                <button className="link" onClick={() => set({ placeCard: o.placeId })}>Scheda del luogo</button>
+                <div className="muted">{EVENT_CAT[o.category] ?? o.category ?? ''}{o.placeName ? ` · ${o.placeName}` : ''}{o.note ? ` · ${o.note}` : ''}</div>
+                <div className="row wrap">
+                  <button className="link" onClick={() => set({ placeCard: o.placeId })}>Scheda del luogo</button>
+                  {o.status === 'scheduled' && Date.parse(o.start) > Date.now() ? <button className="link" onClick={() => planWith(o)}>Organizza una giornata con questo evento</button> : null}
+                </div>
               </div>
             </li>
           ))}

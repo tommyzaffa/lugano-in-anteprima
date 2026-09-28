@@ -123,7 +123,10 @@ export function createApi(data: DataStore, db: Db) {
   app.get('/api/events', (c) => {
     const from = DateTime.fromISO(c.req.query('from') ?? DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd'), { zone: TZ }).startOf('day');
     const days = Math.min(31, Number(c.req.query('days') ?? 7));
-    const occ = data.occurrences(from, from.plus({ days }).endOf('day')).map((o) => ({ ...o, placeName: data.place(o.placeId)?.name, category: data.events.get(o.eventId)?.category, description: data.events.get(o.eventId)?.description }));
+    const occ = data.occurrences(from, from.plus({ days }).endOf('day')).map((o) => {
+      const pl = data.place(o.placeId);
+      return { ...o, placeName: pl?.name, lon: pl?.entrance.lon ?? pl?.lon, lat: pl?.entrance.lat ?? pl?.lat, category: data.events.get(o.eventId)?.category, description: data.events.get(o.eventId)?.description };
+    });
     return c.json({ from: from.toFormat('yyyy-MM-dd'), days, demo: true, notice: 'Calendario dimostrativo: fixture di esempio, non è l\'agenda reale di Lugano.', occurrences: occ });
   });
 

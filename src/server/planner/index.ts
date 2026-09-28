@@ -198,6 +198,12 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
     if (Date.now() - t0 > 18000) { notices.push('Ricerca interrotta per limite di tempo: proposte parziali.'); break; }
     const plan = validateWithFixes(ctx, data, stepsOf(s.node), s.theme, problems);
     if (!plan || plan.feasibility === 'invalid' || !plan.stops.length) continue;
+    // mai un programma senza tutte le tappe obbligatorie (luoghi o eventi)
+    const missing = req.mustSee.filter((m) => !plan.stops.some((st) => st.placeId === m || st.eventId === m));
+    if (missing.length) {
+      problems.push(`Non è stato possibile inserire ${missing.map((m) => data.place(m)?.name ?? data.events.get(m)?.title ?? m).join(', ')} insieme agli altri vincoli.`);
+      continue;
+    }
     const set = new Set(plan.stops.map((x) => x.placeId));
     if (accepted.some((a) => jaccard(new Set(a.stops.map((x) => x.placeId)), set) > 0.5)) continue;
     if (accepted.some((a) => a.theme === plan.theme) && accepted.length < 2 && ordered.length > accepted.length + 3) {

@@ -94,6 +94,18 @@ export function search(ctx: PlanContext, cands: Candidate[], est: Estimator, opt
     lunch: false, dinner: false, snacks: 0, cats: {}, ...opts.init,
   } as SearchNode;
   const mustSee = cands.filter((c) => c.mustSee);
+  // un obbligo è soddisfatto da una qualsiasi occorrenza dello stesso evento o dallo stesso luogo
+  const mustId = (c: Candidate) => c.event?.id ?? c.place.id;
+  const mustIds = [...new Set(mustSee.map(mustId))];
+  const satisfied = (n: SearchNode, id: string) => n.seq.some((st) => mustId(st.cand) === id);
+  // obblighi a orario fisso (eventi, tappe bloccate): ogni nodo deve poterli ancora raggiungere
+  const fixedMust = mustIds.map((id) => ({ id, occ: mustSee.filter((c) => mustId(c) === id && c.fixedStart != null) })).filter((x) => x.occ.length);
+  const stillReachable = (n: SearchNode) => fixedMust.every(({ id, occ }) => satisfied(n, id) || occ.some((c) => {
+    if (n.usedPlaces.has(c.place.id) && !n.seq.some((st) => st.cand.key === c.key)) return false;
+    // limite ottimistico: in linea d'aria a 8 m/s (più veloce di qualsiasi combinazione di cammino e mezzi urbani)
+    const d = Math.hypot((c.place.lon - n.pos.lon) * 77300, (c.place.lat - n.pos.lat) * 111200);
+    return n.t + (d / 8) * 1000 <= c.fixedStart! - 5 * 60_000;
+  }));
   const complete: SearchNode[] = [];
   let beam: SearchNode[] = [root];
   const finishScore = (n: SearchNode) => {
@@ -102,7 +114,7 @@ export function search(ctx: PlanContext, cands: Candidate[], est: Estimator, opt
     s += (used / Math.max(1, ctx.end - ctx.start)) * 6;
     if (meals.lunch && !n.lunch) s -= 7;
     if (meals.dinner && !n.dinner) s -= 8;
-    for (const m of mustSee) if (!n.used.has(m.key) && !n.usedPlaces.has(m.place.id)) s -= 1000;
+    for (const id of mustIds) if (!satisfied(n, id)) s -= 1000;
     const idle = (ctx.end - n.t) / 60_000;
     if (idle > 120) s -= (idle - 120) / 60;
     return s;
@@ -127,7 +139,8 @@ export function search(ctx: PlanContext, cands: Candidate[], est: Estimator, opt
         if (act) stayMin = Math.max(stayMin, Math.round((act.sec * 1.2) / 60));
         if (c.fixedStart != null) {
           if (arrive > c.fixedStart - 5 * 60_000) continue;
-          if (!c.locked && c.fixedStart - arrive > 50 * 60_000) continue; // attesa eccessiva (le tappe bloccate possono attendere)
+          // attesa eccessiva: le tappe bloccate e gli obblighi possono attendere (con penalità), le altre no
+          if (!c.locked && !c.mustSee && c.fixedStart - arrive > 50 * 60_000) continue;
           start = c.fixedStart; end = c.fixedEnd!;
         } else {
           const sched = c.place.schedules.find((s) => s.kind === 'public');
@@ -198,6 +211,8 @@ export function search(ctx: PlanContext, cands: Candidate[], est: Estimator, opt
           seq: [...node.seq, step], used: new Set([...node.used, c.key]), usedPlaces: new Set([...node.usedPlaces, c.place.id, ...(c.exit ? [c.exit.id] : [])]),
           costMin, costMax, walkM, score: node.score + s, lunch, dinner, snacks, cats: { ...node.cats, [cat]: catCount + 1 },
         };
+        // niente rami che rendono irraggiungibile un obbligo a orario fisso
+        if (fixedMust.length && !stillReachable(child)) continue;
         children.push(child);
       }
       // diversità: al massimo 6 figli per nodo

@@ -23,7 +23,8 @@ export interface Meta {
   quickStarts: { kind: 'stop' | 'place'; label: string; lon: number; lat: number; stopId?: string; placeId?: string }[];
 }
 
-export interface Draft extends Omit<GroupRequest, 'people'> { people: Person[] }
+/** mustSeeLabels: nomi leggibili delle tappe obbligatorie che non sono luoghi (es. eventi scelti dal calendario) */
+export interface Draft extends Omit<GroupRequest, 'people'> { people: Person[]; mustSeeLabels?: Record<string, string> }
 
 const LS = {
   get<T>(k: string, d: T): T { try { const v = localStorage.getItem(k); return v ? (JSON.parse(v) as T) : d; } catch { return d; } },
@@ -55,7 +56,10 @@ export interface SavedRef { id: string; token: string; title: string; date: stri
 
 export interface PendingChange { decision: Decision; plan: Plan | null; diff: PlanDiff | null; explanation: string[]; hypothetical: boolean; label: string }
 
+export interface EventPin { id: string; lon: number; lat: number; title: string; time: string; placeId: string; status: string }
+
 interface AppState {
+  eventPins: EventPin[];
   meta: Meta | null;
   metaError: string | null;
   view: View;
@@ -99,6 +103,7 @@ export const useApp = create<AppState>((set, get) => ({
   metaError: null,
   view: 'home',
   sheet: 'half',
+  eventPins: [],
   draft: LS.get<Draft | null>('lia.draft', null),
   wizardStep: 0,
   progress: [],

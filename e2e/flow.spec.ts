@@ -104,12 +104,27 @@ test('esplorazione libera, scheda luogo e segnalazione di errore', async ({ page
   await expect(page.getByText(/segnalazione arriva alla redazione/i)).toBeVisible();
 });
 
-test('eventi: calendario dichiarato dimostrativo', async ({ page }) => {
+test('eventi: calendario dimostrativo, ricerca, segnaposti e giornata costruita attorno a un evento', async ({ page }) => {
   await page.goto('/');
+  await waitMap(page);
   await page.getByRole('button', { name: 'Eventi', exact: true }).click();
   await expect(page.locator('.events .notice.demo')).toContainText('dimostrativ');
   await page.getByRole('tab', { name: 'Settimana' }).click();
   await expect(page.locator('.event-list li').first()).toBeVisible();
+  const all = await page.locator('.event-list li').count();
+  // segnaposti sulla mappa per gli eventi mostrati
+  await expect(page.locator('.event-pins-status')).toContainText(/\d+ eventi? segnat/);
+  await page.getByLabel('Cerca negli eventi').fill('mercato');
+  await expect.poll(() => page.locator('.event-list li').count()).toBeLessThan(all);
+  const li = page.locator('.event-list li').filter({ has: page.getByRole('button', { name: 'Organizza una giornata con questo evento' }) }).first();
+  const title = (await li.locator('strong').textContent())!.trim();
+  await li.getByRole('button', { name: 'Organizza una giornata con questo evento' }).click();
+  await expect(page.locator('.wizard-title')).toBeVisible();
+  await expect(page.locator('.toast')).toContainText('tappa obbligatoria');
+  for (let i = 0; i < 6; i++) { const b = page.getByRole('button', { name: 'Avanti' }); if (await b.count()) await b.click(); }
+  await page.getByRole('button', { name: 'Proponi programmi' }).click();
+  await expect(page.getByRole('heading', { name: /^\d proposte$/ })).toBeVisible({ timeout: 60_000 });
+  for (const card of await page.locator('.alt-card').all()) await expect(card).toContainText(title.replace(' (demo)', ''));
 });
 
 test('pannello editoriale protetto: accesso, modifica orari, versione del catalogo', async ({ page }) => {

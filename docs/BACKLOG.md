@@ -20,7 +20,7 @@ Separato da ciò che è già implementato (in fondo).
 11. ~~Rotte dei battelli da OSM~~ — fatto (69 tratte su 70). Resta: confronto con i dati di percorso SNL, se resi disponibili.
 12. **Lingue**: inglese e tedesco completi (dizionari e contenuti del catalogo).
 13. **Accessibilità**: dati di accessibilità delle fermate (BAV/SBB) e degli ingressi — il meccanismo c'è (`data/catalog/stop-access.yaml`, oggi con la stazione di Melide, fonte ufficiale); servono i dati completi delle FFS/UFT; percorsi per sedia a rotelle con pendenze misurate.
-14. **Vista eventi sulla mappa** con filtri per giorno e categoria; ricerca per testo nel calendario.
+14. ~~Vista eventi sulla mappa~~ — fatto: segnaposti, filtri per giorno e categoria, ricerca, giornata costruita attorno a un evento.
 15. **Voto degli amici** con proposta vincente evidenziata e commenti brevi.
 16. **Modalità «siamo già qui» nella simulazione**: ricalcolo da posizione GPS reale e ora attuale durante l'uscita, non solo dal modulo.
 17. **Personaggi**: più pose e animazioni (seduti al ristorante, foto al belvedere) e folla decorativa dichiarata.

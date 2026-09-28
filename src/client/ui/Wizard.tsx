@@ -177,20 +177,20 @@ function StepLikes() {
           {([['any', 'Indifferente'], ['outdoor', 'All\'aperto'], ['indoor', 'Al coperto']] as const).map(([k, v]) => <button type="button" key={k} className={d.environment === k ? 'on' : ''} onClick={() => setD((x) => ({ ...x, environment: k }))}>{v}</button>)}
         </div>
       </Field>
-      <PlacesMulti label="Tappe da non perdere (facoltative)" value={d.mustSee} onChange={(v) => setD((x) => ({ ...x, mustSee: v }))} hint="Diventano vincoli rigidi: se non sono compatibili, il sistema spiega perché." />
+      <PlacesMulti label="Tappe da non perdere (facoltative)" value={d.mustSee} labels={d.mustSeeLabels} onChange={(v) => setD((x) => ({ ...x, mustSee: v }))} hint="Diventano vincoli rigidi: se non sono compatibili, il sistema spiega perché." />
       <PlacesMulti label="Luoghi già visti o da escludere" value={d.exclude} onChange={(v) => setD((x) => ({ ...x, exclude: v }))} />
     </div>
   );
 }
 
-function PlacesMulti({ label, value, onChange, hint }: { label: string; value: string[]; onChange: (v: string[]) => void; hint?: string }) {
+function PlacesMulti({ label, value, onChange, hint, labels }: { label: string; value: string[]; onChange: (v: string[]) => void; hint?: string; labels?: Record<string, string> }) {
   const [all, setAll] = useState<{ id: string; name: string; category: string }[]>([]);
   const [q, setQ] = useState('');
   useEffect(() => { get<{ places: any[] }>('/api/places').then((r) => setAll(r.places)).catch(() => {}); }, []);
   const matches = useMemo(() => (q.length >= 2 ? all.filter((p) => p.name.toLowerCase().includes(q.toLowerCase()) && !value.includes(p.id)).slice(0, 8) : []), [q, all, value]);
   return (
     <Field label={label} hint={hint}>
-      <div className="chips">{value.map((id) => <Chip key={id} on onClick={() => onChange(value.filter((x) => x !== id))} title="Rimuovi">{all.find((p) => p.id === id)?.name ?? id} ✕</Chip>)}</div>
+      <div className="chips">{value.map((id) => <Chip key={id} on onClick={() => onChange(value.filter((x) => x !== id))} title="Rimuovi">{all.find((p) => p.id === id)?.name ?? labels?.[id] ?? id} ✕</Chip>)}</div>
       <input type="search" placeholder="Cerca nel catalogo…" value={q} onChange={(e) => setQ(e.target.value)} aria-label={label} />
       {matches.length ? <ul className="loc-results inline">{matches.map((m) => <li key={m.id}><button type="button" onClick={() => { onChange([...value, m.id]); setQ(''); }}><strong>{m.name}</strong></button></li>)}</ul> : null}
     </Field>
