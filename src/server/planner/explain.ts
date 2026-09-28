@@ -144,7 +144,7 @@ export function explainInfeasible(ctx: PlanContext, report: CandidateReport | nu
     reasons.push({ code: 'window_short', message: `La finestra di ${Math.round(winMin)} minuti è troppo breve per un'uscita con rientro.` });
   }
   if (report) {
-    for (const m of report.excludedMustSee) reasons.push({ code: 'must_see', message: `Tappa obbligatoria non possibile: ${m.id} (${m.reason}).` });
+    for (const m of report.excludedMustSee) reasons.push({ code: 'must_see', message: `Tappa obbligatoria non possibile: ${m.name ?? m.id} (${m.reason}).` });
     if (report.excludedMustSee.length) suggestions.push({ id: 'drop_must', label: 'Rendi facoltative le tappe obbligatorie', patch: { mustSee: [] } });
     if (report.candidates.length === 0) {
       const top = Object.entries(report.excluded).sort((a, b) => b[1] - a[1]).slice(0, 3);

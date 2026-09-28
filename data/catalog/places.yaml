@@ -23,11 +23,11 @@
   tags: [arte, architettura, museo, al-coperto, pioggia]
   moods: [cultural]
   visit: [40, 90, 150]
-  hours: osm
-  lastEntryMin: 30
-  lastEntryNote: Ultimo ingresso indicativo 30 minuti prima della chiusura (redazione, da verificare).
+  hours: { osm: "Tu,We,Fr 11:00-18:00; Th 11:00-20:00; Sa,Su,PH 10:00-18:00; Mo off", status: verified, url: "https://www.masilugano.ch/masi/info/orari-e-tariffe.html", checked: 2026-09-28, note: "Orari delle mostre MASI (sito ufficiale). Le casse chiudono 15 minuti prima." }
+  lastEntryMin: 15
+  lastEntryNote: Le casse chiudono 15 minuti prima della chiusura (sito MASI).
   prices:
-    - { label: "Mostre MASI al LAC", min: 15, max: 20, unit: person, status: estimate, childFree: true, childAgeMax: 16, note: "Tariffa indicativa; ingresso al foyer libero." }
+    - { label: "Mostre MASI al LAC", min: 20, max: 20, unit: person, status: known, childFree: true, childAgeMax: 16, url: "https://www.masilugano.ch/masi/info/orari-e-tariffe.html", checked: 2026-09-28, note: "Intero CHF 20; ridotto CHF 16 (over 65, AVS/AI, studenti 17–25 e altre categorie); gratis fino a 16 anni; il primo giovedì del mese gratis dalle 18 alle 20. Foyer libero." }
   booking: no
   access: { wheelchair: osm, stroller: yes, stairs: none }
   occ: [sightseeing, guests, date, family, leisure]
@@ -45,10 +45,12 @@
   tags: [arte, museo, al-coperto, pioggia]
   moods: [cultural]
   visit: [40, 75, 120]
-  hours: unknown
+  hours: { osm: "Tu,We,Fr 11:00-18:00; Th 11:00-20:00; Sa,Su,PH 10:00-18:00; Mo off", status: verified, url: "https://www.masilugano.ch/masi/info/orari-e-tariffe.html", checked: 2026-09-28, note: "Orari MASI (sito ufficiale, confermati da lugano.ch).", closures: [{ from: 2026-09-22, to: 2026-10-16, note: "lavori di riallestimento, secondo il sito del MASI" }] }
+  lastEntryMin: 15
+  lastEntryNote: Le casse chiudono 15 minuti prima della chiusura (sito MASI).
   prices:
-    - { label: "Ingresso MASI", unit: person, status: unknown, note: "Prezzo non disponibile nel catalogo: verificare sul sito del MASI." }
-  booking: unknown
+    - { label: "Ingresso MASI Palazzo Reali", unit: person, status: unknown, childFree: true, childAgeMax: 16, note: "Tariffa non pubblicata durante la chiusura per riallestimento: verificare sul sito del MASI. Gratis fino a 16 anni." }
+  booking: no
   website: https://www.masilugano.ch
   access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
   occ: [sightseeing, guests, date]
@@ -242,9 +244,11 @@
   tags: [museo, culture, al-coperto, pioggia]
   moods: [cultural]
   visit: [45, 75, 120]
-  hours: osm
+  hours: { osm: "Mo,We-Fr 11:00-18:00; Sa,Su,PH 10:00-18:00; Tu off", status: verified, url: "https://www.musec.ch/it/visita", checked: 2026-09-28, note: "Orari MUSEC (sito ufficiale); chiuso il martedì.", closures: [{ from: 2026-12-24, to: 2026-12-25, note: "Natale, secondo il sito del MUSEC" }, { from: 2026-12-31, to: 2026-12-31, note: "31 dicembre, secondo il sito del MUSEC" }] }
   prices:
-    - { label: "Ingresso MUSEC", min: 12, max: 15, unit: person, status: estimate, childFree: true, childAgeMax: 16 }
+    - { label: "Ingresso MUSEC", min: 15, max: 15, unit: person, audience: adult, status: known, url: "https://www.musec.ch/it/visita", checked: 2026-09-28, note: "Intero dai 16 anni; ridotto CHF 10 (AVS/AI, studenti universitari); il lunedì CHF 10; dopo le 17 sconto del 30%." }
+    - { label: "Ingresso MUSEC (6–15 anni)", min: 5, max: 5, unit: person, audience: child, childAgeMax: 15, status: known, url: "https://www.musec.ch/it/visita", checked: 2026-09-28 }
+    - { label: "Ingresso MUSEC (0–5 anni)", min: 0, max: 0, unit: person, audience: child, childAgeMax: 5, status: known, url: "https://www.musec.ch/it/visita", checked: 2026-09-28, note: "Gratis fino a 5 anni." }
   booking: no
   access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
   occ: [sightseeing, guests, date]
@@ -261,9 +265,9 @@
   tags: [museo, natura, famiglia, bambini, al-coperto, pioggia]
   moods: [cultural, nature]
   visit: [30, 60, 90]
-  hours: osm
+  hours: { osm: "Tu-Su 09:00-12:00,14:00-17:00; Mo off; PH off", status: verified, url: "https://www4.ti.ch/dt/da/mcsn/temi/mcsn/tema", checked: 2026-09-28, note: "Sito del Cantone: mattino 9–12, pomeriggio 14–17; chiuso lunedì e festivi." }
   prices:
-    - { label: "Ingresso", min: 0, max: 0, unit: person, status: estimate, note: "Ingresso indicato come gratuito dalla redazione, da verificare." }
+    - { label: "Ingresso", min: 0, max: 0, unit: person, status: known, url: "https://www4.ti.ch/dt/da/mcsn/temi/mcsn/tema", checked: 2026-09-28, note: "Entrata libera (sito del Cantone)." }
   booking: no
   access: { wheelchair: osm, stroller: unknown, stairs: unknown }
   occ: [family, sightseeing, guests]
@@ -705,14 +709,15 @@
   tags: [modellini, famiglia, bambini, all-aperto, stagionale]
   moods: [adventure, cultural, chill]
   visit: [60, 90, 150]
-  hours: { osm: "Mar 14-Nov 01: 09:00-18:00", status: editorial, note: "Stagione e orari indicativi, da verificare sul sito ufficiale." }
-  lastEntryMin: 60
-  lastEntryNote: Ultimo ingresso indicativo un'ora prima della chiusura (redazione, da verificare).
+  hours: { osm: "Jun 01-Nov 08: Mo-Su 09:00-18:00", status: verified, url: "https://www.swissminiatur.ch/contatti/", checked: 2026-09-28, note: "Calendario ufficiale 2026: «Orario 1» (9–18, ultimo ingresso 17.30) tutti i giorni fino all'8 novembre, poi parco chiuso. Mesi prima di giugno non consultati." }
+  lastEntryMin: 30
+  lastEntryNote: Ultimo ingresso alle 17.30 (sito ufficiale).
   prices:
-    - { label: "Adulti", min: 20, max: 25, unit: person, status: estimate, audience: adult }
-    - { label: "Bambini", min: 12, max: 16, unit: person, status: estimate, audience: child, childAgeMax: 15 }
+    - { label: "Adulti (dai 16 anni)", min: 22, max: 22, unit: person, audience: adult, status: known, url: "https://www.swissminiatur.ch/biglietti-swissminiatur/", checked: 2026-09-28, note: "AVS CHF 18; studenti dai 16 anni e AI CHF 17; famiglia (2 adulti + bambini 6–15) CHF 60." }
+    - { label: "Bambini 6–15 anni", min: 15, max: 15, unit: person, audience: child, childAgeMax: 15, status: known, url: "https://www.swissminiatur.ch/biglietti-swissminiatur/", checked: 2026-09-28 }
+    - { label: "Bambini fino a 5 anni", min: 0, max: 0, unit: person, audience: child, childAgeMax: 5, status: known, url: "https://www.swissminiatur.ch/biglietti-swissminiatur/", checked: 2026-09-28, note: "Gratis fino a 5 anni compiuti." }
   booking: no
-  access: { wheelchair: osm, stroller: yes, stairs: none }
+  access: { wheelchair: yes, stroller: yes, stairs: none, url: "https://www.swissminiatur.ch/contatti/", checked: 2026-09-28, note: "Parco pianeggiante e senza barriere architettoniche secondo il sito ufficiale. La stazione FFS di Melide non è accessibile alle persone con mobilità ridotta (sito ufficiale): meglio il battello o il bus." }
   occ: [family, guests, sightseeing, birthday]
   weather: dry
   atmosphere: usually_lively
@@ -782,9 +787,10 @@
   tags: [museo, letteratura, storia, al-coperto]
   moods: [cultural, chill]
   visit: [40, 60, 90]
-  hours: osm
+  hours: { osm: "Apr-Oct: Mo-Su 10:30-17:30", status: verified, url: "https://www.hessemontagnola.ch/informazioni", checked: 2026-09-28, note: "Aprile–ottobre 2026 tutti i giorni 10.30–17.30 (sito del museo).", closures: [{ from: 2026-11-02, to: 2027-03-19, note: "rinnovo dell'esposizione permanente, secondo il sito del museo" }] }
   prices:
-    - { label: "Ingresso", min: 9, max: 12, unit: person, status: estimate }
+    - { label: "Ingresso", min: 10, max: 10, unit: person, audience: adult, status: known, url: "https://www.hessemontagnola.ch/informazioni", checked: 2026-09-28, note: "Adulti CHF 10; ridotto CHF 8 (studenti, pensionati); famiglia CHF 26; ragazzi dai 12 anni: tariffa non indicata separatamente, stimata come adulti." }
+    - { label: "Ingresso (fino a 11 anni)", min: 0, max: 0, unit: person, audience: child, childAgeMax: 11, status: known, url: "https://www.hessemontagnola.ch/informazioni", checked: 2026-09-28, note: "Gratis sotto i 12 anni." }
   booking: no
   access: { wheelchair: osm, stroller: unknown, stairs: unknown }
   occ: [sightseeing, guests, date]

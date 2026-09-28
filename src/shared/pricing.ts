@@ -46,7 +46,9 @@ export function groupCost(prices: PriceEstimate[], people: Person[], at: string,
     let count = 0;
     let freeKids = 0;
     if (p.audience === 'child') {
-      count = comp.children.filter((c) => childAge(c.ageBand) <= (p.childAgeMax ?? 15)).length;
+      // con più tariffe bambini (es. 0–5 gratis, 6–15 ridotto) ogni bambino va nella fascia più stretta che lo comprende
+      const covering = (age: number) => childRules.filter((r) => age <= (r.childAgeMax ?? 15)).sort((a, b) => (a.childAgeMax ?? 15) - (b.childAgeMax ?? 15))[0];
+      count = comp.children.filter((c) => covering(childAge(c.ageBand)) === p).length;
     } else if (p.audience === 'adult') {
       count = comp.adults;
       // bambini senza una tariffa bambini dedicata pagano come adulti (stima prudente)
@@ -61,7 +63,7 @@ export function groupCost(prices: PriceEstimate[], people: Person[], at: string,
     }
     if (count <= 0 && !(p.audience === 'all' && freeKids > 0)) continue;
     const unknown = p.status === 'unknown' || p.min == null;
-    const note = [p.note, freeKids ? `${freeKids} bambin${freeKids > 1 ? 'i' : 'o'} gratis secondo la fonte (da verificare)` : ''].filter(Boolean).join(' · ') || undefined;
+    const note = [p.note, freeKids ? `${freeKids} bambin${freeKids > 1 ? 'i' : 'o'} gratis secondo ${p.evidence.status === 'verified' ? 'il sito ufficiale' : 'la fonte (da verificare)'}` : ''].filter(Boolean).join(' · ') || undefined;
     lines.push({
       id: `${idPrefix}-${p.id}`,
       label: `${p.label}${count > 0 ? ` × ${count}` : ''}`,

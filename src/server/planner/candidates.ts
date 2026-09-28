@@ -39,7 +39,7 @@ export interface Candidate {
   locked?: boolean;
 }
 
-export interface CandidateReport { candidates: Candidate[]; excluded: Record<string, number>; excludedMustSee: { id: string; reason: string }[] }
+export interface CandidateReport { candidates: Candidate[]; excluded: Record<string, number>; excludedMustSee: { id: string; reason: string; name?: string }[] }
 
 const THEME_OF: Record<string, string[]> = {
   park: ['natura', 'lago'], museum: ['cultura'], culture: ['cultura'], viewpoint: ['panorami'], walk: ['lago', 'natura'],
@@ -61,7 +61,7 @@ function dataQuality(p: Place, hoursKnown: boolean): Candidate['dataQuality'] {
 
 export function selectCandidates(ctx: PlanContext, data: DataStore): CandidateReport {
   const excluded: Record<string, number> = {};
-  const excludedMustSee: { id: string; reason: string }[] = [];
+  const excludedMustSee: { id: string; reason: string; name?: string }[] = [];
   const req = ctx.req;
   const from = DateTime.fromMillis(ctx.start), to = DateTime.fromMillis(ctx.end);
   const out: Candidate[] = [];
@@ -69,7 +69,7 @@ export function selectCandidates(ctx: PlanContext, data: DataStore): CandidateRe
   const minKidAge = ctx.kids ? Math.min(...req.people.filter((p) => p.kind === 'child').map((p) => (p.ageBand === '0-5' ? 3 : p.ageBand === '6-11' ? 6 : p.ageBand === '12-15' ? 12 : p.ageBand === '16-17' ? 16 : 6))) : 99;
   const exclude = (reason: string, id: string) => {
     excluded[reason] = (excluded[reason] ?? 0) + 1;
-    if (mustSee.has(id)) excludedMustSee.push({ id, reason });
+    if (mustSee.has(id)) excludedMustSee.push({ id, reason, name: data.place(id)?.name ?? data.events.get(id)?.title });
     return null;
   };
 
@@ -135,7 +135,12 @@ export function selectCandidates(ctx: PlanContext, data: DataStore): CandidateRe
       const ivs = openIntervals(pub, from, to);
       const minStay = p.visit.min * 60_000;
       const usable = ivs.some((iv) => Math.min(iv.end.toMillis(), ctx.end) - Math.max(iv.start.toMillis(), ctx.start) >= minStay);
-      if (!usable) { exclude('chiuso nella finestra richiesta', p.id); continue; }
+      if (!usable) {
+        // una chiusura straordinaria dichiarata dal gestore va spiegata con il suo motivo
+        const why = pub.exceptions.find((e) => e.closed && e.note && e.date === ctx.req.date)?.note;
+        exclude(why ? `chiuso in questa data: ${why}` : 'chiuso nella finestra richiesta', p.id);
+        continue;
+      }
     } else {
       // orari sconosciuti: candidabile solo di giorno e segnalato come incerto
       const h0 = from.hour, h1 = to.hour + (ctx.crossesMidnight ? 24 : 0);
@@ -205,7 +210,7 @@ export function selectCandidates(ctx: PlanContext, data: DataStore): CandidateRe
     if (s0 < ctx.start) s0 = localToInstant(req.date, l.start, 1).toMillis();
     let e0 = localToInstant(req.date, l.end).toMillis();
     while (e0 <= s0) e0 += 24 * 3600_000;
-    if (s0 < ctx.start || e0 > ctx.end) { excludedMustSee.push({ id: p.id, reason: `orario bloccato ${l.start}–${l.end} fuori dalla finestra della giornata` }); continue; }
+    if (s0 < ctx.start || e0 > ctx.end) { excludedMustSee.push({ id: p.id, name: p.name, reason: `orario bloccato ${l.start}–${l.end} fuori dalla finestra della giornata` }); continue; }
     const existing = out.findIndex((c) => c.place.id === p.id && c.kind === 'place');
     const base = existing >= 0 ? out[existing] : null;
     const costs = groupCost(p.prices, ctx.req.people, new Date(s0).toISOString(), p.id);
@@ -224,7 +229,7 @@ export function selectCandidates(ctx: PlanContext, data: DataStore): CandidateRe
   for (const m of mustSee) {
     if (!out.some((c) => c.place.id === m || c.event?.id === m) && !excludedMustSee.some((x) => x.id === m)) {
       const p = data.place(m);
-      excludedMustSee.push({ id: m, reason: p ? 'non disponibile nella finestra richiesta' : 'non presente nel catalogo' });
+      excludedMustSee.push({ id: m, reason: p ? 'non disponibile nella finestra richiesta' : 'non presente nel catalogo', name: p?.name });
     }
   }
   return { candidates: out, excluded, excludedMustSee };

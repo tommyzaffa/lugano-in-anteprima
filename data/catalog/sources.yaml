@@ -31,6 +31,12 @@
   reuse: open
   freshnessHours: { general: 87600 }
   note: Modello altimetrico a 2 m (LV95), ricampionato nei tile Terrarium sul territorio svizzero.
+- id: official-web
+  name: Siti ufficiali dei gestori (consultati dalla redazione)
+  kind: official_site
+  reuse: restricted
+  freshnessHours: { hours: 720, prices: 2160, general: 4320 }
+  note: Orari e tariffe letti sulle pagine ufficiali indicate in ogni dato (URL e data di consultazione). Valgono alla data di controllo; stagioni, mostre e chiusure straordinarie cambiano.
 - id: editorial-2026-09
   name: Redazione Lugano in anteprima (settembre 2026)
   kind: editorial

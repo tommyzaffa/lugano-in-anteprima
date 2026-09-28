@@ -4,6 +4,7 @@
  * budget, cammino e mobilità. Restituisce un Plan completo oppure il problema
  * che lo rende invalido (per correggerlo o scartarlo).
  */
+import { applyReturnTickets } from '../catalog/fares.ts';
 import { DateTime } from 'luxon';
 import type { Plan, PlanStop, Trip, CheckResult, LegPoint, CostLine, DataSnapshot } from '../../shared/types.ts';
 import { TZ } from '../../shared/types.ts';
@@ -174,6 +175,10 @@ export function evidenceLabel(s: string) {
 }
 
 export function finalize(ctx: PlanContext, data: DataStore, stops: PlanStop[], trips: Trip[], endPoint: LegPoint, meta: { theme: string; themeLabel: string; branchId?: string; parentPlanId?: string; version?: number }): Plan {
+  // andata e ritorno sulla stessa funicolare: listino a/r al posto di due corse semplici
+  const fareLines = trips.flatMap((t, ti) => t.cost.map((c, ci) => ({ c, ti, ci })));
+  const adjusted = applyReturnTickets(fareLines.map((x) => x.c), ctx.req.people, ctx.req.passes ?? []);
+  fareLines.forEach((x, i) => { trips[x.ti].cost[x.ci] = adjusted[i]; });
   const allCosts: CostLine[] = [...stops.flatMap((s) => s.cost), ...trips.flatMap((t) => t.cost)];
   const cost = sumCosts(allCosts, ctx.people, ctx.req.budget.amount != null ? ctx.req.budget : undefined);
   const walkM = trips.reduce((s, t) => s + t.summary.walkM, 0) + stops.reduce((s, st) => s + (st.activityPath?.lengthM ?? 0), 0);

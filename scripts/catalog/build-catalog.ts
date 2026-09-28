@@ -6,10 +6,12 @@
  * la build fallisce.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import YAML from 'yaml';
 import * as turf from '@turf/turf';
 import polylabel from 'polylabel';
 import { Place, CatalogEvent, Source, type PriceEstimate, type OpeningSchedule, type Evidence } from '../../src/shared/types.ts';
+import { DateTime } from 'luxon';
 import { parseOsmOpeningHours } from '../../src/shared/osm-hours.ts';
 import { haversine } from '../lib/dem.ts';
 
@@ -86,7 +88,10 @@ function buildPrices(id: string, p: any): PriceEstimate[] {
   return (p as any[]).map((x, i) => ({
     id: `${id}-p${i}`, label: x.label, currency: 'CHF', min: x.min, max: x.max ?? x.min, unit: x.unit ?? 'person', audience: x.audience ?? 'all',
     childAgeMax: x.childAgeMax, childFree: x.childFree, status: x.status ?? 'estimate', optional: x.optional, essential: x.essential ?? true, note: x.note,
-    evidence: ev('price', x.status === 'known' ? 'editorial-2026-09' : x.status === 'unknown' ? 'editorial-2026-09' : 'estimate', x.status === 'known' ? 'editorial' : x.status === 'unknown' ? 'unknown' : 'estimate', { note: x.note ?? 'Tariffa indicativa, da verificare sul sito ufficiale.' }),
+    // con url e checked la tariffa è stata letta sul sito ufficiale del gestore
+    evidence: x.url && x.checked
+      ? ev('price', 'official-web', 'verified', { note: x.note, url: x.url, observedAt: String(x.checked), lastCheckedAt: String(x.checked) })
+      : ev('price', x.status === 'known' ? 'editorial-2026-09' : x.status === 'unknown' ? 'editorial-2026-09' : 'estimate', x.status === 'known' ? 'editorial' : x.status === 'unknown' ? 'unknown' : 'estimate', { note: x.note ?? 'Tariffa indicativa, da verificare sul sito ufficiale.' }),
   }));
 }
 
@@ -122,10 +127,20 @@ function buildSchedules(id: string, y: any, tags: Record<string, string>): { sch
     return { schedules: out, hoursStatus: 'osm' };
   }
   if (typeof h === 'object' && h.osm) {
-    const r = parseOsmOpeningHours(h.osm, { id: `${id}-public`, kind: 'public', evidence: ev('hours', 'editorial-2026-09', h.status ?? 'editorial', { note: h.note }) });
+    // orario redazionale; con status «verified» è stato controllato sul sito ufficiale indicato in url, alla data checked
+    const verified = h.status === 'verified';
+    if (verified && (!h.url || !h.checked)) throw new Error(`${id}: un orario verificato richiede url e checked`);
+    const evidence = ev('hours', verified ? 'official-web' : 'editorial-2026-09', h.status ?? 'editorial', { note: h.note, ...(h.url ? { url: h.url } : {}), ...(h.checked ? { observedAt: h.checked, lastCheckedAt: h.checked } : {}) });
+    const r = parseOsmOpeningHours(h.osm, { id: `${id}-public`, kind: 'public', evidence });
     if (!r.ok) throw new Error(`${id}: orario redazionale non valido: ${r.reason}`);
     const s = applyLastEntry(r.schedule, y.lastEntryMin);
     if (y.lastEntryMin) s.evidence.note = `${s.evidence.note ?? ''} · ${y.lastEntryNote ?? ''}`.trim();
+    // chiusure temporanee dichiarate dal gestore (es. riallestimenti): un'eccezione per ogni giorno
+    for (const c of h.closures ?? []) {
+      for (let d = DateTime.fromISO(String(c.from)); d <= DateTime.fromISO(String(c.to)); d = d.plus({ days: 1 })) {
+        s.exceptions.push({ date: d.toFormat('yyyy-MM-dd'), closed: true, note: c.note });
+      }
+    }
     return { schedules: [s], hoursStatus: h.status ?? 'editorial' };
   }
   throw new Error(`${id}: formato hours non valido`);
@@ -185,7 +200,9 @@ for (const y of rawPlaces) {
   const wheelchair = access.wheelchair === 'osm' ? wheelchairFromOsm(tags.wheelchair) : (access.wheelchair ?? 'unknown');
   const accessEvidence = access.wheelchair === 'osm' && tags.wheelchair
     ? ev('accessibility', 'osm', 'osm', { note: `wheelchair=${tags.wheelchair}${tags['wheelchair:description'] ? ` (${tags['wheelchair:description']})` : ''}` })
-    : ev('accessibility', 'editorial-2026-09', wheelchair === 'unknown' && (access.stroller ?? 'unknown') === 'unknown' ? 'unknown' : 'editorial', { note: access.note });
+    : access.url && access.checked
+      ? ev('accessibility', 'official-web', 'verified', { note: access.note, url: access.url, observedAt: String(access.checked), lastCheckedAt: String(access.checked) })
+      : ev('accessibility', 'editorial-2026-09', wheelchair === 'unknown' && (access.stroller ?? 'unknown') === 'unknown' ? 'unknown' : 'editorial', { note: access.note });
   const website = y.website ?? tags.website ?? tags['contact:website'];
   const muni = municipalityOf(lon, lat);
   const place = {
@@ -276,7 +293,9 @@ for (const [, f] of index) {
   } catch { /* geometria non valida */ }
 }
 
-const version = `cat-${TODAY}-${places.length}p-${events.length}e`;
+// l'impronta del contenuto cambia la versione a ogni modifica di orari, prezzi o testi (le date di controllo sono escluse)
+const contentHash = createHash('sha1').update(JSON.stringify({ sources, places, events }, (k, v) => (k === 'observedAt' || k === 'lastCheckedAt' ? undefined : v))).digest('hex').slice(0, 6);
+const version = `cat-${TODAY}-${places.length}p-${events.length}e-${contentHash}`;
 writeFileSync('data/build/catalog.json', JSON.stringify({ version, builtAt: new Date().toISOString(), sources, places, events }, null, 1));
 writeFileSync('data/build/explore.json', JSON.stringify({ builtAt: new Date().toISOString(), source: 'osm', pois: explore, amenities }));
 writeFileSync('data/build/addresses.json', JSON.stringify(addresses));

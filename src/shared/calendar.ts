@@ -147,6 +147,8 @@ export function checkVisit(s: OpeningSchedule | undefined, arrival: DateTime, st
   const containing = ivs.find((iv) => iv.start <= arrival && iv.end > arrival);
   if (!containing) {
     const next = ivs.find((iv) => iv.start > arrival);
+    const why = s.exceptions.find((e) => e.date === arrival.setZone(TZ).toFormat('yyyy-MM-dd') && e.closed && e.note)?.note;
+    if (why) return { ok: false, status: 'closed', message: `Chiuso in questa data: ${why}` };
     return { ok: false, status: 'closed', message: next ? `Chiuso all'arrivo; apre alle ${next.start.toFormat('HH:mm')}` : "Chiuso all'orario previsto", nextOpen: next?.start };
   }
   if (containing.lastEntry && arrival > containing.lastEntry) {
@@ -163,6 +165,8 @@ export function describeDay(s: OpeningSchedule, date: string): string {
   if (s.alwaysOpen) return 'Sempre accessibile';
   const ivs = intervalsForDate(s, date);
   if (!ivs.length) {
+    const why = s.exceptions.find((e) => e.date === date && e.closed && e.note)?.note;
+    if (why) return `Chiuso (${why})`;
     const hol = holidayName(date);
     return hol ? `Chiuso (${hol})` : 'Chiuso';
   }

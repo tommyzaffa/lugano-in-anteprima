@@ -1,6 +1,6 @@
 {
- "version": "cat-2026-09-28-87p-14e",
- "builtAt": "2026-09-28T12:39:13.147Z",
+ "version": "cat-2026-09-28-87p-14e-545ea8",
+ "builtAt": "2026-09-28T13:02:00.186Z",
  "sources": [
   {
    "id": "osm",
@@ -54,6 +54,19 @@
    },
    "acquiredAt": "2026-09-28",
    "note": "Modello altimetrico a 2 m (LV95), ricampionato nei tile Terrarium sul territorio svizzero."
+  },
+  {
+   "id": "official-web",
+   "name": "Siti ufficiali dei gestori (consultati dalla redazione)",
+   "kind": "official_site",
+   "reuse": "restricted",
+   "freshnessHours": {
+    "hours": 720,
+    "prices": 2160,
+    "general": 4320
+   },
+   "acquiredAt": "2026-09-28",
+   "note": "Orari e tariffe letti sulle pagine ufficiali indicate in ogni dato (URL e data di consultazione). Valgono alla data di controllo; stagioni, mostre e chiusure straordinarie cambiano."
   },
   {
    "id": "editorial-2026-09",
@@ -162,7 +175,7 @@
        ],
        "from": "11:00",
        "to": "18:00",
-       "lastEntry": "17:30"
+       "lastEntry": "17:45"
       },
       {
        "days": [
@@ -170,7 +183,7 @@
        ],
        "from": "11:00",
        "to": "20:00",
-       "lastEntry": "19:30"
+       "lastEntry": "19:45"
       },
       {
        "days": [
@@ -179,19 +192,20 @@
        ],
        "from": "10:00",
        "to": "18:00",
-       "lastEntry": "17:30"
+       "lastEntry": "17:45"
       }
      ],
-     "holidays": "unknown",
+     "holidays": "as_sunday",
      "exceptions": [],
-     "osmOpeningHours": "Tu,We,Fr 11:00-18:00; Th 11:00-20:00; Sa,Su 10:00-18:00",
+     "osmOpeningHours": "Tu,We,Fr 11:00-18:00; Th 11:00-20:00; Sa,Su,PH 10:00-18:00; Mo off",
      "evidence": {
       "field": "hours",
-      "sourceId": "osm",
-      "status": "osm",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "opening_hours=\"Tu,We,Fr 11:00-18:00; Th 11:00-20:00; Sa,Su 10:00-18:00\" · Ultimo ingresso indicativo 30 minuti prima della chiusura (redazione, da verificare)."
+      "url": "https://www.masilugano.ch/masi/info/orari-e-tariffe.html",
+      "note": "Orari delle mostre MASI (sito ufficiale). Le casse chiudono 15 minuti prima. · Le casse chiudono 15 minuti prima della chiusura (sito MASI)."
      }
     }
    ],
@@ -200,22 +214,23 @@
      "id": "lac-p0",
      "label": "Mostre MASI al LAC",
      "currency": "CHF",
-     "min": 15,
+     "min": 20,
      "max": 20,
      "unit": "person",
      "audience": "all",
      "childAgeMax": 16,
      "childFree": true,
-     "status": "estimate",
+     "status": "known",
      "essential": true,
-     "note": "Tariffa indicativa; ingresso al foyer libero.",
+     "note": "Intero CHF 20; ridotto CHF 16 (over 65, AVS/AI, studenti 17–25 e altre categorie); gratis fino a 16 anni; il primo giovedì del mese gratis dalle 18 alle 20. Foyer libero.",
      "evidence": {
       "field": "price",
-      "sourceId": "estimate",
-      "status": "estimate",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "Tariffa indicativa; ingresso al foyer libero."
+      "url": "https://www.masilugano.ch/masi/info/orari-e-tariffe.html",
+      "note": "Intero CHF 20; ridotto CHF 16 (over 65, AVS/AI, studenti 17–25 e altre categorie); gratis fino a 16 anni; il primo giovedì del mese gratis dalle 18 alle 20. Foyer libero."
      }
     }
    ],
@@ -355,29 +370,204 @@
     "typical": 75,
     "max": 120
    },
-   "schedules": [],
+   "schedules": [
+    {
+     "id": "masi-palazzo-reali-public",
+     "kind": "public",
+     "tz": "Europe/Zurich",
+     "rules": [
+      {
+       "days": [
+        2,
+        3,
+        5
+       ],
+       "from": "11:00",
+       "to": "18:00",
+       "lastEntry": "17:45"
+      },
+      {
+       "days": [
+        4
+       ],
+       "from": "11:00",
+       "to": "20:00",
+       "lastEntry": "19:45"
+      },
+      {
+       "days": [
+        6,
+        7
+       ],
+       "from": "10:00",
+       "to": "18:00",
+       "lastEntry": "17:45"
+      }
+     ],
+     "holidays": "as_sunday",
+     "exceptions": [
+      {
+       "date": "2026-09-22",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-09-23",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-09-24",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-09-25",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-09-26",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-09-27",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-09-28",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-09-29",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-09-30",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-01",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-02",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-03",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-04",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-05",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-06",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-07",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-08",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-09",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-10",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-11",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-12",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-13",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-14",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-15",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      },
+      {
+       "date": "2026-10-16",
+       "closed": true,
+       "note": "lavori di riallestimento, secondo il sito del MASI"
+      }
+     ],
+     "osmOpeningHours": "Tu,We,Fr 11:00-18:00; Th 11:00-20:00; Sa,Su,PH 10:00-18:00; Mo off",
+     "evidence": {
+      "field": "hours",
+      "sourceId": "official-web",
+      "status": "verified",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "url": "https://www.masilugano.ch/masi/info/orari-e-tariffe.html",
+      "note": "Orari MASI (sito ufficiale, confermati da lugano.ch). · Le casse chiudono 15 minuti prima della chiusura (sito MASI)."
+     }
+    }
+   ],
    "prices": [
     {
      "id": "masi-palazzo-reali-p0",
-     "label": "Ingresso MASI",
+     "label": "Ingresso MASI Palazzo Reali",
      "currency": "CHF",
      "unit": "person",
      "audience": "all",
+     "childAgeMax": 16,
+     "childFree": true,
      "status": "unknown",
      "essential": true,
-     "note": "Prezzo non disponibile nel catalogo: verificare sul sito del MASI.",
+     "note": "Tariffa non pubblicata durante la chiusura per riallestimento: verificare sul sito del MASI. Gratis fino a 16 anni.",
      "evidence": {
       "field": "price",
       "sourceId": "editorial-2026-09",
       "status": "unknown",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "Prezzo non disponibile nel catalogo: verificare sul sito del MASI."
+      "note": "Tariffa non pubblicata durante la chiusura per riallestimento: verificare sul sito del MASI. Gratis fino a 16 anni."
      }
     }
    ],
    "booking": {
-    "required": "unknown"
+    "required": "no"
    },
    "links": {
     "website": "https://www.masilugano.ch"
@@ -459,14 +649,6 @@
      "status": "editorial",
      "observedAt": "2026-09-28",
      "lastCheckedAt": "2026-09-28"
-    },
-    {
-     "field": "hours",
-     "sourceId": "editorial-2026-09",
-     "status": "unknown",
-     "observedAt": "2026-09-28",
-     "lastCheckedAt": "2026-09-28",
-     "note": "Orari non disponibili nel catalogo."
     },
     {
      "field": "municipality",
@@ -2306,24 +2488,47 @@
         1,
         3,
         4,
-        5,
-        6,
-        7
+        5
        ],
        "from": "11:00",
        "to": "18:00"
+      },
+      {
+       "days": [
+        6,
+        7
+       ],
+       "from": "10:00",
+       "to": "18:00"
       }
      ],
-     "holidays": "unknown",
-     "exceptions": [],
-     "osmOpeningHours": "We-Mo 11:00-18:00; Tu off",
+     "holidays": "as_sunday",
+     "exceptions": [
+      {
+       "date": "2026-12-24",
+       "closed": true,
+       "note": "Natale, secondo il sito del MUSEC"
+      },
+      {
+       "date": "2026-12-25",
+       "closed": true,
+       "note": "Natale, secondo il sito del MUSEC"
+      },
+      {
+       "date": "2026-12-31",
+       "closed": true,
+       "note": "31 dicembre, secondo il sito del MUSEC"
+      }
+     ],
+     "osmOpeningHours": "Mo,We-Fr 11:00-18:00; Sa,Su,PH 10:00-18:00; Tu off",
      "evidence": {
       "field": "hours",
-      "sourceId": "osm",
-      "status": "osm",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "opening_hours=\"We-Mo 11:00-18:00; Tu off\""
+      "url": "https://www.musec.ch/it/visita",
+      "note": "Orari MUSEC (sito ufficiale); chiuso il martedì."
      }
     }
    ],
@@ -2332,21 +2537,63 @@
      "id": "musec-p0",
      "label": "Ingresso MUSEC",
      "currency": "CHF",
-     "min": 12,
+     "min": 15,
      "max": 15,
      "unit": "person",
-     "audience": "all",
-     "childAgeMax": 16,
-     "childFree": true,
-     "status": "estimate",
+     "audience": "adult",
+     "status": "known",
+     "essential": true,
+     "note": "Intero dai 16 anni; ridotto CHF 10 (AVS/AI, studenti universitari); il lunedì CHF 10; dopo le 17 sconto del 30%.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "official-web",
+      "status": "verified",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "url": "https://www.musec.ch/it/visita",
+      "note": "Intero dai 16 anni; ridotto CHF 10 (AVS/AI, studenti universitari); il lunedì CHF 10; dopo le 17 sconto del 30%."
+     }
+    },
+    {
+     "id": "musec-p1",
+     "label": "Ingresso MUSEC (6–15 anni)",
+     "currency": "CHF",
+     "min": 5,
+     "max": 5,
+     "unit": "person",
+     "audience": "child",
+     "childAgeMax": 15,
+     "status": "known",
      "essential": true,
      "evidence": {
       "field": "price",
-      "sourceId": "estimate",
-      "status": "estimate",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "Tariffa indicativa, da verificare sul sito ufficiale."
+      "url": "https://www.musec.ch/it/visita"
+     }
+    },
+    {
+     "id": "musec-p2",
+     "label": "Ingresso MUSEC (0–5 anni)",
+     "currency": "CHF",
+     "min": 0,
+     "max": 0,
+     "unit": "person",
+     "audience": "child",
+     "childAgeMax": 5,
+     "status": "known",
+     "essential": true,
+     "note": "Gratis fino a 5 anni.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "official-web",
+      "status": "verified",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "url": "https://www.musec.ch/it/visita",
+      "note": "Gratis fino a 5 anni."
      }
     }
    ],
@@ -2497,7 +2744,8 @@
         3,
         4,
         5,
-        6
+        6,
+        7
        ],
        "from": "09:00",
        "to": "12:00"
@@ -2508,22 +2756,24 @@
         3,
         4,
         5,
-        6
+        6,
+        7
        ],
        "from": "14:00",
        "to": "17:00"
       }
      ],
-     "holidays": "unknown",
+     "holidays": "closed",
      "exceptions": [],
-     "osmOpeningHours": "Tu-Sa 09:00-12:00, 14:00-17:00",
+     "osmOpeningHours": "Tu-Su 09:00-12:00,14:00-17:00; Mo off; PH off",
      "evidence": {
       "field": "hours",
-      "sourceId": "osm",
-      "status": "osm",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "opening_hours=\"Tu-Sa 09:00-12:00, 14:00-17:00\""
+      "url": "https://www4.ti.ch/dt/da/mcsn/temi/mcsn/tema",
+      "note": "Sito del Cantone: mattino 9–12, pomeriggio 14–17; chiuso lunedì e festivi."
      }
     }
    ],
@@ -2536,16 +2786,17 @@
      "max": 0,
      "unit": "person",
      "audience": "all",
-     "status": "estimate",
+     "status": "known",
      "essential": true,
-     "note": "Ingresso indicato come gratuito dalla redazione, da verificare.",
+     "note": "Entrata libera (sito del Cantone).",
      "evidence": {
       "field": "price",
-      "sourceId": "estimate",
-      "status": "estimate",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "Ingresso indicato come gratuito dalla redazione, da verificare."
+      "url": "https://www4.ti.ch/dt/da/mcsn/temi/mcsn/tema",
+      "note": "Entrata libera (sito del Cantone)."
      }
     }
    ],
@@ -6643,62 +6894,87 @@
        ],
        "from": "09:00",
        "to": "18:00",
-       "lastEntry": "17:00",
-       "seasonFrom": "03-14",
-       "seasonTo": "11-01"
+       "lastEntry": "17:30",
+       "seasonFrom": "06-01",
+       "seasonTo": "11-08"
       }
      ],
      "holidays": "unknown",
      "exceptions": [],
-     "osmOpeningHours": "Mar 14-Nov 01: 09:00-18:00",
+     "osmOpeningHours": "Jun 01-Nov 08: Mo-Su 09:00-18:00",
      "evidence": {
       "field": "hours",
-      "sourceId": "editorial-2026-09",
-      "status": "editorial",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "Stagione e orari indicativi, da verificare sul sito ufficiale. · Ultimo ingresso indicativo un'ora prima della chiusura (redazione, da verificare)."
+      "url": "https://www.swissminiatur.ch/contatti/",
+      "note": "Calendario ufficiale 2026: «Orario 1» (9–18, ultimo ingresso 17.30) tutti i giorni fino all'8 novembre, poi parco chiuso. Mesi prima di giugno non consultati. · Ultimo ingresso alle 17.30 (sito ufficiale)."
      }
     }
    ],
    "prices": [
     {
      "id": "swissminiatur-p0",
-     "label": "Adulti",
+     "label": "Adulti (dai 16 anni)",
      "currency": "CHF",
-     "min": 20,
-     "max": 25,
+     "min": 22,
+     "max": 22,
      "unit": "person",
      "audience": "adult",
-     "status": "estimate",
+     "status": "known",
      "essential": true,
+     "note": "AVS CHF 18; studenti dai 16 anni e AI CHF 17; famiglia (2 adulti + bambini 6–15) CHF 60.",
      "evidence": {
       "field": "price",
-      "sourceId": "estimate",
-      "status": "estimate",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "Tariffa indicativa, da verificare sul sito ufficiale."
+      "url": "https://www.swissminiatur.ch/biglietti-swissminiatur/",
+      "note": "AVS CHF 18; studenti dai 16 anni e AI CHF 17; famiglia (2 adulti + bambini 6–15) CHF 60."
      }
     },
     {
      "id": "swissminiatur-p1",
-     "label": "Bambini",
+     "label": "Bambini 6–15 anni",
      "currency": "CHF",
-     "min": 12,
-     "max": 16,
+     "min": 15,
+     "max": 15,
      "unit": "person",
      "audience": "child",
      "childAgeMax": 15,
-     "status": "estimate",
+     "status": "known",
      "essential": true,
      "evidence": {
       "field": "price",
-      "sourceId": "estimate",
-      "status": "estimate",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "Tariffa indicativa, da verificare sul sito ufficiale."
+      "url": "https://www.swissminiatur.ch/biglietti-swissminiatur/"
+     }
+    },
+    {
+     "id": "swissminiatur-p2",
+     "label": "Bambini fino a 5 anni",
+     "currency": "CHF",
+     "min": 0,
+     "max": 0,
+     "unit": "person",
+     "audience": "child",
+     "childAgeMax": 5,
+     "status": "known",
+     "essential": true,
+     "note": "Gratis fino a 5 anni compiuti.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "official-web",
+      "status": "verified",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "url": "https://www.swissminiatur.ch/biglietti-swissminiatur/",
+      "note": "Gratis fino a 5 anni compiuti."
      }
     }
    ],
@@ -6713,13 +6989,15 @@
     "wheelchair": "yes",
     "stroller": "yes",
     "stairs": "none",
+    "note": "Parco pianeggiante e senza barriere architettoniche secondo il sito ufficiale. La stazione FFS di Melide non è accessibile alle persone con mobilità ridotta (sito ufficiale): meglio il battello o il bus.",
     "evidence": {
      "field": "accessibility",
-     "sourceId": "osm",
-     "status": "osm",
+     "sourceId": "official-web",
+     "status": "verified",
      "observedAt": "2026-09-28",
      "lastCheckedAt": "2026-09-28",
-     "note": "wheelchair=yes"
+     "url": "https://www.swissminiatur.ch/contatti/",
+     "note": "Parco pianeggiante e senza barriere architettoniche secondo il sito ufficiale. La stazione FFS di Melide non è accessibile alle persone con mobilità ridotta (sito ufficiale): meglio il battello o il bus."
     }
    },
    "suitability": {
@@ -7466,30 +7744,712 @@
        ],
        "from": "10:30",
        "to": "17:30",
-       "seasonFrom": "03-01",
+       "seasonFrom": "04-01",
        "seasonTo": "10-31"
-      },
-      {
-       "days": [
-        6,
-        7
-       ],
-       "from": "10:30",
-       "to": "17:30",
-       "seasonFrom": "11-01",
-       "seasonTo": "02-29"
       }
      ],
      "holidays": "unknown",
-     "exceptions": [],
-     "osmOpeningHours": "Mar-Oct: Mo-Su 10:30-17:30; Nov-Feb: Sa-Su 10:30-17:30",
+     "exceptions": [
+      {
+       "date": "2026-11-02",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-03",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-04",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-05",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-06",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-07",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-08",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-09",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-10",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-11",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-12",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-13",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-14",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-15",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-16",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-17",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-18",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-19",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-20",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-21",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-22",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-23",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-24",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-25",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-26",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-27",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-28",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-29",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-11-30",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-01",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-02",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-03",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-04",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-05",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-06",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-07",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-08",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-09",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-10",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-11",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-12",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-13",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-14",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-15",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-16",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-17",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-18",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-19",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-20",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-21",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-22",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-23",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-24",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-25",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-26",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-27",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-28",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-29",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-30",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2026-12-31",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-01",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-02",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-03",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-04",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-05",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-06",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-07",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-08",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-09",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-10",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-11",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-12",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-13",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-14",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-15",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-16",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-17",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-18",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-19",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-20",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-21",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-22",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-23",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-24",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-25",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-26",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-27",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-28",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-29",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-30",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-01-31",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-01",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-02",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-03",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-04",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-05",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-06",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-07",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-08",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-09",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-10",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-11",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-12",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-13",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-14",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-15",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-16",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-17",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-18",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-19",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-20",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-21",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-22",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-23",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-24",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-25",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-26",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-27",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-02-28",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-01",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-02",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-03",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-04",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-05",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-06",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-07",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-08",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-09",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-10",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-11",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-12",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-13",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-14",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-15",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-16",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-17",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-18",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      },
+      {
+       "date": "2027-03-19",
+       "closed": true,
+       "note": "rinnovo dell'esposizione permanente, secondo il sito del museo"
+      }
+     ],
+     "osmOpeningHours": "Apr-Oct: Mo-Su 10:30-17:30",
      "evidence": {
       "field": "hours",
-      "sourceId": "osm",
-      "status": "osm",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "opening_hours=\"Mar-Oct: Mo-Su 10:30-17:30; Nov-Feb: Sa-Su 10:30-17:30\""
+      "url": "https://www.hessemontagnola.ch/informazioni",
+      "note": "Aprile–ottobre 2026 tutti i giorni 10.30–17.30 (sito del museo)."
      }
     }
    ],
@@ -7498,19 +8458,43 @@
      "id": "museo-hesse-p0",
      "label": "Ingresso",
      "currency": "CHF",
-     "min": 9,
-     "max": 12,
+     "min": 10,
+     "max": 10,
      "unit": "person",
-     "audience": "all",
-     "status": "estimate",
+     "audience": "adult",
+     "status": "known",
      "essential": true,
+     "note": "Adulti CHF 10; ridotto CHF 8 (studenti, pensionati); famiglia CHF 26; ragazzi dai 12 anni: tariffa non indicata separatamente, stimata come adulti.",
      "evidence": {
       "field": "price",
-      "sourceId": "estimate",
-      "status": "estimate",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "Tariffa indicativa, da verificare sul sito ufficiale."
+      "url": "https://www.hessemontagnola.ch/informazioni",
+      "note": "Adulti CHF 10; ridotto CHF 8 (studenti, pensionati); famiglia CHF 26; ragazzi dai 12 anni: tariffa non indicata separatamente, stimata come adulti."
+     }
+    },
+    {
+     "id": "museo-hesse-p1",
+     "label": "Ingresso (fino a 11 anni)",
+     "currency": "CHF",
+     "min": 0,
+     "max": 0,
+     "unit": "person",
+     "audience": "child",
+     "childAgeMax": 11,
+     "status": "known",
+     "essential": true,
+     "note": "Gratis sotto i 12 anni.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "official-web",
+      "status": "verified",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "url": "https://www.hessemontagnola.ch/informazioni",
+      "note": "Gratis sotto i 12 anni."
      }
     }
    ],

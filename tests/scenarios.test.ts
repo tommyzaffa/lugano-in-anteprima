@@ -128,13 +128,19 @@ describe('G/H — rami e salto equivalente', () => {
 
 describe('I — dati incompleti e provider assente', () => {
   it('un costo sconosciuto non diventa zero e il budget non viene dichiarato rispettato', async () => {
-    const r = await plan({ moods: ['cultural'], mustSee: ['masi-palazzo-reali'], budget: { amount: 500, per: 'person', strict: false } });
+    // dopo la riapertura del 17 ottobre: orari verificati, tariffa non pubblicata
+    const r = await plan({ date: '2026-10-20', moods: ['cultural'], mustSee: ['masi-palazzo-reali'], budget: { amount: 500, per: 'person', strict: false } });
     const p = ok(r)[0];
     const stop = p.stops.find((s) => s.placeId === 'masi-palazzo-reali')!;
     expect(stop.cost.some((c) => c.min == null)).toBe(true);
     expect(p.totals.cost.unknownEssential).toBeGreaterThan(0);
     expect(p.totals.cost.status).toBe('unverifiable');
     expect(p.feasibility).not.toBe('valid');
+  });
+  it('una chiusura straordinaria dichiarata dal gestore rende impossibile la tappa obbligatoria e ne dà il motivo', async () => {
+    const r = await plan({ moods: ['cultural'], mustSee: ['masi-palazzo-reali'] });
+    expect(r.status).toBe('infeasible');
+    if (r.status === 'infeasible') expect(r.infeasible.reasons.map((x) => x.message).join(' ')).toMatch(/MASI Palazzo Reali.*riallestimento/);
   });
   it('senza modello AI la fonte è dichiarata come pianificatore deterministico', async () => {
     const [p] = ok(await plan({}));

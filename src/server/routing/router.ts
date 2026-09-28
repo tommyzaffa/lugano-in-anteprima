@@ -9,7 +9,7 @@ import { walkCost, edgeTime, type WalkProfile } from './walk.ts';
 import { EdgeFlag } from '../../shared/graph-format.ts';
 import type { RouteLeg, Trip, LegPoint, LegMode, CostLine, Person, TransitInfo } from '../../shared/types.ts';
 import { isoFromMs } from '../../shared/time.ts';
-import { rideFare } from '../catalog/fares.ts';
+import { rideFare, mergeBreSections } from '../catalog/fares.ts';
 
 export interface WalkResult {
   coords: [number, number][];
@@ -249,8 +249,40 @@ export class Router {
     return best;
   }
 
+  /**
+   * Elimina gli «avanti e indietro»: se una corsa riporta il gruppo indietro e la corsa successiva
+   * ripassa dalla fermata in cui era salito prima (es. scendere in funicolare per poi risalire
+   * sulla stessa linea), si sale direttamente sulla seconda corsa in quella fermata: stesso arrivo,
+   * meno corse e un biglietto in meno.
+   */
+  private removeBacktracks(parts: JourneyPart[]): JourneyPart[] {
+    const out = parts.slice();
+    for (let changed = true; changed;) {
+      changed = false;
+      for (let i = 0; i < out.length; i++) {
+        const r1 = out[i];
+        if (r1.kind !== 'ride') continue;
+        let j = i + 1;
+        while (j < out.length && out[j].kind === 'transfer') j++;
+        const r2 = out[j];
+        if (!r2 || r2.kind !== 'ride') continue;
+        const stops = this.transit.d.patterns[r2.instance.pattern].stops;
+        // la seconda corsa ripassa (dopo la sua salita) dalla fermata dove era iniziata la prima
+        for (let h = r2.fromHop + 1; h < r2.toHop; h++) {
+          if (stops[h] !== r1.fromStop || r2.instance.dep[h] < r1.dep) continue;
+          out.splice(i, j - i + 1, { ...r2, fromHop: h, fromStop: r1.fromStop, dep: r2.instance.dep[h] });
+          changed = true;
+          break;
+        }
+        if (changed) break;
+      }
+    }
+    return out;
+  }
+
   /** Elimina corse superflue all'inizio o alla fine quando camminare è equivalente. */
-  private simplify(parts: JourneyPart[], from: LegPoint, to: LegPoint, departAt: number, arrival: number, o: TravelOptions): JourneyPart[] {
+  private simplify(parts0: JourneyPart[], from: LegPoint, to: LegPoint, departAt: number, arrival: number, o: TravelOptions): JourneyPart[] {
+    const parts = this.removeBacktracks(parts0);
     const rides = parts.map((p, i) => [p, i] as const).filter(([p]) => p.kind === 'ride') as [Extract<JourneyPart, { kind: 'ride' }>, number][];
     if (rides.length <= 1) return parts;
     let startIdx = 0;
@@ -342,7 +374,7 @@ export class Router {
     if (inst.frequencyBased) notes.push(`Servizio a cadenza (circa ogni ${Math.round((inst.headwaySec ?? 0) / 60)} min): orario indicativo.`);
     if (approx) notes.push('Parte della geometria della tratta è approssimata (non ricostruita sulla rete).');
     const hops = p.toHop - p.fromHop;
-    const fare = rideFare({ short: route.short, mode: pat.mode, agency }, hops, o.people, isoFromMs(p.dep), o.passes);
+    const fare = rideFare({ short: route.short, mode: pat.mode, agency }, hops, o.people, isoFromMs(p.dep), o.passes, [this.transit.d.stops[p.fromStop].name, this.transit.d.stops[p.toStop].name]);
     const transit: TransitInfo = {
       routeShort: route.short, routeLong: route.long, agency, headsign: trip.h, tripId: trip.id,
       frequencyBased: inst.frequencyBased, stops, mode: pat.mode,
@@ -375,7 +407,7 @@ export class Router {
     const label = rides.length
       ? rides.map((r) => `${modeLabel(r.mode)} ${r.transit![0].routeShort}`).join(' + ') + (hikeM ? ' + escursione' : walkM > 1500 ? ' + a piedi' : '')
       : main === 'hike' ? 'Escursione a piedi' : 'A piedi';
-    const cost: CostLine[] = mergeArcobaleno(legs.flatMap((l) => l.cost ?? []));
+    const cost: CostLine[] = mergeArcobaleno(mergeBreSections(legs.flatMap((l) => l.cost ?? [])));
     const notes = [...new Set(legs.flatMap((l) => l.notes))];
     return {
       id: `trip-${idx.fromStop}-${idx.toStop}-${Date.parse(dep)}`,
