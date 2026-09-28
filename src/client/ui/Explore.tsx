@@ -67,6 +67,15 @@ export default function Explore() {
       </fieldset>
       <label className="check"><input type="checkbox" checked={onlyFavs} onChange={(e) => setOnlyFavs(e.target.checked)} /> Solo i miei preferiti ({favs.length})</label>
       <label className="check"><input type="checkbox" checked={f.showOsm} onChange={(e) => setF({ showOsm: e.target.checked })} /> Mostra anche i punti OpenStreetMap non curati (da verificare)</label>
+      <details className="legend">
+        <summary>Legenda dei sentieri</summary>
+        <ul>
+          <li><span className="sw sw-yellow" aria-hidden /> escursionistico</li>
+          <li><span className="sw sw-red" aria-hidden /> di montagna (bianco-rosso-bianco)</li>
+          <li><span className="sw sw-blue" aria-hidden /> alpino (bianco-blu-bianco)</li>
+        </ul>
+        <p className="hint">Colori ricavati dalla difficoltà indicata in OpenStreetMap (sac_scale), non dalla segnaletica ufficiale: sul posto vale quella dei cartelli. Condizioni del sentiero non verificate.</p>
+      </details>
       {err ? <div className="notice bad">{err}</div> : !places ? <Spinner /> : !shown.length ? <Empty title="Nessun luogo con questi filtri" /> : (
         <ul className="place-list">
           {shown.map((p) => (

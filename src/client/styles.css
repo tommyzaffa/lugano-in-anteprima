@@ -343,6 +343,14 @@ thead th { font-family: var(--serif); }
 .reval { margin: .8rem 0; }
 .reval li.blocking { color: var(--bad); } .reval li.warning { color: var(--warn); }
 .sources-used { font-size: .86rem; color: var(--ink-soft); }
+.legend { margin: .4rem 0; font-size: .9rem; }
+.legend summary { cursor: pointer; font-weight: 600; min-height: 32px; display: flex; align-items: center; }
+.legend ul { list-style: none; padding: 0; margin: .3rem 0; }
+.legend li { display: flex; align-items: center; gap: .5rem; margin: .2rem 0; }
+.sw { display: inline-block; width: 34px; height: 6px; border-radius: 2px; }
+.sw-yellow { background: repeating-linear-gradient(90deg, #e0b000 0 9px, transparent 9px 14px); }
+.sw-red { background: repeating-linear-gradient(90deg, #c8322b 0 9px, #fff 9px 14px); outline: 2px solid #fff; box-shadow: 0 0 0 3px var(--line); }
+.sw-blue { background: repeating-linear-gradient(90deg, #2f5fb3 0 9px, #fff 9px 14px); outline: 2px solid #fff; box-shadow: 0 0 0 3px var(--line); }
 .vote-box { border: 1.5px solid var(--line); background: var(--card); border-radius: 12px; padding: .6rem .8rem; margin: .6rem 0; }
 .vote-box label { display: flex; flex-direction: column; gap: .2rem; font-size: .88rem; }
 .vote-box .grow { flex: 1 1 220px; }
