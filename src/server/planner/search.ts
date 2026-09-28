@@ -85,7 +85,8 @@ function rng(seed: number) {
 
 export function search(ctx: PlanContext, cands: Candidate[], est: Estimator, opts: SearchOptions): SearchNode[] {
   const meals = expectedMeals(ctx);
-  const travelPenalty = ctx.req.pace === 'relaxed' ? 0.09 : ctx.req.pace === 'intense' ? 0.04 : 0.06; // per minuto
+  // penalità per minuto di spostamento: favorisce sequenze compatte, senza avanti e indietro
+  const travelPenalty = ctx.req.pace === 'relaxed' ? 0.14 : ctx.req.pace === 'intense' ? 0.07 : 0.1;
   const rand = opts.seed ? rng(opts.seed) : null;
   const jitter = new Map(cands.map((c) => [c.key, rand ? rand() * 2.2 : 0]));
   const root: SearchNode = {
@@ -171,7 +172,12 @@ export function search(ctx: PlanContext, cands: Candidate[], est: Estimator, opt
         if (opts.theme.boost.some((b) => c.themes.includes(b))) s *= opts.theme.weight;
         if (c.mustSee) s += 9;
         s += Math.min(stayMin, 120) / 60;
-        s -= (e.sec / 60) * travelPenalty * 10 / 10;
+        s -= (e.sec / 60) * travelPenalty;
+        // ritorno verso una zona già visitata: penalità se ci si avvicina molto a una tappa precedente (non l'ultima)
+        for (const prev of node.seq.slice(0, -1)) {
+          const d = Math.hypot((prev.cand.place.lon - c.place.lon) * 77300, (prev.cand.place.lat - c.place.lat) * 111200);
+          if (d < 400) { s -= 1.2; break; }
+        }
         s -= ((start - arrive) / 60_000) * 0.05;
         s -= e.rides * 0.3;
         s += mealBonus;

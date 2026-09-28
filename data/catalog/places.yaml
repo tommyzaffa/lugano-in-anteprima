@@ -1461,3 +1461,206 @@
   occ: [sightseeing, guests, date]
   weather: any
   noise: quiet
+
+# ---------------------------------------------------------------- nord e ovest dell'agglomerato
+- id: memorial-regazzoni
+  name: Memorial Room Clay Regazzoni
+  cat: museum
+  osm: n5966152456
+  area: Pregassona
+  desc: Piccolo spazio espositivo dedicato al pilota ticinese Clay Regazzoni. Aperture da verificare.
+  tags: [museo, sport, motori, al-coperto]
+  moods: [cultural]
+  visit: [20, 40, 60]
+  hours: unknown
+  prices:
+    - { label: "Ingresso", unit: person, status: unknown }
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, sightseeing, family]
+  weather: indoor
+  indoor: true
+  noise: quiet
+
+- id: museo-tipografia
+  name: Museo della Tipografia Renato Fontana
+  cat: museum
+  osm: n5966165780
+  area: Canobbio
+  desc: Collezione dedicata alla stampa tipografica e ai suoi strumenti. Aperture da verificare.
+  tags: [museo, stampa, storia, al-coperto]
+  moods: [cultural]
+  visit: [30, 45, 75]
+  hours: unknown
+  prices:
+    - { label: "Ingresso", unit: person, status: unknown }
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [sightseeing, guests, family]
+  weather: indoor
+  indoor: true
+  noise: quiet
+
+- id: san-bartolomeo-davesco
+  name: Chiesa di San Bartolomeo (Davesco)
+  cat: church
+  osm: w467806299
+  area: Davesco-Soragno
+  desc: Chiesa del nucleo di Davesco, nella parte settentrionale del comune di Lugano.
+  tags: [chiesa, nucleo, storia, gratuito]
+  moods: [cultural, chill]
+  visit: [10, 20, 30]
+  hours: unknown
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [sightseeing, guests]
+  weather: any
+  noise: quiet
+
+- id: san-siro-canobbio
+  name: Chiesa di San Siro (Canobbio)
+  cat: church
+  osm: w68173096
+  area: Canobbio
+  desc: Chiesa parrocchiale di Canobbio, comune autonomo a nord di Lugano.
+  tags: [chiesa, storia, gratuito]
+  moods: [cultural]
+  visit: [10, 20, 30]
+  hours: unknown
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [sightseeing, guests]
+  weather: any
+  noise: quiet
+
+- id: grotto-ponte-di-valle
+  name: Grotto Ponte di Valle
+  cat: restaurant
+  osm: w313212639
+  area: Davesco-Soragno
+  desc: Grotto lungo il Cassarate fra Davesco e Canobbio.
+  tags: [grotto, ticinese, fiume]
+  moods: [food, nature, chill]
+  visit: [60, 90, 120]
+  meal: any
+  hours: unknown
+  prices: grotto
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, family, guests]
+  weather: any
+  noise: moderate
+  alcohol: available
+
+- id: grotto-pierino
+  name: Grotto Pierino
+  cat: restaurant
+  osm: n506185094
+  area: Viganello / Pregassona
+  desc: Grotto sulla collina sopra Viganello.
+  tags: [grotto, ticinese, collina]
+  moods: [food, chill]
+  visit: [60, 90, 120]
+  meal: any
+  hours: unknown
+  prices: grotto
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, family, guests]
+  weather: any
+  noise: moderate
+  alcohol: available
+
+- id: piccolo-vigneto
+  name: Ristorante Piccolo Vigneto
+  cat: restaurant
+  osm: n2873740901
+  area: Viganello
+  desc: Ristorante di cucina regionale a Viganello.
+  tags: [regionale, pranzo, cena]
+  moods: [food, chill]
+  visit: [60, 80, 110]
+  meal: any
+  hours: osm
+  prices: osteria
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, date, family, guests]
+  weather: any
+  noise: moderate
+  alcohol: available
+
+- id: gelateria-doppiogusto
+  name: Gelateria Doppiogusto
+  cat: gelato
+  osm: n8809409856
+  area: Pregassona
+  desc: Gelateria di quartiere a Pregassona.
+  tags: [gelato, pausa, bambini]
+  moods: [chill, food]
+  visit: [10, 15, 25]
+  meal: snack
+  hours: osm
+  prices: gelato
+  booking: no
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, family, leisure]
+  weather: any
+  noise: moderate
+
+- id: fattoria-moncucchetto
+  name: Fattoria Moncucchetto
+  cat: restaurant
+  osm: w232636831
+  area: Breganzona / Besso
+  desc: Azienda vitivinicola con ristorazione sulla collina del Moncucchetto, fra vigneti e vista sulla città. Orari da verificare.
+  tags: [vigneto, vino, vista, collina]
+  moods: [food, views, romantic]
+  visit: [60, 90, 120]
+  meal: any
+  hours: unknown
+  prices: fine
+  booking: yes
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [date, guests, birthday]
+  weather: any
+  noise: quiet
+  alcohol: central
+
+- id: panorama-breganzona
+  name: "Belvedere «Panorama sul Lago e Monti»"
+  cat: viewpoint
+  osm: n4632422590
+  area: Breganzona
+  desc: Punto panoramico segnalato sulla collina di Breganzona.
+  tags: [vista, gratuito, collina]
+  moods: [views, chill]
+  visit: [10, 15, 25]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [date, friends, leisure]
+  weather: dry
+  noise: quiet
+
+- id: grotto-valletta
+  name: Grotto Valletta
+  cat: restaurant
+  osm: n1271876880
+  area: Massagno
+  desc: Grotto a Massagno, sulla collina a nord della stazione.
+  tags: [grotto, ticinese]
+  moods: [food, chill]
+  visit: [60, 90, 120]
+  meal: any
+  hours: unknown
+  prices: grotto
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, family, guests]
+  weather: any
+  noise: moderate
+  alcohol: available

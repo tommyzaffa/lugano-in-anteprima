@@ -1,6 +1,6 @@
 {
- "version": "cat-2026-09-28-76p-14e",
- "builtAt": "2026-09-28T06:26:44.547Z",
+ "version": "cat-2026-09-28-87p-14e",
+ "builtAt": "2026-09-28T10:46:32.311Z",
  "sources": [
   {
    "id": "osm",
@@ -14742,6 +14742,1961 @@
      "observedAt": "2026-09-28",
      "lastCheckedAt": "2026-09-28",
      "note": "Confini amministrativi OSM: Campione d'Italia (IT)"
+    }
+   ],
+   "sources": [
+    "osm",
+    "editorial-2026-09"
+   ],
+   "lastEditorialCheck": "2026-09-28"
+  },
+  {
+   "id": "memorial-regazzoni",
+   "name": "Memorial Room Clay Regazzoni",
+   "category": "museum",
+   "osm": "n5966152456",
+   "lon": 8.974049,
+   "lat": 46.026448,
+   "entrance": {
+    "lon": 8.9740492,
+    "lat": 46.0264477,
+    "source": "osm_feature"
+   },
+   "municipality": {
+    "name": "Lugano",
+    "country": "CH"
+   },
+   "area": "Pregassona",
+   "description": "Piccolo spazio espositivo dedicato al pilota ticinese Clay Regazzoni. Aperture da verificare.",
+   "tags": [
+    "museo",
+    "sport",
+    "motori",
+    "al-coperto"
+   ],
+   "moods": [
+    "cultural"
+   ],
+   "visit": {
+    "min": 20,
+    "typical": 40,
+    "max": 60
+   },
+   "schedules": [],
+   "prices": [
+    {
+     "id": "memorial-regazzoni-p0",
+     "label": "Ingresso",
+     "currency": "CHF",
+     "unit": "person",
+     "audience": "all",
+     "status": "unknown",
+     "essential": true,
+     "evidence": {
+      "field": "price",
+      "sourceId": "editorial-2026-09",
+      "status": "unknown",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "note": "Tariffa indicativa, da verificare sul sito ufficiale."
+     }
+    }
+   ],
+   "booking": {
+    "required": "recommended"
+   },
+   "links": {},
+   "accessibility": {
+    "wheelchair": "unknown",
+    "stroller": "unknown",
+    "stairs": "unknown",
+    "evidence": {
+     "field": "accessibility",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    }
+   },
+   "suitability": {
+    "occasions": [
+     "friends",
+     "sightseeing",
+     "family"
+    ],
+    "weather": "indoor",
+    "indoor": true,
+    "habitualAtmosphere": "unknown",
+    "noise": "quiet",
+    "alcohol": "none"
+   },
+   "plannable": "yes",
+   "diet": [],
+   "nearestStops": [
+    {
+     "id": "ch:1:sloid:79012::467701",
+     "name": "Ligaino",
+     "distanceM": 220,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:9::435001",
+     "name": "Pregassona, Scuola Media",
+     "distanceM": 288,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:88903::430104",
+     "name": "Canobbio, Mercato Resega",
+     "distanceM": 524,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:88902:0:430203",
+     "name": "Davesco, Ponte di Valle",
+     "distanceM": 549,
+     "modes": [
+      "bus"
+     ]
+    }
+   ],
+   "sponsored": false,
+   "demo": false,
+   "evidence": [
+    {
+     "field": "coordinates",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Oggetto n5966152456 «Memorial Room Clay Regazzoni»"
+    },
+    {
+     "field": "description",
+     "sourceId": "editorial-2026-09",
+     "status": "editorial",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    },
+    {
+     "field": "hours",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Orari non disponibili nel catalogo."
+    },
+    {
+     "field": "municipality",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Confini amministrativi OSM: Lugano (CH)"
+    }
+   ],
+   "sources": [
+    "osm",
+    "editorial-2026-09"
+   ],
+   "lastEditorialCheck": "2026-09-28"
+  },
+  {
+   "id": "museo-tipografia",
+   "name": "Museo della Tipografia Renato Fontana",
+   "category": "museum",
+   "osm": "n5966165780",
+   "lon": 8.969391,
+   "lat": 46.028022,
+   "entrance": {
+    "lon": 8.9693908,
+    "lat": 46.0280224,
+    "source": "osm_feature"
+   },
+   "municipality": {
+    "name": "Lugano",
+    "country": "CH"
+   },
+   "area": "Canobbio",
+   "description": "Collezione dedicata alla stampa tipografica e ai suoi strumenti. Aperture da verificare.",
+   "tags": [
+    "museo",
+    "stampa",
+    "storia",
+    "al-coperto"
+   ],
+   "moods": [
+    "cultural"
+   ],
+   "visit": {
+    "min": 30,
+    "typical": 45,
+    "max": 75
+   },
+   "schedules": [],
+   "prices": [
+    {
+     "id": "museo-tipografia-p0",
+     "label": "Ingresso",
+     "currency": "CHF",
+     "unit": "person",
+     "audience": "all",
+     "status": "unknown",
+     "essential": true,
+     "evidence": {
+      "field": "price",
+      "sourceId": "editorial-2026-09",
+      "status": "unknown",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "note": "Tariffa indicativa, da verificare sul sito ufficiale."
+     }
+    }
+   ],
+   "booking": {
+    "required": "recommended"
+   },
+   "links": {},
+   "accessibility": {
+    "wheelchair": "unknown",
+    "stroller": "unknown",
+    "stairs": "unknown",
+    "evidence": {
+     "field": "accessibility",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    }
+   },
+   "suitability": {
+    "occasions": [
+     "sightseeing",
+     "guests",
+     "family"
+    ],
+    "weather": "indoor",
+    "indoor": true,
+    "habitualAtmosphere": "unknown",
+    "noise": "quiet",
+    "alcohol": "none"
+   },
+   "plannable": "yes",
+   "diet": [],
+   "nearestStops": [
+    {
+     "id": "ch:1:sloid:88903::430104",
+     "name": "Canobbio, Mercato Resega",
+     "distanceM": 148,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:95132::412401",
+     "name": "Lugano, Pista Ghiaccio",
+     "distanceM": 323,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:9::435001",
+     "name": "Pregassona, Scuola Media",
+     "distanceM": 369,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:88902:0:430204",
+     "name": "Davesco, Ponte di Valle",
+     "distanceM": 424,
+     "modes": [
+      "bus"
+     ]
+    }
+   ],
+   "sponsored": false,
+   "demo": false,
+   "evidence": [
+    {
+     "field": "coordinates",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Oggetto n5966165780 «Museo della Tipografia Renato Fontana»"
+    },
+    {
+     "field": "description",
+     "sourceId": "editorial-2026-09",
+     "status": "editorial",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    },
+    {
+     "field": "hours",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Orari non disponibili nel catalogo."
+    },
+    {
+     "field": "municipality",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Confini amministrativi OSM: Lugano (CH)"
+    }
+   ],
+   "sources": [
+    "osm",
+    "editorial-2026-09"
+   ],
+   "lastEditorialCheck": "2026-09-28"
+  },
+  {
+   "id": "san-bartolomeo-davesco",
+   "name": "Chiesa di San Bartolomeo (Davesco)",
+   "category": "church",
+   "osm": "w467806299",
+   "lon": 8.980476,
+   "lat": 46.036923,
+   "entrance": {
+    "lon": 8.980476,
+    "lat": 46.036922649999994,
+    "source": "osm_feature"
+   },
+   "municipality": {
+    "name": "Lugano",
+    "country": "CH"
+   },
+   "area": "Davesco-Soragno",
+   "description": "Chiesa del nucleo di Davesco, nella parte settentrionale del comune di Lugano.",
+   "tags": [
+    "chiesa",
+    "nucleo",
+    "storia",
+    "gratuito"
+   ],
+   "moods": [
+    "cultural",
+    "chill"
+   ],
+   "visit": {
+    "min": 10,
+    "typical": 20,
+    "max": 30
+   },
+   "schedules": [],
+   "prices": [
+    {
+     "id": "san-bartolomeo-davesco-free",
+     "label": "Accesso libero",
+     "currency": "CHF",
+     "min": 0,
+     "max": 0,
+     "unit": "free",
+     "audience": "all",
+     "status": "known",
+     "essential": true,
+     "evidence": {
+      "field": "price",
+      "sourceId": "editorial-2026-09",
+      "status": "editorial",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "note": "Spazio pubblico o ingresso gratuito secondo la redazione."
+     }
+    }
+   ],
+   "booking": {
+    "required": "no"
+   },
+   "links": {},
+   "accessibility": {
+    "wheelchair": "unknown",
+    "stroller": "unknown",
+    "stairs": "unknown",
+    "evidence": {
+     "field": "accessibility",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    }
+   },
+   "suitability": {
+    "occasions": [
+     "sightseeing",
+     "guests"
+    ],
+    "weather": "any",
+    "indoor": false,
+    "habitualAtmosphere": "unknown",
+    "noise": "quiet",
+    "alcohol": "none"
+   },
+   "plannable": "yes",
+   "diet": [],
+   "nearestStops": [
+    {
+     "id": "ch:1:sloid:5566::467502",
+     "name": "Davesco, Paese",
+     "distanceM": 33,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:88900::430401",
+     "name": "Davesco, Via Sonvico",
+     "distanceM": 254,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:88901::430301",
+     "name": "Davesco, Casteldavesco",
+     "distanceM": 276,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:5565::467602",
+     "name": "Soragno",
+     "distanceM": 485,
+     "modes": [
+      "bus"
+     ]
+    }
+   ],
+   "sponsored": false,
+   "demo": false,
+   "evidence": [
+    {
+     "field": "coordinates",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Oggetto w467806299 «Chiesa di San Bartolomeo»"
+    },
+    {
+     "field": "description",
+     "sourceId": "editorial-2026-09",
+     "status": "editorial",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    },
+    {
+     "field": "hours",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Orari non disponibili nel catalogo."
+    },
+    {
+     "field": "municipality",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Confini amministrativi OSM: Lugano (CH)"
+    }
+   ],
+   "sources": [
+    "osm",
+    "editorial-2026-09"
+   ],
+   "lastEditorialCheck": "2026-09-28"
+  },
+  {
+   "id": "san-siro-canobbio",
+   "name": "Chiesa di San Siro (Canobbio)",
+   "category": "church",
+   "osm": "w68173096",
+   "lon": 8.968727,
+   "lat": 46.033682,
+   "entrance": {
+    "lon": 8.9687265671875,
+    "lat": 46.0336815765625,
+    "source": "osm_feature"
+   },
+   "municipality": {
+    "name": "Canobbio",
+    "country": "CH"
+   },
+   "area": "Canobbio",
+   "description": "Chiesa parrocchiale di Canobbio, comune autonomo a nord di Lugano.",
+   "tags": [
+    "chiesa",
+    "storia",
+    "gratuito"
+   ],
+   "moods": [
+    "cultural"
+   ],
+   "visit": {
+    "min": 10,
+    "typical": 20,
+    "max": 30
+   },
+   "schedules": [],
+   "prices": [
+    {
+     "id": "san-siro-canobbio-free",
+     "label": "Accesso libero",
+     "currency": "CHF",
+     "min": 0,
+     "max": 0,
+     "unit": "free",
+     "audience": "all",
+     "status": "known",
+     "essential": true,
+     "evidence": {
+      "field": "price",
+      "sourceId": "editorial-2026-09",
+      "status": "editorial",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "note": "Spazio pubblico o ingresso gratuito secondo la redazione."
+     }
+    }
+   ],
+   "booking": {
+    "required": "no"
+   },
+   "links": {},
+   "accessibility": {
+    "wheelchair": "unknown",
+    "stroller": "unknown",
+    "stairs": "unknown",
+    "evidence": {
+     "field": "accessibility",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    }
+   },
+   "suitability": {
+    "occasions": [
+     "sightseeing",
+     "guests"
+    ],
+    "weather": "any",
+    "indoor": false,
+    "habitualAtmosphere": "unknown",
+    "noise": "quiet",
+    "alcohol": "none"
+   },
+   "plannable": "yes",
+   "diet": [],
+   "nearestStops": [
+    {
+     "id": "ch:1:sloid:78995::466203",
+     "name": "Canobbio, Cioss",
+     "distanceM": 343,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:88902:0:430204",
+     "name": "Davesco, Ponte di Valle",
+     "distanceM": 387,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:7213::413002",
+     "name": "Piano Stampa, Maglio",
+     "distanceM": 427,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:94259::466104",
+     "name": "Canobbio, Paese",
+     "distanceM": 498,
+     "modes": [
+      "bus"
+     ]
+    }
+   ],
+   "sponsored": false,
+   "demo": false,
+   "evidence": [
+    {
+     "field": "coordinates",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Oggetto w68173096 «Chiesa di San Siro»"
+    },
+    {
+     "field": "description",
+     "sourceId": "editorial-2026-09",
+     "status": "editorial",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    },
+    {
+     "field": "hours",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Orari non disponibili nel catalogo."
+    },
+    {
+     "field": "municipality",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Confini amministrativi OSM: Canobbio (CH)"
+    }
+   ],
+   "sources": [
+    "osm",
+    "editorial-2026-09"
+   ],
+   "lastEditorialCheck": "2026-09-28"
+  },
+  {
+   "id": "grotto-ponte-di-valle",
+   "name": "Grotto Ponte di Valle",
+   "category": "restaurant",
+   "osm": "w313212639",
+   "lon": 8.97209,
+   "lat": 46.031319,
+   "entrance": {
+    "lon": 8.972090242187504,
+    "lat": 46.0313192484375,
+    "source": "osm_feature"
+   },
+   "municipality": {
+    "name": "Canobbio",
+    "country": "CH"
+   },
+   "area": "Davesco-Soragno",
+   "description": "Grotto lungo il Cassarate fra Davesco e Canobbio.",
+   "tags": [
+    "grotto",
+    "ticinese",
+    "fiume"
+   ],
+   "moods": [
+    "food",
+    "nature",
+    "chill"
+   ],
+   "visit": {
+    "min": 60,
+    "typical": 90,
+    "max": 120
+   },
+   "schedules": [],
+   "prices": [
+    {
+     "id": "grotto-ponte-di-valle-grotto-adult",
+     "label": "Pasto (fascia grotto)",
+     "currency": "CHF",
+     "min": 30,
+     "max": 55,
+     "unit": "person",
+     "audience": "adult",
+     "status": "estimate",
+     "essential": true,
+     "note": "Fascia indicativa per categoria, non un listino.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "estimate",
+      "status": "estimate",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28"
+     }
+    },
+    {
+     "id": "grotto-ponte-di-valle-grotto-child",
+     "label": "Pasto (fascia grotto) (bambini)",
+     "currency": "CHF",
+     "min": 15,
+     "max": 30,
+     "unit": "person",
+     "audience": "child",
+     "childAgeMax": 11,
+     "status": "estimate",
+     "essential": true,
+     "note": "Fascia indicativa per categoria, non un listino.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "estimate",
+      "status": "estimate",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28"
+     }
+    }
+   ],
+   "booking": {
+    "required": "recommended"
+   },
+   "links": {},
+   "accessibility": {
+    "wheelchair": "unknown",
+    "stroller": "unknown",
+    "stairs": "unknown",
+    "evidence": {
+     "field": "accessibility",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    }
+   },
+   "suitability": {
+    "occasions": [
+     "friends",
+     "family",
+     "guests"
+    ],
+    "weather": "any",
+    "indoor": false,
+    "habitualAtmosphere": "unknown",
+    "noise": "moderate",
+    "alcohol": "available"
+   },
+   "meal": "any",
+   "plannable": "yes",
+   "diet": [],
+   "nearestStops": [
+    {
+     "id": "ch:1:sloid:88902:0:430204",
+     "name": "Davesco, Ponte di Valle",
+     "distanceM": 19,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:88903::430104",
+     "name": "Canobbio, Mercato Resega",
+     "distanceM": 532,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:7213::413002",
+     "name": "Piano Stampa, Maglio",
+     "distanceM": 543,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:5565::467602",
+     "name": "Soragno",
+     "distanceM": 563,
+     "modes": [
+      "bus"
+     ]
+    }
+   ],
+   "sponsored": false,
+   "demo": false,
+   "evidence": [
+    {
+     "field": "coordinates",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Oggetto w313212639 «Grotto Ponte di Valle»"
+    },
+    {
+     "field": "description",
+     "sourceId": "editorial-2026-09",
+     "status": "editorial",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    },
+    {
+     "field": "hours",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Orari non disponibili nel catalogo."
+    },
+    {
+     "field": "municipality",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Confini amministrativi OSM: Canobbio (CH)"
+    }
+   ],
+   "sources": [
+    "osm",
+    "editorial-2026-09"
+   ],
+   "lastEditorialCheck": "2026-09-28"
+  },
+  {
+   "id": "grotto-pierino",
+   "name": "Grotto Pierino",
+   "category": "restaurant",
+   "osm": "n506185094",
+   "lon": 8.983871,
+   "lat": 46.019588,
+   "entrance": {
+    "lon": 8.9838705,
+    "lat": 46.0195883,
+    "source": "osm_feature"
+   },
+   "municipality": {
+    "name": "Lugano",
+    "country": "CH"
+   },
+   "area": "Viganello / Pregassona",
+   "description": "Grotto sulla collina sopra Viganello.",
+   "tags": [
+    "grotto",
+    "ticinese",
+    "collina"
+   ],
+   "moods": [
+    "food",
+    "chill"
+   ],
+   "visit": {
+    "min": 60,
+    "typical": 90,
+    "max": 120
+   },
+   "schedules": [],
+   "prices": [
+    {
+     "id": "grotto-pierino-grotto-adult",
+     "label": "Pasto (fascia grotto)",
+     "currency": "CHF",
+     "min": 30,
+     "max": 55,
+     "unit": "person",
+     "audience": "adult",
+     "status": "estimate",
+     "essential": true,
+     "note": "Fascia indicativa per categoria, non un listino.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "estimate",
+      "status": "estimate",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28"
+     }
+    },
+    {
+     "id": "grotto-pierino-grotto-child",
+     "label": "Pasto (fascia grotto) (bambini)",
+     "currency": "CHF",
+     "min": 15,
+     "max": 30,
+     "unit": "person",
+     "audience": "child",
+     "childAgeMax": 11,
+     "status": "estimate",
+     "essential": true,
+     "note": "Fascia indicativa per categoria, non un listino.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "estimate",
+      "status": "estimate",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28"
+     }
+    }
+   ],
+   "booking": {
+    "required": "recommended"
+   },
+   "links": {
+    "website": "http://www.grottopierino.ch"
+   },
+   "accessibility": {
+    "wheelchair": "unknown",
+    "stroller": "unknown",
+    "stairs": "unknown",
+    "evidence": {
+     "field": "accessibility",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    }
+   },
+   "suitability": {
+    "occasions": [
+     "friends",
+     "family",
+     "guests"
+    ],
+    "weather": "any",
+    "indoor": false,
+    "habitualAtmosphere": "unknown",
+    "noise": "moderate",
+    "alcohol": "available"
+   },
+   "meal": "any",
+   "plannable": "yes",
+   "diet": [],
+   "nearestStops": [
+    {
+     "id": "ch:1:sloid:91796::423101",
+     "name": "Cureggia, Paese",
+     "distanceM": 24,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:91598::423002",
+     "name": "Cureggia, Bassa",
+     "distanceM": 297,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:10199::413502",
+     "name": "Pregassona, Ronco Villa",
+     "distanceM": 408,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:5563::467801",
+     "name": "Pregassona, Paese",
+     "distanceM": 637,
+     "modes": [
+      "bus"
+     ]
+    }
+   ],
+   "sponsored": false,
+   "demo": false,
+   "evidence": [
+    {
+     "field": "coordinates",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Oggetto n506185094 «Grotto Pierino»"
+    },
+    {
+     "field": "description",
+     "sourceId": "editorial-2026-09",
+     "status": "editorial",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    },
+    {
+     "field": "hours",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Orari non disponibili nel catalogo."
+    },
+    {
+     "field": "municipality",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Confini amministrativi OSM: Lugano (CH)"
+    }
+   ],
+   "sources": [
+    "osm",
+    "editorial-2026-09"
+   ],
+   "lastEditorialCheck": "2026-09-28"
+  },
+  {
+   "id": "piccolo-vigneto",
+   "name": "Ristorante Piccolo Vigneto",
+   "category": "restaurant",
+   "osm": "n2873740901",
+   "lon": 8.975452,
+   "lat": 46.008318,
+   "entrance": {
+    "lon": 8.9754524,
+    "lat": 46.0083184,
+    "source": "osm_feature"
+   },
+   "municipality": {
+    "name": "Lugano",
+    "country": "CH"
+   },
+   "area": "Viganello",
+   "description": "Ristorante di cucina regionale a Viganello.",
+   "tags": [
+    "regionale",
+    "pranzo",
+    "cena"
+   ],
+   "moods": [
+    "food",
+    "chill"
+   ],
+   "visit": {
+    "min": 60,
+    "typical": 80,
+    "max": 110
+   },
+   "schedules": [
+    {
+     "id": "piccolo-vigneto-public",
+     "kind": "public",
+     "tz": "Europe/Zurich",
+     "rules": [
+      {
+       "days": [
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "from": "10:00",
+       "to": "14:30"
+      },
+      {
+       "days": [
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "from": "17:30",
+       "to": "00:00"
+      },
+      {
+       "days": [
+        2
+       ],
+       "from": "17:30",
+       "to": "00:00"
+      }
+     ],
+     "holidays": "unknown",
+     "exceptions": [],
+     "osmOpeningHours": "We-Su 10:00-14:30, 17:30-24:00; Tu 17:30-24:00",
+     "evidence": {
+      "field": "hours",
+      "sourceId": "osm",
+      "status": "osm",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "note": "opening_hours=\"We-Su 10:00-14:30, 17:30-24:00; Tu 17:30-24:00\""
+     }
+    }
+   ],
+   "prices": [
+    {
+     "id": "piccolo-vigneto-osteria-adult",
+     "label": "Pasto (fascia osteria/ristorante)",
+     "currency": "CHF",
+     "min": 35,
+     "max": 65,
+     "unit": "person",
+     "audience": "adult",
+     "status": "estimate",
+     "essential": true,
+     "note": "Fascia indicativa per categoria, non un listino.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "estimate",
+      "status": "estimate",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28"
+     }
+    },
+    {
+     "id": "piccolo-vigneto-osteria-child",
+     "label": "Pasto (fascia osteria/ristorante) (bambini)",
+     "currency": "CHF",
+     "min": 15,
+     "max": 30,
+     "unit": "person",
+     "audience": "child",
+     "childAgeMax": 11,
+     "status": "estimate",
+     "essential": true,
+     "note": "Fascia indicativa per categoria, non un listino.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "estimate",
+      "status": "estimate",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28"
+     }
+    }
+   ],
+   "booking": {
+    "required": "recommended"
+   },
+   "links": {
+    "website": "https://piccolo-vigneto.ch/",
+    "phone": "+41 91 972 39 85"
+   },
+   "accessibility": {
+    "wheelchair": "unknown",
+    "stroller": "unknown",
+    "stairs": "unknown",
+    "evidence": {
+     "field": "accessibility",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    }
+   },
+   "suitability": {
+    "occasions": [
+     "friends",
+     "date",
+     "family",
+     "guests"
+    ],
+    "weather": "any",
+    "indoor": false,
+    "habitualAtmosphere": "unknown",
+    "noise": "moderate",
+    "alcohol": "available"
+   },
+   "meal": "any",
+   "plannable": "yes",
+   "diet": [],
+   "nearestStops": [
+    {
+     "id": "ch:1:sloid:5376",
+     "name": "Albonago",
+     "distanceM": 35,
+     "modes": [
+      "funicular"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:91579::410102",
+     "name": "Albonago, Roccolo",
+     "distanceM": 104,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:91584::410201",
+     "name": "Aldesago, Pontaccio",
+     "distanceM": 121,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:91583::410302",
+     "name": "Aldesago, Narbostra",
+     "distanceM": 167,
+     "modes": [
+      "bus"
+     ]
+    }
+   ],
+   "sponsored": false,
+   "demo": false,
+   "evidence": [
+    {
+     "field": "coordinates",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Oggetto n2873740901 «Ristorante Piccolo Vigneto»"
+    },
+    {
+     "field": "description",
+     "sourceId": "editorial-2026-09",
+     "status": "editorial",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    },
+    {
+     "field": "municipality",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Confini amministrativi OSM: Lugano (CH)"
+    }
+   ],
+   "sources": [
+    "osm",
+    "editorial-2026-09"
+   ],
+   "lastEditorialCheck": "2026-09-28"
+  },
+  {
+   "id": "gelateria-doppiogusto",
+   "name": "Gelateria Doppiogusto",
+   "category": "gelato",
+   "osm": "n8809409856",
+   "lon": 8.965689,
+   "lat": 46.021135,
+   "entrance": {
+    "lon": 8.9656894,
+    "lat": 46.0211349,
+    "source": "osm_feature"
+   },
+   "municipality": {
+    "name": "Lugano",
+    "country": "CH"
+   },
+   "area": "Pregassona",
+   "description": "Gelateria di quartiere a Pregassona.",
+   "tags": [
+    "gelato",
+    "pausa",
+    "bambini"
+   ],
+   "moods": [
+    "chill",
+    "food"
+   ],
+   "visit": {
+    "min": 10,
+    "typical": 15,
+    "max": 25
+   },
+   "schedules": [
+    {
+     "id": "gelateria-doppiogusto-public",
+     "kind": "public",
+     "tz": "Europe/Zurich",
+     "rules": [
+      {
+       "days": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "from": "11:00",
+       "to": "22:00"
+      }
+     ],
+     "holidays": "unknown",
+     "exceptions": [],
+     "osmOpeningHours": "Mo-Su 11:00-22:00",
+     "evidence": {
+      "field": "hours",
+      "sourceId": "osm",
+      "status": "osm",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "note": "opening_hours=\"Mo-Su 11:00-22:00\""
+     }
+    }
+   ],
+   "prices": [
+    {
+     "id": "gelateria-doppiogusto-gelato-adult",
+     "label": "Gelato",
+     "currency": "CHF",
+     "min": 4,
+     "max": 8,
+     "unit": "person",
+     "audience": "adult",
+     "status": "estimate",
+     "essential": true,
+     "note": "Fascia indicativa per categoria.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "estimate",
+      "status": "estimate",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28"
+     }
+    },
+    {
+     "id": "gelateria-doppiogusto-gelato-child",
+     "label": "Gelato (bambini)",
+     "currency": "CHF",
+     "min": 3,
+     "max": 6,
+     "unit": "person",
+     "audience": "child",
+     "childAgeMax": 11,
+     "status": "estimate",
+     "essential": true,
+     "note": "Fascia indicativa per categoria.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "estimate",
+      "status": "estimate",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28"
+     }
+    }
+   ],
+   "booking": {
+    "required": "no"
+   },
+   "links": {
+    "phone": "+41912348707"
+   },
+   "accessibility": {
+    "wheelchair": "unknown",
+    "stroller": "unknown",
+    "stairs": "unknown",
+    "evidence": {
+     "field": "accessibility",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    }
+   },
+   "suitability": {
+    "occasions": [
+     "friends",
+     "family",
+     "leisure"
+    ],
+    "weather": "any",
+    "indoor": false,
+    "habitualAtmosphere": "unknown",
+    "noise": "moderate",
+    "alcohol": "none"
+   },
+   "meal": "snack",
+   "plannable": "yes",
+   "diet": [],
+   "nearestStops": [
+    {
+     "id": "ch:1:sloid:91642::405302",
+     "name": "Pregassona, Boschina",
+     "distanceM": 31,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:91643::405201",
+     "name": "Pregassona, Bozzoreda",
+     "distanceM": 139,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:91646::405402",
+     "name": "Pregassona, Viarnetto",
+     "distanceM": 231,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:7226::413801",
+     "name": "Lugano, Via Ciani/Cornaredo",
+     "distanceM": 237,
+     "modes": [
+      "bus"
+     ]
+    }
+   ],
+   "sponsored": false,
+   "demo": false,
+   "evidence": [
+    {
+     "field": "coordinates",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Oggetto n8809409856 «Gelateria Doppiogusto»"
+    },
+    {
+     "field": "description",
+     "sourceId": "editorial-2026-09",
+     "status": "editorial",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    },
+    {
+     "field": "municipality",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Confini amministrativi OSM: Lugano (CH)"
+    }
+   ],
+   "sources": [
+    "osm",
+    "editorial-2026-09"
+   ],
+   "lastEditorialCheck": "2026-09-28"
+  },
+  {
+   "id": "fattoria-moncucchetto",
+   "name": "Fattoria Moncucchetto",
+   "category": "restaurant",
+   "osm": "w232636831",
+   "lon": 8.938251,
+   "lat": 46.002253,
+   "entrance": {
+    "lon": 8.938251057812495,
+    "lat": 46.0022534234375,
+    "source": "osm_feature"
+   },
+   "municipality": {
+    "name": "Sorengo",
+    "country": "CH"
+   },
+   "area": "Breganzona / Besso",
+   "description": "Azienda vitivinicola con ristorazione sulla collina del Moncucchetto, fra vigneti e vista sulla città. Orari da verificare.",
+   "tags": [
+    "vigneto",
+    "vino",
+    "vista",
+    "collina"
+   ],
+   "moods": [
+    "food",
+    "views",
+    "romantic"
+   ],
+   "visit": {
+    "min": 60,
+    "typical": 90,
+    "max": 120
+   },
+   "schedules": [],
+   "prices": [
+    {
+     "id": "fattoria-moncucchetto-fine-adult",
+     "label": "Cena (fascia alta)",
+     "currency": "CHF",
+     "min": 80,
+     "max": 160,
+     "unit": "person",
+     "audience": "adult",
+     "status": "estimate",
+     "essential": true,
+     "note": "Fascia indicativa per categoria, non un listino.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "estimate",
+      "status": "estimate",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28"
+     }
+    },
+    {
+     "id": "fattoria-moncucchetto-fine-child",
+     "label": "Cena (fascia alta) (bambini)",
+     "currency": "CHF",
+     "min": 40,
+     "max": 80,
+     "unit": "person",
+     "audience": "child",
+     "childAgeMax": 11,
+     "status": "estimate",
+     "essential": true,
+     "note": "Fascia indicativa per categoria, non un listino.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "estimate",
+      "status": "estimate",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28"
+     }
+    }
+   ],
+   "booking": {
+    "required": "yes"
+   },
+   "links": {
+    "phone": "+41 91 967 70 60"
+   },
+   "accessibility": {
+    "wheelchair": "unknown",
+    "stroller": "unknown",
+    "stairs": "unknown",
+    "evidence": {
+     "field": "accessibility",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    }
+   },
+   "suitability": {
+    "occasions": [
+     "date",
+     "guests",
+     "birthday"
+    ],
+    "weather": "any",
+    "indoor": false,
+    "habitualAtmosphere": "unknown",
+    "noise": "quiet",
+    "alcohol": "central"
+   },
+   "meal": "any",
+   "plannable": "yes",
+   "diet": [],
+   "nearestStops": [
+    {
+     "id": "ch:1:sloid:75288::482802",
+     "name": "Cortivallo, Paese",
+     "distanceM": 241,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:94222::422602",
+     "name": "Lugano, Moncucco Clinica",
+     "distanceM": 282,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:80113::482702",
+     "name": "Sorengo, Moncucchetto",
+     "distanceM": 295,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:5399::48201",
+     "name": "Sorengo",
+     "distanceM": 304,
+     "modes": [
+      "train"
+     ]
+    }
+   ],
+   "sponsored": false,
+   "demo": false,
+   "evidence": [
+    {
+     "field": "coordinates",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Oggetto w232636831 «Fattoria Moncucchetto»"
+    },
+    {
+     "field": "description",
+     "sourceId": "editorial-2026-09",
+     "status": "editorial",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    },
+    {
+     "field": "hours",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Orari non disponibili nel catalogo."
+    },
+    {
+     "field": "municipality",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Confini amministrativi OSM: Sorengo (CH)"
+    }
+   ],
+   "sources": [
+    "osm",
+    "editorial-2026-09"
+   ],
+   "lastEditorialCheck": "2026-09-28"
+  },
+  {
+   "id": "panorama-breganzona",
+   "name": "Belvedere «Panorama sul Lago e Monti»",
+   "category": "viewpoint",
+   "osm": "n4632422590",
+   "lon": 8.929031,
+   "lat": 46.007994,
+   "entrance": {
+    "lon": 8.9290305,
+    "lat": 46.0079935,
+    "source": "osm_feature"
+   },
+   "municipality": {
+    "name": "Lugano",
+    "country": "CH"
+   },
+   "area": "Breganzona",
+   "description": "Punto panoramico segnalato sulla collina di Breganzona.",
+   "tags": [
+    "vista",
+    "gratuito",
+    "collina"
+   ],
+   "moods": [
+    "views",
+    "chill"
+   ],
+   "visit": {
+    "min": 10,
+    "typical": 15,
+    "max": 25
+   },
+   "schedules": [
+    {
+     "id": "panorama-breganzona-public",
+     "kind": "public",
+     "tz": "Europe/Zurich",
+     "alwaysOpen": true,
+     "rules": [],
+     "holidays": "regular",
+     "exceptions": [],
+     "evidence": {
+      "field": "hours",
+      "sourceId": "editorial-2026-09",
+      "status": "editorial",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "note": "Spazio pubblico sempre accessibile (redazione)."
+     }
+    }
+   ],
+   "prices": [
+    {
+     "id": "panorama-breganzona-free",
+     "label": "Accesso libero",
+     "currency": "CHF",
+     "min": 0,
+     "max": 0,
+     "unit": "free",
+     "audience": "all",
+     "status": "known",
+     "essential": true,
+     "evidence": {
+      "field": "price",
+      "sourceId": "editorial-2026-09",
+      "status": "editorial",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "note": "Spazio pubblico o ingresso gratuito secondo la redazione."
+     }
+    }
+   ],
+   "booking": {
+    "required": "no"
+   },
+   "links": {},
+   "accessibility": {
+    "wheelchair": "unknown",
+    "stroller": "unknown",
+    "stairs": "unknown",
+    "evidence": {
+     "field": "accessibility",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    }
+   },
+   "suitability": {
+    "occasions": [
+     "date",
+     "friends",
+     "leisure"
+    ],
+    "weather": "dry",
+    "indoor": false,
+    "habitualAtmosphere": "unknown",
+    "noise": "quiet",
+    "alcohol": "none"
+   },
+   "plannable": "yes",
+   "diet": [],
+   "nearestStops": [
+    {
+     "id": "ch:1:sloid:91795::406201",
+     "name": "Breganzona, Posta",
+     "distanceM": 121,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:94213::422302",
+     "name": "Breganzona, Camara Medi",
+     "distanceM": 151,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:91589::406101",
+     "name": "Breganzona, Medi",
+     "distanceM": 215,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:94215::422402",
+     "name": "Breganzona, Camara Scuole",
+     "distanceM": 383,
+     "modes": [
+      "bus"
+     ]
+    }
+   ],
+   "sponsored": false,
+   "demo": false,
+   "evidence": [
+    {
+     "field": "coordinates",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Oggetto n4632422590 «Panorama sul Lago e Monti»"
+    },
+    {
+     "field": "description",
+     "sourceId": "editorial-2026-09",
+     "status": "editorial",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    },
+    {
+     "field": "municipality",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Confini amministrativi OSM: Lugano (CH)"
+    }
+   ],
+   "sources": [
+    "osm",
+    "editorial-2026-09"
+   ],
+   "lastEditorialCheck": "2026-09-28"
+  },
+  {
+   "id": "grotto-valletta",
+   "name": "Grotto Valletta",
+   "category": "restaurant",
+   "osm": "n1271876880",
+   "lon": 8.94376,
+   "lat": 46.012149,
+   "entrance": {
+    "lon": 8.94376,
+    "lat": 46.0121487,
+    "source": "osm_feature"
+   },
+   "municipality": {
+    "name": "Massagno",
+    "country": "CH"
+   },
+   "area": "Massagno",
+   "description": "Grotto a Massagno, sulla collina a nord della stazione.",
+   "tags": [
+    "grotto",
+    "ticinese"
+   ],
+   "moods": [
+    "food",
+    "chill"
+   ],
+   "visit": {
+    "min": 60,
+    "typical": 90,
+    "max": 120
+   },
+   "schedules": [],
+   "prices": [
+    {
+     "id": "grotto-valletta-grotto-adult",
+     "label": "Pasto (fascia grotto)",
+     "currency": "CHF",
+     "min": 30,
+     "max": 55,
+     "unit": "person",
+     "audience": "adult",
+     "status": "estimate",
+     "essential": true,
+     "note": "Fascia indicativa per categoria, non un listino.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "estimate",
+      "status": "estimate",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28"
+     }
+    },
+    {
+     "id": "grotto-valletta-grotto-child",
+     "label": "Pasto (fascia grotto) (bambini)",
+     "currency": "CHF",
+     "min": 15,
+     "max": 30,
+     "unit": "person",
+     "audience": "child",
+     "childAgeMax": 11,
+     "status": "estimate",
+     "essential": true,
+     "note": "Fascia indicativa per categoria, non un listino.",
+     "evidence": {
+      "field": "price",
+      "sourceId": "estimate",
+      "status": "estimate",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28"
+     }
+    }
+   ],
+   "booking": {
+    "required": "recommended"
+   },
+   "links": {},
+   "accessibility": {
+    "wheelchair": "unknown",
+    "stroller": "unknown",
+    "stairs": "unknown",
+    "evidence": {
+     "field": "accessibility",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    }
+   },
+   "suitability": {
+    "occasions": [
+     "friends",
+     "family",
+     "guests"
+    ],
+    "weather": "any",
+    "indoor": false,
+    "habitualAtmosphere": "unknown",
+    "noise": "moderate",
+    "alcohol": "available"
+   },
+   "meal": "any",
+   "plannable": "yes",
+   "diet": [],
+   "nearestStops": [
+    {
+     "id": "ch:1:sloid:75311::403202",
+     "name": "Massagno, Praccio",
+     "distanceM": 137,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:91625::403101",
+     "name": "Massagno, al Sole",
+     "distanceM": 215,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:75312::403302",
+     "name": "Massagno, Cappella due Mani",
+     "distanceM": 277,
+     "modes": [
+      "bus"
+     ]
+    },
+    {
+     "id": "ch:1:sloid:91626::403001",
+     "name": "Massagno, Santa Lucia",
+     "distanceM": 277,
+     "modes": [
+      "bus"
+     ]
+    }
+   ],
+   "sponsored": false,
+   "demo": false,
+   "evidence": [
+    {
+     "field": "coordinates",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Oggetto n1271876880 «Grotto Valletta»"
+    },
+    {
+     "field": "description",
+     "sourceId": "editorial-2026-09",
+     "status": "editorial",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28"
+    },
+    {
+     "field": "hours",
+     "sourceId": "editorial-2026-09",
+     "status": "unknown",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Orari non disponibili nel catalogo."
+    },
+    {
+     "field": "municipality",
+     "sourceId": "osm",
+     "status": "osm",
+     "observedAt": "2026-09-28",
+     "lastCheckedAt": "2026-09-28",
+     "note": "Confini amministrativi OSM: Massagno (CH)"
     }
    ],
    "sources": [
