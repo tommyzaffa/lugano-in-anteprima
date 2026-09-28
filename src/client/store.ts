@@ -5,6 +5,7 @@
 import { create } from 'zustand';
 import type { GroupRequest, Plan, Branch, Contradiction, InfeasibleResult, Decision, PlanDiff, Person, Location } from '../shared/types.ts';
 import { defaultAvatar } from './map/avatars.ts';
+import { track } from './api.ts';
 
 export type View = 'home' | 'wizard' | 'planning' | 'results' | 'sim' | 'summary' | 'explore' | 'events' | 'saved' | 'settings' | 'about' | 'share' | 'admin';
 
@@ -130,7 +131,11 @@ export const useApp = create<AppState>((set, get) => ({
     LS.set('lia.draft', nd);
   },
   setSettings: (p) => {
-    const s = { ...get().settings, ...p };
+    const prev = get().settings;
+    const s = { ...prev, ...p };
+    // statistiche aggregate anonime: solo quando un'opzione di accessibilità viene attivata
+    if (s.listView && !prev.listView) track('list_view');
+    if (s.reducedMotion && !prev.reducedMotion) track('reduced_motion');
     set({ settings: s });
     LS.set('lia.settings', s);
   },

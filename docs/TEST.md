@@ -8,7 +8,7 @@ Esito al 28 settembre 2026 su MacBook Pro (Apple M3 Pro), macOS 26, Node 24.8, C
 npm test
 ```
 
-**64 test, tutti superati** (Vitest, fuso del processo impostato su `America/New_York` per dimostrare l'indipendenza dal fuso della macchina).
+**67 test, tutti superati** (Vitest, fuso del processo impostato su `America/New_York` per dimostrare l'indipendenza dal fuso della macchina).
 
 | File | Cosa verifica |
 |---|---|
@@ -18,6 +18,7 @@ npm test
 | `tests/simulation.test.ts` (9) | **salto equivalente alla riproduzione** (posizione, spese, tappa), checkpoint senza spese duplicate, stato finale = totali del piano, «vai al riepilogo» fermo alle decisioni obbligatorie, posizione sempre sulla geometria reale, rami (passato invariato, tappa saltata rimossa); **oscuramento dei link condivisi** (alloggio e punto di partenza privati non compaiono in nessun campo, neppure nei testi delle verifiche); **iCalendar RFC 5545** (righe ≤ 75 ottetti ripiegate, CRLF, fuso Europe/Zurich) |
 | `tests/scenarios.test.ts` (19) | scenari del brief sul pianificatore reale — vedi sotto |
 | `tests/ai.test.ts` (1) | fornitore AI **simulato** (nessuna chiamata di rete): proposte con identificativi inesistenti scartate con avviso, piani etichettati «AI live» solo se nati dalla proposta AI e comunque ricalcolati e verificati dal motore |
+| `tests/planb.test.ts` (3) | piano B meteo: una voce per ogni tappa all'aperto; alternative al coperto, fuori dal programma, entro 25 minuti a piedi sulla rete reale, **aperte secondo il calendario** o dichiarate «orari da verificare», costo sconosciuto mai zero; in montagna ricerca in basso; filtro passeggino |
 | `tests/editorial.test.ts` (5) | modifiche editoriali: applicazione validata con nuova versione del catalogo, **conflitto** quando il dato di base cambia dopo la modifica, modifica non valida ignorata e segnalata, luogo sparito segnalato, luogo nascosto tolto dal catalogo pubblicato |
 
 ### Scenari di accettazione (§17)
@@ -47,7 +48,7 @@ npm run test:e2e
 
 **8 test, tutti superati** (desktop 1280×800 e mobile 390×844, Chrome con WebGL software):
 
-1. Flusso principale: esempio → proposte (confronto, dettagli e verifiche) → simulazione (salta spostamento, prossima decisione, «vai al riepilogo» bloccato dalla decisione, scelta dell'alternativa con nuovo ramo) → riepilogo → verifica dei dati → salvataggio (URL personale) → link di condivisione → voto da un altro browser → **revoca** e link non più accessibile.
+1. Flusso principale: esempio → proposte (confronto, dettagli e verifiche) → simulazione (salta spostamento, prossima decisione, «vai al riepilogo» bloccato dalla decisione, scelta dell'alternativa con nuovo ramo) → riepilogo → verifica dei dati → piano B se piove → salvataggio (URL personale) → link di condivisione → voto da un altro browser → **revoca** e link non più accessibile.
 2. Modulo manuale: limite di 12 persone spiegato; 3 persone → 3 personaggi sulla mappa.
 3. Esplorazione, filtro «Cultura», scheda luogo con provenienza, segnalazione di errore.
 4. Eventi dichiarati dimostrativi.

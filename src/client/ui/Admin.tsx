@@ -153,6 +153,16 @@ function Reports({ headers }: { headers: Record<string, string> }) {
   return <ul className="reports">{r.map((x) => <li key={x.id}><Badge kind={x.status === 'open' ? 'warn' : 'ok'}>{x.status}</Badge> <strong>{x.targetKind}:{x.targetId}</strong> [{x.field}] {x.message} <span className="muted">{new Date(x.createdAt).toLocaleString('it-CH')}</span> {x.status === 'open' ? <><button className="link" onClick={() => void resolve(x.id, 'resolved')}>risolta</button> <button className="link" onClick={() => void resolve(x.id, 'rejected')}>respinta</button></> : null}</li>)}</ul>;
 }
 
+const STAT_LABEL: Record<string, string> = {
+  plan_requested: 'Pianificazioni richieste', plan_ok: 'Pianificazioni con proposte', plan_infeasible: 'Pianificazioni impossibili', plan_needs_resolution: 'Contraddizioni da risolvere',
+  plan_saved: 'Programmi salvati', plan_shared: 'Link di condivisione creati', share_revoked: 'Link revocati', vote: 'Voti ricevuti',
+  sim_started: 'Simulazioni avviate', sim_finished: 'Simulazioni concluse', sim_skip: 'Spostamenti saltati', sim_decision: 'Decisioni prese', sim_checkpoint: 'Salti a un checkpoint',
+  replan_requested: 'Ricalcoli richiesti', whatif_requested: 'Ipotesi «E se…» richieste', branch_created: 'Rami creati', whatif: 'Rami ipotetici creati',
+  export_ics: 'Esportazioni calendario', print: 'Stampe', postcard: 'Cartoline', offline_saved: 'Salvati per l\'uso offline', planb: 'Piani B meteo preparati',
+  explore_opened: 'Esplorazioni libere', list_view: 'Vista elenco attivata', reduced_motion: 'Movimento ridotto attivato', webgl_fallback: 'Vista senza WebGL',
+  geolocation_used: 'Posizione usata (su richiesta)', surprise: '«Sorprendimi»', report_submitted: 'Segnalazioni di errore',
+};
+
 function Stats({ headers }: { headers: Record<string, string> }) {
   const [s, setS] = useState<any>(null);
   useEffect(() => { void get<any>('/api/admin/stats', { headers }).then(setS); }, []);
@@ -162,7 +172,7 @@ function Stats({ headers }: { headers: Record<string, string> }) {
   return (
     <div>
       <p className="hint">{s.note}</p>
-      <div className="table-wrap"><table><thead><tr><th>Indicatore (30 giorni)</th><th>Totale</th></tr></thead><tbody>{Object.entries(totals).sort().map(([k, v]) => <tr key={k}><td>{k}</td><td>{v}</td></tr>)}</tbody></table></div>
+      <div className="table-wrap"><table><thead><tr><th>Indicatore (30 giorni)</th><th>Totale</th></tr></thead><tbody>{Object.entries(totals).sort().map(([k, v]) => <tr key={k}><td>{STAT_LABEL[k] ?? k} <span className="muted">{k}</span></td><td>{v}</td></tr>)}</tbody></table></div>
       <h3>Consumi AI</h3>
       <p>Token oggi: {s.aiTokensToday}</p>
       {s.ai.length ? <div className="table-wrap"><table><thead><tr><th>Giorno</th><th>Modello</th><th>Uso</th><th>Esito</th><th>Chiamate</th><th>Input</th><th>Output</th><th>ms medi</th></tr></thead><tbody>{s.ai.map((a: any, i: number) => <tr key={i}><td>{a.day}</td><td>{a.model}</td><td>{a.purpose}</td><td>{a.status}</td><td>{a.calls}</td><td>{a.input ?? 0}</td><td>{a.output ?? 0}</td><td>{Math.round(a.avg_ms)}</td></tr>)}</tbody></table></div> : <p className="muted">Nessuna chiamata AI registrata.</p>}

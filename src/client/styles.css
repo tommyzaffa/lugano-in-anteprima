@@ -343,6 +343,12 @@ thead th { font-family: var(--serif); }
 .reval { margin: .8rem 0; }
 .reval li.blocking { color: var(--bad); } .reval li.warning { color: var(--warn); }
 .sources-used { font-size: .86rem; color: var(--ink-soft); }
+.planb { border: 1.5px dashed #9fc3cf; background: #f1f8fa; border-radius: 12px; padding: .5rem .8rem; margin: .8rem 0; }
+.planb h3 { margin-top: .2rem; }
+.planb-list { padding-left: 1.1rem; }
+.planb-list > li { margin: .45rem 0; }
+.planb-list ul { padding-left: 1rem; margin: .2rem 0; }
+.planb-list ul li { margin: .2rem 0; line-height: 1.5; }
 
 /* fallback */
 .fallback { position: absolute; inset: 0; overflow-y: auto; padding: 1rem 1rem 1rem calc(var(--panel-w) + 30px); }

@@ -15,6 +15,7 @@ import type { Db } from './db.ts';
 import { config, ensureAdminToken, aiConfigured } from './config.ts';
 import { planAlternatives } from './planner/index.ts';
 import { replan } from './planner/replan.ts';
+import { planB } from './planner/planb.ts';
 import { revalidate } from './planner/revalidate.ts';
 import { weatherFor } from './adapters/weather.ts';
 import { ojpTrip } from './adapters/ojp.ts';
@@ -203,7 +204,8 @@ export function createApi(data: DataStore, db: Db) {
     if (!req.success) return c.json({ error: 'invalid_plan', message: 'Piano non valido' }, 400);
     const t0 = Date.now();
     const r = replan({ ...plan, request: req.data }, dec.data, data);
-    db.count(dec.data.kind.startsWith('whatif') ? 'whatif' : 'branch_created');
+    // richiesta di ricalcolo; il ramo creato (se l'utente lo applica) è contato dal client
+    db.count(dec.data.kind.startsWith('whatif') ? 'whatif_requested' : 'replan_requested');
     return c.json({ ...r, ms: Date.now() - t0 });
   });
 
@@ -213,6 +215,14 @@ export function createApi(data: DataStore, db: Db) {
     const r = await ojpTrip(b.from, b.to, b.departure);
     db.setSourceHealth('ojp', r.status, r.message ?? '');
     return c.json(r);
+  });
+
+  app.post('/api/planb', async (c) => {
+    const body = await c.req.json().catch(() => null);
+    const req = GroupRequest.safeParse(body?.plan?.request);
+    if (!req.success || !Array.isArray(body?.plan?.stops)) return c.json({ error: 'invalid_request', message: 'Piano non valido' }, 400);
+    db.count('planb');
+    return c.json(planB({ ...(body.plan as Plan), request: req.data }, data));
   });
 
   app.post('/api/revalidate', async (c) => {

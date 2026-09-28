@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { useApp, useSim } from './store.ts';
-import { get } from './api.ts';
+import { get, track } from './api.ts';
 import MapView from './map/MapView.tsx';
 import Home from './ui/Home.tsx';
 import Wizard from './ui/Wizard.tsx';
@@ -61,6 +61,7 @@ export default function App() {
   }, []);
 
   useEffect(() => { document.documentElement.classList.toggle('reduced-motion', settings.reducedMotion); }, [settings.reducedMotion]);
+  useEffect(() => { if (webgl !== 'ok') track('webgl_fallback'); }, [webgl]);
 
   const showMap = webgl === 'ok' && !settings.listView;
   const nav = (v: typeof view) => { set({ view: v, placeCard: null }); if (v !== 'share' && location.pathname !== '/') history.pushState(null, '', '/'); };

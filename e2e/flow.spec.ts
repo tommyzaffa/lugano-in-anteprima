@@ -45,6 +45,9 @@ test('flusso principale: modulo → proposte → simulazione → decisione → r
   // verifica dei dati attuali
   await page.getByRole('button', { name: /Verifica i dati adesso/ }).click();
   await expect(page.locator('.reval .notice')).toBeVisible();
+  // piano B per la pioggia: alternative al coperto o spiegazione che non servono
+  await page.getByRole('button', { name: /Prepara le alternative al coperto/ }).click();
+  await expect(page.locator('.planb-list, .planb p.muted')).toBeVisible({ timeout: 15_000 });
   // salvataggio e condivisione
   await page.locator('.summary-actions').getByRole('button', { name: 'Salva', exact: true }).click();
   await expect(page.locator('.toast')).toContainText('salvato');

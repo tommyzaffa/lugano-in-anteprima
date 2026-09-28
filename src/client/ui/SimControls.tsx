@@ -5,6 +5,7 @@ import { hhmm } from '../../shared/time.ts';
 import { fmtRange } from '../../shared/pricing.ts';
 import { play, pause, setSpeed, skipMove, nextDecision, goToSummary, seek, cameraMode } from '../sim/actions.ts';
 import { t as tr } from '../i18n.ts';
+import { track } from '../api.ts';
 
 export default function SimControls() {
   const plan = useApp((s) => s.branches.find((b) => b.id === s.currentBranch)?.plan ?? null);
@@ -43,7 +44,7 @@ export default function SimControls() {
         </div>
         <div className="tl-cps">
           {tl.checkpoints.filter((c) => c.kind === 'arrive' || c.kind === 'decision' || c.kind === 'start' || c.kind === 'end').map((c) => (
-            <button key={c.id} className={`tl-cp tl-cp-${c.kind}`} style={{ left: pct(c.t) }} onClick={() => { pause(); seek(c.t); }} title={`${hhmm(c.t)} · ${c.label}`} aria-label={`Vai a ${hhmm(c.t)}: ${c.label}`}>{c.kind === 'decision' ? '◆' : c.kind === 'arrive' ? (c.stopIndex ?? 0) + 1 : c.kind === 'start' ? '▸' : '■'}</button>
+            <button key={c.id} className={`tl-cp tl-cp-${c.kind}`} style={{ left: pct(c.t) }} onClick={() => { pause(); seek(c.t); track('sim_checkpoint'); }} title={`${hhmm(c.t)} · ${c.label}`} aria-label={`Vai a ${hhmm(c.t)}: ${c.label}`}>{c.kind === 'decision' ? '◆' : c.kind === 'arrive' ? (c.stopIndex ?? 0) + 1 : c.kind === 'start' ? '▸' : '■'}</button>
           ))}
         </div>
       </div>

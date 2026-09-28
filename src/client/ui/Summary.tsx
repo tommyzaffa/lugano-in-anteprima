@@ -108,6 +108,7 @@ export default function Summary({ planOverride, readOnly }: { planOverride?: Pla
           <ul className="legs">{ret.legs.filter((l) => l.mode !== 'wait').map((l) => <LegLine key={l.id} leg={l} />)}</ul>
         </div>
       ) : null}
+      <PlanBSection plan={plan} />
       <div className="sources-used">
         <h3>Fonti e limiti</h3>
         <ul>
@@ -119,6 +120,53 @@ export default function Summary({ planOverride, readOnly }: { planOverride?: Pla
         </ul>
       </div>
       {share ? <ShareDialog onClose={() => setShare(false)} /> : null}
+    </div>
+  );
+}
+
+interface PlanBData { note: string; items: { stopId: string; stopName: string; start: string; reason: string; near?: string; none?: string; options: { placeId: string; name: string; category: string; walkMin: number; walkM: number; hours: 'open' | 'unknown'; hoursDetail: string; costMin: number | null; costMax: number | null; costUnknown: boolean; booking: string }[] }[] }
+
+/** Piano B per meteo: alternative al coperto per le tappe all'aperto, calcolate su richiesta. */
+function PlanBSection({ plan }: { plan: Plan }) {
+  const set = useApp((s) => s.set);
+  const [data, setData] = useState<PlanBData | null>(null);
+  const [state, setState] = useState<'idle' | 'loading' | 'error'>('idle');
+  const load = async () => {
+    setState('loading');
+    try { setData(await send<PlanBData>('POST', '/api/planb', { plan })); setState('idle'); }
+    catch { setState('error'); }
+  };
+  return (
+    <div className="planb">
+      <h3>Piano B se piove</h3>
+      {!data ? (
+        <div className="no-print">
+          <button className="btn-ghost" onClick={() => void load()} disabled={state === 'loading'}>{state === 'loading' ? <Spinner /> : '☂'} Prepara le alternative al coperto</button>
+          {state === 'error' ? <div className="notice bad">Calcolo non riuscito: riprovate.</div> : null}
+        </div>
+      ) : !data.items.length ? <p className="muted">Tutte le tappe sono al coperto o sono pause: nessun piano B necessario.</p> : (
+        <>
+          <p className="hint">{data.note}</p>
+          <ul className="planb-list">
+            {data.items.map((it) => (
+              <li key={it.stopId}>
+                <strong>Al posto di {it.stopName}</strong> <span className="muted">alle {hhmm(it.start)} · {it.reason}{it.near ? ` · alternative ${it.near}` : ''}</span>
+                {it.options.length ? (
+                  <ul>{it.options.map((o) => (
+                    <li key={o.placeId}>
+                      <button className="link" onClick={() => set({ placeCard: o.placeId })}>{o.name}</button> <span className="muted">{CATEGORY[o.category] ?? o.category}</span>
+                      {' · '}{o.walkMin} min a piedi ({(o.walkM / 1000).toFixed(1)} km)
+                      {' · '}{o.hours === 'open' ? <Badge kind="ok" title={o.hoursDetail}>aperto</Badge> : <Badge kind="warn" title={o.hoursDetail}>orari da verificare</Badge>}
+                      {' · '}{o.costUnknown ? <Badge kind="bad">costo non noto</Badge> : fmtRange(o.costMin, o.costMax)}
+                      {o.booking === 'yes' ? <> · <Badge kind="warn">prenotazione necessaria</Badge></> : null}
+                    </li>
+                  ))}</ul>
+                ) : <div className="muted">{it.none}</div>}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </div>
   );
 }
