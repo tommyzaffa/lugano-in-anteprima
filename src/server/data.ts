@@ -32,6 +32,7 @@ export class DataStore {
   catalogVersion = '';
   baseVersion = '';
   explore: ExplorePoi[] = [];
+  stopAccess: { name: string; modes: string[]; wheelchair: string; evidence: Evidence }[] = [];
   amenities: any[] = [];
   addresses: [string, number, number][] = [];
   router!: Router;
@@ -57,6 +58,11 @@ export class DataStore {
     const walk = new Graph(read('build/graph-walk.json'));
     this.transit = new TransitNetwork(read('build/transit.json'));
     this.router = new Router(walk, this.transit);
+    // fermate non accessibili in sedia a rotelle (dato con fonte nel catalogo)
+    this.stopAccess = cat.stopAccess ?? [];
+    this.router.wheelchairBlocked = new Set(this.transit.d.stops.map((s, i) => [s, i] as const)
+      .filter(([s]) => this.stopAccess.some((a) => a.wheelchair === 'no' && a.name === s.name && a.modes.some((m) => s.modes.includes(m as any))))
+      .map(([, i]) => i));
     this.applyOverrides(db);
     this.loadedAt = new Date().toISOString();
     this.loadMs = Date.now() - t0;

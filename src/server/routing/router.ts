@@ -40,6 +40,8 @@ const MAX_SNAP_M = 350;
 
 export class Router {
   readonly walkG: Graph;
+  /** fermate non accessibili in sedia a rotelle (dal catalogo, con fonte) */
+  wheelchairBlocked = new Set<number>();
   readonly transit: TransitNetwork;
   private stopsByNode = new Map<number, number[]>();
   private stopsByNodeSF = new Map<number, number[]>();
@@ -149,7 +151,7 @@ export class Router {
   }
 
   csaOptions(o: TravelOptions): CsaOptions {
-    return { modes: o.modes, minChangeSec: o.minChangeSec, maxDurationSec: 4 * 3600, stepFree: this.stepFree(o.profile) };
+    return { modes: o.modes, minChangeSec: o.minChangeSec, maxDurationSec: 4 * 3600, stepFree: this.stepFree(o.profile), ...(o.profile.wheelchair && this.wheelchairBlocked.size ? { blockedStops: this.wheelchairBlocked } : {}) };
   }
 
   /** Stima veloce uno-a-tutti: istante di arrivo (ms) a ogni fermata partendo da un punto. */

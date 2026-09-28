@@ -195,3 +195,16 @@ describe('tappe bloccate', () => {
     expect(s.end).toBe('2026-10-02T21:00:00+02:00');
   });
 });
+
+describe('accessibilità delle fermate', () => {
+  it('in sedia a rotelle non si sale né si scende alla stazione FFS di Melide (non accessibile secondo la fonte)', async () => {
+    const r = await plan({ date: '2026-10-03', startTime: '10:00', endTime: '16:00', moods: ['cultural'], mustSee: ['swissminiatur'], mobility: { stroller: false, wheelchair: true, avoidStairs: true, frequentBreaks: false } });
+    for (const p of ok(r)) {
+      for (const l of allLegs(p)) {
+        if (l.mode !== 'train') continue;
+        expect(l.from.label).not.toBe('Melide');
+        expect(l.to.label).not.toBe('Melide');
+      }
+    }
+  });
+});

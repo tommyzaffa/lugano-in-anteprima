@@ -8,7 +8,7 @@ Esito al 28 settembre 2026 su MacBook Pro (Apple M3 Pro), macOS 26, Node 24.8, C
 npm test
 ```
 
-**74 test, tutti superati** (Vitest, fuso del processo impostato su `America/New_York` per dimostrare l'indipendenza dal fuso della macchina).
+**75 test, tutti superati** (Vitest, fuso del processo impostato su `America/New_York` per dimostrare l'indipendenza dal fuso della macchina).
 
 | File | Cosa verifica |
 |---|---|
@@ -16,7 +16,7 @@ npm test
 | `tests/osm-hours.test.ts` (9) | conversione `opening_hours` OSM: override, stagioni per mese e per data, 25:00, regole aggiuntive «,» vs sostitutive «;», PH, 24/7, rifiuto della sintassi non supportata |
 | `tests/pricing.test.ts` (5) | costo per persona/gruppo, bambini gratuiti, **costo sconosciuto ≠ zero** e budget «non verificabile», tariffe adulti/ragazzi, voci facoltative |
 | `tests/simulation.test.ts` (9) | **salto equivalente alla riproduzione** (posizione, spese, tappa), checkpoint senza spese duplicate, stato finale = totali del piano, «vai al riepilogo» fermo alle decisioni obbligatorie, posizione sempre sulla geometria reale, rami (passato invariato, tappa saltata rimossa); **oscuramento dei link condivisi** (alloggio e punto di partenza privati non compaiono in nessun campo, neppure nei testi delle verifiche); **iCalendar RFC 5545** (righe ≤ 75 ottetti ripiegate, CRLF, fuso Europe/Zurich) |
-| `tests/scenarios.test.ts` (20) | scenari del brief sul pianificatore reale — vedi sotto |
+| `tests/scenarios.test.ts` (21) | scenari del brief sul pianificatore reale — vedi sotto |
 | `tests/ai.test.ts` (1) | fornitore AI **simulato** (nessuna chiamata di rete): proposte con identificativi inesistenti scartate con avviso, piani etichettati «AI live» solo se nati dalla proposta AI e comunque ricalcolati e verificati dal motore |
 | `tests/fares.test.ts` (6) | listini ufficiali delle funicolari (ragazzi, gratuità, metà prezzo/AG, Ticino Ticket), **andata e ritorno** quando si sale e si scende, prima e seconda sezione del Monte Brè in un solo biglietto; prezzi dei luoghi per fasce d'età senza doppi conteggi |
 | `tests/planb.test.ts` (3) | piano B meteo: una voce per ogni tappa all'aperto; alternative al coperto, fuori dal programma, entro 25 minuti a piedi sulla rete reale, **aperte secondo il calendario** o dichiarate «orari da verificare», costo sconosciuto mai zero; in montagna ricerca in basso; filtro passeggino |
@@ -40,6 +40,7 @@ npm test
 | L — telefono e movimento ridotto | ✅ | e2e su viewport 390×844: modulo, confronto, salto, riepilogo e salvataggio; nessuna cutscene con movimento ridotto; pulsanti ≥ 44 px; nessuno scroll orizzontale |
 | Contraddizioni del testo libero | ✅ | budget del testo diverso dal modulo → richiesta di risoluzione; con risoluzione esplicita il piano procede |
 | Tappe bloccate | ✅ | cena prenotata 19:30–21:00 mantenuta all'orario esatto |
+| Fermata non accessibile | ✅ | in sedia a rotelle nessuna salita o discesa alla stazione FFS di Melide (dato con fonte in `data/catalog/stop-access.yaml`): si usa il bus |
 | Chiusura straordinaria dichiarata dal gestore | ✅ | MASI Palazzo Reali obbligatorio il 2 ottobre → impossibile con il motivo «lavori di riallestimento»; il 20 ottobre è pianificabile con tariffa sconosciuta |
 
 ### End-to-end (Playwright, build di produzione)

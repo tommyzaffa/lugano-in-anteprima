@@ -1,6 +1,6 @@
 {
- "version": "cat-2026-09-28-87p-14e-3da24e",
- "builtAt": "2026-09-28T13:10:13.220Z",
+ "version": "cat-2026-09-28-87p-14e-921550",
+ "builtAt": "2026-09-28T13:12:10.074Z",
  "sources": [
   {
    "id": "osm",
@@ -18951,6 +18951,24 @@
      "note": "Fixture dimostrativa: non è l'agenda reale."
     }
    ]
+  }
+ ],
+ "stopAccess": [
+  {
+   "name": "Melide",
+   "modes": [
+    "train"
+   ],
+   "wheelchair": "no",
+   "evidence": {
+    "field": "accessibility",
+    "sourceId": "official-web",
+    "status": "verified",
+    "observedAt": "2026-09-28",
+    "lastCheckedAt": "2026-09-28",
+    "url": "https://www.swissminiatur.ch/contatti/",
+    "note": "La stazione ferroviaria di Melide non è accessibile alle persone con mobilità ridotta (Swissminiatur, pagina informazioni pratiche; per assistenza il Contact Center Handicap FFS)."
+   }
   }
  ]
 }

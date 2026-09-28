@@ -1,0 +1,9 @@
+# Accessibilità delle fermate dove l'orario GTFS non la riporta.
+# Solo dati con fonte: per chi viaggia in sedia a rotelle la fermata non viene usata
+# per salire o scendere (i mezzi possono passarci senza fermarsi per il gruppo).
+- name: Melide
+  modes: [train]
+  wheelchair: no
+  url: https://www.swissminiatur.ch/contatti/
+  checked: 2026-09-28
+  note: La stazione ferroviaria di Melide non è accessibile alle persone con mobilità ridotta (Swissminiatur, pagina informazioni pratiche; per assistenza il Contact Center Handicap FFS).

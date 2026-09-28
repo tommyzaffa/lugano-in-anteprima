@@ -49,6 +49,8 @@ export interface CsaOptions {
   modes: Set<TransitMode>;
   /** usa solo interscambi senza gradini */
   stepFree?: boolean;
+  /** fermate dove il gruppo non può salire né scendere (es. non accessibili in sedia a rotelle) */
+  blockedStops?: Set<number>;
   /** secondi minimi di cambio fra due corse (oltre al cammino) */
   minChangeSec: number;
   maxDurationSec: number;
@@ -206,12 +208,13 @@ export class TransitNetwork {
       const hop = conns.hop[c];
       const t = trips[conns.instances[inst].trip];
       if (boarded[inst] < 0) {
-        const canBoard = ready[from] <= dep && !(t.pk && t.pk[hop] === 1);
+        const canBoard = ready[from] <= dep && !(t.pk && t.pk[hop] === 1) && !opts.blockedStops?.has(from);
         if (!canBoard) continue;
         boarded[inst] = c;
       }
       const arr = conns.arr[c];
       if (t.dr && t.dr[hop + 1] === 1) continue; // discesa non consentita
+      if (opts.blockedStops?.has(to)) continue; // fermata non utilizzabile dal gruppo: si prosegue a bordo
       if (arr < arrival[to]) {
         arrival[to] = arr;
         ready[to] = Math.min(ready[to], arr + changeMs);

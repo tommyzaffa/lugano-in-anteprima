@@ -295,10 +295,15 @@ for (const [, f] of index) {
   } catch { /* geometria non valida */ }
 }
 
+// accessibilità delle fermate (dati con fonte, non presenti nel GTFS)
+const stopAccess = (YAML.parse(readFileSync('data/catalog/stop-access.yaml', 'utf8')) ?? []).map((x: any) => {
+  if (!x.name || !x.url || !x.checked || !Array.isArray(x.modes)) throw new Error(`stop-access: voce incompleta ${JSON.stringify(x)}`);
+  return { name: String(x.name), modes: x.modes.map(String), wheelchair: x.wheelchair === false || x.wheelchair === 'no' ? 'no' : String(x.wheelchair), evidence: ev('accessibility', 'official-web', 'verified', { url: x.url, note: x.note, observedAt: String(x.checked), lastCheckedAt: String(x.checked) }) };
+});
 // l'impronta del contenuto cambia la versione a ogni modifica di orari, prezzi o testi (le date di controllo sono escluse)
-const contentHash = createHash('sha1').update(JSON.stringify({ sources, places, events }, (k, v) => (k === 'observedAt' || k === 'lastCheckedAt' ? undefined : v))).digest('hex').slice(0, 6);
+const contentHash = createHash('sha1').update(JSON.stringify({ sources, places, events, stopAccess }, (k, v) => (k === 'observedAt' || k === 'lastCheckedAt' ? undefined : v))).digest('hex').slice(0, 6);
 const version = `cat-${TODAY}-${places.length}p-${events.length}e-${contentHash}`;
-writeFileSync('data/build/catalog.json', JSON.stringify({ version, builtAt: new Date().toISOString(), sources, places, events }, null, 1));
+writeFileSync('data/build/catalog.json', JSON.stringify({ version, builtAt: new Date().toISOString(), sources, places, events, stopAccess }, null, 1));
 writeFileSync('data/build/explore.json', JSON.stringify({ builtAt: new Date().toISOString(), source: 'osm', pois: explore, amenities }));
 writeFileSync('data/build/addresses.json', JSON.stringify(addresses));
 console.log(`Catalogo ${version}: ${places.length} luoghi, ${events.length} eventi, ${sources.length} fonti; esplorazione ${explore.length} POI OSM, ${amenities.length} servizi, ${addresses.length} indirizzi`);
