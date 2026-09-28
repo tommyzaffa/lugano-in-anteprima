@@ -65,9 +65,12 @@ Schermate controllate durante lo sviluppo con Chrome headless (script `scripts/d
 - proposte con percorso per modalità (cammino tratteggiato, bus, battello sul lago, funicolari), tappe numerate, decisione;
 - simulazione in città a zoom 17: edifici 3D con tetti variati, personaggi in formazione, battute;
 - luce: giorno, tramonto, notte (mappa scura, finestre accese, percorso in chiaro);
-- modulo in tutti i passaggi, dialogo «E se… piove» con tabella prima/dopo, riepilogo, pannello editoriale.
+- modulo in tutti i passaggi, dialogo «E se… piove» con tabella prima/dopo, riepilogo con piano B, tutte le schede del pannello editoriale;
+- larghezze 320, 360, 375, 390 px e 1280 px; bordi dell'area a zoom 13,5 (cornice «plastico» senza tagli netti di lago e boschi).
 
-Difetti trovati e corretti con queste verifiche: marcatori dei personaggi incolonnati (CSS che annullava il posizionamento di MapLibre), limitatore di richieste applicato anche ai tile, espressioni di stile non valide (zoom dentro `match`), dialoghi sotto la barra dei comandi, camera che non seguiva il gruppo durante i salti, contesto WebGL segnalato come perso alla chiusura della mappa, glifi mancanti serviti come HTML.
+Contrasto (WCAG 2.1 AA, testo normale ≥ 4,5:1), calcolato sui colori del foglio di stile: testo 13,4:1, testo secondario 6,7:1, testo attenuato 4,6:1, stati «ok/attenzione/errore» dei badge ≥ 4,6:1, link 4,6:1, testo bianco sul pulsante principale 4,7:1. Il grigio attenuato, il verde, l'ambra, il blu lago e il terracotta sono stati scuriti di poco dopo la misura (erano fra 3,4 e 4,4:1).
+
+Difetti trovati e corretti con queste verifiche: barra superiore che sbordava sotto i 400 px (la griglia si allargava al contenuto), camera bloccata dai limiti della mappa che lasciava Lugano sotto il foglio inferiore su telefono, richieste di tile del terreno inesistenti ai bordi (curve di livello), marcatori dei personaggi incolonnati (CSS che annullava il posizionamento di MapLibre), limitatore di richieste applicato anche ai tile, espressioni di stile non valide (zoom dentro `match`), dialoghi sotto la barra dei comandi, camera che non seguiva il gruppo durante i salti, contesto WebGL segnalato come perso alla chiusura della mappa, glifi mancanti serviti come HTML.
 
 ## Prestazioni misurate
 

@@ -136,14 +136,18 @@ export default function MapView({ onFallback }: Props) {
     if (import.meta.env.DEV) (window as any).__map = map;
     map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
     map.addControl(new maplibregl.ScaleControl({ unit: 'metric', maxWidth: 110 }), 'bottom-right');
-    map.on('styleimagemissing', (e) => {
-      if (map.hasImage(e.id)) return;
-      map.addImage(e.id, { width: 1, height: 1, data: new Uint8Array(4) });
+    // le immagini disegnate in canvas si installano alla prima richiesta (anche prima di «load»);
+    // solo un'immagine sconosciuta riceve un segnaposto trasparente
+    let imagesInstalled = false;
+    map.setMissingStyleImageResolver((id) => {
+      if (map.hasImage(id)) return;
+      if (!imagesInstalled) { imagesInstalled = true; try { installImages(map); } catch { imagesInstalled = false; } }
+      if (!map.hasImage(id)) map.addImage(id, { width: 1, height: 1, data: new Uint8Array(4) });
     });
     map.once('idle', () => { try { performance.mark('map-idle'); } catch { /* */ } });
     map.on('load', async () => {
       try { performance.mark('map-load'); } catch { /* */ }
-      installImages(map);
+      if (!imagesInstalled) { imagesInstalled = true; installImages(map); }
       map.addSource('dem-terrain', { type: 'raster-dem', tiles: [`${origin}/terrain/{z}/{x}/{y}.png`], encoding: 'terrarium', tileSize: 256, minzoom: 8, maxzoom: 14, bounds });
       if (settings.threeD) map.setTerrain({ source: 'dem-terrain', exaggeration: 1.35 });
       // perimetro di prodotto

@@ -152,6 +152,12 @@ export function buildStyle(p: Palette, opts: StyleOptions): StyleSpecification {
         'fill-extrusion-opacity': p.windowGlow * 0.85,
       } } as LayerSpecification,
     ] : []),
+    // ------------------------------------------------ cornice: fuori dall'area coperta dai dati la carta resta bianca,
+    // come il margine di una tavola d'atlante (evita che lago e boschi finiscano con un taglio netto)
+    { id: 'frame-mask', type: 'fill', source: 'frame', filter: ['==', ['get', 'k'], 'mask'], paint: { 'fill-color': p.paper, 'fill-antialias': false } },
+    { id: 'frame-grain', type: 'fill', source: 'frame', filter: ['==', ['get', 'k'], 'mask'], paint: { 'fill-pattern': 'paper-grain', 'fill-opacity': 0.55 } },
+    { id: 'frame-line', type: 'line', source: 'frame', filter: ['==', ['get', 'k'], 'edge'], paint: { 'line-color': p.ink, 'line-width': 1.6, 'line-opacity': 0.55 } },
+    { id: 'frame-line-outer', type: 'line', source: 'frame', filter: ['==', ['get', 'k'], 'edge'], paint: { 'line-color': p.ink, 'line-width': 0.8, 'line-opacity': 0.4, 'line-offset': -6 } },
     // ------------------------------------------------ etichette
     { id: 'label-water', type: 'symbol', source: 'lugano', 'source-layer': 'labels', filter: ['==', ['get', 'kind'], 'lake'], layout: { 'text-field': ['get', 'name'], 'text-font': FONT.italic, 'text-size': z([[9, 12], [13, 18], [16, 26]]), 'text-letter-spacing': 0.3, 'text-max-width': 20 }, paint: { 'text-color': mix(p.shore, p.ink, 0.2), 'text-halo-color': p.water, 'text-halo-width': 1 } },
     { id: 'label-waterway', type: 'symbol', source: 'lugano', 'source-layer': 'waterway', minzoom: 14, filter: ['all', ['has', 'name'], ['!=', ['get', 'name'], '']], layout: { 'symbol-placement': 'line', 'text-field': ['get', 'name'], 'text-font': FONT.italic, 'text-size': 11, 'symbol-spacing': 350 }, paint: { 'text-color': p.shore, 'text-halo-color': p.paper, 'text-halo-width': 1.4 } },
@@ -166,6 +172,7 @@ export function buildStyle(p: Palette, opts: StyleOptions): StyleSpecification {
     lugano: { type: 'vector', tiles: [`${opts.origin}/tiles/lugano/{z}/{x}/{y}.pbf`], minzoom: 8, maxzoom: 16, bounds: opts.bounds, attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors' },
     dem: { type: 'raster-dem', tiles: [`${opts.origin}/terrain/{z}/{x}/{y}.png`], encoding: 'terrarium', tileSize: 256, minzoom: 8, maxzoom: 14, bounds: opts.bounds, attribution: 'Rilievo: Terrain Tiles (AWS Open Data, SRTM e altre fonti)' },
   };
+  sources.frame = { type: 'geojson', data: frameGeoJSON(opts.bounds) };
   if (opts.contoursUrl) sources.contours = { type: 'vector', tiles: [opts.contoursUrl], minzoom: 11, maxzoom: 15, bounds: opts.bounds };
   return {
     version: 8,
@@ -177,10 +184,29 @@ export function buildStyle(p: Palette, opts: StyleOptions): StyleSpecification {
   } as StyleSpecification;
 }
 
+/** Maschera esterna (mondo meno l'area dei dati, leggermente rientrata) e bordo della tavola. */
+export function frameGeoJSON(b: [number, number, number, number]): GeoJSON.FeatureCollection {
+  const inset = 0.002;
+  const [w, s, e, n] = [b[0] + inset * 1.4, b[1] + inset, b[2] - inset * 1.4, b[3] - inset];
+  const inner: [number, number][] = [[w, s], [e, s], [e, n], [w, n], [w, s]];
+  const outer: [number, number][] = [[b[0] - 3, b[1] - 3], [b[0] - 3, b[3] + 3], [b[2] + 3, b[3] + 3], [b[2] + 3, b[1] - 3], [b[0] - 3, b[1] - 3]];
+  return {
+    type: 'FeatureCollection',
+    features: [
+      { type: 'Feature', properties: { k: 'mask' }, geometry: { type: 'Polygon', coordinates: [outer, inner.slice().reverse()] } },
+      { type: 'Feature', properties: { k: 'edge' }, geometry: { type: 'LineString', coordinates: inner } },
+    ],
+  };
+}
+
 /** Aggiorna i colori della palette sui layer già presenti, senza ricaricare lo stile. */
 export function applyPalette(map: import('maplibre-gl').Map, p: Palette) {
   const set = (id: string, prop: string, v: unknown) => { if (map.getLayer(id)) map.setPaintProperty(id, prop as any, v as any); };
   set('bg', 'background-color', p.paper);
+  set('frame-mask', 'fill-color', p.paper);
+  set('frame-grain', 'fill-opacity', 0.55 * (1 - p.windowGlow * 0.5));
+  set('frame-line', 'line-color', p.ink);
+  set('frame-line-outer', 'line-color', p.ink);
   set('bg-texture', 'background-opacity', 0.55 * (1 - p.windowGlow * 0.5));
   set('lc-farm', 'fill-color', p.farm);
   set('lc-residential', 'fill-color', p.residential);

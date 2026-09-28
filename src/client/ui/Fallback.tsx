@@ -45,7 +45,7 @@ export default function Fallback() {
             <polyline key={`${i}-${j}`} fill="none" stroke={l.transit ? '#3f7f93' : l.mode === 'hike' ? '#b8452e' : '#2b2a27'} strokeWidth={l.transit ? 3 : 2} strokeDasharray={l.transit ? undefined : '4 3'} points={l.geometry.map(([x, y]) => `${svg.sx(x)},${svg.sy(y)}`).join(' ')} />
           )))}
           {plan.stops.map((s, i) => (
-            <g key={s.id}><circle cx={svg.sx(s.lon)} cy={svg.sy(s.lat)} r={10} fill="#c8643c" stroke="#2b2a27" /><text x={svg.sx(s.lon)} y={svg.sy(s.lat) + 4} textAnchor="middle" fontSize="11" fill="#fff" fontWeight="bold">{i + 1}</text><text x={svg.sx(s.lon) + 13} y={svg.sy(s.lat) + 4} fontSize="11" fill="#2b2a27">{s.name.slice(0, 28)}</text></g>
+            <g key={s.id}><circle cx={svg.sx(s.lon)} cy={svg.sy(s.lat)} r={10} fill="#b55a36" stroke="#2b2a27" /><text x={svg.sx(s.lon)} y={svg.sy(s.lat) + 4} textAnchor="middle" fontSize="11" fill="#fff" fontWeight="bold">{i + 1}</text><text x={svg.sx(s.lon) + 13} y={svg.sy(s.lat) + 4} fontSize="11" fill="#2b2a27">{s.name.slice(0, 28)}</text></g>
           ))}
           {st && view === 'sim' ? <circle cx={svg.sx(st.position[0])} cy={svg.sy(st.position[1])} r={7} fill="#2f8f7a" stroke="#fff" strokeWidth={2} /> : null}
         </svg>
