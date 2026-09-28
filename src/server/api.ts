@@ -13,7 +13,7 @@ import { parseOsmOpeningHours } from '../shared/osm-hours.ts';
 import { baseHash, type DataStore } from './data.ts';
 import type { Db } from './db.ts';
 import { config, ensureAdminToken, aiConfigured } from './config.ts';
-import { planAlternatives } from './planner/index.ts';
+import { planAlternatives, PlanningTimeout } from './planner/index.ts';
 import { replan } from './planner/replan.ts';
 import { planB } from './planner/planb.ts';
 import { revalidate } from './planner/revalidate.ts';
@@ -76,6 +76,7 @@ export function createApi(data: DataStore, db: Db) {
     weather: config.weather.provider,
     today: DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd'),
     quickStarts: quickStarts(data),
+    hosting: { ephemeralStorage: config.ephemeralStorage },
   }));
 
   // ---------------------------------------------------------------- catalogo ed esplorazione
@@ -188,7 +189,7 @@ export function createApi(data: DataStore, db: Db) {
       const write = (o: unknown) => s.write(JSON.stringify(o) + '\n');
       try {
         const res = await planAlternatives(parsed.data, {
-          data, signal: ctrl.signal,
+          data, signal: ctrl.signal, timeLimitMs: Math.max(5000, config.planner.timeoutMs - 2000),
           weather: (r) => weatherFor(r, (st, d) => db.setSourceHealth('weather', st, d)),
           ai: aiHooks(db),
           progress: (step) => { void write({ type: 'progress', step, at: Date.now() }); },
@@ -198,9 +199,10 @@ export function createApi(data: DataStore, db: Db) {
         await write({ type: 'result', ...res, demoMode: config.demoMode });
       } catch (e) {
         const aborted = (e as Error).message === 'ABORTED';
-        db.count(aborted ? 'plan_aborted' : 'plan_error');
-        if (!aborted) console.error('[plan]', e);
-        await write({ type: 'error', message: aborted ? 'Ricerca annullata o troppo lunga.' : 'Errore durante la pianificazione.' });
+        const slow = e instanceof PlanningTimeout;
+        db.count(aborted ? 'plan_aborted' : slow ? 'plan_timeout' : 'plan_error');
+        if (!aborted && !slow) console.error('[plan]', e);
+        await write({ type: 'error', message: aborted ? 'Ricerca annullata o troppo lunga.' : slow ? 'La ricerca ha richiesto troppo tempo e si è fermata prima di trovare un programma: non significa che la richiesta sia impossibile. Riprovate fra qualche secondo (il server potrebbe essere occupato o appena riavviato).' : 'Errore durante la pianificazione.' });
       } finally {
         clearTimeout(timer);
       }

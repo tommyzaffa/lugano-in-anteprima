@@ -159,7 +159,7 @@ export function EventsView() {
       {categories.length > 1 ? <div className="chips">{categories.map((c) => <Chip key={c} on={cats.includes(c)} onClick={() => setCats((x) => x.includes(c) ? x.filter((y) => y !== c) : [...x, c])}>{EVENT_CAT[c] ?? c}</Chip>)}</div> : null}
       <label className="check"><input type="checkbox" checked={showOff} onChange={(e) => setShowOff(e.target.checked)} /> Mostra anche annullati, rinviati ed esauriti</label>
       {data ? <p className="muted event-pins-status" role="status">{pins.length ? `${pins.length} ${pins.length === 1 ? 'evento segnato' : 'eventi segnati'} sulla mappa (viola; rosso se annullato, rinviato o esaurito).` : 'Nessun evento da segnare sulla mappa.'}</p> : null}
-      {!data ? <Spinner /> : !shown.length ? <Empty title={data.occurrences.length ? 'Nessun evento corrisponde ai filtri' : 'Nessun evento in questo periodo'}>{data.occurrences.length ? 'Provate a togliere un filtro.' : 'Non inventiamo eventi per riempire una giornata vuota.'}</Empty> : (
+      {!data ? <Spinner /> : !shown.length ? <Empty title={data.occurrences.length ? 'Nessun evento corrisponde ai filtri' : 'Nessun evento in questo periodo'}>{data.occurrences.length ? 'Provate a togliere un filtro.' : 'Non inventiamo eventi per riempire una giornata vuota. Gli esempi del calendario dimostrativo si concentrano fra settembre e dicembre 2026.'}</Empty> : (
         <ul className="event-list">
           {shown.map((o: any) => (
             <li key={o.sessionId} className={o.status !== 'scheduled' ? 'off' : ''}>

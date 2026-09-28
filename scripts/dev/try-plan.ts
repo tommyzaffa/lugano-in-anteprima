@@ -8,7 +8,7 @@ console.log('dati caricati in', data.loadMs, 'ms');
 const av = { color: '#c0392b', accent: '#fff', hat: 'none', accessory: 'none', hair: 'short' };
 const mk = (n: number, kind = 'adult') => Array.from({ length: n }, (_, i) => ({ id: `p${i}`, name: `Persona ${i + 1}`, kind, avatar: av, interests: [] }));
 const scenario = process.argv[2] ?? 'A';
-const base = { date: '2026-10-02', start: { kind: 'stop', label: 'Stazione FFS di Lugano', lon: 8.946849, lat: 46.005499 }, end: { mode: 'same' }, occasion: 'friends', budget: { per: 'person', strict: false } };
+const base = { date: process.env.DATE ?? '2026-10-02', start: { kind: 'stop', label: 'Stazione FFS di Lugano', lon: 8.946849, lat: 46.005499 }, end: { mode: 'same' }, occasion: 'friends', budget: { per: 'person', strict: false } };
 const reqs: Record<string, any> = {
   A: { ...base, people: mk(4), startTime: '18:30', endTime: '23:59', moods: ['chill', 'lively'], avoid: ['nightclub'], budget: { amount: 60, per: 'person', strict: false } },
   B: { ...base, people: mk(2), date: '2026-10-03', startTime: '09:30', endTime: '18:00', occasion: 'date', moods: ['views', 'cultural'], budget: { amount: 120, per: 'person', strict: false } },

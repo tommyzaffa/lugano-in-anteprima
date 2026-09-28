@@ -35,6 +35,13 @@ export interface PlanDeps {
   ai?: AiHooks | null;
   progress?: (step: string) => void;
   signal?: AbortSignal;
+  /** tempo massimo (ms) per la validazione dei candidati; oltre si restituiscono le proposte già trovate */
+  timeLimitMs?: number;
+}
+
+/** La ricerca ha esaurito il tempo prima di trovare un programma valido (non significa che i vincoli siano impossibili). */
+export class PlanningTimeout extends Error {
+  constructor() { super('PLANNING_TIMEOUT'); }
 }
 
 export function chooseThemes(ctx: PlanContext): Theme[] {
@@ -141,7 +148,12 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
     if (weather?.status === 'demo') notices.push('Meteo dimostrativo: non è una previsione reale.');
   }
   const ctx = buildContext(req, hints, weather, progress, deps.signal);
-  if (!data.transit.covers(req.date)) notices.push(`La data è fuori dal periodo dell'orario importato (${data.transit.feedRange.start}–${data.transit.feedRange.end}): i mezzi pubblici non sono calcolabili.`);
+  if (!data.transit.covers(req.date)) {
+    const ref = data.transit.referenceDate(req.date);
+    notices.push(ref
+      ? `L'orario ufficiale dei mezzi per il ${req.date} non è ancora importato (orario attuale valido ${fmtYmd(data.transit.feedRange.start)}–${fmtYmd(data.transit.feedRange.end)}): le corse sono stimate dall'orario del ${ref}, stesso giorno della settimana. Da verificare.`
+      : `La data è fuori dal periodo dell'orario importato (${fmtYmd(data.transit.feedRange.start)}–${fmtYmd(data.transit.feedRange.end)}): i mezzi pubblici non sono calcolabili.`);
+  }
   if (ctx.end - ctx.start < 45 * 60_000) {
     return { status: 'infeasible', infeasible: explainInfeasible(ctx, null, []), understood: hints.understood, notices };
   }
@@ -190,12 +202,14 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
   // prima un piano per tema, poi i migliori restanti
   const ordered = [...sequences.filter((s) => s.source === 'ai'), ...themes.map((t) => sequences.find((s) => s.theme.id === t.id && s.source === 'search')).filter(Boolean) as typeof sequences, ...sequences];
   const tried = new Set<string>();
+  const timeLimitMs = deps.timeLimitMs ?? 18000;
+  let timedOut = false;
   for (const s of ordered) {
     if (accepted.length >= 3) break;
     const key = s.node.seq.map((x) => x.cand.key).join('>');
     if (tried.has(key) || !s.node.seq.length) continue;
     tried.add(key);
-    if (Date.now() - t0 > 18000) { notices.push('Ricerca interrotta per limite di tempo: proposte parziali.'); break; }
+    if (Date.now() - t0 > timeLimitMs) { timedOut = true; notices.push('Ricerca interrotta per limite di tempo: proposte parziali.'); break; }
     const plan = validateWithFixes(ctx, data, stepsOf(s.node), s.theme, problems);
     if (!plan || plan.feasibility === 'invalid' || !plan.stops.length) continue;
     // mai un programma senza tutte le tappe obbligatorie (luoghi o eventi)
@@ -214,6 +228,8 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
     accepted.push(plan);
   }
   if (!accepted.length) {
+    // senza tempo sufficiente non sappiamo se i vincoli siano davvero incompatibili: non lo diciamo
+    if (timedOut) throw new PlanningTimeout();
     return { status: 'infeasible', infeasible: explainInfeasible(ctx, report, problems), understood: hints.understood, notices };
   }
   progress('Preparo le alternative');
@@ -296,5 +312,7 @@ function isMealAt(s: { category: string; start: string }, which: 'lunch' | 'dinn
   const h = Number(hhmm(s.start).slice(0, 2));
   return which === 'lunch' ? h >= 11 && h <= 14 : h >= 18 && h <= 21;
 }
+
+function fmtYmd(x: string) { return `${x.slice(0, 4)}-${x.slice(4, 6)}-${x.slice(6, 8)}`; }
 
 function hashSeed(s: string) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }

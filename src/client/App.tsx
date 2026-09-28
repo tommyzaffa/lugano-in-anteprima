@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useApp, useSim } from './store.ts';
 import { get, track } from './api.ts';
 import MapView from './map/MapView.tsx';
@@ -30,7 +30,10 @@ export default function App() {
   const sheet = useApp((s) => s.sheet);
   const online = useApp((s) => s.online);
   const [shareToken, setShareToken] = useState<string | null>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   useSimulation();
+  // ogni vista si apre dall'inizio (non dalla posizione di scorrimento della vista precedente)
+  useEffect(() => { bodyRef.current?.scrollTo({ top: 0, behavior: 'instant' }); }, [view]);
 
   // metadati e instradamento iniziale
   useEffect(() => {
@@ -95,7 +98,7 @@ export default function App() {
           <span />
           <button aria-label="Espandi il pannello" onClick={() => set({ sheet: sheet === 'peek' ? 'half' : 'full' })}>▴</button>
         </div>
-        <div className="panel-body">
+        <div className="panel-body" ref={bodyRef}>
           {view === 'home' && <Home />}
           {view === 'wizard' && <Wizard />}
           {view === 'planning' && <Planning />}

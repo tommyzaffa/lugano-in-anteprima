@@ -18,7 +18,9 @@ export class Estimator {
   private activityCache = new Map<string, { sec: number; lengthM: number; upM: number; downM: number } | null>();
   calls = 0;
 
-  constructor(private router: Router) {}
+  private router: Router;
+
+  constructor(router: Router) { this.router = router; }
 
   private snap(p: { lon: number; lat: number }, o: TravelOptions) {
     const k = `${p.lon.toFixed(5)},${p.lat.toFixed(5)}|${o.profile.id}`;

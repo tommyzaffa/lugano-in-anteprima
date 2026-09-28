@@ -22,6 +22,11 @@ setCatalogNames([...data.places.values()].map((p) => ({ id: p.id, name: p.name }
 config.demoMode = !aiConfigured() || config.weather.provider !== 'open-meteo' || config.transitLive.provider === 'none';
 
 const app = new Hono();
+// prototipo: fuori dai motori di ricerca (vedi ALLOW_INDEXING in .env.example)
+if (!config.allowIndexing) {
+  app.use('*', async (c, next) => { await next(); c.header('X-Robots-Tag', 'noindex, nofollow'); });
+  app.get('/robots.txt', (c) => c.text('User-agent: *\nDisallow: /\n'));
+}
 // compressione per API, script, stili, tile vettoriali e glifi (i PNG del terreno sono già compressi)
 for (const path of ['/api/*', '/assets/*', '/tiles/*', '/glyphs/*', '/vendor/*']) app.use(path, compress());
 app.route('/', createApi(data, db));

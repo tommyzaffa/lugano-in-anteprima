@@ -61,9 +61,11 @@ export default function Summary({ planOverride, readOnly }: { planOverride?: Pla
       </div>
       <TotalsLine plan={plan} />
       <div className="reval no-print">
-        <button className="btn" onClick={() => void revalidate()} disabled={checking}>{checking ? <Spinner /> : null} Verifica i dati adesso</button>
-        <button className="btn-ghost" onClick={() => void liveCheck()}>Corse in tempo reale</button>
-        <span className="hint">Confronta il programma con i dati attuali (orari, eventi, corse). La simulazione continua invece a usare lo snapshot originale.</span>
+        <div className="row wrap">
+          <button className="btn" onClick={() => void revalidate()} disabled={checking}>{checking ? <Spinner /> : null} Verifica i dati adesso</button>
+          <button className="btn-ghost" onClick={() => void liveCheck()}>Corse in tempo reale</button>
+        </div>
+        <p className="hint">Confronta il programma con i dati attuali (orari, eventi, corse). La simulazione continua invece a usare lo snapshot originale.</p>
         {live ? <div className="notice info">{live}</div> : null}
         {reval ? (
           <div className={`notice ${reval.status === 'blocking' ? 'bad' : reval.status === 'changed' ? 'warn' : 'ok'}`}>
@@ -115,7 +117,7 @@ export default function Summary({ planOverride, readOnly }: { planOverride?: Pla
         <h3>Fonti e limiti</h3>
         <ul>
           <li>Luoghi, strade e sentieri: © OpenStreetMap contributors (ODbL), catalogo {plan.snapshot.catalogVersion}.</li>
-          <li>Orari dei mezzi: orario ufficiale statico {plan.snapshot.transitFeed} (opentransportdata.swiss), senza ritardi in tempo reale.</li>
+          <li>Orari dei mezzi: orario ufficiale statico {plan.snapshot.transitFeed} (opentransportdata.swiss), senza ritardi in tempo reale.{plan.checks.find((c) => c.id === 'transit' && c.detail.startsWith('Orario stimato')) ? ' Per questa data le corse sono stimate dall\'orario dello stesso giorno della settimana di un anno prima: verificatele prima di partire.' : ''}</li>
           <li>Tempi a piedi e dislivelli: calcolati sulla rete pedonale e sul modello del terreno (stime).</li>
           <li>Prezzi: stime indicative per categoria o tariffe da verificare; nessun acquisto o prenotazione è stato effettuato.</li>
           <li>Eventi: fixture dimostrative, non l'agenda reale.</li>
@@ -146,9 +148,13 @@ function OutingNow({ plan }: { plan: Plan }) {
     const fallback = last ? { kind: 'place' as const, label: `Ultima tappa: ${last.name}`, lon: (last.exit ?? last).lon, lat: (last.exit ?? last).lat, placeId: last.placeId } : plan.request.start;
     const start = await new Promise<any>((resolve) => {
       if (!navigator.geolocation) { resolve(fallback); return; }
+      let done = false;
+      const noPosition = () => { if (done) return; done = true; useApp.getState().notify(`Posizione non disponibile: si riparte da ${fallback.label.replace(/^Ultima tappa: /, '')}.`, 'info'); resolve(fallback); };
+      // il timeout della geolocalizzazione parte solo dopo il permesso: se la richiesta resta senza risposta non si aspetta all'infinito
+      const guard = setTimeout(noPosition, 12_000);
       navigator.geolocation.getCurrentPosition(
-        (p) => { track('geolocation_used'); resolve({ kind: 'geolocation', label: 'La mia posizione', lon: p.coords.longitude, lat: p.coords.latitude, sensitive: true }); },
-        () => { useApp.getState().notify(`Posizione non concessa: si riparte da ${fallback.label.replace(/^Ultima tappa: /, '')}.`, 'info'); resolve(fallback); },
+        (p) => { if (done) return; done = true; clearTimeout(guard); track('geolocation_used'); resolve({ kind: 'geolocation', label: 'La mia posizione', lon: p.coords.longitude, lat: p.coords.latitude, sensitive: true }); },
+        () => { clearTimeout(guard); noPosition(); },
         { enableHighAccuracy: true, timeout: 8000 },
       );
     });

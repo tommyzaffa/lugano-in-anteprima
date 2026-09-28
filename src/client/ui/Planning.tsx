@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useApp } from '../store.ts';
 import { cancelPlanning, resolveContradiction, runPlanning } from './planning-actions.ts';
 import { Spinner } from './common.tsx';
@@ -10,6 +11,7 @@ export default function Planning() {
   const result = useApp((s) => s.result);
   const set = useApp((s) => s.set);
   const online = useApp((s) => s.online);
+  const slow = useSlow(!contradictions?.length && !infeasible && !error);
 
   if (contradictions?.length) {
     return (
@@ -60,7 +62,20 @@ export default function Planning() {
         {!progress.length ? <li className="current"><Spinner /> Invio della richiesta…</li> : null}
       </ol>
       <p className="hint">Il motore verifica aperture, ultimo ingresso, coincidenze reali, budget e rientro. Nessun ragionamento interno viene mostrato: solo motivazioni sintetiche e fonti.</p>
+      {slow ? <p className="notice" role="status">Ci vuole più del solito: il server di questa demo ha poche risorse e la ricerca può richiedere fino a mezzo minuto. Le proposte arrivano comunque verificate.</p> : null}
       <button className="btn-ghost" onClick={cancelPlanning}>Annulla</button>
     </div>
   );
+}
+
+/** Vero dopo 8 secondi di attesa continua (server lento o appena riattivato). */
+function useSlow(waiting: boolean): boolean {
+  const [slow, setSlow] = useState(false);
+  useEffect(() => {
+    setSlow(false);
+    if (!waiting) return;
+    const id = setTimeout(() => setSlow(true), 8000);
+    return () => clearTimeout(id);
+  }, [waiting]);
+  return slow;
 }

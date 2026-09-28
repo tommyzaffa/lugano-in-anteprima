@@ -21,7 +21,9 @@ export async function savePlan(): Promise<{ id: string; token: string } | null> 
     }
     // copia leggibile anche senza rete (riepilogo offline, senza garanzie live)
     try { localStorage.setItem(`lia.offline.${ref.id}`, JSON.stringify({ plan, savedAt: new Date().toISOString() })); track('offline_saved'); } catch { /* archiviazione piena */ }
-    app.notify('Programma salvato. Il link personale permette di riaprirlo e modificarlo.', 'ok');
+    app.notify(app.meta?.hosting?.ephemeralStorage
+      ? 'Programma salvato. In questa demo pubblica i salvataggi possono sparire quando il server si riavvia: tenete anche il riepilogo (Copia testo, calendario o stampa).'
+      : 'Programma salvato. Il link personale permette di riaprirlo e modificarlo.', 'ok');
     history.replaceState(null, '', `/p/${ref.id}#k=${ref.token}`);
     return ref;
   } catch (e) {
@@ -49,6 +51,7 @@ export function ShareDialog({ onClose }: { onClose: () => void }) {
   const [link, setLink] = useState<string | null>(null);
   const [shares, setShares] = useState<{ token: string; createdAt: string; revokedAt: string | null; allowVotes: boolean; tally?: Record<string, number> | null; comments?: number }[]>([]);
   const savedRef = useApp((s) => s.savedRef);
+  const ephemeral = useApp((s) => s.meta?.hosting?.ephemeralStorage);
   const load = async (ref = savedRef) => { if (ref) try { setShares((await get<any>(`/api/plans/${ref.id}/shares`, { headers: { 'x-edit-token': ref.token } })).shares); } catch { /* */ } };
   useEffect(() => { void load(); }, [savedRef]);
   const create = async () => {
@@ -68,6 +71,7 @@ export function ShareDialog({ onClose }: { onClose: () => void }) {
   return (
     <Modal title="Condividi il programma" onClose={onClose}>
       <p className="hint">Chi riceve il link vede le proposte senza account. Potete togliere i dettagli personali e revocare il link in ogni momento.</p>
+      {ephemeral ? <div className="notice warn">Demo pubblica: i link condivisi valgono finché il server non si riavvia (ad esempio dopo un periodo di inattività o un aggiornamento).</div> : null}
       {opt('hideLocations', 'Nascondi partenza, alloggio e posizione')}
       {opt('hideNeeds', 'Nascondi esigenze personali, alimentazione e testo libero')}
       {opt('hideNames', 'Nascondi i nomi dei personaggi')}

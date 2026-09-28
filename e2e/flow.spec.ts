@@ -170,8 +170,9 @@ test('senza WebGL: vista semplificata con le stesse informazioni', async ({ page
 
 test('siamo in giro adesso: il giorno dell\'uscita si ricalcola il resto senza le tappe fatte', async ({ page, request }) => {
   const meta = await (await request.get('/api/meta')).json();
-  // orologio del browser fissato a metà mattina del giorno del programma (fuso di Zurigo)
-  await page.clock.setFixedTime(new Date(`${meta.today}T10:40:00+02:00`));
+  // orologio del browser fissato al mattino del giorno del programma, prima della partenza dell'esempio
+  // (fuso di Zurigo): dopo l'ora di partenza gli esempi propongono il giorno seguente
+  await page.clock.setFixedTime(new Date(`${meta.today}T09:05:00+02:00`));
   await page.goto('/');
   await page.getByText('Due persone fra paesaggio e cultura').click();
   await page.getByRole('button', { name: 'Proponi programmi' }).click();

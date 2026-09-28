@@ -8,7 +8,9 @@ import { PNG } from 'pngjs';
 
 export class Dem {
   private cache = new Map<string, Float32Array | null>();
-  constructor(private dir = 'public/terrain', private z = 14) {}
+  private dir: string;
+  private z: number;
+  constructor(dir = 'public/terrain', z = 14) { this.dir = dir; this.z = z; }
 
   private tile(x: number, y: number): Float32Array | null {
     const key = `${x}/${y}`;

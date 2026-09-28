@@ -7,6 +7,7 @@
 import { DateTime } from 'luxon';
 import type { LegPoint } from '../../shared/types.ts';
 import { checkVisit } from '../../shared/calendar.ts';
+import { localMinuteOfDay } from '../../shared/time.ts';
 import { TZ } from '../../shared/types.ts';
 import type { PlanContext } from './context.ts';
 import { checkAbort } from './context.ts';
@@ -53,7 +54,7 @@ export const THEMES: Record<string, Theme> = {
 };
 
 const MEAL = { lunch: [11 * 60 + 45, 14 * 60 + 15], dinner: [18 * 60 + 30, 21 * 60 + 30] } as const;
-function minuteOfDay(ms: number) { const d = DateTime.fromMillis(ms, { zone: TZ }); return d.hour * 60 + d.minute; }
+const minuteOfDay = localMinuteOfDay;
 
 export function expectedMeals(ctx: PlanContext): { lunch: boolean; dinner: boolean } {
   const overlap = (a: number, b: number) => {
@@ -145,14 +146,14 @@ export function search(ctx: PlanContext, cands: Candidate[], est: Estimator, opt
         } else {
           const sched = c.place.schedules.find((s) => s.kind === 'public');
           if (sched) {
-            let chk = checkVisit(sched, DateTime.fromMillis(arrive, { zone: TZ }), stayMin);
+            let chk = checkVisit(sched, arrive, stayMin);
             if (!chk.ok && chk.status === 'closed' && chk.nextOpen && chk.nextOpen.toMillis() - arrive <= 35 * 60_000) {
               start = chk.nextOpen.toMillis();
               chk = checkVisit(sched, chk.nextOpen, stayMin);
             }
             if (!chk.ok && chk.status === 'closes_before_end') {
               stayMin = c.stay.min;
-              chk = checkVisit(sched, DateTime.fromMillis(start, { zone: TZ }), stayMin);
+              chk = checkVisit(sched, start, stayMin);
             }
             if (!chk.ok) continue;
           }

@@ -26,7 +26,11 @@ export type AiProviderName = 'anthropic' | 'none';
 export const config = {
   port: num('API_PORT', num('PORT', 8787)),
   host: env('HOST', '127.0.0.1')!,
-  publicBaseUrl: env('PUBLIC_BASE_URL', ''),
+  publicBaseUrl: env('PUBLIC_BASE_URL', env('RENDER_EXTERNAL_URL', '')),
+  /** Il prototipo resta fuori dai motori di ricerca finché non è un servizio autorizzato (ALLOW_INDEXING=true per cambiarlo). */
+  allowIndexing: env('ALLOW_INDEXING') === 'true',
+  /** Disco non persistente (es. piano gratuito di Render): salvataggi e link condivisi possono sparire a ogni riavvio. */
+  ephemeralStorage: env('EPHEMERAL_STORAGE') === 'true',
   dataDir: env('DATA_DIR', 'data')!,
   dbPath: env('DB_PATH', 'data/db/lugano.sqlite')!,
   adminToken: env('ADMIN_TOKEN'),

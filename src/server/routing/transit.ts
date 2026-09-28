@@ -6,6 +6,8 @@
  */
 import { DateTime } from 'luxon';
 import { TZ } from '../../shared/types.ts';
+import { isoWeekday, addDaysToDate } from '../../shared/time.ts';
+import { holidayName } from '../../shared/calendar.ts';
 
 export type TransitMode = 'bus' | 'train' | 'funicular' | 'boat' | 'cable_car';
 
@@ -32,6 +34,8 @@ export interface TripInstance {
   frequencyBased: boolean;
   headwaySec?: number;
   serviceDate: string;
+  /** giornata dell'orario usata come riferimento quando la data non è coperta dal feed */
+  referenceDate?: string;
 }
 
 interface ConnectionSet {
@@ -67,7 +71,6 @@ export interface CsaResult {
   departAt: number;
 }
 
-const DOW = (date: string) => DateTime.fromISO(date, { zone: TZ }).weekday; // 1..7
 function ymd(date: string) { return date.replace(/-/g, ''); }
 
 export class TransitNetwork {
@@ -76,6 +79,8 @@ export class TransitNetwork {
   private footOut: [number, number][][];
   private footOutSF: [number, number][][];
   private connCache = new Map<string, ConnectionSet>();
+  /** servizi attivi per data (le corse sono decine di migliaia, i servizi poche centinaia) */
+  private activeCache = new Map<string, Map<string, boolean>>();
 
   constructor(d: TransitData) {
     this.d = d;
@@ -95,14 +100,46 @@ export class TransitNetwork {
     return x >= this.d.source.feedStart && x <= this.d.source.feedEnd;
   }
 
+  /**
+   * Giornata dell'orario da usare per una data. Se la data è coperta dal feed è la data stessa.
+   * Altrimenti (per esempio dopo il cambio d'orario di dicembre, prima che il nuovo orario sia
+   * importato) si usa lo stesso giorno della settimana 52 settimane prima o dopo, nella stessa
+   * stagione, con i festivi abbinati ai festivi: è una stima dichiarata, mai l'orario ufficiale.
+   */
+  referenceDate(date: string): string | null {
+    if (this.covers(date)) return date;
+    const dir = ymd(date) > this.d.source.feedEnd ? -1 : 1;
+    const holiday = holidayName(date) != null || isoWeekday(date) === 7;
+    for (let k = 1; k <= 3; k++) {
+      let ref = addDaysToDate(date, dir * 364 * k);
+      // un festivo si confronta con una domenica, un feriale con un feriale non festivo
+      if (holiday && isoWeekday(ref) !== 7) ref = addDaysToDate(ref, 7 - isoWeekday(ref));
+      else if (!holiday && holidayName(ref)) ref = addDaysToDate(ref, dir * 7);
+      if (this.covers(ref)) return ref;
+    }
+    return null;
+  }
+
   serviceActive(sid: string, date: string): boolean {
+    let byService = this.activeCache.get(date);
+    if (!byService) {
+      if (this.activeCache.size > 60) this.activeCache.clear();
+      byService = new Map();
+      this.activeCache.set(date, byService);
+    }
+    let v = byService.get(sid);
+    if (v === undefined) { v = this.computeServiceActive(sid, date); byService.set(sid, v); }
+    return v;
+  }
+
+  private computeServiceActive(sid: string, date: string): boolean {
     const s = this.d.services[sid];
     if (!s) return false;
     const x = ymd(date);
     if (s.remove.includes(x)) return false;
     if (s.add.includes(x)) return true;
     if (!s.start || x < s.start || x > s.end) return false;
-    return s.days[DOW(date) - 1] === 1;
+    return s.days[isoWeekday(date) - 1] === 1;
   }
 
   /** Istante di riferimento GTFS: mezzogiorno locale meno 12 ore. */
@@ -113,17 +150,21 @@ export class TransitNetwork {
 
   private instancesFor(date: string, from: number, to: number, modes: Set<TransitMode>): TripInstance[] {
     const out: TripInstance[] = [];
+    const svcDate = this.referenceDate(date);
+    if (!svcDate) return out;
+    const referenceDate = svcDate === date ? undefined : svcDate;
+    // gli orari restano relativi alla data reale (ora legale compresa); cambia solo quali corse circolano
     const base = TransitNetwork.serviceBase(date);
     this.d.trips.forEach((t, ti) => {
       const pat = this.d.patterns[t.p];
       if (!modes.has(pat.mode)) return;
-      if (!this.serviceActive(t.s, date)) return;
+      if (!this.serviceActive(t.s, svcDate)) return;
       const n = pat.stops.length;
       const make = (shiftSec: number, freq?: { headway: number }) => {
         const arr = new Float64Array(n), dep = new Float64Array(n);
         for (let i = 0; i < n; i++) { arr[i] = base + (t.t[i * 2] + shiftSec) * 1000; dep[i] = base + (t.t[i * 2 + 1] + shiftSec) * 1000; }
         if (dep[0] > to || arr[n - 1] < from) return;
-        out.push({ trip: ti, pattern: t.p, arr, dep, frequencyBased: !!freq, headwaySec: freq?.headway, serviceDate: date });
+        out.push({ trip: ti, pattern: t.p, arr, dep, frequencyBased: !!freq, headwaySec: freq?.headway, serviceDate: date, referenceDate });
       };
       if (t.f && t.f.length) {
         const first = t.t[1];

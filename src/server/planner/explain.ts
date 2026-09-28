@@ -73,7 +73,8 @@ export function whyThis(plan: Plan, ctx: PlanContext, reasonsByStop: Map<string,
   out.push(...[...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3).map(([r]) => r));
   const outside = plan.stops.filter((s) => isOutsideCenter(s.lon, s.lat)).length;
   if (outside >= 1) out.push(`Esce dal centro: ${plan.stops.filter((s) => isOutsideCenter(s.lon, s.lat)).map((s) => s.name.replace(/\s*\(.*?\)\s*/g, '')).slice(0, 3).join(', ')}`);
-  if (plan.trips.some((t) => t.legs.some((l) => l.mode === 'funicular'))) out.push('Include una funicolare con orario ufficiale');
+  const funi = plan.trips.flatMap((t) => t.legs).filter((l) => l.mode === 'funicular');
+  if (funi.length) out.push(funi.some((l) => l.source.label.startsWith('Orario di riferimento')) ? 'Include una funicolare (orario stimato, da verificare)' : 'Include una funicolare con orario ufficiale');
   if (plan.trips.some((t) => t.legs.some((l) => l.mode === 'boat'))) out.push('Include un tratto in battello');
   if (ctx.req.pace === 'relaxed' && plan.totals.walkM < 3000) out.push('Poco cammino, adatto a un ritmo rilassato');
   return [...new Set(out)].slice(0, 5);

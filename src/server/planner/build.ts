@@ -219,7 +219,13 @@ export function finalize(ctx: PlanContext, data: DataStore, stops: PlanStop[], t
   if (rides.length) {
     const freq = rides.filter((r) => r.transit![0].frequencyBased).length;
     const covered = data.transit.covers(ctx.req.date);
-    checks.push({ id: 'transit', label: 'Trasporti', status: covered ? (freq ? 'uncertain' : 'ok') : 'violated', detail: covered ? `${rides.length} corse dall'orario ufficiale statico ${data.transit.feedVersion}; nessun dato in tempo reale.${freq ? ` ${freq} a cadenza (orario indicativo).` : ''}` : 'La data è fuori dal periodo di validità dell\'orario importato.' });
+    const ref = covered ? null : data.transit.referenceDate(ctx.req.date);
+    checks.push({
+      id: 'transit', label: 'Trasporti', status: covered ? (freq ? 'uncertain' : 'ok') : ref ? 'uncertain' : 'violated',
+      detail: covered ? `${rides.length} corse dall'orario ufficiale statico ${data.transit.feedVersion}; nessun dato in tempo reale.${freq ? ` ${freq} a cadenza (orario indicativo).` : ''}`
+        : ref ? `Orario stimato: l'orario ufficiale per questa data non è ancora importato; ${rides.length} corse ricavate dall'orario del ${ref} (stesso giorno della settimana). Verificate le corse reali prima di partire.`
+        : 'La data è fuori dal periodo di validità dell\'orario importato.',
+    });
   }
   if (walkM > 0 && trips.some((t) => t.legs.some((l) => l.mode === 'hike'))) checks.push({ id: 'hike', label: 'Escursione', status: 'uncertain', detail: 'Il programma include tratti di sentiero di montagna: tempi e dislivelli stimati, condizioni non verificate.' });
   for (const s of stops) for (const c of s.checks) if (c.status !== 'ok') checks.push({ ...c, id: `${s.id}:${c.id}`, label: `${s.name} — ${c.label}` });

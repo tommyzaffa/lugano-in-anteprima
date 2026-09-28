@@ -32,7 +32,12 @@ export default function Home() {
     const today = meta?.today ?? new Date().toISOString().slice(0, 10);
     const base = draft ?? defaultDraft(today);
     const withDate = { ...base, date: base.date < today ? today : base.date };
-    useApp.setState({ draft: preset ? { ...preset(defaultDraft(today)), date: withDate.date } : withDate });
+    if (preset) {
+      const p = preset(defaultDraft(today));
+      // una data futura scelta in precedenza resta; altrimenti oggi, o domani se l'esempio sarebbe già iniziato
+      const date = withDate.date > today ? withDate.date : zurichNow() > p.startTime ? nextDay(today) : today;
+      useApp.setState({ draft: { ...p, date } });
+    } else useApp.setState({ draft: withDate });
     setDraft((d) => d);
     set({ view: 'wizard', wizardStep: preset ? 5 : 0 });
   };
@@ -85,8 +90,18 @@ export default function Home() {
       {meta ? (
         <p className="fineprint">
           Area coperta: {meta.perimeter.sizeKm.width}×{meta.perimeter.sizeKm.height} km, dal Monte Boglia al San Salvatore, da Canobbio a Melide. <Badge kind="demo">{t('demo.badge')}</Badge> {meta.ai.label}.
+          {' '}Prototipo dimostrativo: non è un servizio ufficiale della Città di Lugano né di Lugano Region.
         </p>
       ) : null}
     </div>
   );
+}
+
+/** Ora corrente a Zurigo (HH:MM), indipendente dal fuso del dispositivo. */
+function zurichNow(): string {
+  return new Intl.DateTimeFormat('it-CH', { timeZone: 'Europe/Zurich', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date());
+}
+function nextDay(date: string): string {
+  const [y, m, d] = date.split('-').map(Number);
+  return new Date(Date.UTC(y, m - 1, d + 1)).toISOString().slice(0, 10);
 }

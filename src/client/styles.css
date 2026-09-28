@@ -53,6 +53,10 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-
 .topnav { margin-left: auto; display: flex; gap: .2rem; min-width: 0; overflow-x: auto; scrollbar-width: none; }
 .topnav button { background: none; border: 0; padding: .5rem .7rem; border-radius: 8px; cursor: pointer; min-height: 40px; }
 .topnav button[aria-current='true'], .topnav button:hover { background: var(--paper-2); }
+.integrations { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
+.integrations li { border: 1px solid var(--line); border-radius: 10px; padding: .55rem .7rem; }
+.integrations .int-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .3rem .6rem; }
+.integrations p { margin: .3rem 0 0; font-size: .9rem; }
 .offline-banner { position: fixed; top: 52px; left: 0; right: 0; background: var(--gold); color: var(--ink); text-align: center; padding: .35rem; z-index: 30; font-size: .88rem; }
 .stage { position: relative; grid-row: 2; min-height: 0; }
 .map { position: absolute; inset: 0; background: var(--paper); }
@@ -398,9 +402,13 @@ thead th { font-family: var(--serif); }
   body { font-size: 15.5px; }
   .topbar { padding: .35rem .5rem; gap: .4rem; }
   .brand span { font-size: .95rem; line-height: 1.05; max-width: 92px; }
-  .topnav { gap: 0; }
+  /* la navigazione non si restringe (l'ultima voce non deve finire fuori schermo): cede il nome */
+  .topnav { gap: 0; flex-shrink: 0; }
+  .demo-pill { padding: 0; flex-shrink: 0; }
   .demo-pill .badge { font-size: .65rem; }
   .demo-text { display: none; }
+  .brand { min-width: 0; }
+  .brand span { overflow: hidden; }
   .topnav button { padding: .45rem .5rem; font-size: .9rem; }
   .panel { left: 0; right: 0; width: auto; top: auto; bottom: 0; border-radius: 18px 18px 0 0; border-bottom: 0; height: 52vh; transition: height .25s ease; }
   .sheet-peek .panel { height: 118px; }
@@ -428,7 +436,7 @@ thead th { font-family: var(--serif); }
   .cutscene { top: 10%; }
   .toast { bottom: calc(52vh + 12px); }
 }
-@media (max-width: 420px) {
+@media (max-width: 440px) {
   .topbar { gap: .25rem; padding: .3rem .35rem; }
   .brand { gap: .3rem; }
   .brand svg { width: 26px; height: 26px; flex-shrink: 0; }

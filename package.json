@@ -9,7 +9,7 @@
     "dev:api": "API_PORT=8787 node --watch-path=src/server --watch-path=src/shared --watch-path=data/build/catalog.json --disable-warning=ExperimentalWarning --import tsx src/server/index.ts",
     "dev:web": "vite",
     "build": "vite build",
-    "start": "NODE_ENV=production node --disable-warning=ExperimentalWarning --import tsx src/server/index.ts",
+    "start": "NODE_ENV=production node --disable-warning=ExperimentalWarning src/server/index.ts",
     "test:e2e": "playwright test",
     "typecheck": "tsc -p tsconfig.json",
     "data:perimeter": "tsx scripts/geo/01-perimeter.ts",
@@ -32,6 +32,9 @@
   "license": "ISC",
   "type": "module",
   "private": true,
+  "engines": {
+    "node": ">=22.18"
+  },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",
     "@hono/node-server": "^2.1.1",

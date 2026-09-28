@@ -6,7 +6,7 @@
 |---|---|---|
 | Linguaggio | TypeScript ovunque (client, server, script, test) | Tipi e schemi condivisi fra pianificatore, simulazione e interfaccia |
 | Client | React 19 + zustand + MapLibre GL JS 6 | Mappa vettoriale con stile proprio, terreno 3D, estrusioni; stato semplice e prevedibile |
-| Server | Node 24 + Hono, eseguito con `tsx` | Backend leggero con endpoint; niente framework full-stack non necessario |
+| Server | Node 24 + Hono; TypeScript eseguito direttamente da Node (rimozione dei tipi, `erasableSyntaxOnly`), `tsx` solo in sviluppo | Backend leggero con endpoint; niente framework full-stack; avvio rapido anche con poca CPU (hosting gratuito) |
 | Persistenza | SQLite tramite `node:sqlite` integrato | Nessuna infrastruttura in più per il pilota; per la versione pubblica è previsto PostgreSQL/PostGIS |
 | Cartografia | Tile vettoriali **generati in locale** da estratti OSM (geojson-vt + vt-pbf), terreno Terrarium locale, glifi locali | Stile originale, nessuna dipendenza dai server pubblici di tile, copertura dell'intera area fin dall'avvio |
 | Percorsi a piedi | Grafo pedonale proprio da OSM con quote dal DEM, A* e Dijkstra | Geometria reale, scale, sentieri e dislivelli; profili per passeggino, sedia a rotelle, notte, escursione |

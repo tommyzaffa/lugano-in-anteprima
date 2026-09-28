@@ -1,7 +1,12 @@
 # Blueprint di Render: https://render.com/docs/blueprint-spec
-# Crea un servizio web dal Dockerfile. ADMIN_TOKEN viene generato da Render (lo trovate nelle variabili d'ambiente).
-# Piano gratuito: il servizio si sospende quando è inattivo e il disco non è persistente
-# (programmi salvati e link condivisi si perdono a ogni riavvio o nuovo deploy).
+# Un servizio web dal Dockerfile, pubblico, in modalità demo (nessuna credenziale necessaria).
+# ADMIN_TOKEN viene generato da Render: lo trovate nella scheda «Environment» del servizio.
+#
+# Piano gratuito: il servizio si sospende dopo 15 minuti senza visite (la prima apertura
+# richiede circa un minuto), ha 0,1 CPU (una pianificazione richiede 10–20 s) e il disco
+# non è persistente (programmi salvati e link condivisi si perdono a ogni riavvio o deploy).
+# Per un incontro dal vivo conviene il piano «starter» (sempre attivo, 0,5 CPU): basta
+# cambiare `plan` qui sotto oppure dalla dashboard. Vedi docs/DEPLOY.md.
 services:
   - type: web
     name: lugano-in-anteprima
@@ -17,3 +22,9 @@ services:
         value: demo
       - key: AI_PROVIDER
         value: none
+      # CPU ridotta: più margine prima di interrompere una pianificazione
+      - key: PLANNER_TIMEOUT_MS
+        value: "45000"
+      # l'interfaccia avvisa che salvataggi e link condivisi non sono permanenti
+      - key: EPHEMERAL_STORAGE
+        value: "true"

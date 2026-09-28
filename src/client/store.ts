@@ -21,6 +21,7 @@ export interface Meta {
   weather: string;
   today: string;
   quickStarts: { kind: 'stop' | 'place'; label: string; lon: number; lat: number; stopId?: string; placeId?: string }[];
+  hosting?: { ephemeralStorage: boolean };
 }
 
 /** mustSeeLabels: nomi leggibili delle tappe obbligatorie che non sono luoghi (es. eventi scelti dal calendario) */

@@ -2,7 +2,13 @@
 import type { GroupRequest, Plan, Decision, PlanDiff, InfeasibleResult, Contradiction } from '../shared/types.ts';
 
 export class ApiError extends Error {
-  constructor(public status: number, public code: string, message: string, public data?: any) { super(message); }
+  status: number;
+  code: string;
+  data?: any;
+  constructor(status: number, code: string, message: string, data?: any) {
+    super(message);
+    this.status = status; this.code = code; this.data = data;
+  }
 }
 
 async function json<T>(res: Response): Promise<T> {

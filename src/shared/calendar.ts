@@ -5,7 +5,7 @@
  */
 import { DateTime } from 'luxon';
 import type { OpeningSchedule, OpeningRule, CatalogEvent, EventOccurrence } from './types.ts';
-import { TZ, localToInstant, toISO, addDaysToDate, isoWeekday } from './time.ts';
+import { TZ, localToInstant, toISO, addDaysToDate, isoWeekday, localDateOfMs } from './time.ts';
 
 // ------------------------------------------------------------- festività (Canton Ticino)
 function easterSunday(year: number): string {
@@ -94,7 +94,24 @@ function rulesForDate(s: OpeningSchedule, date: string): OpeningRule[] {
   return s.rules.filter((r) => r.days.includes(weekday) && inSeason(date, r.seasonFrom, r.seasonTo) && inValidity(date, r.validFrom, r.validTo));
 }
 
-export function intervalsForDate(s: OpeningSchedule, date: string): OpenInterval[] {
+// Intervalli per orario e data: gli orari non vengono mai modificati sul posto (le modifiche
+// editoriali creano nuovi oggetti), quindi la cache per identità resta valida.
+const intervalCache = new WeakMap<OpeningSchedule, Map<string, readonly OpenInterval[]>>();
+
+/** Intervalli di apertura di una data locale. Il risultato è condiviso: non va modificato. */
+export function intervalsForDate(s: OpeningSchedule, date: string): readonly OpenInterval[] {
+  let byDate = intervalCache.get(s);
+  if (!byDate) { byDate = new Map(); intervalCache.set(s, byDate); }
+  let ivs = byDate.get(date);
+  if (!ivs) {
+    ivs = computeIntervals(s, date);
+    if (byDate.size > 2000) byDate.clear();
+    byDate.set(date, ivs);
+  }
+  return ivs;
+}
+
+function computeIntervals(s: OpeningSchedule, date: string): OpenInterval[] {
   if (s.alwaysOpen) {
     return [{ start: localToInstant(date, '00:00'), end: localToInstant(date, '00:00', 1), lastEntry: null, date, source: 'always' }];
   }
@@ -108,11 +125,15 @@ export function intervalsForDate(s: OpeningSchedule, date: string): OpenInterval
 
 /** Tutti gli intervalli che toccano [from, to]; include quelli iniziati il giorno prima (oltre mezzanotte). */
 export function openIntervals(s: OpeningSchedule, from: DateTime, to: DateTime): OpenInterval[] {
+  return openIntervalsMs(s, from.toMillis(), to.toMillis());
+}
+
+function openIntervalsMs(s: OpeningSchedule, f: number, t: number): OpenInterval[] {
   const out: OpenInterval[] = [];
-  let d = from.setZone(TZ).minus({ days: 1 }).toFormat('yyyy-MM-dd');
-  const last = to.setZone(TZ).toFormat('yyyy-MM-dd');
+  let d = addDaysToDate(localDateOfMs(f), -1);
+  const last = localDateOfMs(t);
   for (let guard = 0; d <= last && guard < 400; guard++) {
-    for (const iv of intervalsForDate(s, d)) if (iv.end > from && iv.start < to) out.push(iv);
+    for (const iv of intervalsForDate(s, d)) if (iv.end.toMillis() > f && iv.start.toMillis() < t) out.push(iv);
     d = addDaysToDate(d, 1);
   }
   // unisce intervalli contigui (es. 24/7 su più giorni)
@@ -140,21 +161,23 @@ export interface VisitCheck {
  * Verifica che la struttura sia aperta per tutta la permanenza [arrivo, arrivo+durata]
  * e che l'arrivo non superi l'ultimo ingresso.
  */
-export function checkVisit(s: OpeningSchedule | undefined, arrival: DateTime, stayMin: number): VisitCheck {
+export function checkVisit(s: OpeningSchedule | undefined, arrival: DateTime | number, stayMin: number): VisitCheck {
   if (!s) return { ok: true, status: 'unknown', message: 'Orari non disponibili: da verificare' };
-  const end = arrival.plus({ minutes: stayMin });
-  const ivs = openIntervals(s, arrival.minus({ hours: 1 }), end.plus({ hours: 12 }));
-  const containing = ivs.find((iv) => iv.start <= arrival && iv.end > arrival);
+  const a = typeof arrival === 'number' ? arrival : arrival.toMillis();
+  const end = a + stayMin * 60_000;
+  const ivs = openIntervalsMs(s, a - 3_600_000, end + 12 * 3_600_000);
+  const containing = ivs.find((iv) => iv.start.toMillis() <= a && iv.end.toMillis() > a);
   if (!containing) {
-    const next = ivs.find((iv) => iv.start > arrival);
-    const why = s.exceptions.find((e) => e.date === arrival.setZone(TZ).toFormat('yyyy-MM-dd') && e.closed && e.note)?.note;
+    const next = ivs.find((iv) => iv.start.toMillis() > a);
+    const day = localDateOfMs(a);
+    const why = s.exceptions.find((e) => e.date === day && e.closed && e.note)?.note;
     if (why) return { ok: false, status: 'closed', message: `Chiuso in questa data: ${why}` };
     return { ok: false, status: 'closed', message: next ? `Chiuso all'arrivo; apre alle ${next.start.toFormat('HH:mm')}` : "Chiuso all'orario previsto", nextOpen: next?.start };
   }
-  if (containing.lastEntry && arrival > containing.lastEntry) {
+  if (containing.lastEntry && a > containing.lastEntry.toMillis()) {
     return { ok: false, status: 'last_entry_passed', message: `Ultimo ingresso alle ${containing.lastEntry.toFormat('HH:mm')}: arrivo troppo tardi`, interval: containing };
   }
-  if (containing.end < end) {
+  if (containing.end.toMillis() < end) {
     return { ok: false, status: 'closes_before_end', message: `Chiude alle ${containing.end.toFormat('HH:mm')}, prima della fine della visita`, interval: containing };
   }
   return { ok: true, status: 'ok', message: `Aperto fino alle ${containing.end.toFormat('HH:mm')}${containing.lastEntry ? ` (ultimo ingresso ${containing.lastEntry.toFormat('HH:mm')})` : ''}`, interval: containing };

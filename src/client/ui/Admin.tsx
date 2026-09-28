@@ -154,7 +154,7 @@ function Reports({ headers }: { headers: Record<string, string> }) {
 }
 
 const STAT_LABEL: Record<string, string> = {
-  plan_requested: 'Pianificazioni richieste', plan_ok: 'Pianificazioni con proposte', plan_infeasible: 'Pianificazioni impossibili', plan_needs_resolution: 'Contraddizioni da risolvere',
+  plan_requested: 'Pianificazioni richieste', plan_ok: 'Pianificazioni con proposte', plan_infeasible: 'Pianificazioni impossibili', plan_needs_resolution: 'Contraddizioni da risolvere', plan_timeout: 'Pianificazioni interrotte per tempo', plan_error: 'Errori di pianificazione', plan_aborted: 'Pianificazioni annullate',
   plan_saved: 'Programmi salvati', plan_shared: 'Link di condivisione creati', share_revoked: 'Link revocati', vote: 'Voti ricevuti',
   sim_started: 'Simulazioni avviate', sim_finished: 'Simulazioni concluse', sim_skip: 'Spostamenti saltati', sim_decision: 'Decisioni prese', sim_checkpoint: 'Salti a un checkpoint',
   replan_requested: 'Ricalcoli richiesti', whatif_requested: 'Ipotesi «E se…» richieste', branch_created: 'Rami creati', whatif: 'Rami ipotetici creati',

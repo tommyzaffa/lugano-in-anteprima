@@ -375,6 +375,7 @@ export class Router {
     const notes: string[] = [];
     if (inst.frequencyBased) notes.push(`Servizio a cadenza (circa ogni ${Math.round((inst.headwaySec ?? 0) / 60)} min): orario indicativo.`);
     if (approx) notes.push('Parte della geometria della tratta è approssimata (non ricostruita sulla rete).');
+    if (inst.referenceDate) notes.push(`Orario stimato: l'orario ufficiale di questa data non è ancora importato; corsa ricavata dall'orario del ${inst.referenceDate} (stesso giorno della settimana).`);
     const hops = p.toHop - p.fromHop;
     const fare = rideFare({ short: route.short, mode: pat.mode, agency }, hops, o.people, isoFromMs(p.dep), o.passes, [this.transit.d.stops[p.fromStop].name, this.transit.d.stops[p.toStop].name]);
     const transit: TransitInfo = {
@@ -391,7 +392,9 @@ export class Router {
       geometry,
       flags: { stairs: false, trail: false, unpaved: false, noSidewalkInfo: false, steep: false, strollerOk: 'unknown' },
       transit: [transit],
-      source: { id: 'gtfs-ch', label: `Orario ufficiale GTFS ${this.transit.feedVersion} (statico)`, freshness: 'static_timetable', feedVersion: this.transit.feedVersion },
+      source: inst.referenceDate
+        ? { id: 'gtfs-ch', label: `Orario di riferimento del ${inst.referenceDate} (GTFS ${this.transit.feedVersion}): stima da verificare`, freshness: 'static_timetable', feedVersion: this.transit.feedVersion }
+        : { id: 'gtfs-ch', label: `Orario ufficiale GTFS ${this.transit.feedVersion} (statico)`, freshness: 'static_timetable', feedVersion: this.transit.feedVersion },
       cost: [fare],
       notes,
     };

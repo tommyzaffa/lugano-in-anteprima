@@ -18,7 +18,12 @@ export function revalidate(plan: Plan, data: DataStore): Revalidation {
   const date = plan.request.date;
   const expired = date < todayZurich();
   if (expired) items.push({ severity: 'blocking', message: `La data del programma (${date}) è passata: il programma resta consultabile come ricordo, non per l'uso reale.` });
-  if (!data.transit.covers(date)) items.push({ severity: 'blocking', message: 'La data è fuori dal periodo dell\'orario ufficiale importato.' });
+  if (!data.transit.covers(date)) {
+    const ref = data.transit.referenceDate(date);
+    items.push(ref
+      ? { severity: 'warning', message: `L'orario ufficiale dei mezzi per questa data non è ancora importato: le corse sono stimate dall'orario del ${ref}. Verificatele prima di partire.` }
+      : { severity: 'blocking', message: 'La data è fuori dal periodo dell\'orario ufficiale importato.' });
+  }
   if (plan.snapshot.catalogVersion !== data.catalogVersion) items.push({ severity: 'info', message: `Catalogo aggiornato dopo il salvataggio (${plan.snapshot.catalogVersion} → ${data.catalogVersion}).` });
   const feedNow = `${data.transit.feedVersion}`;
   if (!plan.snapshot.transitFeed.startsWith(feedNow)) items.push({ severity: 'warning', message: `Orario dei trasporti aggiornato (${plan.snapshot.transitFeed} → ${feedNow}): verificare le corse.` });

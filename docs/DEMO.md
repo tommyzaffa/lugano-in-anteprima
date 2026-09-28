@@ -4,6 +4,10 @@ Per un incontro con la Città di Lugano o Lugano Region. Tutto funziona senza cr
 
 ## Preparazione (5 minuti prima)
 
+**Con il link online** (Render, vedi [DEPLOY.md](DEPLOY.md)): aprite il link 2–3 minuti prima (sul piano gratuito il servizio si riattiva in circa un minuto) e fate una pianificazione di prova, così le successive sono più rapide. Sul piano gratuito una pianificazione richiede 15–30 s: durante l'attesa l'interfaccia lo spiega; per l'incontro è meglio il piano starter (2–3 s). Il pubblico può aprire lo stesso link sul telefono.
+
+**In locale**, senza dipendere dalla rete:
+
 ```bash
 npm run build
 ```
@@ -12,7 +16,7 @@ npm run build
 ADMIN_TOKEN=scegliete-un-token PORT=8787 npm start
 ```
 
-Aprite http://127.0.0.1:8787 su un portatile collegato al proiettore e, se possibile, anche su un telefono nella stessa rete (`HOST=0.0.0.0`). Data consigliata per la demo: un venerdì o un sabato tra fine settembre e metà ottobre 2026 (funicolare del San Salvatore in stagione, eventi dimostrativi presenti).
+Aprite http://127.0.0.1:8787 su un portatile collegato al proiettore e, se possibile, anche su un telefono nella stessa rete (`HOST=0.0.0.0`). Data consigliata per la demo: un venerdì o un sabato tra fine settembre e metà ottobre 2026 (funicolare del San Salvatore in stagione, eventi dimostrativi presenti). Gli esempi della home usano la data di oggi, o di domani se l'orario dell'esempio è già passato; la data si cambia al passo «Quando e dove».
 
 ## 1. La piccola Lugano (3 min)
 
@@ -61,4 +65,5 @@ Aprite http://127.0.0.1:8787 su un portatile collegato al proiettore e, se possi
 ## Se qualcosa non va
 
 - Mappa grigia: il dispositivo non ha WebGL → l'app mostra la vista semplificata (schema del percorso e testo) con le stesse informazioni.
+- Link online lento o «Service waking up» di Render: il servizio gratuito si era sospeso, attendete circa un minuto. Se una ricerca si interrompe per tempo, l'app lo dice (non la dichiara impossibile): premete «Riprova».
 - Nessuna proposta: leggete le ragioni mostrate e usate uno dei pulsanti di modifica suggeriti (è anch'esso parte della demo, scenario J).

@@ -96,14 +96,18 @@ export function About() {
   return (
     <div className="about">
       <h2>Dati, fonti e limiti</h2>
+      <div className="notice demo">Prototipo dimostrativo, in sviluppo: non è un servizio ufficiale della Città di Lugano né di Lugano Region. Luoghi, strade, sentieri e orari dei mezzi vengono da dati reali; eventi e meteo sono esempi, i prezzi sono stime. L'app non prenota né acquista nulla.{meta.hosting?.ephemeralStorage ? ' In questa demo pubblica i programmi salvati e i link condivisi possono sparire quando il server si riavvia.' : ''}</div>
       <p>Area coperta: {meta.perimeter.sizeKm.width}×{meta.perimeter.sizeKm.height} km. Include comuni distinti (Lugano, Paradiso, Melide, Massagno, Sorengo, Muzzano, Collina d'Oro, Canobbio e altri) e il confine con l'Italia (Campione d'Italia, Monte Boglia): non sono tutti quartieri del Comune di Lugano.</p>
       <h3>Integrazioni</h3>
-      <div className="table-wrap">
-        <table>
-          <thead><tr><th scope="col">Servizio</th><th scope="col">Stato</th><th scope="col">Dettagli</th></tr></thead>
-          <tbody>{meta.integrations.map((i) => <tr key={i.id}><td>{i.name}</td><td><Badge kind={i.status === 'implementata' ? 'ok' : i.status === 'bloccata' ? 'bad' : i.status === 'dimostrativa' ? 'demo' : 'warn'}>{i.status}</Badge></td><td>{i.detail}<br /><span className="muted">{i.activation}</span></td></tr>)}</tbody>
-        </table>
-      </div>
+      <ul className="integrations">
+        {meta.integrations.map((i) => (
+          <li key={i.id}>
+            <div className="int-head"><strong>{i.name}</strong> <Badge kind={i.status === 'implementata' ? 'ok' : i.status === 'bloccata' ? 'bad' : i.status === 'dimostrativa' ? 'demo' : 'warn'}>{i.status}</Badge></div>
+            <p>{i.detail}</p>
+            <p className="muted">{i.activation}</p>
+          </li>
+        ))}
+      </ul>
       <h3>Fonti</h3>
       <ul>{meta.sources.map((s: any) => <li key={s.id}><strong>{s.name}</strong> — {s.license ?? 'uso interno'}{s.note ? `. ${s.note}` : ''}</li>)}</ul>
       <h3>Riferimenti territoriali verificati</h3>

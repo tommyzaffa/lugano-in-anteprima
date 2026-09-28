@@ -1,6 +1,6 @@
 # Test, verifiche visive e prestazioni
 
-Esito al 28 settembre 2026 su MacBook Pro (Apple M3 Pro), macOS 26, Node 24.8, Chrome di sistema.
+Esito al 28 settembre 2026 su MacBook Pro (Apple M3 Pro), macOS 26, Node 24.8, Chrome di sistema. Aggiornamento del 29 settembre 2026 (preparazione della demo online): container Linux a 4 core, Node 22.22 e 24 (Docker), Chromium headless; vedi «Demo online» in fondo.
 
 ## Test automatici
 
@@ -8,7 +8,7 @@ Esito al 28 settembre 2026 su MacBook Pro (Apple M3 Pro), macOS 26, Node 24.8, C
 npm test
 ```
 
-**80 test, tutti superati** (Vitest, fuso del processo impostato su `America/New_York` per dimostrare l'indipendenza dal fuso della macchina).
+**90 test, tutti superati** (Vitest, fuso del processo impostato su `America/New_York` per dimostrare l'indipendenza dal fuso della macchina).
 
 | File | Cosa verifica |
 |---|---|
@@ -21,6 +21,7 @@ npm test
 | `tests/fares.test.ts` (6) | listini ufficiali delle funicolari (ragazzi, gratuità, metà prezzo/AG, Ticino Ticket), **andata e ritorno** quando si sale e si scende, prima e seconda sezione del Monte Brè in un solo biglietto; prezzi dei luoghi per fasce d'età senza doppi conteggi |
 | `tests/planb.test.ts` (3) | piano B meteo: una voce per ogni tappa all'aperto; alternative al coperto, fuori dal programma, entro 25 minuti a piedi sulla rete reale, **aperte secondo il calendario** o dichiarate «orari da verificare», costo sconosciuto mai zero; in montagna ricerca in basso; filtro passeggino |
 | `tests/api.test.ts` (3) | API HTTP con database in memoria: salvataggio con token personale, link condiviso **oscurato anche nei piani annidati delle decisioni** (nomi, etichette e coordinate della partenza privata), voto con nome e commento ripuliti e troncati, voto modificabile senza doppi conteggi, riepilogo dei voti per il proprietario, revoca, pannello protetto, date inesistenti rifiutate con 400 |
+| `tests/timetable.test.ts` (10) | calcoli di data e ora senza Luxon nel percorso caldo **identici a Luxon** (giorno della settimana, somma di giorni su fine mese/anno/29 febbraio, data e minuto locali e offset ogni 7 minuti attorno ai cambi d'ora di marzo e ottobre), `checkVisit` con istante numerico = con DateTime; **orario di riferimento** oltre il feed (15.1.2027 → 16.1.2026 stesso giorno, festivi abbinati a domeniche, nessun abbinamento con il Corpus Domini, nulla oltre tre anni), programma del 15.1.2027 con corse dichiarate «orario stimato» (controllo incerto, mai «ufficiale», rivalidazione con avviso e non bloccante), nessuna corsa stimata dentro il feed; **tempo esaurito** senza proposte = errore dichiarato, mai «impossibile» |
 | `tests/editorial.test.ts` (5) | modifiche editoriali: applicazione validata con nuova versione del catalogo, **conflitto** quando il dato di base cambia dopo la modifica, modifica non valida ignorata e segnalata, luogo sparito segnalato, luogo nascosto tolto dal catalogo pubblicato |
 
 ### Scenari di accettazione (§17)
@@ -64,7 +65,7 @@ npm run test:e2e
 9. **Accessibilità automatica** (axe-core, WCAG 2.1 A/AA): home, modulo, proposte, simulazione, esplorazione su desktop; home e modulo su telefono — **0 violazioni** (la tela WebGL è esclusa: le stesse informazioni sono nel pannello e nella vista elenco).
 10. **Tastiera**: il modulo si raggiunge con Tab, il focus è visibile, il dialogo «E se… piove» si apre da tastiera, tiene il focus, si chiude con Esc e riporta il focus al pulsante «Cambia idea…».
 
-11. **Siamo in giro adesso** (orologio del browser fissato al giorno del programma): tappa segnata come fatta esclusa, resto ricalcolato dall'ora reale.
+11. **Siamo in giro adesso** (orologio del browser fissato al mattino del giorno del programma, prima della partenza dell'esempio): tappa segnata come fatta esclusa, resto ricalcolato dall'ora reale. Il test ha rivelato che, se la richiesta di posizione restava senza risposta, il ricalcolo attendeva all'infinito (il timeout della geolocalizzazione parte solo dopo il permesso): ora dopo 12 s si riparte dall'ultima tappa fatta.
 
 Audit completo su 9 viste: `node scripts/dev/a11y.mjs` (con il server di sviluppo avviato).
 
@@ -106,4 +107,35 @@ Dimensioni: bundle JS 1,66 MB (465 kB compressi), CSS 17 kB compressi; tile vett
 - Geometria dei battelli ricostruita su una griglia d'acqua a 30 m: corretta (mai sulla terraferma) ma semplificata rispetto alle rotte reali.
 - Quote da modello a ~30 m: dislivelli su scalinate brevi possono essere sottostimati.
 - In rendering software l'app resta lenta (vedi sopra).
+- Sul piano gratuito di Render una pianificazione richiede 13–28 s (0,1 CPU) e il primo accesso dopo 15 minuti di inattività circa un minuto; programmi salvati e link condivisi non sopravvivono a un riavvio. Per un incontro dal vivo: piano starter (misurato 2–3 s), vedi [DEPLOY.md](DEPLOY.md).
+- Il deploy su Render non è stato eseguito da questa sessione (serve l'account del proprietario): il container è stato verificato in locale con gli stessi limiti di CPU e memoria.
 - Le traduzioni sono predisposte (dizionario `src/client/i18n.ts`) ma l'interfaccia è solo in italiano.
+
+## Demo online (29 settembre 2026)
+
+Verifiche fatte per pubblicare il link su Render (vedi [DEPLOY.md](DEPLOY.md)).
+
+**Prestazioni del pianificatore.** Un profilo CPU ha mostrato che il 53 % del tempo di una pianificazione andava nel calcolo dell'offset del fuso orario in Luxon (`Intl`), ripetuto migliaia di volte per gli stessi istanti. Con cache degli istanti locali, degli intervalli di apertura per data, dei servizi GTFS attivi per data e con aritmetica pura per le date di calendario, i risultati sono **identici** (confronto testuale completo delle proposte degli scenari A, B, C, D, J, K12) e i tempi scendono così (un core, container Linux):
+
+| Scenario | Prima | Dopo |
+|---|---|---|
+| A — quattro amici la sera | 8,7 s | 0,7 s |
+| B — paesaggio e cultura | 8,5 s | 1,1 s |
+| C — famiglia con passeggino | 8,0 s | 0,9 s |
+| D — monte e rientro | 8,3 s | 1,5 s |
+| K — 12 persone | 7,3 s | 1,0 s |
+
+**Container con i limiti di Render** (`docker run --cpus=… --memory=512m`, immagine di produzione):
+
+| | 0,1 CPU (piano free) | 0,5 CPU (piano starter) |
+|---|---|---|
+| Prima del lavoro | 122 s e nessuna proposta (tempo esaurito, dichiarato per errore come «nessuna combinazione») | — |
+| Pianificazione A–D, prima richiesta | 16–28 s | 1,9–2,7 s |
+| Pianificazione, richieste successive | 13–16 s | — |
+| Avvio del server | 15 s (prima 30 s con `tsx`) | — |
+| Memoria | 130–215 MB su 512 | — |
+| Immagine | 634 MB (prima 1,08 GB) | — |
+
+Controllati anche: `X-Robots-Tag: noindex` e `robots.txt`, tile, terreno, glifi e worker di MapLibre serviti dal container, `/api/health` per il controllo di salute.
+
+**Verifiche visive** (Chromium headless, 1280×800 e 390×844): home, esplorazione, scheda luogo, eventi, «Dati, fonti e limiti», modulo, proposte, simulazione, «Cambia idea», riepilogo, condivisione. Difetti trovati e corretti: icona delle impostazioni tagliata nella barra superiore fra 360 e 430 px (la navigazione ora non si restringe); le viste si aprivano alla posizione di scorrimento della vista precedente (es. «Dati, fonti e limiti» a metà pagina); tabella delle integrazioni illeggibile su telefono (ora schede); data del riepilogo del modulo in formato AAAA-MM-GG; esempi della home proposti per un orario già passato (ora il giorno dopo); il service worker mostrava la versione precedente dopo un nuovo deploy (ora la pagina va prima in rete).

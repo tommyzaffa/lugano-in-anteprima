@@ -8,7 +8,7 @@ Stato: **prima versione funzionante in modalità demo** (nessuna credenziale nec
 
 ## Avvio rapido
 
-Requisiti: Node.js ≥ 24 (usa il modulo `node:sqlite` integrato), npm. Per rigenerare i dati OSM serve anche `osmium-tool`.
+Requisiti: Node.js ≥ 24 (consigliato; minimo 22.18: usa `node:sqlite` ed esegue il TypeScript del server direttamente), npm. Per rigenerare i dati OSM serve anche `osmium-tool`.
 
 ```bash
 npm install
@@ -31,6 +31,12 @@ PORT=8787 npm start
 ```
 
 Il token del pannello editoriale (`/admin`) si imposta con `ADMIN_TOKEN`; se manca, all'avvio ne viene stampato uno temporaneo nel terminale. Tutte le variabili sono descritte in [.env.example](.env.example).
+
+## Demo online (Render)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/tommyzaffa/lugano-in-anteprima)
+
+Il blueprint [render.yaml](render.yaml) crea un servizio web dal [Dockerfile](Dockerfile) in modalità demo, senza credenziali. Passi, tempi misurati sul piano gratuito (e perché per un incontro dal vivo conviene lo starter), salvataggi permanenti e aggiornamento dell'orario: [docs/DEPLOY.md](docs/DEPLOY.md).
 
 ## Cosa si può fare
 
@@ -89,14 +95,15 @@ Nessun server pubblico di tile viene usato come backend: tutta la cartografia è
 | [docs/DATI.md](docs/DATI.md) | Perimetro verificabile, pipeline, livelli di dettaglio, catalogo, provenienza e scadenze |
 | [docs/INTEGRAZIONI.md](docs/INTEGRAZIONI.md) | Stato di ogni integrazione e passi per attivarla |
 | [docs/DEMO.md](docs/DEMO.md) | Guida alla demo per un incontro con la Città o Lugano Region |
+| [docs/DEPLOY.md](docs/DEPLOY.md) | Pubblicazione del link demo su Render, piani, limiti e manutenzione |
 | [docs/TEST.md](docs/TEST.md) | Esito dei test, verifiche visive, prestazioni misurate, problemi aperti |
 | [docs/BACKLOG.md](docs/BACKLOG.md) | Estensioni prioritarie, separate da ciò che è già implementato |
 
 ## Limiti noti (sintesi)
 
 - Eventi e meteo sono **dimostrativi**; nessuna agenda reale è importata finché non ci sono accessi e accordi verificati.
-- Gli orari dei mezzi sono **statici** (anno orario 2026): niente ritardi o soppressioni in tempo reale.
+- Gli orari dei mezzi sono **statici** (anno orario 2026, fino al 12.12.2026): niente ritardi o soppressioni in tempo reale. Per le date successive le corse sono stimate dall'orario dello stesso giorno della settimana di un anno prima e dichiarate come tali, finché non si importa il nuovo orario.
 - Prezzi: in gran parte **stime** per categoria; alcuni sono sconosciuti e restano tali.
 - Orari dei luoghi da OpenStreetMap o redazionali: plausibili ma **da verificare**; l'app lo segnala sempre.
 - Quote e dislivelli da un modello del terreno a ~30 m: **stime**.
-- Il servizio non è pubblicato: la modalità demo è una tappa di sviluppo, non un servizio pubblico basato su dati aggiornati.
+- La demo online è un **prototipo non ufficiale** (non indicizzato dai motori di ricerca): la modalità demo è una tappa di sviluppo, non un servizio pubblico basato su dati aggiornati.

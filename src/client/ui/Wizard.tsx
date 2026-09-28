@@ -7,6 +7,7 @@ import { avatarSvg, CLOTHES, TONES, HATS, ACCESSORIES, HAIRS } from '../map/avat
 import { get } from '../api.ts';
 import { runPlanning } from './planning-actions.ts';
 import type { Person } from '../../shared/types.ts';
+import { formatDateIt } from '../../shared/time.ts';
 
 const STEPS = ['Chi siete', 'Quando e dove', 'Cosa vi piace', 'Budget e ritmo', 'Esigenze', 'Riepilogo'];
 const INTERESTS = ['arte', 'storia', 'natura', 'lago', 'vista', 'musica', 'cucina', 'vino', 'bambini', 'sport', 'architettura', 'letteratura', 'foto'];
@@ -140,7 +141,7 @@ function StepWhen() {
         <Field label="Fine" htmlFor="et"><input id="et" type="time" value={d.endTime} onChange={(e) => setD((x) => ({ ...x, endTime: e.target.value }))} /></Field>
       </div>
       {crosses ? <div className="notice">La fine è il giorno successivo, alle {d.endTime}.</div> : null}
-      {outOfFeed ? <div className="notice warn">La data è fuori dal periodo dell'orario ufficiale importato ({meta!.transit.range.start}–{meta!.transit.range.end}): i mezzi pubblici non saranno calcolabili.</div> : null}
+      {outOfFeed ? <div className="notice warn">L'orario ufficiale dei mezzi per questa data non è ancora importato (orario attuale: {fmtFeed(meta!.transit.range.start)}–{fmtFeed(meta!.transit.range.end)}). Le corse saranno stimate dall'orario dello stesso giorno della settimana di un anno prima e segnate come da verificare.</div> : null}
       <Field label="Da dove partite?" htmlFor="start-loc">
         <LocationPicker id="start-loc" value={d.start} onChange={(l) => setD((x) => ({ ...x, start: l }))} />
       </Field>
@@ -288,7 +289,7 @@ function StepReview() {
   const kids = d.people.filter((p) => p.kind === 'child').length;
   const rows: [string, string, number][] = [
     ['Gruppo', `${d.people.length} person${d.people.length > 1 ? 'e' : 'a'}${kids ? ` (${kids} bambin${kids > 1 ? 'i' : 'o'})` : ''} · ${OCCASIONS[d.occasion]}`, 0],
-    ['Quando', `${d.date} · ${d.startTime}–${d.endTime}${d.endTime <= d.startTime ? ' (+1)' : ''}`, 1],
+    ['Quando', `${formatDateIt(d.date)} · ${d.startTime}–${d.endTime}${d.endTime <= d.startTime ? ' (+1)' : ''}`, 1],
     ['Partenza', d.start.label, 1],
     ['Arrivo', d.end.mode === 'same' ? 'Stesso punto' : d.end.mode === 'free' ? 'Punto libero' : d.end.location?.label ?? '—', 1],
     ['Atmosfera', d.moods.map((m) => MOODS[m]).join(', ') || 'libera', 2],
@@ -308,3 +309,5 @@ function StepReview() {
     </div>
   );
 }
+
+function fmtFeed(x: string) { return `${x.slice(6, 8)}.${x.slice(4, 6)}.${x.slice(0, 4)}`; }
