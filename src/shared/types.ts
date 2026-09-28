@@ -290,6 +290,8 @@ export const GroupRequest = z.object({
   locked: z.array(z.object({ placeId: z.string().optional(), eventId: z.string().optional(), start: HHMM, end: HHMM, note: z.string().optional() })).default([]),
   passes: z.array(z.enum(['ga', 'half_fare', 'arcobaleno', 'ticino_ticket', 'lugano_card'])).default([]),
   exclude: z.array(z.string()).default([]),
+  /** luoghi segnati come preferiti su questo dispositivo (preferenza morbida) */
+  favorites: z.array(z.string()).default([]),
   freeText: z.string().max(1000).optional(),
   /** risoluzioni esplicite dell'utente a contraddizioni col testo libero */
   resolutions: z.record(z.string(), z.string()).default({}),

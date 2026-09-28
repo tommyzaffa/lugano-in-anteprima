@@ -6,6 +6,7 @@ import { CATEGORY } from '../i18n.ts';
 import { fmtRange } from '../../shared/pricing.ts';
 import { hhmm } from '../../shared/time.ts';
 import { getMap } from '../map/MapView.tsx';
+import { usePersonal } from '../personal.ts';
 
 export default function PlaceCard() {
   const id = useApp((s) => s.placeCard);
@@ -13,6 +14,7 @@ export default function PlaceCard() {
   const [data, setData] = useState<any>(null);
   const [err, setErr] = useState<string | null>(null);
   const [report, setReport] = useState(false);
+  const { favs, visited, toggleFav, toggleVisited } = usePersonal();
   useEffect(() => {
     if (!id) return;
     setData(null); setErr(null);
@@ -70,6 +72,8 @@ export default function PlaceCard() {
           <div className="muted small">Fonti: {data.sources.map((s: any) => s.name).join(' · ')} · ultimo controllo redazionale {p.lastEditorialCheck ?? 'n.d.'}</div>
           <div className="row">
             <button className="btn-ghost" onClick={() => { useApp.getState().setDraft((d) => ({ ...d, mustSee: [...new Set([...d.mustSee, p.id])] })); useApp.getState().notify(`${p.name} aggiunto alle tappe da non perdere.`, 'ok'); }}>Da non perdere</button>
+            <button className="btn-ghost" aria-pressed={favs.includes(p.id)} onClick={() => toggleFav(p.id)}>{favs.includes(p.id) ? '★ Preferito' : '☆ Preferito'}</button>
+            <button className="btn-ghost" aria-pressed={visited.includes(p.id)} onClick={() => toggleVisited(p.id)}>{visited.includes(p.id) ? '✓ Già visitato' : 'Già visitato'}</button>
             <button className="btn-ghost" onClick={() => setReport(true)}>Segnala un errore</button>
           </div>
           {report ? <ReportDialog targetId={p.id} onClose={() => setReport(false)} /> : null}

@@ -26,7 +26,7 @@ export function t(k: keyof typeof it): string { return (dicts[lang] as any)[k] ?
 export const MOODS: Record<string, string> = { chill: 'Chill', lively: 'Vivace', romantic: 'Romantica', cultural: 'Culturale', nature: 'Natura', views: 'Panorami', food: 'Gastronomia', adventure: 'Avventura leggera' };
 export const MOOD_ICON: Record<string, string> = { chill: '☁︎', lively: '♫', romantic: '♡', cultural: '🏛', nature: '🌿', views: '⛰', food: '🍝', adventure: '🥾' };
 export const OCCASIONS: Record<string, string> = { friends: 'Amici', date: 'Appuntamento', family: 'Famiglia', sightseeing: 'Visita turistica', birthday: 'Compleanno', guests: 'Ospiti', leisure: 'Tempo libero', custom: 'Altro' };
-export const AVOID: Record<string, string> = { nightclub: 'Discoteche', noisy: 'Luoghi rumorosi', alcohol: 'Alcol', climbs: 'Salite ed escursioni', expensive: 'Posti costosi', crowds: 'Posti affollati', already_done: 'Cose già fatte', boats: 'Battelli', heights: 'Altezze' };
+export const AVOID: Record<string, string> = { nightclub: 'Discoteche', noisy: 'Luoghi rumorosi', alcohol: 'Alcol', climbs: 'Salite ed escursioni', expensive: 'Posti costosi', crowds: 'Posti affollati', already_done: 'Posti già visitati', boats: 'Battelli', heights: 'Altezze' };
 export const PACE: Record<string, string> = { relaxed: 'Rilassato', balanced: 'Equilibrato', intense: 'Intenso' };
 export const CATEGORY: Record<string, string> = {
   park: 'Parco', museum: 'Museo', culture: 'Cultura', viewpoint: 'Belvedere', walk: 'Passeggiata', lido: 'Lido', lift: 'Impianto', restaurant: 'Ristorante', cafe: 'Caffè', bar: 'Bar',

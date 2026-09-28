@@ -107,6 +107,7 @@ export function selectCandidates(ctx: PlanContext, data: DataStore): CandidateRe
     const hit = tags.filter((t) => interests.has(t));
     if (hit.length) { s += hit.length * 1.5; reasons.push(`Interessi del gruppo: ${hit.join(', ')}`); }
     if (ctx.hints.mentionedPlaces.includes(p.id)) { s += 4; reasons.push('Citato nella vostra richiesta'); }
+    if (ctx.req.favorites.includes(p.id)) { s += 1.5; reasons.push('Tra i vostri preferiti'); }
     if (ctx.kids && (tags.includes('famiglia') || tags.includes('bambini'))) { s += 1.5; reasons.push('Adatto ai bambini'); }
     if (ctx.rainLikely && p.suitability.indoor) { s += 1.5; reasons.push('Al coperto: previsione di pioggia'); }
     if (ctx.rainLikely && p.suitability.weather === 'dry' && ctx.req.rainTolerance === 'low') s -= 3;

@@ -44,7 +44,7 @@ export function defaultDraft(today: string): Draft {
     occasion: 'leisure', moods: [], budget: { per: 'person', strict: false },
     pace: 'balanced', transport: { walk: true, bus: true, train: true, boat: true, funicular: true },
     avoid: [], mobility: { stroller: false, wheelchair: false, avoidStairs: false, frequentBreaks: false },
-    diet: [], environment: 'any', rainTolerance: 'medium', mustSee: [], locked: [], passes: [], exclude: [],
+    diet: [], environment: 'any', rainTolerance: 'medium', mustSee: [], locked: [], passes: [], exclude: [], favorites: [],
     freeText: '', resolutions: {}, locale: 'it', surprise: false,
   };
 }

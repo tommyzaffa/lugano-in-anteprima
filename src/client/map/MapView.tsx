@@ -131,7 +131,9 @@ export default function MapView({ onFallback }: Props) {
       if (map.hasImage(e.id)) return;
       map.addImage(e.id, { width: 1, height: 1, data: new Uint8Array(4) });
     });
+    map.once('idle', () => { try { performance.mark('map-idle'); } catch { /* */ } });
     map.on('load', async () => {
+      try { performance.mark('map-load'); } catch { /* */ }
       installImages(map);
       map.addSource('dem-terrain', { type: 'raster-dem', tiles: [`${origin}/terrain/{z}/{x}/{y}.png`], encoding: 'terrarium', tileSize: 256, maxzoom: 14, bounds });
       if (settings.threeD) map.setTerrain({ source: 'dem-terrain', exaggeration: 1.35 });
@@ -237,13 +239,42 @@ export default function MapView({ onFallback }: Props) {
         (map.getSource('route') as GeoJSONSource)?.setData(planRouteGeoJSON(planRef.current, s.t));
       }
       if (s.camera === 'follow' && s.playing && !s.cutscene) {
-        const c = map.getCenter();
-        const [x, y] = st.position;
-        const dx = x - c.lng, dy = y - c.lat;
-        if (Math.abs(dx) + Math.abs(dy) > 0.00002) map.jumpTo({ center: [c.lng + dx * 0.18, c.lat + dy * 0.18] });
+        // il gruppo resta nella parte visibile (a destra del pannello su desktop, sopra il foglio su telefono)
+        const desktop = window.innerWidth >= 760;
+        const target = map.project(st.position);
+        const cx = map.getCanvas().clientWidth / 2 + (desktop ? 210 : 0);
+        const cy = map.getCanvas().clientHeight / 2 - (desktop ? 40 : Math.round(window.innerHeight * 0.18));
+        const dx = target.x - cx, dy = target.y - cy;
+        if (Math.abs(dx) + Math.abs(dy) > 1.5) map.panBy([dx * 0.18, dy * 0.18], { duration: 0 });
       }
     });
     return unsub;
+  }, [ready]);
+
+  // dettaglio adattivo: se i fotogrammi scendono sotto ~24 fps si riduce il carico grafico
+  useEffect(() => {
+    if (!ready) return;
+    let frames = 0, raf = 0, lowStreak = 0, level = 0;
+    let last = performance.now();
+    const tick = (now: number) => {
+      raf = requestAnimationFrame(tick);
+      frames++;
+      if (now - last < 2000) return;
+      const fps = (frames * 1000) / (now - last);
+      frames = 0; last = now;
+      const map = mapInstance;
+      const busy = useSim.getState().playing || map?.isMoving();
+      if (!map || !busy || document.hidden) return;
+      if (fps < 24) lowStreak++; else lowStreak = 0;
+      if (lowStreak >= 2 && level < 2) {
+        level++;
+        lowStreak = 0;
+        applyDetail(map, level);
+        useApp.getState().notify(level === 1 ? 'Dettaglio ridotto (rilievo e curve di livello) per mantenere la fluidità.' : 'Dettaglio minimo: edifici in pianta e risoluzione ridotta.', 'info');
+      }
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, [ready]);
 
   // luce di giorno fuori dalla simulazione
@@ -290,6 +321,7 @@ export default function MapView({ onFallback }: Props) {
     vehicleEl.className = 'vehicle-marker';
     const vehicle = new maplibregl.Marker({ element: vehicleEl, anchor: 'bottom' }).setLngLat([p.stops[0]?.lon ?? 8.95, p.stops[0]?.lat ?? 46]).addTo(map);
     markersRef.current = { group, people: markers, vehicle, els, groupEl, vehicleEl };
+    if (import.meta.env.DEV) (window as any).__markers = markersRef.current;
     const tl = tlRef.current;
     if (tl) placeCharacters(map, stateAt(tl, useSim.getState().t), []);
   }
@@ -340,4 +372,18 @@ function escapeHtml(s: string) { return s.replace(/[&<>"']/g, (c) => ({ '&': '&a
 export function fitPadding() {
   const mobile = window.innerWidth < 760;
   return mobile ? { top: 70, bottom: Math.round(window.innerHeight * 0.45), left: 30, right: 30 } : { top: 80, bottom: 150, left: 440, right: 60 };
+}
+
+/** Livelli di dettaglio: 0 pieno, 1 senza rilievo 3D e curve di livello, 2 anche senza edifici 3D e a risoluzione 1×. */
+export function applyDetail(map: MLMap, level: number) {
+  if (level >= 1) {
+    try { map.setTerrain(null); } catch { /* */ }
+    for (const id of ['contours', 'contour-labels']) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
+  }
+  if (level >= 2) {
+    for (const id of ['building-3d', 'building-roof', 'building-windows', 'hillshade', 'bg-texture', 'lc-forest-pattern']) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
+    if (map.getLayer('building-flat')) map.setLayerZoomRange('building-flat', 13, 24);
+    try { (map as any).setPixelRatio?.(1); } catch { /* */ }
+  }
+  (window as any).__detailLevel = level;
 }

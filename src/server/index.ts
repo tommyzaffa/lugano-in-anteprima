@@ -22,7 +22,8 @@ setCatalogNames([...data.places.values()].map((p) => ({ id: p.id, name: p.name }
 config.demoMode = !aiConfigured() || config.weather.provider !== 'open-meteo' || config.transitLive.provider === 'none';
 
 const app = new Hono();
-app.use('/api/*', compress());
+// compressione per API, script, stili, tile vettoriali e glifi (i PNG del terreno sono già compressi)
+for (const path of ['/api/*', '/assets/*', '/tiles/*', '/glyphs/*', '/vendor/*']) app.use(path, compress());
 app.route('/', createApi(data, db));
 
 // glifi mancanti: risposta vuota valida invece di un 404 (evita errori di rendering delle etichette)

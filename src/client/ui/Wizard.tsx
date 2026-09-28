@@ -170,7 +170,7 @@ function StepLikes() {
         <div className="chips">{Object.entries(MOODS).map(([k, v]) => <Chip key={k} icon={MOOD_ICON[k]} on={d.moods.includes(k as any)} onClick={() => toggle('moods', k)}>{v}</Chip>)}</div>
       </Field>
       <Field label="Cosa evitare">
-        <div className="chips">{Object.entries(AVOID).filter(([k]) => k !== 'already_done').map(([k, v]) => <Chip key={k} on={d.avoid.includes(k as any)} onClick={() => toggle('avoid', k)}>{v}</Chip>)}</div>
+        <div className="chips">{Object.entries(AVOID).map(([k, v]) => <Chip key={k} on={d.avoid.includes(k as any)} onClick={() => toggle('avoid', k)} title={k === 'already_done' ? 'Esclude i luoghi segnati come «Già visitato» nelle schede' : undefined}>{v}</Chip>)}</div>
       </Field>
       <Field label="Dentro o fuori?">
         <div className="seg">

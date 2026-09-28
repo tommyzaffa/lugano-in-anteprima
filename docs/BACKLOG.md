@@ -1,0 +1,38 @@
+# Backlog prioritizzato
+
+Separato da ciò che è già implementato (in fondo).
+
+## P1 — per un pilota con dati reali
+
+1. **Feed eventi autorizzati** (Lugano Eventi, Lugano Region): accordo, adattatore ICS/JSON con fonte, data di acquisizione, deduplicazione e gestione dei conflitti; rimozione delle fixture dal percorso live.
+2. **Verifica redazionale** di orari, prezzi e accessibilità dei 76 luoghi (il pannello editoriale lo consente già; serve il lavoro redazionale e fonti ufficiali per ciascun dato).
+3. **Chiave OJP** e verifica live: collegare `src/server/adapters/ojp.ts` alla rivalidazione dei programmi salvati; mostrare ritardi e soppressioni con orario di aggiornamento.
+4. **Tariffe ufficiali** Arcobaleno, SNL e funicolari con validità temporale; applicare abbonamenti solo quando la regola è verificata.
+5. **AI live**: configurare `AI_PROVIDER=anthropic`, misurare qualità e costi su un set di richieste reali, regolare `effort` e prompt; aggiungere un set di valutazione.
+6. **Meteo con licenza adatta** a un servizio pubblico (MeteoSvizzera OGD o abbonamento).
+7. **Aggiornamento periodico automatico** di OSM e GTFS con report delle differenze e controllo redazionale.
+
+## P2 — estensioni vicine
+
+8. **Terreno swisstopo swissALTI3D** (2 m, LV95 → Web Mercator con `proj4`) per dislivelli più precisi e rilievo più nitido sul territorio svizzero.
+9. **Densità del catalogo**: più luoghi fuori dal centro (Pregassona, Canobbio, Davesco-Soragno, Muzzano, Melide), attività stagionali, laboratori, impianti sportivi; foto con diritti chiari.
+10. **Sentieri**: dati SchweizMobil/Wanderland (se riutilizzabili) per durate ufficiali e condizioni; segnaletica gialla/bianco-rosso-bianco sulla mappa.
+11. **Rotte dei battelli** dalle relazioni OSM `route=ferry` o dai dati SNL invece della griglia d'acqua.
+12. **Lingue**: inglese e tedesco completi (dizionari e contenuti del catalogo).
+13. **Accessibilità**: dati di accessibilità delle fermate (BAV/SBB) e degli ingressi; percorsi per sedia a rotelle con pendenze misurate.
+14. **Vista eventi sulla mappa** con filtri per giorno e categoria; ricerca per testo nel calendario.
+15. **Voto degli amici** con proposta vincente evidenziata e commenti brevi.
+16. **Modalità «siamo già qui» nella simulazione**: ricalcolo da posizione GPS reale e ora attuale durante l'uscita, non solo dal modulo.
+17. **Personaggi**: più pose e animazioni (seduti al ristorante, foto al belvedere) e folla decorativa dichiarata.
+
+## P3 — fase successiva
+
+18. Database PostgreSQL/PostGIS per la versione pubblica, con backup e migrazioni.
+19. Account facoltativi per sincronizzare preferiti e programmi fra dispositivi (oggi solo su dispositivo e link).
+20. Partner commerciali con **separazione chiara** fra contenuti sponsorizzati e pertinenza (il campo `sponsored` è già nel modello).
+21. Statistiche del pilota più ricche (imbuto modulo → simulazione → salvataggio), sempre aggregate.
+22. Cartolina animata (breve sequenza del percorso).
+
+## Già implementato (prima versione)
+
+Mappa larga dell'intera area con stile «atlante», terreno 3D, curve di livello, edifici 3D, landmark disegnati, luce collegata all'ora; modulo guidato in 6 passaggi con personaggi personalizzabili (1–12); pianificatore a vincoli su dati reali (grafo pedonale OSM, orario GTFS) con fino a 3 alternative, spiegazioni, compromessi e impossibilità motivate; testo libero con contraddizioni esplicite; tappe bloccate e obbligatorie; simulazione con tutti i comandi richiesti, decisioni pre-validate, rami, «E se…»; salvataggio, condivisione revocabile con redazione e voto, calendario, stampa, cartolina, copia offline; esplorazione con «aperto durante la mia visita», preferiti e posti già visitati, «siamo già in giro»; eventi oggi/domani/settimana (dimostrativi); pannello editoriale con salute delle fonti, modifiche, verifiche, eccezioni, segnalazioni, statistiche e consumi AI; adattatori AI (Claude), meteo (Open-Meteo), OJP; vista semplificata senza WebGL; dettaglio adattivo; accessibilità da tastiera e movimento ridotto.

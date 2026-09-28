@@ -36,6 +36,23 @@ export default function Home() {
     setDraft((d) => d);
     set({ view: 'wizard', wizardStep: preset ? 5 : 0 });
   };
+  /** «Siamo già qui»: partenza da adesso (arrotondato) e dalla posizione, se concessa. */
+  const startHere = () => {
+    const today = meta?.today ?? new Date().toISOString().slice(0, 10);
+    const now = new Date();
+    const fmt = new Intl.DateTimeFormat('it-CH', { timeZone: 'Europe/Zurich', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+    const parts = fmt.format(new Date(Math.ceil(now.getTime() / 300_000) * 300_000));
+    const endParts = fmt.format(new Date(Math.ceil(now.getTime() / 300_000) * 300_000 + 3 * 3600_000));
+    const base = draft ?? defaultDraft(today);
+    useApp.setState({ draft: { ...base, date: today, startTime: parts, endTime: endParts, end: { mode: 'free' }, resolutions: {} } });
+    setDraft((d) => d);
+    set({ view: 'wizard', wizardStep: 1 });
+    if (navigator.geolocation) navigator.geolocation.getCurrentPosition(
+      (pos) => setDraft((d) => ({ ...d, start: { kind: 'geolocation', label: 'La mia posizione', lon: pos.coords.longitude, lat: pos.coords.latitude, sensitive: true } })),
+      () => useApp.getState().notify('Posizione non concessa: scegliete un punto di partenza.', 'info'),
+      { enableHighAccuracy: true, timeout: 8000 },
+    );
+  };
   return (
     <div className="home">
       <p className="lead">{t('app.promise')}</p>
@@ -49,6 +66,9 @@ export default function Home() {
           <span className="ba-sub">{t('home.explore.sub')}</span>
         </button>
       </div>
+      <button className="preset here" onClick={() => startHere()}>
+        <strong>Siamo già in giro</strong><span>Ricalcola da adesso e da dove siete, con il tempo che vi resta</span>
+      </button>
       <h3 className="small-title">Oppure partite da un esempio</h3>
       <div className="presets">
         {PRESETS.map((p) => (

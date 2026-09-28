@@ -1,6 +1,7 @@
 import { useApp } from '../store.ts';
 import { planStream, ApiError, track } from '../api.ts';
 import type { GroupRequest } from '../../shared/types.ts';
+import { usePersonal } from '../personal.ts';
 
 let controller: AbortController | null = null;
 
@@ -15,7 +16,10 @@ export async function runPlanning(surprise = false, patch?: Partial<GroupRequest
   if (!st.draft) return;
   if (patch) st.setDraft((d) => ({ ...d, ...patch } as any));
   const draft = useApp.getState().draft!;
-  const req = { ...draft, surprise } as GroupRequest;
+  const { favs, visited } = usePersonal.getState();
+  // «già fatto»: esclude i posti segnati come visitati su questo dispositivo
+  const exclude = draft.avoid.includes('already_done') ? [...new Set([...draft.exclude, ...visited])].filter((id) => !draft.mustSee.includes(id)) : draft.exclude;
+  const req = { ...draft, exclude, favorites: favs, surprise } as GroupRequest;
   controller?.abort();
   controller = new AbortController();
   st.set({ view: 'planning', progress: [], planError: null, contradictions: null, infeasible: null, result: null });

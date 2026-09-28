@@ -7,6 +7,7 @@ import { getMap } from '../map/MapView.tsx';
 import type { GeoJSONSource } from 'maplibre-gl';
 import { placeIconFor, landmarkFor } from '../map/sprites.ts';
 import { hhmm } from '../../shared/time.ts';
+import { usePersonal } from '../personal.ts';
 
 const GROUPS: Record<string, string[]> = {
   'Cultura': ['museum', 'culture', 'church', 'show'],
@@ -28,12 +29,14 @@ export default function Explore() {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const setF = (p: Partial<typeof f>) => set({ exploreFilter: { ...f, ...p } });
+  const { favs, visited } = usePersonal();
+  const [onlyFavs, setOnlyFavs] = useState(false);
   useEffect(() => {
     const q = from && to ? `?date=${date}&from=${date}T${from}&to=${to <= from ? nextDay(date) : date}T${to}` : `?date=${date}`;
     get<{ places: any[] }>(`/api/places${q}`).then((r) => { setPlaces(r.places); setErr(null); }).catch((e) => setErr(e.message));
   }, [date, from, to]);
   const cats = f.cats.flatMap((g) => GROUPS[g] ?? []);
-  const shown = useMemo(() => (places ?? []).filter((p) => (!cats.length || cats.includes(p.category)) && (!f.q || p.name.toLowerCase().includes(f.q.toLowerCase())) && (!(from && to) || p.openDuring !== 'closed')), [places, cats, f.q, from, to]);
+  const shown = useMemo(() => (places ?? []).filter((p) => (!cats.length || cats.includes(p.category)) && (!f.q || p.name.toLowerCase().includes(f.q.toLowerCase())) && (!(from && to) || p.openDuring !== 'closed') && (!onlyFavs || favs.includes(p.id))), [places, cats, f.q, from, to, onlyFavs, favs]);
   // aggiorna i luoghi mostrati sulla mappa
   useEffect(() => {
     const map = getMap();
@@ -62,13 +65,14 @@ export default function Explore() {
         </div>
         <p className="hint">Filtra sull'intervallo richiesto, non solo sull'ora attuale. I luoghi senza orari noti restano visibili come «da verificare».</p>
       </fieldset>
+      <label className="check"><input type="checkbox" checked={onlyFavs} onChange={(e) => setOnlyFavs(e.target.checked)} /> Solo i miei preferiti ({favs.length})</label>
       <label className="check"><input type="checkbox" checked={f.showOsm} onChange={(e) => setF({ showOsm: e.target.checked })} /> Mostra anche i punti OpenStreetMap non curati (da verificare)</label>
       {err ? <div className="notice bad">{err}</div> : !places ? <Spinner /> : !shown.length ? <Empty title="Nessun luogo con questi filtri" /> : (
         <ul className="place-list">
           {shown.map((p) => (
             <li key={p.id}>
               <button className="place-row" onClick={() => set({ placeCard: p.id })}>
-                <span className="pr-name">{p.name}</span>
+                <span className="pr-name">{favs.includes(p.id) ? '★ ' : ''}{p.name}{visited.includes(p.id) ? <span className="muted"> · già visitato</span> : null}</span>
                 <span className="pr-meta">{CATEGORY[p.category] ?? p.category} · {p.area ?? p.municipality?.name}</span>
                 <span className="pr-hours">{p.hoursToday ?? 'orari non disponibili'} {from && to ? (p.openDuring === 'open' ? <Badge kind="ok">aperto nell'intervallo</Badge> : p.openDuring === 'unknown' ? <Badge kind="warn">da verificare</Badge> : null) : null}</span>
                 <span className="pr-price muted">{p.priceHint}</span>

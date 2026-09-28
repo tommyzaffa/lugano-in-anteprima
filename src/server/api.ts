@@ -17,6 +17,7 @@ import { planAlternatives } from './planner/index.ts';
 import { replan } from './planner/replan.ts';
 import { revalidate } from './planner/revalidate.ts';
 import { weatherFor } from './adapters/weather.ts';
+import { ojpTrip } from './adapters/ojp.ts';
 import { integrations } from './integrations.ts';
 import { aiHooks, aiStatus } from './ai/index.ts';
 
@@ -202,6 +203,14 @@ export function createApi(data: DataStore, db: Db) {
     const r = replan({ ...plan, request: req.data }, dec.data, data);
     db.count(dec.data.kind.startsWith('whatif') ? 'whatif' : 'branch_created');
     return c.json({ ...r, ms: Date.now() - t0 });
+  });
+
+  app.post('/api/transit/live-check', async (c) => {
+    const b = await c.req.json().catch(() => null);
+    if (!b?.from || !b?.to || !b?.departure) return c.json({ error: 'invalid_request' }, 400);
+    const r = await ojpTrip(b.from, b.to, b.departure);
+    db.setSourceHealth('ojp', r.status, r.message ?? '');
+    return c.json(r);
   });
 
   app.post('/api/revalidate', async (c) => {

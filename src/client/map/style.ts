@@ -148,8 +148,8 @@ export function buildStyle(p: Palette, opts: StyleOptions): StyleSpecification {
         'fill-extrusion-opacity': z([[14.5, 0], [15.2, 0.95]]),
       } } as LayerSpecification,
       { id: 'building-windows', type: 'fill-extrusion', source: 'lugano', 'source-layer': 'buildings', minzoom: 15, filter: ['>', ['get', 'h'], 6], paint: {
-        'fill-extrusion-color': '#ffc86e', 'fill-extrusion-height': ['*', ['get', 'h'], 0.62], 'fill-extrusion-base': ['*', ['get', 'h'], 0.58],
-        'fill-extrusion-opacity': p.windowGlow * 0.8,
+        'fill-extrusion-color': '#ffc86e', 'fill-extrusion-height': ['*', ['get', 'h'], 0.66], 'fill-extrusion-base': ['*', ['get', 'h'], 0.52],
+        'fill-extrusion-opacity': p.windowGlow * 0.85,
       } } as LayerSpecification,
     ] : []),
     // ------------------------------------------------ etichette
@@ -207,7 +207,7 @@ export function applyPalette(map: import('maplibre-gl').Map, p: Palette) {
   set('building-flat', 'fill-color', ['case', ['==', ['get', 'lm'], 1], p.roof, p.buildingFlat]);
   set('building-3d', 'fill-extrusion-color', ['match', ['get', 'tone'], 0, p.facade[0], 1, p.facade[1], 2, p.facade[2], p.facade[3]]);
   set('building-roof', 'fill-extrusion-color', roofColor(p));
-  set('building-windows', 'fill-extrusion-opacity', p.windowGlow * 0.8);
+  set('building-windows', 'fill-extrusion-opacity', p.windowGlow * 0.85);
   for (const id of ['label-place', 'label-place-minor', 'label-road', 'label-poi', 'label-peak', 'label-area']) set(id, 'text-halo-color', p.halo);
   set('label-place', 'text-color', p.placeLabel);
   set('label-place-minor', 'text-color', p.inkSoft);

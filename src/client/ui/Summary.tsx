@@ -21,6 +21,16 @@ export default function Summary({ planOverride, readOnly }: { planOverride?: Pla
   const [reval, setReval] = useState<Reval | null>(null);
   const [checking, setChecking] = useState(false);
   const [share, setShare] = useState(false);
+  const [live, setLive] = useState<string | null>(null);
+  const liveCheck = async () => {
+    const t = plan?.trips.find((x) => x.legs.some((l) => l.transit));
+    const leg = t?.legs.find((l) => l.transit);
+    if (!leg) { setLive('Nessuna corsa di mezzi pubblici nel programma.'); return; }
+    try {
+      const r = await send<{ status: string; message?: string; trips?: any[] }>('POST', '/api/transit/live-check', { from: leg.from, to: leg.to, departure: leg.departure });
+      setLive(r.status === 'not_configured' ? 'Verifica in tempo reale non disponibile: il collegamento a Open Journey Planner non è configurato. Gli orari mostrati sono quelli pianificati.' : r.status === 'ok' ? `Open Journey Planner: ${r.trips?.length ?? 0} soluzioni trovate per la prima corsa.` : `Servizio in tempo reale non raggiungibile: ${r.message ?? ''}`);
+    } catch { setLive('Verifica non riuscita.'); }
+  };
   if (!plan) return null;
   const date = plan.request.date;
   const toVerify = [...new Set([...plan.checks.filter((c) => c.status !== 'ok').map((c) => c.detail), ...plan.missing])];
@@ -51,7 +61,9 @@ export default function Summary({ planOverride, readOnly }: { planOverride?: Pla
       <TotalsLine plan={plan} />
       <div className="reval no-print">
         <button className="btn" onClick={() => void revalidate()} disabled={checking}>{checking ? <Spinner /> : null} Verifica i dati adesso</button>
+        <button className="btn-ghost" onClick={() => void liveCheck()}>Corse in tempo reale</button>
         <span className="hint">Confronta il programma con i dati attuali (orari, eventi, corse). La simulazione continua invece a usare lo snapshot originale.</span>
+        {live ? <div className="notice info">{live}</div> : null}
         {reval ? (
           <div className={`notice ${reval.status === 'blocking' ? 'bad' : reval.status === 'changed' ? 'warn' : 'ok'}`}>
             <strong>{reval.status === 'blocking' ? 'Attenzione: alcune tappe non sono più valide' : reval.status === 'changed' ? 'Alcuni dati sono cambiati' : 'Nessun cambiamento rilevante'}</strong>

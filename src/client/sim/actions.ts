@@ -1,7 +1,7 @@
 import { useApp, useSim } from '../store.ts';
 import { replan, ApiError, track } from '../api.ts';
 import type { Decision, Plan, Branch, DecisionPoint } from '../../shared/types.ts';
-import { buildTimeline, skipMoveTarget, nextDecisionTarget, summaryTarget, skipSceneTarget } from '../../shared/simulation.ts';
+import { buildTimeline, skipMoveTarget, nextDecisionTarget, summaryTarget, skipSceneTarget, stateAt } from '../../shared/simulation.ts';
 import { isoFromMs, hhmm } from '../../shared/time.ts';
 import { getMap, boundsOf, planCoords, fitPadding } from '../map/MapView.tsx';
 
@@ -16,13 +16,29 @@ export function currentTimeline() {
   return p ? buildTimeline(p) : null;
 }
 
-export function play() { useSim.getState().set({ playing: true, camera: useSim.getState().camera === 'overview' ? 'follow' : useSim.getState().camera }); }
+export function play() {
+  const cam = useSim.getState().camera === 'overview' ? 'follow' : useSim.getState().camera;
+  useSim.getState().set({ playing: true, camera: cam });
+  if (cam === 'follow') centerOnGroup();
+}
 export function pause() { useSim.getState().set({ playing: false }); }
 export function setSpeed(speed: 1 | 4 | 10) { useSim.getState().set({ speed }); }
 export function seek(t: number) {
   const tl = currentTimeline();
   if (!tl) return;
-  useSim.getState().set({ t: Math.max(tl.start, Math.min(tl.end, t)), cutscene: null, bubbles: [] });
+  const nt = Math.max(tl.start, Math.min(tl.end, t));
+  useSim.getState().set({ t: nt, cutscene: null, bubbles: [] });
+  if (useSim.getState().camera === 'follow') centerOnGroup(nt);
+}
+
+/** Porta la camera sul gruppo, tenendo conto del pannello laterale. */
+export function centerOnGroup(t = useSim.getState().t) {
+  const tl = currentTimeline();
+  const map = getMap();
+  if (!tl || !map) return;
+  const st = stateAt(tl, t);
+  const desktop = window.innerWidth >= 760;
+  map.easeTo({ center: st.position, zoom: Math.max(map.getZoom(), 14.2), offset: desktop ? [210, -40] : [0, -Math.round(window.innerHeight * 0.18)], duration: useApp.getState().settings.reducedMotion ? 0 : 500 });
 }
 export function skipMove() { const tl = currentTimeline(); if (!tl) return; seek(skipMoveTarget(tl, useSim.getState().t)); track('sim_skip'); }
 export function skipScene() { const tl = currentTimeline(); if (!tl) return; seek(skipSceneTarget(tl, useSim.getState().t)); }
@@ -49,7 +65,7 @@ export function cameraMode(mode: 'follow' | 'free' | 'overview') {
     const bb = boundsOf(planCoords(plan));
     if (bb) map.fitBounds(bb, { padding: fitPadding(), duration: useApp.getState().settings.reducedMotion ? 0 : 800 });
   }
-  if (mode === 'follow' && map) map.easeTo({ zoom: Math.max(map.getZoom(), 15), duration: useApp.getState().settings.reducedMotion ? 0 : 600 });
+  if (mode === 'follow' && map) centerOnGroup();
 }
 
 /** Chiede al server un nuovo ramo per la modifica; il risultato va confermato. */

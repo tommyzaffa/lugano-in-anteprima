@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { useApp } from '../store.ts';
 import { STATUS } from '../i18n.ts';
 import { fmtRange } from '../../shared/pricing.ts';
@@ -53,13 +54,14 @@ export function Modal({ title, onClose, children, wide, labelledBy }: { title: s
     return () => { window.removeEventListener('keydown', onKey); prev?.focus?.(); };
   }, [onClose]);
   const hid = labelledBy ?? `m-${title.replace(/\W+/g, '-')}`;
-  return (
+  return createPortal(
     <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className={`modal ${wide ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby={hid} ref={ref}>
         <div className="modal-head"><h2 id={hid}>{title}</h2><button className="icon-btn" onClick={onClose} aria-label="Chiudi">✕</button></div>
         <div className="modal-body">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
