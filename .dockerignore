@@ -1,0 +1,12 @@
+node_modules
+dist
+data/raw
+data/cache
+data/db
+data/reports
+test-results
+playwright-report
+public/vendor
+.git
+.env
+*.sqlite

@@ -1,0 +1,19 @@
+# Blueprint di Render: https://render.com/docs/blueprint-spec
+# Crea un servizio web dal Dockerfile. ADMIN_TOKEN viene generato da Render (lo trovate nelle variabili d'ambiente).
+# Piano gratuito: il servizio si sospende quando è inattivo e il disco non è persistente
+# (programmi salvati e link condivisi si perdono a ogni riavvio o nuovo deploy).
+services:
+  - type: web
+    name: lugano-in-anteprima
+    runtime: docker
+    plan: free
+    region: frankfurt
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: ADMIN_TOKEN
+        generateValue: true
+      - key: WEATHER_PROVIDER
+        value: demo
+      - key: AI_PROVIDER
+        value: none
