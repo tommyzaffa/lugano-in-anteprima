@@ -81,10 +81,11 @@
   cat: culture
   osm: w39213173
   area: Centro, Parco Ciani
-  desc: Villa ottocentesca nel parco, sede di mostre temporanee. Aperta solo durante le esposizioni.
+  desc: Villa ottocentesca nel parco, sede di mostre ed eventi temporanei. Aperta solo durante le manifestazioni, senza un orario regolare.
   tags: [arte, mostre, al-coperto]
   moods: [cultural]
   visit: [30, 60, 90]
+  plannable: events
   hours: unknown
   prices:
     - { label: "Mostra temporanea", unit: person, status: unknown }

@@ -1,6 +1,6 @@
 {
- "version": "cat-2026-09-28-87p-14e-9217d1",
- "builtAt": "2026-09-28T13:07:59.954Z",
+ "version": "cat-2026-09-28-87p-14e-3da24e",
+ "builtAt": "2026-09-28T13:10:13.220Z",
  "sources": [
   {
    "id": "osm",
@@ -895,7 +895,7 @@
     "country": "CH"
    },
    "area": "Centro, Parco Ciani",
-   "description": "Villa ottocentesca nel parco, sede di mostre temporanee. Aperta solo durante le esposizioni.",
+   "description": "Villa ottocentesca nel parco, sede di mostre ed eventi temporanei. Aperta solo durante le manifestazioni, senza un orario regolare.",
    "tags": [
     "arte",
     "mostre",
@@ -957,7 +957,7 @@
     "noise": "quiet",
     "alcohol": "none"
    },
-   "plannable": "yes",
+   "plannable": "events",
    "diet": [],
    "nearestStops": [
     {

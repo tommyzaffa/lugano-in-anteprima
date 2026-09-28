@@ -5,9 +5,9 @@ Separato da ciò che è già implementato (in fondo).
 ## P1 — per un pilota con dati reali
 
 1. **Feed eventi autorizzati** (Lugano Eventi, Lugano Region): accordo, adattatore ICS/JSON con fonte, data di acquisizione, deduplicazione e gestione dei conflitti; rimozione delle fixture dal percorso live.
-2. **Verifica redazionale** di orari, prezzi e accessibilità degli 87 luoghi (il pannello editoriale lo consente già; serve il lavoro redazionale e fonti ufficiali per ciascun dato).
+2. **Verifica redazionale** di orari, prezzi e accessibilità: fatta sui siti ufficiali per 13 luoghi principali e le funicolari (vedi `docs/DATI.md`); restano chiese, grotti, locali e parchi minori, che richiedono contatti diretti o sopralluoghi.
 3. **Chiave OJP** e verifica live: collegare `src/server/adapters/ojp.ts` alla rivalidazione dei programmi salvati; mostrare ritardi e soppressioni con orario di aggiornamento.
-4. **Tariffe ufficiali** Arcobaleno, SNL e funicolari con validità temporale; applicare abbonamenti solo quando la regola è verificata.
+4. **Tariffe ufficiali** Arcobaleno e SNL con validità temporale (funicolari San Salvatore e Monte Brè già a listino, con abbonamenti applicati secondo il listino).
 5. **AI live**: configurare `AI_PROVIDER=anthropic`, misurare qualità e costi su un set di richieste reali, regolare `effort` e prompt; aggiungere un set di valutazione.
 6. **Meteo con licenza adatta** a un servizio pubblico (MeteoSvizzera OGD o abbonamento).
 7. **Aggiornamento periodico automatico** di OSM e GTFS con report delle differenze e controllo redazionale.

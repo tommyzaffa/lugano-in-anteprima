@@ -64,7 +64,7 @@ Si è scelto l'estratto Geofabrik invece di Overpass per la massa dei dati: i se
 
 Ogni luogo (`data/catalog/places.yaml`) è collegato a un oggetto OSM; lo script ne ricava coordinate (punto rappresentativo interno), ingresso (nodo `entrance` OSM entro 60 m quando esiste), comune, orari OSM, accessibilità OSM, sito web e fermate vicine. Ogni informazione critica porta la sua **evidenza** (`field`, `sourceId`, `status`, date di osservazione e controllo, nota), per campo:
 
-- `verified` — verificato dalla redazione su fonte ufficiale (dal pannello editoriale);
+- `verified` — verificato su fonte ufficiale, con **URL e data di consultazione** (nel catalogo o dal pannello editoriale);
 - `official_import` — importato da dataset ufficiale (orario GTFS);
 - `osm` / `editorial` — plausibile, da verificare;
 - `estimate` — stima (prezzi per categoria, tempi, dislivelli);
@@ -72,6 +72,26 @@ Ogni luogo (`data/catalog/places.yaml`) è collegato a un oggetto OSM; lo script
 - `unknown` — mancante (mai trattato come zero o come «aperto»).
 
 Orari: il sottoinsieme della sintassi OSM `opening_hours` usato nel catalogo è convertito in regole strutturate (`src/shared/osm-hours.ts`, con regole aggiuntive «,» e sostitutive «;», stagioni, 25:00, PH); se la sintassi non è supportata con certezza la conversione fallisce e l'orario resta «da verificare». Sono distinti orario pubblico, cucina (quando presente) e ultimo ingresso; le festività sono quelle del Canton Ticino (feste mobili calcolate).
+
+### Verifica sui siti ufficiali (28 settembre 2026)
+
+Orari, tariffe e accessibilità letti sulle pagine ufficiali dei gestori (fonte `official-web`, URL e data su ogni dato, link visibile nella scheda e nel riepilogo). Nel YAML: `hours: { osm, status: verified, url, checked, valid?, closures? }`, prezzi con `url` e `checked`.
+
+| Luogo | Cosa è stato verificato | Scoperte che cambiano i programmi |
+|---|---|---|
+| MASI al LAC e Palazzo Reali | orari, casse chiuse 15 min prima, tariffe LAC (20/16, gratis ≤ 16 anni) | **Palazzo Reali chiuso dal 22.9 al 16.10.2026** per riallestimento |
+| MUSEC | orari (chiuso il martedì), tariffe per fasce d'età | OSM indicava orari diversi |
+| Museo cantonale di storia naturale | orari 9–12 e 14–17, entrata libera | aperto anche la **domenica** (OSM: sabato ultimo giorno); chiuso lunedì e festivi |
+| Museo Hermann Hesse | stagione e tariffe | **chiuso dal 2.11.2026 al 19.3.2027** |
+| Swissminiatur | calendario 2026, ultimo ingresso, tariffe, accessibilità | aperto fino all'8.11; stazione FFS di Melide non accessibile |
+| Lido di Lugano, Lido San Domenico | stagioni 2026 | San Domenico chiuso dal 21.9; Lido di Lugano solo spiaggia fino al 4.10 con bel tempo |
+| Parco Ciani, Parco del Tassino | orari estivi e invernali | 6.30–23.30 / 6.30–21 |
+| Museo doganale | stagione, gratuità, accessibilità | aperto fino al **18.10.2026** |
+| Museo e Ristorante in vetta al San Salvatore | orari legati alla funicolare | chiusi dal 9.11 |
+| Funicolari San Salvatore e Monte Brè | listini completi | andata e ritorno, ragazzi, metà prezzo/AG applicati (`src/server/catalog/fares.ts`) |
+| Villa Ciani | — | senza apertura regolare: pianificabile solo tramite eventi |
+
+Restano «da verificare» (i siti consultati non riportano orari): gli altri parchi, chiese, grotti e locali; i prezzi dei ristoranti restano fasce per categoria.
 
 Eventi: ricorrenze settimanali con intervallo di validità (nessuna occorrenza dopo la fine della stagione), eccezioni per data (annullato, rinviato, esaurito), eventi su più giorni con sessioni distinte, eventi oltre mezzanotte e nella notte del cambio d'ora, eventi con orario incerto. **Sono tutti fixture dimostrative** e l'app lo dice ovunque.
 
