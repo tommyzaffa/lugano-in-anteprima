@@ -1,0 +1,100 @@
+{
+  "tilejson": "3.0.0",
+  "name": "Lugano in anteprima — base cartografica",
+  "description": "Tile vettoriali generati localmente da OpenStreetMap (estratti Geofabrik CH + IT nord-ovest), ritagliati sull'area buffer.",
+  "attribution": "© OpenStreetMap contributors (ODbL)",
+  "minzoom": 8,
+  "maxzoom": 16,
+  "bounds": [
+    8.86313,
+    45.9185,
+    9.05928,
+    46.07259
+  ],
+  "center": [
+    8.955,
+    46,
+    13
+  ],
+  "vector_layers": [
+    {
+      "id": "water",
+      "minzoom": 8,
+      "maxzoom": 16,
+      "fields": {}
+    },
+    {
+      "id": "waterway",
+      "minzoom": 11,
+      "maxzoom": 16,
+      "fields": {}
+    },
+    {
+      "id": "landcover",
+      "minzoom": 8,
+      "maxzoom": 16,
+      "fields": {}
+    },
+    {
+      "id": "buildings",
+      "minzoom": 13,
+      "maxzoom": 16,
+      "fields": {}
+    },
+    {
+      "id": "roads",
+      "minzoom": 8,
+      "maxzoom": 16,
+      "fields": {}
+    },
+    {
+      "id": "rail",
+      "minzoom": 9,
+      "maxzoom": 16,
+      "fields": {}
+    },
+    {
+      "id": "aerialway",
+      "minzoom": 11,
+      "maxzoom": 16,
+      "fields": {}
+    },
+    {
+      "id": "ferry",
+      "minzoom": 10,
+      "maxzoom": 16,
+      "fields": {}
+    },
+    {
+      "id": "boundary",
+      "minzoom": 8,
+      "maxzoom": 16,
+      "fields": {}
+    },
+    {
+      "id": "places",
+      "minzoom": 8,
+      "maxzoom": 16,
+      "fields": {}
+    },
+    {
+      "id": "peaks",
+      "minzoom": 10,
+      "maxzoom": 16,
+      "fields": {}
+    },
+    {
+      "id": "pois",
+      "minzoom": 14,
+      "maxzoom": 16,
+      "fields": {}
+    },
+    {
+      "id": "labels",
+      "minzoom": 8,
+      "maxzoom": 16,
+      "fields": {}
+    }
+  ],
+  "generatedAt": "2026-09-28T04:56:53.739Z"
+}

@@ -1,0 +1,17 @@
+import { readFileSync } from 'node:fs';
+import { Graph } from '../../src/server/routing/graph.ts';
+import { TransitNetwork } from '../../src/server/routing/transit.ts';
+import { Router } from '../../src/server/routing/router.ts';
+import { profileFromRequest } from '../../src/server/routing/walk.ts';
+const g = new Graph(JSON.parse(readFileSync('data/build/graph-walk.json', 'utf8')));
+const tn = new TransitNetwork(JSON.parse(readFileSync('data/build/transit.json', 'utf8')));
+const r = new Router(g, tn);
+const prof = profileFromRequest({ pace: 'balanced', mobility: { stroller: false, wheelchair: false, avoidStairs: false, frequentBreaks: false }, people: [{ kind: 'adult' }], avoid: [], moods: [] } as any);
+const summit = { lon: 8.98741, lat: 46.009085 };
+console.log('snap summit', r.snap(summit.lon, summit.lat, prof));
+const stop = tn.d.stops[59];
+console.log('stop snap', stop.walkNode, stop.walkDistM, g.lon[stop.walkNode], g.lat[stop.walkNode]);
+const w = r.walk(summit, stop, prof);
+console.log('walk summit->stop', w && { len: w.lengthM, sec: w.seconds, up: w.upM, streets: w.streets });
+const acc = r.accessStops(summit, prof);
+console.log('access', [...acc].map(([s, sec]) => [tn.d.stops[s].name, Math.round(sec)]));

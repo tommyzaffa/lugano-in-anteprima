@@ -1,0 +1,10 @@
+{
+  "name": "Lugano in anteprima",
+  "short_name": "Lugano",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3ede0",
+  "theme_color": "#f3ede0",
+  "lang": "it",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

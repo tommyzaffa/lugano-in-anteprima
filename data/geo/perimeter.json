@@ -1,0 +1,363 @@
+{
+  "description": "Perimetro di prodotto di «Lugano in anteprima». Copertura territoriale: include comuni distinti (non sono tutti quartieri del Comune di Lugano).",
+  "crs": "EPSG:4326 (WGS84, gradi decimali). Margini espressi in metri e convertiti con approssimazione sferica locale.",
+  "generatedAt": "2026-09-28T01:38:22.269Z",
+  "source": {
+    "name": "OpenStreetMap via Overpass API",
+    "license": "ODbL 1.0",
+    "attribution": "© OpenStreetMap contributors",
+    "osmTimestamp": "2026-09-28T01:37:13Z"
+  },
+  "margins": {
+    "perimeterMeters": 1500,
+    "bufferMeters": 2500
+  },
+  "core": {
+    "south": 45.954435,
+    "north": 46.036656,
+    "west": 8.914855,
+    "east": 9.007556
+  },
+  "perimeter": {
+    "south": 45.94096,
+    "west": 8.89546,
+    "north": 46.05013,
+    "east": 9.02695
+  },
+  "buffer": {
+    "south": 45.9185,
+    "west": 8.86313,
+    "north": 46.07259,
+    "east": 9.05928
+  },
+  "sizeKm": {
+    "width": 10.2,
+    "height": 12.2
+  },
+  "polygon": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          8.89546,
+          45.94096
+        ],
+        [
+          9.02695,
+          45.94096
+        ],
+        [
+          9.02695,
+          46.05013
+        ],
+        [
+          8.89546,
+          46.05013
+        ],
+        [
+          8.89546,
+          45.94096
+        ]
+      ]
+    ]
+  },
+  "references": [
+    {
+      "key": "lugano-centro",
+      "label": "Lugano (centro)",
+      "kind": "place",
+      "osm": "node/1376769426",
+      "osmName": "Lugano",
+      "lon": 8.951228,
+      "lat": 46.003801,
+      "ele": 273,
+      "candidates": 1
+    },
+    {
+      "key": "stazione",
+      "label": "Stazione FFS di Lugano",
+      "kind": "station",
+      "osm": "node/2460241310",
+      "osmName": "Lugano",
+      "lon": 8.946849,
+      "lat": 46.005499,
+      "ele": 335,
+      "candidates": 1
+    },
+    {
+      "key": "parco-ciani",
+      "label": "Parco Ciani",
+      "kind": "park",
+      "osm": "way/28285131",
+      "osmName": "Parco Civico Villa Ciani",
+      "lon": 8.958512,
+      "lat": 46.003948,
+      "ele": null,
+      "candidates": 1
+    },
+    {
+      "key": "lac",
+      "label": "LAC Lugano Arte e Cultura",
+      "kind": "culture",
+      "osm": "way/259338174",
+      "osmName": "LAC Lugano Arte e Cultura",
+      "lon": 8.948434,
+      "lat": 45.99948,
+      "ele": null,
+      "candidates": 1
+    },
+    {
+      "key": "molino-nuovo",
+      "label": "Molino Nuovo",
+      "kind": "place",
+      "osm": "node/393185602",
+      "osmName": "Molino Nuovo",
+      "lon": 8.9571,
+      "lat": 46.012897,
+      "ele": null,
+      "candidates": 1
+    },
+    {
+      "key": "viganello",
+      "label": "Viganello",
+      "kind": "place",
+      "osm": "node/392442221",
+      "osmName": "Viganello",
+      "lon": 8.96743,
+      "lat": 46.0133,
+      "ele": 283,
+      "candidates": 1
+    },
+    {
+      "key": "cassarate",
+      "label": "Cassarate",
+      "kind": "place",
+      "osm": "node/240125127",
+      "osmName": "Cassarate",
+      "lon": 8.970398,
+      "lat": 46.007265,
+      "ele": null,
+      "candidates": 1
+    },
+    {
+      "key": "pregassona",
+      "label": "Pregassona",
+      "kind": "place",
+      "osm": "node/390040422",
+      "osmName": "Pregassona",
+      "lon": 8.974433,
+      "lat": 46.01905,
+      "ele": 379,
+      "candidates": 1
+    },
+    {
+      "key": "castagnola",
+      "label": "Castagnola",
+      "kind": "place",
+      "osm": "node/2247740482",
+      "osmName": "Castagnola",
+      "lon": 8.977999,
+      "lat": 46.0013,
+      "ele": null,
+      "candidates": 1
+    },
+    {
+      "key": "monte-bre",
+      "label": "Monte Brè (vetta)",
+      "kind": "peak",
+      "osm": "node/291524462",
+      "osmName": "Monte Bre",
+      "lon": 8.98741,
+      "lat": 46.009085,
+      "ele": 925,
+      "candidates": 1
+    },
+    {
+      "key": "bre-paese",
+      "label": "Brè sopra Lugano (paese)",
+      "kind": "place",
+      "osm": "node/832055733",
+      "osmName": "Brè sopra Lugano",
+      "lon": 8.996819,
+      "lat": 46.011485,
+      "ele": null,
+      "candidates": 1
+    },
+    {
+      "key": "gandria",
+      "label": "Gandria",
+      "kind": "place",
+      "osm": "node/20600198",
+      "osmName": "Gandria",
+      "lon": 9.002775,
+      "lat": 46.005737,
+      "ele": 280,
+      "candidates": 1
+    },
+    {
+      "key": "monte-boglia",
+      "label": "Monte Boglia (vetta)",
+      "kind": "peak",
+      "osm": "node/415867212",
+      "osmName": "Monte Boglia",
+      "lon": 9.007556,
+      "lat": 46.029777,
+      "ele": 1516,
+      "candidates": 1
+    },
+    {
+      "key": "paradiso",
+      "label": "Paradiso",
+      "kind": "place",
+      "osm": "node/240120177",
+      "osmName": "Paradiso",
+      "lon": 8.946198,
+      "lat": 45.989731,
+      "ele": 274,
+      "candidates": 1
+    },
+    {
+      "key": "san-salvatore",
+      "label": "Monte San Salvatore (vetta)",
+      "kind": "peak",
+      "osm": "node/26863960",
+      "osmName": "Monte San Salvatore",
+      "lon": 8.947302,
+      "lat": 45.977112,
+      "ele": 912,
+      "candidates": 1
+    },
+    {
+      "key": "carona",
+      "label": "Carona",
+      "kind": "place",
+      "osm": "node/240026247",
+      "osmName": "Carona",
+      "lon": 8.935792,
+      "lat": 45.957456,
+      "ele": 597,
+      "candidates": 1
+    },
+    {
+      "key": "melide",
+      "label": "Melide",
+      "kind": "place",
+      "osm": "node/32457646",
+      "osmName": "Melide",
+      "lon": 8.947622,
+      "lat": 45.954435,
+      "ele": 279,
+      "candidates": 1
+    },
+    {
+      "key": "massagno",
+      "label": "Massagno",
+      "kind": "place",
+      "osm": "node/2574329904",
+      "osmName": "Massagno",
+      "lon": 8.944367,
+      "lat": 46.0127,
+      "ele": 352,
+      "candidates": 1
+    },
+    {
+      "key": "breganzona",
+      "label": "Breganzona",
+      "kind": "place",
+      "osm": "node/395304321",
+      "osmName": "Breganzona",
+      "lon": 8.928446,
+      "lat": 46.006465,
+      "ele": 433,
+      "candidates": 1
+    },
+    {
+      "key": "sorengo",
+      "label": "Sorengo",
+      "kind": "place",
+      "osm": "node/2570866824",
+      "osmName": "Sorengo",
+      "lon": 8.936977,
+      "lat": 45.998229,
+      "ele": 430,
+      "candidates": 1
+    },
+    {
+      "key": "muzzano",
+      "label": "Muzzano",
+      "kind": "place",
+      "osm": "node/240081060",
+      "osmName": "Muzzano",
+      "lon": 8.922808,
+      "lat": 45.997796,
+      "ele": 365,
+      "candidates": 1
+    },
+    {
+      "key": "montagnola",
+      "label": "Montagnola (Collina d'Oro)",
+      "kind": "place",
+      "osm": "node/279808322",
+      "osmName": "Montagnola",
+      "lon": 8.918437,
+      "lat": 45.982974,
+      "ele": 467,
+      "candidates": 1
+    },
+    {
+      "key": "gentilino",
+      "label": "Gentilino (Collina d'Oro)",
+      "kind": "place",
+      "osm": "node/575992088",
+      "osmName": "Gentilino",
+      "lon": 8.932061,
+      "lat": 45.991423,
+      "ele": 388,
+      "candidates": 1
+    },
+    {
+      "key": "agra",
+      "label": "Agra (Collina d'Oro)",
+      "kind": "place",
+      "osm": "node/575994370",
+      "osmName": "Agra",
+      "lon": 8.914855,
+      "lat": 45.967994,
+      "ele": 552,
+      "candidates": 1
+    },
+    {
+      "key": "canobbio",
+      "label": "Canobbio",
+      "kind": "place",
+      "osm": "node/3487391675",
+      "osmName": "Canobbio",
+      "lon": 8.967245,
+      "lat": 46.034999,
+      "ele": 405,
+      "candidates": 1
+    },
+    {
+      "key": "davesco",
+      "label": "Davesco (Davesco-Soragno)",
+      "kind": "place",
+      "osm": "node/415299111",
+      "osmName": "Davesco",
+      "lon": 8.980943,
+      "lat": 46.036656,
+      "ele": null,
+      "candidates": 1
+    },
+    {
+      "key": "soragno",
+      "label": "Soragno (Davesco-Soragno)",
+      "kind": "place",
+      "osm": "node/415299107",
+      "osmName": "Soragno",
+      "lon": 8.979378,
+      "lat": 46.032252,
+      "ele": null,
+      "candidates": 1
+    }
+  ]
+}

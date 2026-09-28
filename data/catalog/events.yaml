@@ -1,0 +1,251 @@
+# Eventi — FIXTURE DIMOSTRATIVE
+# ------------------------------------------------------------------
+# Tutti gli eventi di questo file sono inventati a scopo dimostrativo (demo: true)
+# e servono a riprodurre casi del calendario: ricorrenze con validità, occorrenze
+# annullate, eventi su più giorni, oltre mezzanotte, cambio dell'ora legale, orari
+# incerti. NON rappresentano l'agenda reale di Lugano.
+# L'import di calendari reali (Lugano Eventi, Lugano Region) richiede accesso e
+# condizioni di riuso verificati: vedi docs/INTEGRAZIONI.md.
+
+- id: jazz-lungolago-demo
+  title: Jazz al LAC, piazza Luini (demo)
+  placeId: lac
+  description: Concerti jazz gratuiti all'aperto il venerdì sera, fino a metà ottobre. Fixture dimostrativa.
+  category: concert
+  tags: [musica, jazz, gratuito, all-aperto]
+  moods: [chill, lively, cultural]
+  prices: free
+  booking: { required: no }
+  recurrence:
+    freq: weekly
+    byDay: [5]
+    from: "20:30"
+    to: "23:00"
+    validFrom: "2026-06-05"
+    validTo: "2026-10-16"
+    exceptions:
+      - { date: "2026-10-09", status: cancelled, note: "Annullato (caso dimostrativo)." }
+  suitability: { occasions: [friends, date, guests, leisure], indoor: false, noise: moderate, alcohol: available }
+
+- id: mercato-centro-demo
+  title: Mercato del centro (demo)
+  placeId: piazza-riforma
+  description: Bancarelle di frutta, verdura e prodotti locali il martedì e il venerdì mattina. Fixture dimostrativa.
+  category: market
+  tags: [mercato, prodotti-locali, gratuito]
+  moods: [lively, food]
+  prices: free
+  booking: { required: no }
+  recurrence:
+    freq: weekly
+    byDay: [2, 5]
+    from: "07:30"
+    to: "12:30"
+    validFrom: "2026-01-06"
+    validTo: "2026-12-22"
+    exceptions:
+      - { date: "2026-12-08", status: cancelled, note: "Festivo (Immacolata)." }
+  suitability: { occasions: [family, sightseeing, guests, leisure], indoor: false, noise: moderate }
+
+- id: festa-autunno-demo
+  title: Festa d'autunno in centro (demo)
+  placeId: piazza-riforma
+  description: Tre giorni di bancarelle gastronomiche, musica e cortei. Sessioni distinte per giorno. Fixture dimostrativa.
+  category: festival
+  tags: [festa, gastronomia, musica]
+  moods: [lively, food]
+  prices:
+    - { label: "Degustazioni", min: 10, max: 30, unit: person, status: estimate, optional: true, essential: false }
+  booking: { required: no }
+  sessions:
+    - { id: fa-1, start: "2026-10-02T17:00:00+02:00", end: "2026-10-03T00:30:00+02:00", label: "venerdì sera" }
+    - { id: fa-2, start: "2026-10-03T11:00:00+02:00", end: "2026-10-04T00:30:00+02:00", label: "sabato" }
+    - { id: fa-3, start: "2026-10-04T11:00:00+02:00", end: "2026-10-04T19:00:00+02:00", label: "domenica" }
+  suitability: { occasions: [friends, family, guests, leisure, birthday], indoor: false, noise: loud, alcohol: available }
+
+- id: visita-centro-demo
+  title: Visita guidata del centro storico (demo)
+  placeId: piazza-riforma
+  description: Passeggiata guidata di 90 minuti fra piazze, chiese e portici. Partenza dal Palazzo Civico. Fixture dimostrativa.
+  category: tour
+  tags: [visita, storia, a-piedi]
+  moods: [cultural]
+  prices:
+    - { label: "Visita guidata", min: 20, max: 25, unit: person, status: estimate, childFree: true, childAgeMax: 12 }
+  booking: { required: recommended }
+  recurrence:
+    freq: weekly
+    byDay: [1, 3]
+    from: "10:00"
+    to: "11:30"
+    validFrom: "2026-04-06"
+    validTo: "2026-10-28"
+  suitability: { occasions: [sightseeing, guests, family], indoor: false, noise: quiet }
+
+- id: organo-cattedrale-demo
+  title: Concerto d'organo in Cattedrale (demo)
+  placeId: cattedrale-san-lorenzo
+  description: Concerto d'organo pomeridiano. Fixture dimostrativa.
+  category: concert
+  tags: [musica, organo, chiesa]
+  moods: [cultural, chill]
+  prices:
+    - { label: "Offerta libera", min: 0, max: 10, unit: person, status: estimate, essential: false }
+  booking: { required: no }
+  sessions:
+    - { id: oc-1, start: "2026-10-11T17:00:00+02:00", end: "2026-10-11T18:00:00+02:00" }
+  suitability: { occasions: [guests, sightseeing, date], indoor: true, noise: quiet }
+
+- id: laboratorio-famiglie-demo
+  title: Laboratorio naturalistico per famiglie (demo)
+  placeId: museo-storia-naturale
+  description: Attività per bambini dai 6 anni la domenica pomeriggio, con apertura straordinaria (l'orario dell'evento non coincide con quello del museo). Fixture dimostrativa.
+  category: workshop
+  tags: [bambini, famiglia, laboratorio, al-coperto]
+  moods: [cultural, nature]
+  prices:
+    - { label: "Partecipazione bambino", min: 5, max: 10, unit: person, status: estimate, audience: child, childAgeMax: 12 }
+  booking: { required: yes }
+  recurrence:
+    freq: weekly
+    byDay: [7]
+    from: "14:00"
+    to: "16:00"
+    validFrom: "2026-09-06"
+    validTo: "2026-11-29"
+  suitability: { occasions: [family], minAge: 6, indoor: true, noise: moderate }
+
+- id: cinema-parco-demo
+  title: Cinema all'aperto al Parco Ciani (demo)
+  placeId: parco-ciani
+  description: Proiezioni estive il giovedì, terminate a fine agosto. Serve a verificare che una ricorrenza finita non venga riproposta. Fixture dimostrativa.
+  category: cinema
+  tags: [cinema, estate, all-aperto]
+  moods: [chill, romantic]
+  prices:
+    - { label: "Biglietto", min: 12, max: 16, unit: person, status: estimate }
+  booking: { required: recommended }
+  recurrence:
+    freq: weekly
+    byDay: [4]
+    from: "21:00"
+    to: "23:15"
+    validFrom: "2026-07-02"
+    validTo: "2026-08-27"
+  suitability: { occasions: [date, friends, family], indoor: false, noise: moderate }
+
+- id: serata-foce-demo
+  title: Serata DJ allo Spazio FOCE (demo)
+  placeId: foce
+  description: Serata danzante il sabato, fino alle 02:00. Classificata come discoteca/serata rumorosa. Fixture dimostrativa.
+  category: party
+  tags: [discoteca, ballare, notte, rumoroso]
+  moods: [lively]
+  prices:
+    - { label: "Ingresso", min: 10, max: 20, unit: person, status: estimate }
+  booking: { required: no }
+  recurrence:
+    freq: weekly
+    byDay: [6]
+    from: "22:00"
+    to: "02:00"
+    validFrom: "2026-09-05"
+    validTo: "2026-12-19"
+  suitability: { occasions: [friends, birthday], minAge: 18, indoor: true, noise: loud, alcohol: central }
+
+- id: jazz-in-bess-demo
+  title: Concerti al Jazz In Bess (demo)
+  placeId: jazz-in-bess
+  description: Concerti dal vivo il mercoledì e il giovedì. Una data risulta esaurita. Fixture dimostrativa.
+  category: concert
+  tags: [jazz, concerto, al-coperto]
+  moods: [cultural, chill]
+  prices:
+    - { label: "Biglietto", min: 15, max: 30, unit: person, status: estimate }
+  booking: { required: recommended }
+  recurrence:
+    freq: weekly
+    byDay: [3, 4]
+    from: "21:00"
+    to: "23:30"
+    validFrom: "2026-09-02"
+    validTo: "2026-12-17"
+    exceptions:
+      - { date: "2026-10-15", status: sold_out, note: "Esaurito (caso dimostrativo)." }
+  suitability: { occasions: [friends, date, guests], indoor: true, noise: moderate, alcohol: available }
+
+- id: tramonto-bre-demo
+  title: Aperitivo al tramonto in vetta al Monte Brè (demo)
+  placeId: monte-bre
+  description: Aperitivo con musica acustica sulla terrazza della vetta, venerdì e sabato fino al 10 ottobre. Fixture dimostrativa.
+  category: festival
+  tags: [tramonto, vista, aperitivo, montagna]
+  moods: [views, romantic, chill]
+  prices:
+    - { label: "Aperitivo", min: 12, max: 20, unit: person, status: estimate, essential: false }
+  booking: { required: no }
+  recurrence:
+    freq: weekly
+    byDay: [5, 6]
+    from: "18:00"
+    to: "20:00"
+    validFrom: "2026-06-05"
+    validTo: "2026-10-10"
+  suitability: { occasions: [date, friends, guests], indoor: false, noise: quiet, alcohol: available }
+
+- id: notte-cambio-ora-demo
+  title: La notte dell'ora in più (demo)
+  placeId: foce
+  description: Serata speciale nella notte del ritorno all'ora solare (25 ottobre 2026), dalle 22:00 alle 03:00 ora solare. Serve a verificare il cambio d'ora. Fixture dimostrativa.
+  category: party
+  tags: [notte, musica, rumoroso]
+  moods: [lively]
+  prices:
+    - { label: "Ingresso", min: 10, max: 20, unit: person, status: estimate }
+  booking: { required: no }
+  sessions:
+    - { id: nco-1, start: "2026-10-24T22:00:00+02:00", end: "2026-10-25T03:00:00+01:00" }
+  suitability: { occasions: [friends, birthday], minAge: 18, indoor: true, noise: loud, alcohol: central }
+
+- id: teatro-lac-demo
+  title: Spettacolo teatrale al LAC (demo)
+  placeId: lac
+  description: Serata di prosa nella sala teatro. Fixture dimostrativa.
+  category: show
+  tags: [teatro, sera, al-coperto]
+  moods: [cultural]
+  prices:
+    - { label: "Biglietto", min: 30, max: 70, unit: person, status: estimate }
+  booking: { required: yes }
+  sessions:
+    - { id: tl-1, start: "2026-10-03T20:00:00+02:00", end: "2026-10-03T22:15:00+02:00" }
+    - { id: tl-2, start: "2026-10-10T20:00:00+02:00", end: "2026-10-10T22:15:00+02:00" }
+    - { id: tl-3, start: "2026-10-17T20:00:00+02:00", end: "2026-10-17T22:15:00+02:00", status: cancelled }
+  suitability: { occasions: [date, guests, friends], minAge: 12, indoor: true, noise: quiet }
+
+- id: mercatino-gandria-demo
+  title: Mercatino dell'artigianato a Gandria (demo)
+  placeId: gandria
+  description: Bancarelle di artigiani lungo i vicoli del borgo. Fixture dimostrativa.
+  category: market
+  tags: [artigianato, borgo]
+  moods: [chill, cultural]
+  prices: free
+  booking: { required: no }
+  sessions:
+    - { id: mg-1, start: "2026-10-04T10:00:00+02:00", end: "2026-10-04T17:00:00+02:00" }
+  suitability: { occasions: [date, guests, family, sightseeing], indoor: false, noise: quiet }
+
+- id: festa-carona-demo
+  title: Festa di paese a Carona (demo)
+  placeId: carona
+  description: Festa di paese con pranzo comunitario. Data nota ma orario non confermato. Fixture dimostrativa.
+  category: festival
+  tags: [festa, borgo, pranzo]
+  moods: [food, lively]
+  prices:
+    - { label: "Pranzo", unit: person, status: unknown }
+  booking: { required: unknown }
+  sessions:
+    - { id: fc-1, start: "2026-10-11T12:00:00+02:00", end: "2026-10-11T17:00:00+02:00", timeUncertain: true }
+  suitability: { occasions: [family, friends, guests], indoor: false, noise: moderate, alcohol: available }

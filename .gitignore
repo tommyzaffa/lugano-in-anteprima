@@ -1,0 +1,12 @@
+node_modules/
+dist/
+data/raw/
+data/cache/
+data/db/
+*.log
+.env
+.env.local
+test-results/
+playwright-report/
+.DS_Store
+public/vendor/

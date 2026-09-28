@@ -1,0 +1,57 @@
+# Registro delle fonti con politica di scadenza (ore) per tipo di informazione.
+- id: osm
+  name: OpenStreetMap (estratti Geofabrik CH + IT nord-ovest)
+  kind: osm
+  url: https://www.openstreetmap.org/copyright
+  license: ODbL 1.0 — © OpenStreetMap contributors
+  reuse: open
+  freshnessHours: { hours: 2160, general: 8760 }
+  note: Geometrie, nomi, POI, orari e accessibilità inseriti dalla comunità; da verificare per l'uso reale.
+- id: gtfs-ch
+  name: Orario ufficiale svizzero (GTFS, opentransportdata.swiss)
+  kind: gtfs
+  url: https://data.opentransportdata.swiss/en/dataset/timetable-2026-gtfs2020
+  license: Termini d'uso opentransportdata.swiss
+  reuse: open
+  freshnessHours: { transport: 336 }
+  note: Orario pianificato statico; non include ritardi o perturbazioni in tempo reale.
+- id: terrain
+  name: Terrain Tiles (Mapzen / AWS Open Data)
+  kind: terrain
+  url: https://registry.opendata.aws/terrain-tiles/
+  license: Attribuzione alle fonti SRTM, GMTED2010, ETOPO1 e altre
+  reuse: open
+  freshnessHours: { general: 87600 }
+  note: Quote indicative (risoluzione ~30 m); dislivelli stimati.
+- id: editorial-2026-09
+  name: Redazione Lugano in anteprima (settembre 2026)
+  kind: editorial
+  reuse: internal
+  freshnessHours: { hours: 720, prices: 1440, general: 4320 }
+  note: Descrizioni e stime curate per il pilota; orari e prezzi redazionali vanno riverificati sulle fonti ufficiali.
+- id: estimate
+  name: Stime per categoria (redazione)
+  kind: computed
+  reuse: internal
+  freshnessHours: { prices: 2160 }
+  note: Fasce di prezzo indicative per tipo di locale o servizio. Non sono listini.
+- id: demo-fixtures
+  name: Fixture dimostrative
+  kind: demo
+  reuse: internal
+  freshnessHours: {}
+  note: Eventi inventati per riprodurre casi di calendario. Non rappresentano l'agenda reale.
+- id: routing
+  name: Percorsi calcolati sul grafo OSM
+  kind: computed
+  reuse: internal
+  freshnessHours: { general: 8760 }
+  note: Tempi a piedi stimati con funzione di Tobler e dislivelli dal DEM.
+- id: open-meteo
+  name: Open-Meteo (modelli MeteoSvizzera ICON-CH)
+  kind: weather
+  url: https://open-meteo.com/
+  license: CC BY 4.0 — uso non commerciale gratuito; uso commerciale su abbonamento
+  reuse: restricted
+  freshnessHours: { general: 3 }
+  note: Previsioni orarie; orizzonte e precisione dichiarati nella risposta.

@@ -1,0 +1,1463 @@
+# Catalogo editoriale — Lugano in anteprima
+# ------------------------------------------------------------------
+# Ogni luogo è collegato a un oggetto OpenStreetMap (campo osm): le coordinate
+# NON sono scritte a mano ma risolte dallo script scripts/catalog/build-catalog.ts.
+#
+# Convenzioni:
+#   hours: osm            -> usa opening_hours di OSM (stato «osm», da verificare)
+#   hours: always         -> spazio pubblico sempre accessibile (stato editoriale)
+#   hours: unknown        -> orari mancanti: il pianificatore li segnala come incerti
+#   hours: { osm: "…", status: editorial|estimate, note: "…" } -> orario redazionale
+#   prices: preset (grotto, osteria, pizzeria, fine, cafe, gelato, bar, free) oppure lista
+#   Tutti i prezzi sono STIME salvo diversa indicazione: non sono listini ufficiali.
+#   access.wheelchair: osm -> usa il tag OSM wheelchair se presente, altrimenti «unknown»
+#   atmosphere: caratteristica abituale curata dalla redazione, NON affluenza reale.
+# Ultimo controllo redazionale: 2026-09-28 (demo del pilota).
+
+- id: lac
+  name: LAC Lugano Arte e Cultura
+  cat: culture
+  osm: w259338174
+  area: Centro, lungolago
+  desc: Centro culturale sul lago con le sale del MASI, teatro e sala concerti. Il foyer vetrato e la piazza Luini sono un buon punto d'incontro.
+  tags: [arte, architettura, museo, al-coperto, pioggia]
+  moods: [cultural]
+  visit: [40, 90, 150]
+  hours: osm
+  lastEntryMin: 30
+  lastEntryNote: Ultimo ingresso indicativo 30 minuti prima della chiusura (redazione, da verificare).
+  prices:
+    - { label: "Mostre MASI al LAC", min: 15, max: 20, unit: person, status: estimate, childFree: true, childAgeMax: 16, note: "Tariffa indicativa; ingresso al foyer libero." }
+  booking: no
+  access: { wheelchair: osm, stroller: yes, stairs: none }
+  occ: [sightseeing, guests, date, family, leisure]
+  weather: indoor
+  indoor: true
+  atmosphere: varies
+  noise: quiet
+
+- id: masi-palazzo-reali
+  name: MASI Palazzo Reali
+  cat: museum
+  osm: n10982817248
+  area: Centro
+  desc: Seconda sede del Museo d'arte della Svizzera italiana, in via Canova, con collezioni e mostre temporanee.
+  tags: [arte, museo, al-coperto, pioggia]
+  moods: [cultural]
+  visit: [40, 75, 120]
+  hours: unknown
+  prices:
+    - { label: "Ingresso MASI", unit: person, status: unknown, note: "Prezzo non disponibile nel catalogo: verificare sul sito del MASI." }
+  booking: unknown
+  website: https://www.masilugano.ch
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [sightseeing, guests, date]
+  weather: indoor
+  indoor: true
+  noise: quiet
+
+- id: parco-ciani
+  name: Parco Ciani
+  cat: park
+  osm: w28285131
+  area: Centro, lungolago
+  desc: Il grande parco storico sul lago, con viali alberati, prati, la Villa Ciani e la vista verso il Monte Brè e il San Salvatore.
+  tags: [parco, lago, all-aperto, famiglia, passeggino, gratuito]
+  moods: [chill, nature, romantic, views]
+  visit: [20, 45, 90]
+  hours: { osm: "Mar-Oct: 06:00-23:00; Nov-Feb: 06:00-21:00", status: editorial, note: "Orari stagionali indicativi del parco recintato, da verificare sul sito della Città." }
+  prices: free
+  booking: no
+  access: { wheelchair: limited, stroller: yes, stairs: none, note: "Viali in piano; alcuni tratti in ghiaietto (redazione)." }
+  occ: [friends, date, family, sightseeing, guests, leisure, birthday]
+  weather: dry
+  atmosphere: varies
+  noise: quiet
+
+- id: villa-ciani
+  name: Villa Ciani
+  cat: culture
+  osm: w39213173
+  area: Centro, Parco Ciani
+  desc: Villa ottocentesca nel parco, sede di mostre temporanee. Aperta solo durante le esposizioni.
+  tags: [arte, mostre, al-coperto]
+  moods: [cultural]
+  visit: [30, 60, 90]
+  hours: unknown
+  prices:
+    - { label: "Mostra temporanea", unit: person, status: unknown }
+  booking: unknown
+  access: { wheelchair: osm, stroller: unknown, stairs: unknown }
+  occ: [sightseeing, guests]
+  weather: indoor
+  indoor: true
+  noise: quiet
+
+- id: cattedrale-san-lorenzo
+  name: Cattedrale di San Lorenzo
+  cat: church
+  osm: w156471728
+  area: Centro storico
+  desc: La cattedrale con la facciata rinascimentale; dal sagrato si apre una delle viste più belle sulla città e sul golfo.
+  tags: [storia, chiesa, vista, gratuito]
+  moods: [cultural, views]
+  visit: [15, 25, 40]
+  hours: osm
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: limited, stairs: some, note: "Il sagrato si raggiunge anche da via Cattedrale, in salita e con scalinate." }
+  occ: [sightseeing, guests, date, family]
+  weather: any
+  noise: quiet
+
+- id: santa-maria-angioli
+  name: Chiesa di Santa Maria degli Angioli
+  cat: church
+  osm: w205835473
+  area: Centro, lungolago
+  desc: Chiesa quattrocentesca celebre per il grande affresco della Passione di Bernardino Luini.
+  tags: [arte, storia, chiesa, al-coperto, gratuito]
+  moods: [cultural]
+  visit: [15, 25, 40]
+  hours: unknown
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [sightseeing, guests, date]
+  weather: indoor
+  indoor: true
+  noise: quiet
+
+- id: piazza-riforma
+  name: Piazza della Riforma
+  cat: walk
+  osm: w304788336
+  area: Centro
+  desc: La piazza principale, davanti al Palazzo Civico, circondata da caffè con dehors. Punto di ritrovo naturale in centro.
+  tags: [piazza, centro, dehors, gratuito]
+  moods: [lively, food, chill]
+  visit: [10, 20, 45]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: yes, stroller: yes, stairs: none, note: "Area pedonale in piano (redazione)." }
+  occ: [friends, date, family, sightseeing, guests, leisure, birthday]
+  weather: any
+  atmosphere: usually_lively
+  noise: moderate
+
+- id: via-nassa
+  name: Via Nassa e i portici
+  cat: walk
+  osm: w304791942
+  area: Centro
+  desc: La via pedonale dei portici, con negozi, vicoli che scendono al lago e scorci sul centro storico.
+  tags: [passeggiata, portici, centro, gratuito, pioggia]
+  moods: [chill, lively]
+  visit: [15, 30, 60]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: yes, stroller: yes, stairs: none }
+  occ: [friends, date, sightseeing, guests, leisure]
+  weather: any
+  atmosphere: usually_lively
+  noise: moderate
+
+- id: lungolago-lugano
+  name: Lungolago di Lugano
+  cat: walk
+  osm: w33174707
+  area: Centro, lungolago
+  desc: La passeggiata alberata lungo il golfo fra il LAC e il Parco Ciani, con panchine, imbarcaderi e la vista sui monti.
+  tags: [lago, passeggiata, tramonto, gratuito, passeggino]
+  moods: [chill, romantic, views]
+  visit: [15, 30, 60]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: yes, stroller: yes, stairs: none }
+  occ: [friends, date, family, sightseeing, guests, leisure, birthday]
+  weather: dry
+  atmosphere: varies
+  noise: moderate
+
+- id: parco-belvedere
+  name: Giardino Belvedere
+  cat: park
+  osm: w32757977
+  area: Centro, lungolago
+  desc: Piccolo giardino sul lungolago vicino al LAC, con sculture e piante mediterranee.
+  tags: [giardino, lago, sculture, gratuito]
+  moods: [chill, cultural]
+  visit: [10, 20, 30]
+  hours: unknown
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: yes, stairs: none }
+  occ: [date, sightseeing, guests, leisure]
+  weather: dry
+  noise: quiet
+
+- id: parco-tassino
+  name: Parco del Tassino
+  cat: park
+  osm: w35357771
+  area: Besso, sopra la stazione
+  desc: Parco collinare a due passi dalla stazione con un belvedere sulla città e sul golfo e un'area giochi.
+  tags: [parco, vista, famiglia, gioco, gratuito]
+  moods: [chill, views, nature]
+  visit: [20, 40, 60]
+  hours: unknown
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: limited, stairs: some, note: "Accessi in pendenza dalla stazione." }
+  occ: [family, date, friends, leisure, guests]
+  weather: dry
+  noise: quiet
+
+- id: parco-san-michele
+  name: Parco San Michele
+  cat: viewpoint
+  osm: w36951196
+  area: Castagnola
+  desc: Terrazza panoramica sulle pendici del Monte Brè con vista aperta su tutto il golfo di Lugano.
+  tags: [vista, parco, tramonto, gratuito]
+  moods: [views, romantic, chill]
+  visit: [15, 30, 60]
+  hours: osm
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: limited, stairs: some }
+  occ: [date, friends, guests, sightseeing, leisure]
+  weather: dry
+  noise: quiet
+
+- id: musec
+  name: MUSEC — Museo delle Culture
+  cat: museum
+  osm: n8909994253
+  area: Paradiso, Riva Caccia
+  desc: Museo delle culture extraeuropee nella Villa Malpensata, sul lungolago verso Paradiso.
+  tags: [museo, culture, al-coperto, pioggia]
+  moods: [cultural]
+  visit: [45, 75, 120]
+  hours: osm
+  prices:
+    - { label: "Ingresso MUSEC", min: 12, max: 15, unit: person, status: estimate, childFree: true, childAgeMax: 16 }
+  booking: no
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [sightseeing, guests, date]
+  weather: indoor
+  indoor: true
+  noise: quiet
+
+- id: museo-storia-naturale
+  name: Museo cantonale di storia naturale
+  cat: museum
+  osm: n5980969228
+  area: Centro, viale Cattaneo
+  desc: Collezioni di fauna, flora e geologia del Ticino. Adatto alle famiglie, raccolto e al coperto.
+  tags: [museo, natura, famiglia, bambini, al-coperto, pioggia]
+  moods: [cultural, nature]
+  visit: [30, 60, 90]
+  hours: osm
+  prices:
+    - { label: "Ingresso", min: 0, max: 0, unit: person, status: estimate, note: "Ingresso indicato come gratuito dalla redazione, da verificare." }
+  booking: no
+  access: { wheelchair: osm, stroller: unknown, stairs: unknown }
+  occ: [family, sightseeing, guests]
+  weather: indoor
+  indoor: true
+  noise: quiet
+
+- id: lido-lugano
+  name: Lido di Lugano
+  cat: lido
+  osm: w39165395
+  area: Cassarate
+  desc: Il grande lido cittadino alla foce del Cassarate, con piscine e spiaggia sul lago. Stagionale.
+  tags: [lido, lago, estate, famiglia, all-aperto]
+  moods: [chill, nature]
+  visit: [60, 150, 300]
+  hours: { osm: "May 15-Sep 13: 09:00-19:00", status: editorial, note: "Stagione e orari indicativi, variano ogni anno: da verificare." }
+  prices:
+    - { label: "Ingresso lido adulti", min: 8, max: 12, unit: person, status: estimate, audience: adult }
+    - { label: "Ingresso lido ragazzi", min: 4, max: 7, unit: person, status: estimate, audience: child, childAgeMax: 15 }
+  booking: no
+  access: { wheelchair: osm, stroller: yes, stairs: some }
+  occ: [family, friends, leisure]
+  weather: dry
+  atmosphere: usually_lively
+  noise: moderate
+
+- id: casino-lugano
+  name: Casinò Lugano
+  cat: nightlife
+  osm: n10154541285
+  area: Centro, lungolago
+  desc: Sala giochi sul lungolago. Accesso riservato ai maggiorenni con documento.
+  tags: [casino, sera, maggiorenni]
+  moods: [lively]
+  visit: [45, 90, 180]
+  hours: osm
+  minAge: 18
+  prices:
+    - { label: "Ingresso", unit: person, status: unknown, optional: false, note: "Eventuali spese di gioco non stimabili." }
+  booking: no
+  access: { wheelchair: unknown, stroller: no, stairs: unknown }
+  occ: [friends, birthday]
+  weather: indoor
+  indoor: true
+  atmosphere: varies
+  noise: moderate
+  alcohol: available
+
+- id: foce
+  name: Spazio FOCE
+  cat: show
+  osm: r17329565
+  area: Cassarate, foce
+  desc: "Centro culturale giovane alla foce del Cassarate: teatro, concerti, serate e spazi all'aperto. Le attività dipendono dal programma."
+  tags: [musica, teatro, serate, giovani]
+  moods: [lively, cultural]
+  visit: [60, 120, 180]
+  hours: unknown
+  prices:
+    - { label: "Biglietto evento", unit: person, status: unknown }
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, date, birthday, leisure]
+  weather: any
+  indoor: true
+  atmosphere: varies
+  noise: loud
+  alcohol: available
+  plannable: events
+
+- id: jazz-in-bess
+  name: Jazz In Bess
+  cat: show
+  osm: n14056376785
+  area: Besso
+  desc: Club storico del jazz luganese con concerti dal vivo in una sala raccolta. Programma su calendario.
+  tags: [musica, jazz, concerti, sera, al-coperto]
+  moods: [cultural, chill]
+  visit: [60, 120, 150]
+  hours: unknown
+  prices:
+    - { label: "Concerto", unit: person, status: unknown }
+  booking: recommended
+  access: { wheelchair: unknown, stroller: no, stairs: unknown }
+  occ: [friends, date, guests]
+  weather: indoor
+  indoor: true
+  atmosphere: varies
+  noise: moderate
+  alcohol: available
+  plannable: events
+
+- id: parco-heleneum
+  name: Parco dell'Heleneum
+  cat: park
+  osm: w215835949
+  area: Castagnola
+  desc: Il giardino della Villa Heleneum, affacciato sul lago tra Castagnola e il sentiero di Gandria.
+  tags: [giardino, lago, villa]
+  moods: [chill, romantic, nature]
+  visit: [15, 30, 45]
+  hours: unknown
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: limited, stairs: some }
+  occ: [date, guests, sightseeing]
+  weather: dry
+  noise: quiet
+
+- id: sentiero-olivo
+  name: Sentiero dell'olivo (Castagnola–Gandria)
+  cat: walk
+  osm: w68506604
+  walkTo: gandria
+  area: Castagnola → Gandria
+  desc: Sentiero didattico fra gli ulivi dal Parco degli Ulivi di Castagnola fino a Gandria, a mezza costa sopra il lago. Tratti a gradini.
+  tags: [sentiero, lago, ulivi, natura, gradini]
+  moods: [nature, views, chill, romantic]
+  visit: [45, 60, 90]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: no, stroller: no, stairs: many, note: "Tratti a gradini e sentiero stretto: non adatto a passeggini (redazione)." }
+  occ: [friends, date, sightseeing, guests, leisure]
+  weather: dry
+  noise: quiet
+
+- id: gandria
+  name: Gandria (nucleo)
+  cat: village
+  osm: n20600198
+  area: Gandria
+  desc: Borgo di pescatori aggrappato alla riva, fatto di vicoli, scalinate e terrazze sul lago. Raggiungibile a piedi, in bus o in battello.
+  tags: [borgo, lago, vicoli, gradini, battello]
+  moods: [romantic, views, chill]
+  visit: [30, 60, 90]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: no, stroller: no, stairs: many, note: "Il nucleo è quasi solo a scalinate (redazione)." }
+  occ: [date, friends, sightseeing, guests, leisure]
+  weather: dry
+  noise: quiet
+
+- id: museo-doganale
+  name: Museo doganale svizzero (Cantine di Gandria)
+  cat: museum
+  osm: w68810349
+  area: Cantine di Gandria (sponda sud)
+  desc: Piccolo museo sulla storia del contrabbando e della dogana, sulla sponda di fronte a Gandria. Si raggiunge soprattutto in battello.
+  tags: [museo, storia, battello, famiglia]
+  moods: [cultural, adventure]
+  visit: [30, 45, 75]
+  hours: osm
+  prices:
+    - { label: "Ingresso", min: 0, max: 0, unit: person, status: estimate, note: "Indicato come gratuito dalla redazione, da verificare." }
+  booking: no
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [family, sightseeing, guests, friends]
+  weather: any
+  indoor: true
+  noise: quiet
+
+- id: grotto-pescatori
+  name: Grotto Pescatori (Caprino)
+  cat: restaurant
+  osm: n984002812
+  area: Caprino, sponda sud
+  desc: Grotto sulla sponda di Caprino, raggiungibile in battello. Cucina ticinese in terrazza sul lago.
+  tags: [grotto, lago, battello, all-aperto]
+  moods: [food, romantic, chill]
+  visit: [60, 90, 120]
+  meal: any
+  hours: unknown
+  prices:
+    - { label: "Pasto al grotto", unit: person, status: unknown, note: "Prezzi non disponibili." }
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, date, family, guests]
+  weather: dry
+  atmosphere: varies
+  noise: moderate
+  alcohol: available
+
+- id: monte-bre
+  name: Monte Brè (vetta)
+  cat: summit
+  osm: n291524462
+  area: Monte Brè
+  desc: Il «monte più soleggiato della Svizzera» con il panorama sul golfo, sulle Alpi e sulla città. In vetta si arriva con la funicolare da Cassarate (cambio a Suvigliana) o a piedi.
+  tags: [montagna, vista, funicolare, tramonto]
+  moods: [views, nature, romantic, adventure]
+  visit: [30, 60, 120]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: limited, stairs: some, note: "Terrazze in vetta con brevi scalinate (redazione)." }
+  occ: [friends, date, family, sightseeing, guests, leisure, birthday]
+  weather: dry
+  noise: quiet
+  mountain:
+    kind: summit
+    elevation: 925
+    access: ["Funicolare Cassarate–Suvigliana–Monte Brè (orario ufficiale importato)", "Bus TPL 12 fino a Brè paese, poi sentiero", "A piedi da Castagnola/Aldesago: salita ripida, escursione"]
+    returnNote: "Controllare l'ultima corsa in discesa della funicolare: dopo, il rientro è a piedi o via Brè paese (bus 12)."
+
+- id: bre-paese
+  name: Brè sopra Lugano (paese)
+  cat: village
+  osm: n832055733
+  area: Brè paese
+  desc: Nucleo raccolto sulle pendici del Monte Brè, con opere d'arte all'aperto lungo i vicoli e la casa-museo di Wilhelm Schmid.
+  tags: [borgo, arte, vista, montagna]
+  moods: [cultural, chill, views]
+  visit: [30, 60, 90]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: limited, stairs: some }
+  occ: [date, friends, sightseeing, guests, leisure]
+  weather: dry
+  noise: quiet
+
+- id: osteria-funicolare
+  name: Osteria Funicolare (Monte Brè)
+  cat: restaurant
+  osm: n8880027179
+  area: Monte Brè
+  desc: Osteria vicino all'arrivo della funicolare del Monte Brè, con cucina regionale e grigliate.
+  tags: [osteria, montagna, vista]
+  moods: [food, views]
+  visit: [45, 75, 100]
+  meal: lunch
+  hours: osm
+  prices: osteria
+  booking: recommended
+  access: { wheelchair: osm, stroller: unknown, stairs: unknown }
+  occ: [friends, family, guests, date, leisure]
+  weather: any
+  noise: moderate
+  alcohol: available
+
+- id: salotto-bre
+  name: Salotto Brè
+  cat: cafe
+  osm: n6533511490
+  area: Brè paese
+  desc: Locale nel paese di Brè per una pausa, un pranzo leggero o un aperitivo.
+  tags: [pausa, borgo]
+  moods: [chill, food]
+  visit: [30, 45, 90]
+  meal: any
+  hours: osm
+  prices: cafe
+  booking: no
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, date, guests, leisure]
+  weather: any
+  noise: quiet
+  alcohol: available
+
+- id: grotto-castagneto
+  name: Grotto Castagneto
+  cat: restaurant
+  osm: n470352738
+  area: Brè
+  desc: Grotto fra i castagni sulle pendici del Monte Brè, cucina ticinese.
+  tags: [grotto, bosco, ticinese]
+  moods: [food, nature, chill]
+  visit: [60, 90, 120]
+  meal: any
+  hours: osm
+  prices: grotto
+  booking: recommended
+  access: { wheelchair: osm, stroller: unknown, stairs: unknown }
+  occ: [friends, family, date, guests]
+  weather: any
+  noise: moderate
+  alcohol: available
+
+- id: monte-boglia
+  name: Monte Boglia (vetta)
+  cat: summit
+  osm: n415867212
+  area: Monte Boglia, confine CH-IT
+  desc: Vetta di 1516 m sul confine con l'Italia, raggiungibile solo a piedi (per esempio da Brè paese). È un'escursione di montagna, non una passeggiata cittadina.
+  tags: [montagna, escursione, vista, sentiero]
+  moods: [adventure, nature, views]
+  visit: [20, 40, 60]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: no, stroller: no, stairs: many, note: "Sentiero di montagna con forte dislivello." }
+  occ: [friends, sightseeing, leisure]
+  weather: dry
+  noise: quiet
+  mountain:
+    kind: hike
+    elevation: 1516
+    access: ["Solo a piedi: sentieri da Brè paese, da Soragno/Cadro o dall'Alpe Boglia", "Nessun impianto di risalita"]
+    returnNote: "Il rientro richiede di riscendere a piedi fino a una fermata del bus: verificare l'ultima corsa."
+    conditionsVerified: false
+
+- id: lido-san-domenico
+  name: Lido San Domenico
+  cat: lido
+  osm: w68506123
+  area: Castagnola
+  desc: Piccolo lido comunale a Castagnola, con accesso al lago. Stagionale.
+  tags: [lido, lago, estate]
+  moods: [chill, nature]
+  visit: [60, 120, 240]
+  hours: unknown
+  prices:
+    - { label: "Ingresso", unit: person, status: unknown }
+  booking: no
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [family, friends, leisure]
+  weather: dry
+  noise: moderate
+
+- id: san-salvatore
+  name: Monte San Salvatore (vetta)
+  cat: summit
+  osm: n26863960
+  area: San Salvatore
+  desc: "Il «Pan di zucchero» di Lugano: in vetta chiesetta, piccolo museo e belvederi a 360° sul lago. Funicolare stagionale da Paradiso."
+  tags: [montagna, vista, funicolare, museo]
+  moods: [views, nature, cultural, romantic]
+  visit: [45, 75, 120]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: limited, stairs: some, note: "Il belvedere sul tetto della chiesa ha scale (redazione)." }
+  occ: [friends, date, family, sightseeing, guests, leisure]
+  weather: dry
+  noise: quiet
+  mountain:
+    kind: summit
+    elevation: 912
+    access: ["Funicolare Paradiso–Pazzallo–Monte San Salvatore (stagionale, orario ufficiale importato)", "Sentiero da Pazzallo o da Carona: escursione con dislivello"]
+    returnNote: "La funicolare ha orari stagionali: fuori stagione o dopo l'ultima corsa si scende solo a piedi."
+
+- id: museo-san-salvatore
+  name: Museo San Salvatore
+  cat: museum
+  osm: n2241821230
+  area: San Salvatore, vetta
+  desc: Piccolo museo in vetta con arte sacra, minerali e la storia della funicolare.
+  tags: [museo, montagna]
+  moods: [cultural]
+  visit: [20, 30, 45]
+  hours: osm
+  prices: free
+  booking: no
+  access: { wheelchair: osm, stroller: unknown, stairs: unknown }
+  occ: [sightseeing, family, guests]
+  weather: any
+  indoor: true
+  noise: quiet
+
+- id: vetta-san-salvatore-ristorante
+  name: Ristorante Vetta San Salvatore
+  cat: restaurant
+  osm: n2241821238
+  area: San Salvatore, vetta
+  desc: Ristorante in vetta al San Salvatore, con terrazza panoramica. Segue la stagione della funicolare.
+  tags: [ristorante, vista, montagna]
+  moods: [food, views, romantic]
+  visit: [45, 75, 100]
+  meal: any
+  hours: unknown
+  prices: osteria
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [date, guests, friends, family]
+  weather: any
+  noise: moderate
+  alcohol: available
+
+- id: carona
+  name: Carona (nucleo)
+  cat: village
+  osm: n240026247
+  area: Carona
+  desc: Paese d'arte sulla montagna dietro al San Salvatore, con logge, chiese affrescate e vicoli in pietra.
+  tags: [borgo, arte, storia, montagna]
+  moods: [cultural, chill, nature]
+  visit: [30, 60, 90]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: limited, stairs: some }
+  occ: [date, sightseeing, guests, leisure, friends]
+  weather: dry
+  noise: quiet
+
+- id: parco-san-grato
+  name: Parco San Grato
+  cat: park
+  osm: w376567966
+  area: Carona
+  desc: Parco botanico in collina famoso per azalee e rododendri, con sentieri tematici e vista sul lago e sulle Alpi.
+  tags: [parco, botanico, vista, natura, famiglia]
+  moods: [nature, views, chill, romantic]
+  visit: [45, 75, 120]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: limited, stroller: limited, stairs: some }
+  occ: [family, date, friends, sightseeing, guests, leisure]
+  weather: dry
+  noise: quiet
+
+- id: swing-the-world-carona
+  name: Swing the World (altalena panoramica)
+  cat: viewpoint
+  osm: n11094327307
+  area: Carona
+  desc: Grande altalena panoramica affacciata sul lago, per una foto e un momento di gioco.
+  tags: [vista, gioco, foto, gratuito, famiglia]
+  moods: [views, adventure, romantic]
+  visit: [10, 20, 30]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: limited, stairs: unknown }
+  occ: [friends, date, family, birthday, leisure]
+  weather: dry
+  noise: quiet
+
+- id: swissminiatur
+  name: Swissminiatur
+  cat: attraction
+  osm: r4872552
+  area: Melide
+  desc: Parco all'aperto con i modellini dei luoghi più noti della Svizzera, trenini e battelli in scala. Stagionale.
+  tags: [modellini, famiglia, bambini, all-aperto, stagionale]
+  moods: [adventure, cultural, chill]
+  visit: [60, 90, 150]
+  hours: { osm: "Mar 14-Nov 01: 09:00-18:00", status: editorial, note: "Stagione e orari indicativi, da verificare sul sito ufficiale." }
+  lastEntryMin: 60
+  lastEntryNote: Ultimo ingresso indicativo un'ora prima della chiusura (redazione, da verificare).
+  prices:
+    - { label: "Adulti", min: 20, max: 25, unit: person, status: estimate, audience: adult }
+    - { label: "Bambini", min: 12, max: 16, unit: person, status: estimate, audience: child, childAgeMax: 15 }
+  booking: no
+  access: { wheelchair: osm, stroller: yes, stairs: none }
+  occ: [family, guests, sightseeing, birthday]
+  weather: dry
+  atmosphere: usually_lively
+  noise: moderate
+
+- id: lungolago-melide
+  name: Lungolago di Melide
+  cat: walk
+  osm: w320446256
+  area: Melide
+  desc: Passeggiata in riva al lago con vista sul ponte-diga e sul San Salvatore.
+  tags: [lago, passeggiata, passeggino, gratuito]
+  moods: [chill, views, romantic]
+  visit: [15, 30, 45]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: yes, stroller: yes, stairs: none }
+  occ: [family, date, friends, leisure]
+  weather: dry
+  noise: quiet
+
+- id: grotto-morchino
+  name: Grotto Morchino
+  cat: restaurant
+  osm: n6432560831
+  area: Pazzallo
+  desc: Grotto storico ai piedi del San Salvatore, con tavoli all'aperto sotto gli alberi.
+  tags: [grotto, ticinese, all-aperto]
+  moods: [food, chill, nature]
+  visit: [60, 90, 120]
+  meal: any
+  hours: osm
+  prices: grotto
+  booking: recommended
+  access: { wheelchair: osm, stroller: unknown, stairs: unknown }
+  occ: [friends, family, date, guests]
+  weather: any
+  noise: moderate
+  alcohol: available
+
+- id: locanda-bigatt
+  name: Locanda dal Bigatt
+  cat: restaurant
+  osm: n8946804641
+  area: Pazzallo
+  desc: Cucina locale in un piccolo nucleo sopra Paradiso.
+  tags: [ticinese, cena]
+  moods: [food, chill]
+  visit: [60, 90, 120]
+  meal: any
+  hours: osm
+  prices: osteria
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [date, friends, guests]
+  weather: any
+  noise: quiet
+  alcohol: available
+
+- id: museo-hesse
+  name: Museo Hermann Hesse
+  cat: museum
+  osm: n813256078
+  area: Montagnola (Collina d'Oro)
+  desc: La Torre Camuzzi dove visse lo scrittore Hermann Hesse, con oggetti, acquerelli e la storia dei suoi anni ticinesi.
+  tags: [museo, letteratura, storia, al-coperto]
+  moods: [cultural, chill]
+  visit: [40, 60, 90]
+  hours: osm
+  prices:
+    - { label: "Ingresso", min: 9, max: 12, unit: person, status: estimate }
+  booking: no
+  access: { wheelchair: osm, stroller: unknown, stairs: unknown }
+  occ: [sightseeing, guests, date]
+  weather: any
+  indoor: true
+  noise: quiet
+
+- id: passeggiata-hesse
+  name: Passeggiata Hermann Hesse (Montagnola–Gentilino)
+  cat: walk
+  osm: n813256078
+  walkTo: sant-abbondio-gentilino
+  area: Collina d'Oro
+  desc: Breve cammino fra i luoghi di Hesse, dal museo di Montagnola alla chiesa di Sant'Abbondio a Gentilino, dove lo scrittore è sepolto.
+  tags: [passeggiata, letteratura, collina]
+  moods: [cultural, nature, chill]
+  visit: [25, 35, 60]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: limited, stairs: unknown }
+  occ: [sightseeing, guests, date]
+  weather: dry
+  noise: quiet
+
+- id: sant-abbondio-gentilino
+  name: Chiesa di Sant'Abbondio (Gentilino)
+  cat: church
+  osm: w268473712
+  area: Gentilino (Collina d'Oro)
+  desc: Chiesa barocca con il viale di cipressi e il cimitero dove riposa Hermann Hesse.
+  tags: [chiesa, storia, letteratura, gratuito]
+  moods: [cultural, chill]
+  visit: [15, 25, 40]
+  hours: unknown
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: limited, stairs: some }
+  occ: [sightseeing, guests]
+  weather: any
+  noise: quiet
+
+- id: laghetto-muzzano
+  name: Laghetto di Muzzano
+  cat: park
+  osm: w61636062
+  area: Muzzano / Sorengo
+  desc: Piccolo lago protetto fra canneti e boschi, con un sentiero ad anello tranquillo. Riserva naturale.
+  tags: [natura, riserva, passeggiata, famiglia, gratuito]
+  moods: [nature, chill]
+  visit: [30, 50, 75]
+  hours: always
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: limited, stairs: unknown }
+  occ: [family, date, friends, leisure]
+  weather: dry
+  noise: quiet
+
+- id: bellevue-bellavista
+  name: Bellevue Bellavista
+  cat: restaurant
+  osm: n1433676870
+  area: Montagnola
+  desc: Ristorante sulla Collina d'Oro con vista verso il lago.
+  tags: [cena, vista]
+  moods: [food, views, romantic]
+  visit: [60, 90, 120]
+  meal: dinner
+  hours: osm
+  prices: osteria
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [date, guests, friends, birthday]
+  weather: any
+  noise: quiet
+  alcohol: available
+
+- id: caffe-boccadoro
+  name: Caffè Letterario Boccadoro
+  cat: cafe
+  osm: n5262148342
+  area: Montagnola
+  desc: Caffè accanto al Museo Hesse, per una pausa con libri e dolci.
+  tags: [caffè, pausa, letteratura]
+  moods: [chill, cultural]
+  visit: [20, 30, 45]
+  meal: snack
+  hours: osm
+  prices: cafe
+  booking: no
+  access: { wheelchair: osm, stroller: unknown, stairs: unknown }
+  occ: [date, guests, friends, family, leisure]
+  weather: any
+  indoor: true
+  noise: quiet
+
+- id: grotto-posmonte
+  name: Grotto Posmonte
+  cat: restaurant
+  osm: n4539975063
+  area: Agra (Collina d'Oro)
+  desc: Grotto sulla Collina d'Oro con cucina regionale.
+  tags: [grotto, ticinese]
+  moods: [food, nature, chill]
+  visit: [60, 90, 120]
+  meal: any
+  hours: osm
+  prices: grotto
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, family, date, guests]
+  weather: any
+  noise: moderate
+  alcohol: available
+
+- id: ristorante-del-popolo
+  name: Ristorante del Popolo
+  cat: restaurant
+  osm: n6360969097
+  area: Breganzona
+  desc: Ristorante di quartiere a Breganzona con carne e cucina italiana.
+  tags: [cena, pranzo]
+  moods: [food]
+  visit: [60, 80, 110]
+  meal: any
+  hours: osm
+  prices: osteria
+  booking: recommended
+  access: { wheelchair: osm, stroller: unknown, stairs: unknown }
+  occ: [friends, family, guests]
+  weather: any
+  noise: moderate
+  alcohol: available
+
+- id: osteria-tarilli
+  name: Osteria Tarilli
+  cat: restaurant
+  osm: n595033045
+  area: Nord di Lugano
+  desc: Osteria di cucina italiana nella parte settentrionale dell'agglomerato.
+  tags: [osteria, pranzo, cena]
+  moods: [food, chill]
+  visit: [60, 80, 110]
+  meal: any
+  hours: osm
+  prices: osteria
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, family, guests]
+  weather: any
+  noise: moderate
+  alcohol: available
+
+- id: ristorante-moretto
+  name: Ristorante Moretto
+  cat: restaurant
+  osm: n4681827604
+  area: Nord di Lugano
+  desc: Ristorante con dehors nella zona collinare a nord della città.
+  tags: [pranzo, cena, dehors]
+  moods: [food, chill]
+  visit: [60, 80, 110]
+  meal: any
+  hours: osm
+  prices: osteria
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, family, guests]
+  weather: any
+  noise: moderate
+  alcohol: available
+
+- id: grotto-del-grillo
+  name: Grotto del Grillo
+  cat: restaurant
+  osm: n483413988
+  area: Molino Nuovo / Porza
+  desc: Grotto nella fascia collinare a nord del centro.
+  tags: [grotto]
+  moods: [food, chill]
+  visit: [60, 90, 120]
+  meal: any
+  hours: unknown
+  prices: grotto
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, family, guests]
+  weather: any
+  noise: moderate
+  alcohol: available
+
+- id: parco-giochi-molino-nuovo
+  name: Parco giochi di Molino Nuovo
+  cat: playground
+  osm: w1547489116
+  area: Molino Nuovo
+  desc: Area giochi di quartiere, utile per una pausa con i bambini.
+  tags: [gioco, bambini, famiglia, gratuito]
+  moods: [chill]
+  visit: [20, 40, 60]
+  hours: unknown
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: yes, stairs: unknown }
+  occ: [family]
+  weather: dry
+  noise: moderate
+
+- id: parco-villa-saroli
+  name: Parco Villa Saroli
+  cat: park
+  osm: w33428797
+  area: Centro nord
+  desc: Giardino storico in centro con area giochi, a pochi passi da viale Franscini.
+  tags: [parco, gioco, bambini, famiglia, gratuito]
+  moods: [chill]
+  visit: [15, 30, 60]
+  hours: unknown
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: yes, stairs: none }
+  occ: [family, leisure]
+  weather: dry
+  noise: quiet
+
+# ---------------------------------------------------------------- mangiare e bere in centro
+- id: la-tinera
+  name: La Tinera
+  cat: restaurant
+  osm: n1103516397
+  area: Centro
+  desc: Trattoria in una cantina a volta del centro storico, cucina ticinese semplice.
+  tags: [ticinese, trattoria, al-coperto]
+  moods: [food, chill]
+  visit: [50, 75, 100]
+  meal: any
+  hours: osm
+  prices: osteria
+  booking: recommended
+  access: { wheelchair: osm, stroller: no, stairs: some, note: "Locale in cantina con scale." }
+  occ: [friends, date, family, guests]
+  weather: any
+  indoor: true
+  noise: moderate
+  alcohol: available
+
+- id: osteria-trani
+  name: Osteria Trani
+  cat: restaurant
+  osm: n7820970103
+  area: Centro
+  desc: Osteria in un vicolo del centro storico con piatti regionali.
+  tags: [osteria, ticinese, cena]
+  moods: [food, romantic]
+  visit: [60, 90, 120]
+  meal: any
+  hours: osm
+  prices: osteria
+  booking: recommended
+  access: { wheelchair: osm, stroller: unknown, stairs: unknown }
+  occ: [date, friends, guests, birthday]
+  weather: any
+  indoor: true
+  noise: moderate
+  alcohol: available
+
+- id: ristorante-olimpia
+  name: Ristorante Olimpia
+  cat: restaurant
+  osm: n3760356759
+  area: Piazza della Riforma
+  desc: Ristorante con dehors in Piazza della Riforma, cucina italiana e opzioni vegetariane.
+  tags: [piazza, dehors, vegetariano]
+  moods: [food, lively]
+  visit: [45, 75, 100]
+  meal: any
+  hours: osm
+  prices: osteria
+  booking: recommended
+  access: { wheelchair: osm, stroller: yes, stairs: none }
+  occ: [friends, family, guests, date, sightseeing]
+  weather: any
+  atmosphere: usually_lively
+  noise: moderate
+  alcohol: available
+  diet: [vegetarian]
+
+- id: acqua-e-farina
+  name: Acqua e Farina
+  cat: restaurant
+  osm: n12463977447
+  area: Centro
+  desc: Pizzeria del centro con cucina italiana.
+  tags: [pizza, cena, pranzo]
+  moods: [food, lively]
+  visit: [45, 60, 90]
+  meal: any
+  hours: osm
+  prices: pizzeria
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, family, birthday, leisure]
+  weather: any
+  indoor: true
+  noise: moderate
+  alcohol: available
+
+- id: pane-e-pomodoro
+  name: Pane e Pomodoro
+  cat: restaurant
+  osm: n13108627201
+  area: Centro
+  desc: Cucina italiana informale in centro.
+  tags: [italiano, pranzo, cena]
+  moods: [food]
+  visit: [45, 60, 90]
+  meal: any
+  hours: osm
+  prices: pizzeria
+  booking: no
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, family, leisure]
+  weather: any
+  indoor: true
+  noise: moderate
+  alcohol: available
+
+- id: grotto-ronco-bianchi
+  name: Grotto-distilleria Ronco Bianchi
+  cat: restaurant
+  osm: n13108823401
+  area: Loreto
+  desc: Grotto serale con cucina locale, poco sopra il centro.
+  tags: [grotto, cena, ticinese]
+  moods: [food, chill, romantic]
+  visit: [60, 90, 120]
+  meal: dinner
+  hours: osm
+  prices: grotto
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, date, guests]
+  weather: any
+  noise: moderate
+  alcohol: central
+
+- id: seven-lugano
+  name: Seven Lugano
+  cat: restaurant
+  osm: n367028639
+  area: Lungolago
+  desc: Ristorante e lounge elegante sul lungolago. Fascia di prezzo alta.
+  tags: [elegante, lago, cena, costoso]
+  moods: [food, romantic, lively]
+  visit: [75, 105, 150]
+  meal: dinner
+  hours: osm
+  prices: fine
+  booking: yes
+  access: { wheelchair: osm, stroller: unknown, stairs: unknown }
+  occ: [date, birthday, guests]
+  weather: any
+  indoor: true
+  atmosphere: usually_lively
+  noise: moderate
+  alcohol: central
+
+- id: vanini
+  name: Vanini (Piazza della Riforma)
+  cat: cafe
+  osm: n3111033508
+  area: Piazza della Riforma
+  desc: Caffè e pasticceria storica in piazza, per colazione, una pausa dolce o un gelato.
+  tags: [caffè, pasticceria, pausa, piazza]
+  moods: [chill, food]
+  visit: [15, 30, 45]
+  meal: snack
+  hours: osm
+  prices: cafe
+  booking: no
+  access: { wheelchair: osm, stroller: yes, stairs: none }
+  occ: [friends, date, family, guests, sightseeing, leisure]
+  weather: any
+  atmosphere: usually_lively
+  noise: moderate
+
+- id: crea-gelato
+  name: Crea Gelato
+  cat: gelato
+  osm: n1243585874
+  area: Centro
+  desc: Gelateria artigianale del centro.
+  tags: [gelato, pausa, bambini]
+  moods: [chill, food]
+  visit: [10, 15, 25]
+  meal: snack
+  hours: osm
+  prices: gelato
+  booking: no
+  access: { wheelchair: osm, stroller: yes, stairs: none }
+  occ: [friends, date, family, guests, leisure, birthday]
+  weather: any
+  noise: moderate
+
+- id: gelateria-veneta
+  name: Gelateria Veneta
+  cat: gelato
+  osm: n12603373924
+  area: Viganello / Cassarate
+  desc: Gelateria aperta fino a tardi, fra Cassarate e Viganello.
+  tags: [gelato, sera, pausa]
+  moods: [chill, food]
+  visit: [10, 15, 25]
+  meal: snack
+  hours: osm
+  prices: gelato
+  booking: no
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, date, family, leisure]
+  weather: any
+  noise: moderate
+
+- id: gelateria-paradiso
+  name: Gelateria Paradiso
+  cat: gelato
+  osm: n8987995192
+  area: Paradiso
+  desc: Gelateria vicino al lungolago di Paradiso e alla funicolare del San Salvatore.
+  tags: [gelato, pausa]
+  moods: [chill, food]
+  visit: [10, 15, 25]
+  meal: snack
+  hours: osm
+  prices: gelato
+  booking: no
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, date, family, leisure]
+  weather: any
+  noise: moderate
+
+- id: il-fermento
+  name: Il Fermento
+  cat: bar
+  osm: n5488630962
+  area: Centro, lungolago
+  desc: Bar vicino al lungolago per un aperitivo o un drink serale.
+  tags: [aperitivo, drink, sera]
+  moods: [lively, chill]
+  visit: [45, 75, 120]
+  meal: snack
+  hours: osm
+  prices: bar
+  booking: no
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, date, birthday, leisure]
+  weather: any
+  atmosphere: usually_lively
+  noise: moderate
+  alcohol: central
+
+- id: bar-pinard
+  name: Bar Pinard
+  cat: bar
+  osm: n9002487879
+  area: Centro nord
+  desc: Wine bar serale con una selezione di vini.
+  tags: [vino, aperitivo, sera]
+  moods: [chill, romantic, lively]
+  visit: [45, 75, 120]
+  meal: snack
+  hours: osm
+  prices: bar
+  booking: no
+  access: { wheelchair: osm, stroller: unknown, stairs: unknown }
+  occ: [friends, date, guests]
+  weather: any
+  indoor: true
+  atmosphere: varies
+  noise: moderate
+  alcohol: central
+
+- id: trinity-pub
+  name: The Trinity Irish Pub
+  cat: bar
+  osm: n3346719244
+  area: Centro est
+  desc: Pub irlandese vivace, con partite in TV e birre alla spina.
+  tags: [pub, birra, sport, sera]
+  moods: [lively]
+  visit: [60, 90, 150]
+  meal: snack
+  hours: osm
+  prices: bar
+  booking: no
+  access: { wheelchair: unknown, stroller: no, stairs: unknown }
+  occ: [friends, birthday]
+  weather: any
+  indoor: true
+  atmosphere: usually_lively
+  noise: loud
+  alcohol: central
+
+- id: la-lanchetta
+  name: La Lanchetta
+  cat: bar
+  osm: n13982530699
+  area: Cassarate, foce
+  desc: Locale sulla foce del Cassarate con tavoli vicino al lago, dal caffè al drink serale.
+  tags: [lago, dehors, aperitivo]
+  moods: [chill, lively, views]
+  visit: [30, 60, 120]
+  meal: any
+  hours: osm
+  prices: bar
+  booking: no
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, date, leisure, birthday]
+  weather: any
+  atmosphere: varies
+  noise: moderate
+  alcohol: available
+
+- id: pane-e-zucchero
+  name: Pane e Zucchero
+  cat: cafe
+  osm: n2288142607
+  area: Cassarate
+  desc: Caffè-bar di Cassarate aperto dalla colazione alla sera, con gelati.
+  tags: [caffè, gelato, sera]
+  moods: [chill, lively]
+  visit: [20, 45, 90]
+  meal: snack
+  hours: osm
+  prices: cafe
+  booking: no
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, date, family, leisure]
+  weather: any
+  noise: moderate
+  alcohol: available
+
+- id: breva
+  name: Breva
+  cat: restaurant
+  osm: n4760805623
+  area: Cassarate
+  desc: Pizzeria-ristorante a Cassarate, a pochi passi dal lago.
+  tags: [pizza, cena]
+  moods: [food, lively]
+  visit: [45, 70, 100]
+  meal: any
+  hours: osm
+  prices: pizzeria
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, family, birthday, leisure]
+  weather: any
+  noise: moderate
+  alcohol: available
+
+- id: locanda-gandriese
+  name: Locanda Gandriese
+  cat: restaurant
+  osm: n826761117
+  area: Gandria
+  desc: Ristorante nel nucleo di Gandria con terrazza sul lago e cucina locale.
+  tags: [lago, terrazza, ticinese, vegetariano]
+  moods: [food, romantic, views]
+  visit: [50, 75, 110]
+  meal: any
+  hours: osm
+  prices: osteria
+  booking: recommended
+  access: { wheelchair: osm, stroller: no, stairs: some }
+  occ: [date, friends, guests, family]
+  weather: any
+  noise: quiet
+  alcohol: available
+  diet: [vegetarian]
+
+- id: bucce-di-gandria
+  name: Le Bucce di Gandria
+  cat: restaurant
+  osm: n823042658
+  area: Gandria
+  desc: Cucina ticinese creativa in una casa del borgo affacciata sul lago.
+  tags: [ticinese, lago, cena]
+  moods: [food, romantic]
+  visit: [60, 90, 120]
+  meal: any
+  hours: osm
+  prices: osteria
+  booking: recommended
+  access: { wheelchair: osm, stroller: no, stairs: some }
+  occ: [date, guests, birthday]
+  weather: any
+  noise: quiet
+  alcohol: available
+
+- id: bottega-gandria
+  name: Bar La Bottega di Gandria
+  cat: cafe
+  osm: n9862964252
+  area: Gandria
+  desc: Piccolo bar del borgo per un caffè o un bicchiere guardando il lago.
+  tags: [caffè, lago, pausa]
+  moods: [chill, views]
+  visit: [15, 30, 60]
+  meal: snack
+  hours: osm
+  prices: cafe
+  booking: no
+  access: { wheelchair: unknown, stroller: no, stairs: some }
+  occ: [date, friends, guests, leisure]
+  weather: any
+  noise: quiet
+  alcohol: available
+
+- id: unerge
+  name: Unerge
+  cat: nightlife
+  osm: n373008087
+  area: Centro
+  desc: Discoteca del centro aperta fino a tardi nei fine settimana.
+  tags: [discoteca, notte, ballare]
+  moods: [lively]
+  visit: [90, 150, 240]
+  minAge: 18
+  hours: osm
+  prices:
+    - { label: "Ingresso e consumazione", min: 15, max: 35, unit: person, status: estimate }
+  booking: no
+  access: { wheelchair: unknown, stroller: no, stairs: unknown }
+  occ: [friends, birthday]
+  weather: any
+  indoor: true
+  atmosphere: usually_lively
+  noise: loud
+  alcohol: central
+
+- id: grotto-rialdo
+  name: Grotto Rialdo (Campione d'Italia)
+  cat: restaurant
+  osm: n12091331856
+  area: Campione d'Italia (IT)
+  desc: Locale serale a Campione d'Italia, enclave italiana sulla sponda opposta.
+  tags: [cena, italia, sera]
+  moods: [food, lively]
+  visit: [60, 90, 120]
+  meal: dinner
+  hours: osm
+  prices: pizzeria
+  booking: recommended
+  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  occ: [friends, date]
+  weather: any
+  noise: moderate
+  alcohol: available
+
+- id: madonna-ghirli
+  name: Santuario della Madonna dei Ghirli
+  cat: church
+  osm: w186808753
+  area: Campione d'Italia (IT)
+  desc: Santuario affrescato affacciato sul lago a Campione d'Italia, con una scalinata monumentale.
+  tags: [chiesa, arte, lago, italia]
+  moods: [cultural, views]
+  visit: [15, 30, 45]
+  hours: unknown
+  prices: free
+  booking: no
+  access: { wheelchair: unknown, stroller: limited, stairs: many }
+  occ: [sightseeing, guests, date]
+  weather: any
+  noise: quiet

@@ -1,0 +1,15 @@
+import { readFileSync } from 'node:fs';
+import { TransitNetwork } from '../../src/server/routing/transit.ts';
+import { localToInstant } from '../../src/shared/time.ts';
+import { DateTime } from 'luxon';
+const tn = new TransitNetwork(JSON.parse(readFileSync('data/build/transit.json', 'utf8')));
+const idx = (name: string) => tn.d.stops.map((s, i) => [s, i] as const).filter(([s]) => s.name === name).map(([s, i]) => ({ i, id: s.id, wn: s.walkNode, lat: s.lat, lon: s.lon }));
+console.log('Cassarate', idx('Cassarate'));
+console.log('Suvigliana', idx('Suvigliana'));
+console.log('Monte Brè', idx('Monte Brè'));
+const fp = tn.d.footpaths.filter(([a, b]) => idx('Suvigliana').some((x) => x.i === a) && idx('Suvigliana').some((x) => x.i === b));
+console.log('footpaths Suvigliana', fp);
+const from = idx('Cassarate')[0].i;
+const t = localToInstant('2026-10-02', '10:00').toMillis();
+const res = tn.csa([{ stop: from, at: t }], t, { modes: new Set(['funicular', 'bus'] as any), minChangeSec: 120, maxDurationSec: 7200 });
+for (const s of [...idx('Suvigliana'), ...idx('Monte Brè')]) console.log(s.i, DateTime.fromMillis(res.arrival[s.i]).setZone('Europe/Zurich').toFormat('HH:mm'), res.via[s.i]);
