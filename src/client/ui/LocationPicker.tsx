@@ -64,7 +64,7 @@ export default function LocationPicker({ value, onChange, id, allowSensitive = t
         {QUICK.map((l) => <button type="button" key={l.label} className={`chip ${value?.label === l.label ? 'on' : ''}`} onClick={() => onChange(l)}>{l.label}</button>)}
       </div>
       <div className="loc-search">
-        <input id={id} type="search" placeholder="Cerca luogo, fermata o indirizzo…" value={q} onChange={(e) => setQ(e.target.value)} aria-autocomplete="list" aria-controls={`${id}-list`} autoComplete="off" />
+        <input id={id} type="search" placeholder="Cerca luogo, fermata o indirizzo…" value={q} onChange={(e) => setQ(e.target.value)} aria-autocomplete="list" aria-controls={results.length ? `${id}-list` : undefined} autoComplete="off" />
         {results.length ? (
           <ul className="loc-results" id={`${id}-list`} role="listbox">
             {results.map((r) => (

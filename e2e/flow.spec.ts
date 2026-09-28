@@ -160,8 +160,12 @@ test('senza WebGL: vista semplificata con le stesse informazioni', async ({ page
   await expect(page.locator('.text-state')).toBeVisible();
 });
 
-test('siamo in giro adesso: il giorno dell\'uscita si ricalcola il resto senza le tappe fatte', async ({ page, request }) => {
+test('siamo in giro adesso: il giorno dell\'uscita si ricalcola il resto senza le tappe fatte', async ({ page, context, request }) => {
+  test.setTimeout(240_000);
   const meta = await (await request.get('/api/meta')).json();
+  // posizione concessa: si riparte da Piazza della Riforma
+  await context.grantPermissions(['geolocation']);
+  await context.setGeolocation({ latitude: 46.0045, longitude: 8.9517 });
   // orologio del browser fissato al mattino del giorno del programma, prima della partenza dell'idea
   // (fuso di Zurigo): dopo l'ora di partenza le idee propongono il giorno seguente
   await page.clock.setFixedTime(new Date(`${meta.today}T09:05:00+02:00`));
