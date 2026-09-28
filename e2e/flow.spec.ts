@@ -60,8 +60,14 @@ test('flusso principale: modulo → proposte → simulazione → decisione → r
   const other = await browser.newPage();
   await other.goto(link);
   await expect(other.locator('.share-view')).toBeVisible();
+  await other.getByLabel('Nome (facoltativo)').fill('Sara');
+  await other.getByLabel('Commento breve (facoltativo)').fill('Questa mi piace, rientro comodo');
   await other.locator('.share-view .alt-card').first().getByRole('button', { name: /Voto/ }).click();
   await expect(other.locator('.toast')).toContainText('Voto registrato');
+  await expect(other.locator('.share-view .alt-card').first()).toContainText('in testa');
+  await expect(other.locator('.vote-comment').first()).toContainText('rientro comodo');
+  await expect(other.locator('.vote-comment').first()).toContainText('Sara');
+  await expect(other.getByRole('button', { name: 'Il vostro voto (1)' })).toBeVisible();
   // revoca
   await page.locator('.share-list').getByRole('button', { name: 'revoca' }).first().click();
   await expect(page.locator('.toast')).toContainText('revocato');

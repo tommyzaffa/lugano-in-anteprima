@@ -8,7 +8,7 @@ Esito al 28 settembre 2026 su MacBook Pro (Apple M3 Pro), macOS 26, Node 24.8, C
 npm test
 ```
 
-**77 test, tutti superati** (Vitest, fuso del processo impostato su `America/New_York` per dimostrare l'indipendenza dal fuso della macchina).
+**80 test, tutti superati** (Vitest, fuso del processo impostato su `America/New_York` per dimostrare l'indipendenza dal fuso della macchina).
 
 | File | Cosa verifica |
 |---|---|
@@ -20,6 +20,7 @@ npm test
 | `tests/ai.test.ts` (1) | fornitore AI **simulato** (nessuna chiamata di rete): proposte con identificativi inesistenti scartate con avviso, piani etichettati «AI live» solo se nati dalla proposta AI e comunque ricalcolati e verificati dal motore |
 | `tests/fares.test.ts` (6) | listini ufficiali delle funicolari (ragazzi, gratuità, metà prezzo/AG, Ticino Ticket), **andata e ritorno** quando si sale e si scende, prima e seconda sezione del Monte Brè in un solo biglietto; prezzi dei luoghi per fasce d'età senza doppi conteggi |
 | `tests/planb.test.ts` (3) | piano B meteo: una voce per ogni tappa all'aperto; alternative al coperto, fuori dal programma, entro 25 minuti a piedi sulla rete reale, **aperte secondo il calendario** o dichiarate «orari da verificare», costo sconosciuto mai zero; in montagna ricerca in basso; filtro passeggino |
+| `tests/api.test.ts` (3) | API HTTP con database in memoria: salvataggio con token personale, link condiviso **oscurato anche nei piani annidati delle decisioni** (nomi, etichette e coordinate della partenza privata), voto con nome e commento ripuliti e troncati, voto modificabile senza doppi conteggi, riepilogo dei voti per il proprietario, revoca, pannello protetto, date inesistenti rifiutate con 400 |
 | `tests/editorial.test.ts` (5) | modifiche editoriali: applicazione validata con nuova versione del catalogo, **conflitto** quando il dato di base cambia dopo la modifica, modifica non valida ignorata e segnalata, luogo sparito segnalato, luogo nascosto tolto dal catalogo pubblicato |
 
 ### Scenari di accettazione (§17)
@@ -78,7 +79,7 @@ Schermate controllate durante lo sviluppo con Chrome headless (script `scripts/d
 
 Contrasto (WCAG 2.1 AA, testo normale ≥ 4,5:1), calcolato sui colori del foglio di stile: testo 13,4:1, testo secondario 6,7:1, testo attenuato 4,6:1, stati «ok/attenzione/errore» dei badge ≥ 4,6:1, link 4,6:1, testo bianco sul pulsante principale 4,7:1. Il grigio attenuato, il verde, l'ambra, il blu lago e il terracotta sono stati scuriti di poco dopo la misura (erano fra 3,4 e 4,4:1).
 
-Difetti trovati e corretti con queste verifiche: barra superiore che sbordava sotto i 400 px (la griglia si allargava al contenuto), camera bloccata dai limiti della mappa che lasciava Lugano sotto il foglio inferiore su telefono, richieste di tile del terreno inesistenti ai bordi (curve di livello), marcatori dei personaggi incolonnati (CSS che annullava il posizionamento di MapLibre), limitatore di richieste applicato anche ai tile, espressioni di stile non valide (zoom dentro `match`), dialoghi sotto la barra dei comandi, camera che non seguiva il gruppo durante i salti, contesto WebGL segnalato come perso alla chiusura della mappa, glifi mancanti serviti come HTML.
+Difetti trovati e corretti con queste verifiche: link condiviso che conservava nomi e coordinate della partenza privata dentro le decisioni pre-calcolate; cartolina che fotografava il tragitto da un indirizzo privato; data inesistente che causava un errore 500; barra superiore che sbordava sotto i 400 px (la griglia si allargava al contenuto), camera bloccata dai limiti della mappa che lasciava Lugano sotto il foglio inferiore su telefono, richieste di tile del terreno inesistenti ai bordi (curve di livello), marcatori dei personaggi incolonnati (CSS che annullava il posizionamento di MapLibre), limitatore di richieste applicato anche ai tile, espressioni di stile non valide (zoom dentro `match`), dialoghi sotto la barra dei comandi, camera che non seguiva il gruppo durante i salti, contesto WebGL segnalato come perso alla chiusura della mappa, glifi mancanti serviti come HTML.
 
 ## Prestazioni misurate
 

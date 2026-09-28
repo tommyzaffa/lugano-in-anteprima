@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useApp, useSim } from '../store.ts';
 import { get, send, ApiError } from '../api.ts';
 import { Badge, Empty, Spinner } from './common.tsx';
@@ -123,34 +123,71 @@ export function About() {
 }
 
 /** Vista condivisa (/s/:token): sola lettura, dettagli personali già rimossi dal server, voto facoltativo. */
+interface VoteComment { optionId: string; name: string | null; comment: string; at: string }
+
 export function ShareView({ token }: { token: string }) {
   const [data, setData] = useState<any>(null);
   const [err, setErr] = useState<string | null>(null);
   const [tally, setTally] = useState<Record<string, number> | null>(null);
+  const [comments, setComments] = useState<VoteComment[]>([]);
+  const [mine, setMine] = useState<{ optionId: string; name: string; comment: string } | null>(null);
+  const [name, setName] = useState('');
+  const [comment, setComment] = useState('');
   const set = useApp((s) => s.set);
+  const voter = useMemo(() => { try { let v = localStorage.getItem('lia.voter'); if (!v) { v = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('lia.voter', v); } return v; } catch { return 'anon-' + Math.random().toString(36).slice(2) + Date.now().toString(36); } }, []);
   useEffect(() => {
-    get<any>(`/api/share/${token}`).then((d) => { setData(d); setTally(d.tally); if (d.alternatives?.length) set({ result: { alternatives: d.alternatives, understood: [], notices: [], plannerSource: d.alternatives[0].plannerSource }, selected: 0 }); }).catch((e) => setErr(e.message));
-  }, [token, set]);
-  const voter = (() => { try { let v = localStorage.getItem('lia.voter'); if (!v) { v = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('lia.voter', v); } return v; } catch { return 'anon-' + Date.now(); } })();
+    get<any>(`/api/share/${token}?voter=${encodeURIComponent(voter)}`).then((d) => {
+      setData(d); setTally(d.tally); setComments(d.comments ?? []); setMine(d.myVote ?? null);
+      if (d.myVote) { setName(d.myVote.name ?? ''); setComment(d.myVote.comment ?? ''); }
+      if (d.alternatives?.length) set({ result: { alternatives: d.alternatives, understood: [], notices: [], plannerSource: d.alternatives[0].plannerSource }, selected: 0 });
+    }).catch((e) => setErr(e.message));
+  }, [token, set, voter]);
   const vote = async (optionId: string) => {
-    try { const r = await send<{ tally: Record<string, number> }>('POST', `/api/share/${token}/vote`, { voter, optionId }); setTally(r.tally); useApp.getState().notify('Voto registrato. Potete cambiarlo quando volete.', 'ok'); }
-    catch (e) { useApp.getState().notify((e as Error).message, 'error'); }
+    try {
+      const r = await send<{ tally: Record<string, number>; comments: VoteComment[]; myVote: any }>('POST', `/api/share/${token}/vote`, { voter, optionId, name, comment });
+      setTally(r.tally); setComments(r.comments); setMine(r.myVote);
+      useApp.getState().notify('Voto registrato. Potete cambiarlo quando volete.', 'ok');
+    } catch (e) { useApp.getState().notify((e as Error).message, 'error'); }
   };
   if (err) return <div className="share-view"><h2>Link non disponibile</h2><div className="notice bad">{err}</div></div>;
   if (!data) return <Spinner />;
+  const letter = (id: string) => String.fromCharCode(65 + Math.max(0, data.alternatives.findIndex((p: Plan) => p.id === id)));
+  const total = Object.values(tally ?? {}).reduce((a: number, b) => a + (b as number), 0);
+  const max = Math.max(0, ...Object.values(tally ?? {}).map(Number));
+  const leaders = Object.entries(tally ?? {}).filter(([, n]) => n === max && max > 0).map(([id]) => id);
   return (
     <div className="share-view">
       <h2>{data.title}</h2>
       <p className="hint">Proposta condivisa con «Lugano in anteprima». Alcuni dettagli personali possono essere stati nascosti da chi l'ha creata.</p>
+      {data.allowVotes ? (
+        <div className="vote-box">
+          <p><strong>Votate la vostra preferita.</strong> {total ? `${total} ${total === 1 ? 'voto' : 'voti'} finora${leaders.length === 1 ? `: in testa la proposta ${letter(leaders[0])}` : leaders.length > 1 ? `: parità fra ${leaders.map(letter).join(' e ')}` : ''}.` : 'Nessun voto finora.'}</p>
+          <div className="row wrap">
+            <label>Nome (facoltativo) <input value={name} maxLength={30} onChange={(e) => setName(e.target.value)} placeholder="es. Sara" /></label>
+            <label className="grow">Commento breve (facoltativo) <input value={comment} maxLength={140} onChange={(e) => setComment(e.target.value)} placeholder="es. meglio se rientriamo presto" /></label>
+          </div>
+          <p className="hint">Nome e commento sono visibili a chi ha il link. Non scrivete dati personali.</p>
+        </div>
+      ) : null}
       <ul className="alt-cards">
-        {data.alternatives.map((p: Plan, i: number) => (
-          <li key={p.id} className="alt-card" onMouseEnter={() => set({ selected: i })}>
-            <div className="alt-top"><span className="alt-letter">{String.fromCharCode(65 + i)}</span><h3>{p.title}</h3></div>
-            <p className="alt-summary">{p.summary}</p>
-            <ol className="alt-stops">{p.stops.map((s) => <li key={s.id}><span className="muted">{hhmm(s.start)}</span> {s.name}</li>)}</ol>
-            {data.allowVotes ? <button className="btn" onClick={() => void vote(p.id)}>Voto questa{tally?.[p.id] ? ` (${tally[p.id]})` : ''}</button> : null}
-          </li>
-        ))}
+        {data.alternatives.map((p: Plan, i: number) => {
+          const n = tally?.[p.id] ?? 0;
+          const lead = leaders.length === 1 && leaders[0] === p.id;
+          return (
+            <li key={p.id} className={`alt-card ${lead ? 'leading' : ''} ${mine?.optionId === p.id ? 'my-vote' : ''}`} onMouseEnter={() => set({ selected: i })} onFocus={() => set({ selected: i })} onClick={() => set({ selected: i })}>
+              <div className="alt-top"><span className="alt-letter">{String.fromCharCode(65 + i)}</span><h3>{p.title}</h3>{lead ? <Badge kind="ok">in testa</Badge> : null}</div>
+              <p className="alt-summary">{p.summary}</p>
+              <ol className="alt-stops">{p.stops.map((s) => <li key={s.id}><span className="muted">{hhmm(s.start)}</span> {s.name}</li>)}</ol>
+              {data.allowVotes ? (
+                <>
+                  {total ? <div className="vote-bar" aria-label={`${n} voti su ${total}`}><span style={{ width: `${Math.round((n / total) * 100)}%` }} /></div> : null}
+                  <button className={mine?.optionId === p.id ? 'btn primary' : 'btn'} onClick={() => void vote(p.id)} aria-pressed={mine?.optionId === p.id}>{mine?.optionId === p.id ? `Il vostro voto (${n})` : `Voto questa${n ? ` (${n})` : ''}`}</button>
+                  {comments.filter((c) => c.optionId === p.id).map((c, k) => <blockquote key={k} className="vote-comment">«{c.comment}»{c.name ? <span className="muted"> — {c.name}</span> : null}</blockquote>)}
+                </>
+              ) : null}
+            </li>
+          );
+        })}
       </ul>
       <button className="btn-ghost" onClick={() => { set({ view: 'home' }); history.pushState(null, '', '/'); }}>Crea il vostro programma</button>
     </div>

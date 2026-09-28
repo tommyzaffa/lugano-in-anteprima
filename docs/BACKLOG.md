@@ -21,7 +21,7 @@ Separato da ciò che è già implementato (in fondo).
 12. **Lingue**: inglese e tedesco completi (dizionari e contenuti del catalogo).
 13. **Accessibilità**: dati di accessibilità delle fermate (BAV/SBB) e degli ingressi — il meccanismo c'è (`data/catalog/stop-access.yaml`, oggi con la stazione di Melide, fonte ufficiale); servono i dati completi delle FFS/UFT; percorsi per sedia a rotelle con pendenze misurate.
 14. ~~Vista eventi sulla mappa~~ — fatto: segnaposti, filtri per giorno e categoria, ricerca, giornata costruita attorno a un evento.
-15. **Voto degli amici** con proposta vincente evidenziata e commenti brevi.
+15. ~~Voto degli amici con proposta in testa e commenti brevi~~ — fatto (nome facoltativo, commento ≤ 140 caratteri visibile a chi ha il link, riepilogo per chi l'ha creato). Resta: moderazione dei commenti da parte del creatore.
 16. **Modalità «siamo già qui» nella simulazione**: ricalcolo da posizione GPS reale e ora attuale durante l'uscita, non solo dal modulo.
 17. **Personaggi**: più pose e animazioni (seduti al ristorante, foto al belvedere) e folla decorativa dichiarata.
 

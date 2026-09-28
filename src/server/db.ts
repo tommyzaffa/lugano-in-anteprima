@@ -50,6 +50,10 @@ export function openDb(path: string) {
       source_id TEXT PRIMARY KEY, checked_at TEXT NOT NULL, status TEXT NOT NULL, detail TEXT
     );
   `);
+  // migrazione: nome facoltativo e commento breve con il voto
+  const voteCols = (db.prepare('PRAGMA table_info(votes)').all() as any[]).map((c) => c.name);
+  if (!voteCols.includes('name')) db.exec('ALTER TABLE votes ADD COLUMN name TEXT');
+  if (!voteCols.includes('comment')) db.exec('ALTER TABLE votes ADD COLUMN comment TEXT');
   const now = () => new Date().toISOString();
   const day = () => now().slice(0, 10);
   const id = (n = 12) => randomBytes(n).toString('base64url');
@@ -98,8 +102,17 @@ export function openDb(path: string) {
     revokeShare(token: string) {
       return db.prepare('UPDATE shares SET revoked_at = ? WHERE token = ? AND revoked_at IS NULL').run(now(), token).changes > 0;
     },
-    vote(token: string, voter: string, optionId: string) {
-      db.prepare('INSERT INTO votes (share_token, voter, option_id, created_at) VALUES (?, ?, ?, ?) ON CONFLICT(share_token, voter) DO UPDATE SET option_id = excluded.option_id, created_at = excluded.created_at').run(token, voter, optionId, now());
+    vote(token: string, voter: string, optionId: string, name?: string | null, comment?: string | null) {
+      db.prepare('INSERT INTO votes (share_token, voter, option_id, created_at, name, comment) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(share_token, voter) DO UPDATE SET option_id = excluded.option_id, created_at = excluded.created_at, name = excluded.name, comment = excluded.comment').run(token, voter, optionId, now(), name ?? null, comment ?? null);
+    },
+    /** commenti visibili a chi ha il link: mai l'identificativo del votante */
+    voteComments(token: string) {
+      return (db.prepare("SELECT option_id, name, comment, created_at FROM votes WHERE share_token = ? AND comment IS NOT NULL AND comment != '' ORDER BY created_at DESC LIMIT 50").all(token) as any[])
+        .map((r) => ({ optionId: r.option_id, name: r.name ?? null, comment: r.comment, at: r.created_at }));
+    },
+    myVote(token: string, voter: string) {
+      const r = db.prepare('SELECT option_id, name, comment FROM votes WHERE share_token = ? AND voter = ?').get(token, voter) as any;
+      return r ? { optionId: r.option_id, name: r.name ?? '', comment: r.comment ?? '' } : null;
     },
     tally(token: string) {
       return Object.fromEntries((db.prepare('SELECT option_id, COUNT(*) AS n FROM votes WHERE share_token = ? GROUP BY option_id').all(token) as any[]).map((r) => [r.option_id, r.n]));

@@ -75,8 +75,12 @@ export function redactPlan(plan: Plan, r: Redaction): Plan {
   }
   if (r.hideNames) {
     req.people = req.people.map((x, i) => ({ ...x, name: `Persona ${i + 1}` }));
-    p.narrative.lines = p.narrative.lines.map((l) => { const i = plan.request.people.findIndex((x) => x.name === l.speaker); return { ...l, speaker: i >= 0 ? `Persona ${i + 1}` : l.speaker }; });
+    // anche i nomi citati nelle battute (solo parole intere: «Clinica S. Anna» resta il nome di una fermata)
+    const rename = (t: string) => plan.request.people.reduce((acc, x, i) => (x.name.trim().length > 1 ? acc.replace(new RegExp(`(^|[^\\p{L}])${x.name.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\p{L}])`, 'gu'), `$1Persona ${i + 1}`) : acc), t);
+    p.narrative.lines = p.narrative.lines.map((l) => { const i = plan.request.people.findIndex((x) => x.name === l.speaker); return { ...l, speaker: i >= 0 ? `Persona ${i + 1}` : l.speaker, text: rename(l.text) }; });
   }
+  // le decisioni pre-validate contengono piani completi: vanno oscurati allo stesso modo
+  p.decisions = p.decisions.map((d) => ({ ...d, options: d.options.map((o) => (o.plan ? { ...o, plan: redactPlan(o.plan, r) } : o)) }));
   if (r.hideNeeds) {
     req.mobility = { stroller: false, wheelchair: false, avoidStairs: false, frequentBreaks: false };
     req.diet = [];

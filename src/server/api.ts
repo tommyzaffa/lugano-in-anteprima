@@ -38,6 +38,10 @@ function limited(c: Context, key: string, perMinute: number): boolean {
   return false;
 }
 
+/** Data nel formato AAAA-MM-GG ed esistente nel calendario (2026-13-45 non lo è). */
+const isDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s) && DateTime.fromISO(s, { zone: TZ }).isValid;
+const badDate = (c: Context) => c.json({ error: 'invalid_date', message: 'Data non valida: usare il formato AAAA-MM-GG.' }, 400);
+
 export function createApi(data: DataStore, db: Db) {
   const app = new Hono();
 
@@ -77,8 +81,10 @@ export function createApi(data: DataStore, db: Db) {
   // ---------------------------------------------------------------- catalogo ed esplorazione
   app.get('/api/places', (c) => {
     const qd = c.req.query('date');
-    const date = qd && /^\d{4}-\d{2}-\d{2}$/.test(qd) ? qd : DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd');
+    if (qd && !isDate(qd)) return badDate(c);
+    const date = qd || DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd');
     const from = c.req.query('from'), to = c.req.query('to');
+    if ((from && !DateTime.fromISO(from, { zone: TZ }).isValid) || (to && !DateTime.fromISO(to, { zone: TZ }).isValid)) return badDate(c);
     const f = from ? DateTime.fromISO(from, { zone: TZ }) : null;
     const t = to ? DateTime.fromISO(to, { zone: TZ }) : null;
     const places = [...data.places.values()].map((p) => {
@@ -103,7 +109,8 @@ export function createApi(data: DataStore, db: Db) {
     const p = data.place(c.req.param('id'));
     if (!p) return c.json({ error: 'not_found', message: 'Luogo non trovato' }, 404);
     const q = c.req.query('date');
-    const date = q && /^\d{4}-\d{2}-\d{2}$/.test(q) ? q : DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd');
+    if (q && !isDate(q)) return badDate(c);
+    const date = q || DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd');
     const week = Array.from({ length: 7 }, (_, i) => {
       const d = DateTime.fromISO(date, { zone: TZ }).plus({ days: i }).toFormat('yyyy-MM-dd');
       return { date: d, schedules: p.schedules.map((s) => ({ kind: s.kind, text: describeDay(s, d) })) };
@@ -121,8 +128,11 @@ export function createApi(data: DataStore, db: Db) {
   });
 
   app.get('/api/events', (c) => {
-    const from = DateTime.fromISO(c.req.query('from') ?? DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd'), { zone: TZ }).startOf('day');
-    const days = Math.min(31, Number(c.req.query('days') ?? 7));
+    const qf = c.req.query('from');
+    if (qf && !isDate(qf)) return badDate(c);
+    const from = DateTime.fromISO(qf ?? DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd'), { zone: TZ }).startOf('day');
+    const qdays = Number(c.req.query('days') ?? 7);
+    const days = Number.isFinite(qdays) ? Math.max(0, Math.min(31, Math.floor(qdays))) : 7;
     const occ = data.occurrences(from, from.plus({ days }).endOf('day')).map((o) => {
       const pl = data.place(o.placeId);
       return { ...o, placeName: pl?.name, lon: pl?.entrance.lon ?? pl?.lon, lat: pl?.entrance.lat ?? pl?.lat, category: data.events.get(o.eventId)?.category, description: data.events.get(o.eventId)?.description };
@@ -266,7 +276,7 @@ export function createApi(data: DataStore, db: Db) {
   });
   app.get('/api/plans/:id/shares', (c) => {
     if (!db.checkEdit(c.req.param('id'), c.req.header('x-edit-token') ?? '')) return c.json({ error: 'forbidden' }, 403);
-    return c.json({ shares: db.listShares(c.req.param('id')) });
+    return c.json({ shares: db.listShares(c.req.param('id')).map((s) => ({ ...s, tally: s.allowVotes ? db.tally(s.token) : null, comments: s.allowVotes ? db.voteComments(s.token).length : 0 })) });
   });
 
   // ---------------------------------------------------------------- condivisione revocabile e voto
@@ -293,7 +303,8 @@ export function createApi(data: DataStore, db: Db) {
   app.get('/api/share/:token', (c) => {
     const s = db.getShare(c.req.param('token'));
     if (!s || s.revokedAt) return c.json({ error: 'revoked', message: 'Questo link è stato revocato o non esiste.' }, 410);
-    return c.json({ ...s.data, allowVotes: s.allowVotes, tally: s.allowVotes ? db.tally(s.token) : null, redaction: s.redaction });
+    const voter = c.req.query('voter');
+    return c.json({ ...s.data, allowVotes: s.allowVotes, tally: s.allowVotes ? db.tally(s.token) : null, comments: s.allowVotes ? db.voteComments(s.token) : [], myVote: s.allowVotes && voter ? db.myVote(s.token, voter) : null, redaction: s.redaction });
   });
   app.delete('/api/share/:token', (c) => {
     const s = db.getShare(c.req.param('token'));
@@ -305,13 +316,16 @@ export function createApi(data: DataStore, db: Db) {
   app.post('/api/share/:token/vote', async (c) => {
     const s = db.getShare(c.req.param('token'));
     if (!s || s.revokedAt || !s.allowVotes) return c.json({ error: 'forbidden', message: 'Voto non disponibile' }, 403);
-    const b = z.object({ voter: z.string().min(6).max(64), optionId: z.string().max(80) }).safeParse(await c.req.json().catch(() => null));
+    // nome e commento sono facoltativi, brevi e trattati come testo (mai come istruzioni né HTML)
+    const clean = (x: unknown, max: number) => (typeof x === 'string' ? x.replace(/[\u0000-\u001f\u007f<>]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max) : '');
+    const b = z.object({ voter: z.string().min(6).max(64), optionId: z.string().max(80), name: z.string().max(200).optional(), comment: z.string().max(1000).optional() }).safeParse(await c.req.json().catch(() => null));
     if (!b.success) return c.json({ error: 'invalid_request' }, 400);
     const valid = new Set((s.data.alternatives ?? []).map((p: Plan) => p.id));
     if (!valid.has(b.data.optionId)) return c.json({ error: 'invalid_option' }, 400);
-    db.vote(s.token, b.data.voter, b.data.optionId);
+    if (limited(c, 'vote', 30)) return c.json({ error: 'rate_limited', message: 'Troppi voti in poco tempo.' }, 429);
+    db.vote(s.token, b.data.voter, b.data.optionId, clean(b.data.name, 30) || null, clean(b.data.comment, 140) || null);
     db.count('vote');
-    return c.json({ tally: db.tally(s.token) });
+    return c.json({ tally: db.tally(s.token), comments: db.voteComments(s.token), myVote: db.myVote(s.token, b.data.voter) });
   });
 
   // ---------------------------------------------------------------- esportazioni

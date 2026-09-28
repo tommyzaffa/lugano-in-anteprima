@@ -221,13 +221,14 @@ export default function MapView({ onFallback }: Props) {
     planRef.current = plan;
     tlRef.current = plan ? buildTimeline(plan) : null;
     const showPlan = plan && (view === 'sim' || view === 'summary');
-    const preview = !showPlan && (view === 'results') ? result?.alternatives[selected] ?? null : null;
+    // anteprima della proposta selezionata: nei risultati e nella pagina condivisa
+    const preview = !showPlan && (view === 'results' || view === 'share') ? result?.alternatives[selected] ?? null : null;
     const p = showPlan ? plan : preview;
     (map.getSource('route') as GeoJSONSource)?.setData(planRouteGeoJSON(p, showPlan ? useSim.getState().t : null));
     (map.getSource('stops') as GeoJSONSource)?.setData(planStopsGeoJSON(p));
     const cmp = compareBranch ? branches.find((b) => b.id === compareBranch)?.plan : null;
     (map.getSource('alt-route') as GeoJSONSource)?.setData(planRouteGeoJSON(cmp ?? null, null));
-    if (p && (view === 'results' || (view === 'sim' && useSim.getState().t <= Date.parse(p.totals.startsAt)))) {
+    if (p && (view === 'results' || view === 'share' || (view === 'sim' && useSim.getState().t <= Date.parse(p.totals.startsAt)))) {
       const bb = boundsOf(planCoords(p));
       if (bb) map.fitBounds(bb, { padding: fitPadding(), duration: settings.reducedMotion ? 0 : 900, pitch: settings.threeD ? 40 : 0 });
     }

@@ -3,10 +3,12 @@
  * tappe e personaggi. Nessun dettaglio privato (partenza e alloggio esclusi).
  */
 import type { Plan } from '../../shared/types.ts';
-import { getMap, boundsOf, planCoords } from '../map/MapView.tsx';
+import type { GeoJSONSource } from 'maplibre-gl';
+import { getMap, boundsOf, planCoords, planRouteGeoJSON, planStopsGeoJSON } from '../map/MapView.tsx';
+import { redactPlan } from '../../shared/export.ts';
 import { avatarSvg } from '../map/avatars.ts';
 import { hhmm, formatDateIt } from '../../shared/time.ts';
-import { useApp } from '../store.ts';
+import { useApp, useSim } from '../store.ts';
 import { track } from '../api.ts';
 
 function loadImg(src: string): Promise<HTMLImageElement> {
@@ -16,10 +18,19 @@ function loadImg(src: string): Promise<HTMLImageElement> {
 export async function makePostcard(plan: Plan) {
   const map = getMap();
   if (!map) { useApp.getState().notify('Cartolina non disponibile senza mappa.', 'error'); return; }
-  const bb = boundsOf(plan.stops.map((s) => [s.lon, s.lat] as [number, number]).concat(planCoords(plan).filter((_, i) => i % 7 === 0)));
+  // la cartolina si condivide: tragitto da un indirizzo privato e bandierine di partenza/arrivo esclusi
+  const safe = redactPlan(plan, { hideLocations: true, hideNames: false, hideNeeds: false, hideBudget: false });
+  const route = map.getSource('route') as GeoJSONSource | undefined, stops = map.getSource('stops') as GeoJSONSource | undefined;
+  const safeStops = planStopsGeoJSON(safe);
+  safeStops.features = safeStops.features.filter((f) => f.properties?.kind === 'stop');
+  route?.setData(planRouteGeoJSON(safe, null));
+  stops?.setData(safeStops);
+  const bb = boundsOf(safe.stops.map((s) => [s.lon, s.lat] as [number, number]).concat(planCoords(safe).filter((_, i) => i % 7 === 0)));
   if (bb) map.fitBounds(bb, { padding: 60, duration: 0 });
   await new Promise<void>((r) => map.once('idle', () => r()));
   const shot = map.getCanvas().toDataURL('image/png');
+  route?.setData(planRouteGeoJSON(plan, useSim.getState().t));
+  stops?.setData(planStopsGeoJSON(plan));
   const W = 1600, H = 1100;
   const c = document.createElement('canvas');
   c.width = W; c.height = H;
@@ -48,9 +59,9 @@ export async function makePostcard(plan: Plan) {
     g.drawImage(im, x, 760, im.width, im.height);
     x += 40;
   }
-  g.strokeStyle = '#c8643c'; g.lineWidth = 6; g.strokeRect(20, 20, W - 40, H - 40);
+  g.strokeStyle = '#b55a36'; g.lineWidth = 6; g.strokeRect(20, 20, W - 40, H - 40);
   g.font = '15px system-ui, sans-serif'; g.fillStyle = '#5d574c';
-  g.fillText('Lugano in anteprima · mappa © OpenStreetMap contributors · programma simulato', 1110, H - 60);
+  wrap(g, 'Lugano in anteprima · programma simulato · mappa © OpenStreetMap contributors · rilievo swissALTI3D © swisstopo', 1110, H - 110, 420, 22);
   c.toBlob((blob) => {
     if (!blob) return;
     const a = document.createElement('a');

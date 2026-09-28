@@ -47,7 +47,7 @@ export function ShareDialog({ onClose }: { onClose: () => void }) {
   const [red, setRed] = useState<Redaction>(DEFAULT_REDACTION);
   const [votes, setVotes] = useState(true);
   const [link, setLink] = useState<string | null>(null);
-  const [shares, setShares] = useState<{ token: string; createdAt: string; revokedAt: string | null; allowVotes: boolean }[]>([]);
+  const [shares, setShares] = useState<{ token: string; createdAt: string; revokedAt: string | null; allowVotes: boolean; tally?: Record<string, number> | null; comments?: number }[]>([]);
   const savedRef = useApp((s) => s.savedRef);
   const load = async (ref = savedRef) => { if (ref) try { setShares((await get<any>(`/api/plans/${ref.id}/shares`, { headers: { 'x-edit-token': ref.token } })).shares); } catch { /* */ } };
   useEffect(() => { void load(); }, [savedRef]);
@@ -78,7 +78,7 @@ export function ShareDialog({ onClose }: { onClose: () => void }) {
       {shares.length ? (
         <>
           <h4>Link esistenti</h4>
-          <ul className="share-list">{shares.map((s) => <li key={s.token}><code>/s/{s.token.slice(0, 6)}…</code> {new Date(s.createdAt).toLocaleString('it-CH')} {s.revokedAt ? <span className="muted">revocato</span> : <button className="link" onClick={() => void revoke(s.token)}>revoca</button>}</li>)}</ul>
+          <ul className="share-list">{shares.map((s) => <li key={s.token}><code>/s/{s.token.slice(0, 6)}…</code> {new Date(s.createdAt).toLocaleString('it-CH')} {s.tally && Object.keys(s.tally).length ? <span className="muted"> · voti: {Object.values(s.tally as Record<string, number>).reduce((a, b) => a + b, 0)}{s.comments ? `, commenti: ${s.comments}` : ''}</span> : null} {s.revokedAt ? <span className="muted">revocato</span> : <button className="link" onClick={() => void revoke(s.token)}>revoca</button>}</li>)}</ul>
         </>
       ) : null}
     </Modal>
