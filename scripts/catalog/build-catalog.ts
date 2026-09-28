@@ -135,6 +135,8 @@ function buildSchedules(id: string, y: any, tags: Record<string, string>): { sch
     if (!r.ok) throw new Error(`${id}: orario redazionale non valido: ${r.reason}`);
     const s = applyLastEntry(r.schedule, y.lastEntryMin);
     if (y.lastEntryMin) s.evidence.note = `${s.evidence.note ?? ''} · ${y.lastEntryNote ?? ''}`.trim();
+    // periodo di validità dichiarato (es. «dal 21.09 al 04.10.2026»): fuori dal periodo nessuna apertura
+    if (h.valid) for (const rule of s.rules) { rule.validFrom = String(h.valid.from); rule.validTo = String(h.valid.to); }
     // chiusure temporanee dichiarate dal gestore (es. riallestimenti): un'eccezione per ogni giorno
     for (const c of h.closures ?? []) {
       for (let d = DateTime.fromISO(String(c.from)); d <= DateTime.fromISO(String(c.to)); d = d.plus({ days: 1 })) {

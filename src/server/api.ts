@@ -455,9 +455,11 @@ function quickStarts(data: DataStore) {
 function priceHint(p: Place): string {
   if (p.prices.every((x) => x.unit === 'free' || (x.max ?? -1) === 0)) return 'gratuito';
   if (p.prices.some((x) => x.status === 'unknown')) return 'prezzo sconosciuto';
-  const a = p.prices.filter((x) => x.audience !== 'child');
+  const a = p.prices.filter((x) => x.audience !== 'child' && !x.optional);
+  if (!a.length) return 'prezzo sconosciuto';
   const min = Math.min(...a.map((x) => x.min ?? 0)), max = Math.max(...a.map((x) => x.max ?? 0));
-  return `CHF ${min}–${max} a persona (stima)`;
+  const verified = a.every((x) => x.evidence.status === 'verified');
+  return `CHF ${min === max ? min : `${min}–${max}`} a persona${verified ? ' (tariffa ufficiale)' : ' (stima)'}`;
 }
 
 void checkVisit;

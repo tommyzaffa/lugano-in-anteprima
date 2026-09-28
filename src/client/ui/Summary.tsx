@@ -5,7 +5,7 @@ import { fmtRange } from '../../shared/pricing.ts';
 import { describeDay } from '../../shared/calendar.ts';
 import { planToIcs, planToText } from '../../shared/export.ts';
 import { send, track } from '../api.ts';
-import { download, copy, Badge, EvidenceBadge, Spinner } from './common.tsx';
+import { download, copy, Badge, EvidenceBadge, Spinner, SourceLink } from './common.tsx';
 import { LegLine, FeasibilityBadge, SourceBadge, TotalsLine } from './PlanDetail.tsx';
 import { savePlan, ShareDialog } from './SaveShare.tsx';
 import { makePostcard } from './postcard.ts';
@@ -93,7 +93,7 @@ export default function Summary({ planOverride, readOnly }: { planOverride?: Pla
                 <h3>{i + 1}. {s.name} <span className="muted">{hhmm(s.start)}–{hhmm(s.end)}</span></h3>
                 <div className="muted">{CATEGORY[s.category] ?? s.category}{s.kind === 'event' ? ' · evento dimostrativo' : ''}</div>
                 <div>Posizione: <a href={`https://www.openstreetmap.org/?mlat=${s.lat}&mlon=${s.lon}#map=18/${s.lat}/${s.lon}`} target="_blank" rel="noopener noreferrer">{s.lat.toFixed(5)}, {s.lon.toFixed(5)}</a> <span className="muted">(ingresso o punto rappresentativo, fonte OSM)</span></div>
-                {pub ? <div>Orari del giorno: {describeDay(pub, date)} <EvidenceBadge status={pub.evidence.status} />{pub.osmOpeningHours ? <span className="muted"> · fonte: «{pub.osmOpeningHours}»</span> : null}</div> : s.placeId ? <div>Orari: <Badge kind="bad">non disponibili</Badge></div> : null}
+                {pub ? <div>Orari del giorno: {describeDay(pub, date)} <EvidenceBadge status={pub.evidence.status} /><SourceLink evidence={pub.evidence} />{pub.osmOpeningHours ? <span className="muted"> · fonte: «{pub.osmOpeningHours}»</span> : null}</div> : s.placeId ? <div>Orari: <Badge kind="bad">non disponibili</Badge></div> : null}
                 {s.cost.length ? <div>Costi stimati: {s.cost.map((c) => <span key={c.id} className="cost-line">{c.label}: {fmtRange(c.min, c.max)} <EvidenceBadge status={c.evidenceStatus ?? c.status} /></span>)}</div> : null}
                 <PlaceLinks placeId={s.placeId} />
                 {s.checks.filter((c) => c.status !== 'ok').map((c) => <div key={c.id} className="check-line uncertain">? {c.detail}</div>)}

@@ -67,7 +67,7 @@
   tags: [parco, lago, all-aperto, famiglia, passeggino, gratuito]
   moods: [chill, nature, romantic, views]
   visit: [20, 45, 90]
-  hours: { osm: "Mar-Oct: 06:00-23:00; Nov-Feb: 06:00-21:00", status: editorial, note: "Orari stagionali indicativi del parco recintato, da verificare sul sito della Città." }
+  hours: { osm: "Mar-Oct: 06:30-23:30; Nov-Feb: 06:30-21:00", status: verified, url: "https://www.lugano.ch/vivere-lugano/cultura-e-tempo-libero/parchi-aree-gioco/parco-ciani/", checked: 2026-09-28, note: "Estate (marzo–ottobre) lu–do 6.30–23.30, inverno (novembre–febbraio) 6.30–21.00 (lugano.ch)." }
   prices: free
   booking: no
   access: { wheelchair: limited, stroller: yes, stairs: none, note: "Viali in piano; alcuni tratti in ghiaietto (redazione)." }
@@ -210,7 +210,7 @@
   tags: [parco, vista, famiglia, gioco, gratuito]
   moods: [chill, views, nature]
   visit: [20, 40, 60]
-  hours: unknown
+  hours: { osm: "Mar-Oct: 06:30-23:30; Nov-Feb: 06:30-21:00", status: verified, url: "https://www.lugano.ch/vivere-lugano/cultura-e-tempo-libero/parchi-aree-gioco/parco-tassino/", checked: 2026-09-28, note: "Estate (marzo–ottobre) lu–do 6.30–23.30, inverno 6.30–21.00; area giochi per i più piccoli (lugano.ch)." }
   prices: free
   booking: no
   access: { wheelchair: unknown, stroller: limited, stairs: some, note: "Accessi in pendenza dalla stazione." }
@@ -284,10 +284,10 @@
   tags: [lido, lago, estate, famiglia, all-aperto]
   moods: [chill, nature]
   visit: [60, 150, 300]
-  hours: { osm: "May 15-Sep 13: 09:00-19:00", status: editorial, note: "Stagione e orari indicativi, variano ogni anno: da verificare." }
+  hours: { osm: "Mo-Su 10:00-18:00", valid: { from: 2026-09-21, to: 2026-10-04 }, status: verified, url: "https://www.lugano.ch/vivere-lugano/cultura-e-tempo-libero/lidi-e-piscine/lido-lugano.html", checked: 2026-09-28, note: "Dal 21.09 al 04.10.2026 aperta solo la zona spiaggia (balneazione nel lago), 10–18 e solo con bel tempo (lugano.ch). Dopo il 4 ottobre il sito non indica aperture: considerato chiuso." }
   prices:
-    - { label: "Ingresso lido adulti", min: 8, max: 12, unit: person, status: estimate, audience: adult }
-    - { label: "Ingresso lido ragazzi", min: 4, max: 7, unit: person, status: estimate, audience: child, childAgeMax: 15 }
+    - { label: "Ingresso lido adulti", min: 8, max: 12, unit: person, status: estimate, audience: adult, note: "Tariffa non indicata sul sito per l'apertura ridotta di fine stagione: stima." }
+    - { label: "Ingresso lido ragazzi", min: 4, max: 7, unit: person, status: estimate, audience: child, childAgeMax: 15, note: "Stima." }
   booking: no
   access: { wheelchair: osm, stroller: yes, stairs: some }
   occ: [family, friends, leisure]
@@ -422,11 +422,11 @@
   tags: [museo, storia, battello, famiglia]
   moods: [cultural, adventure]
   visit: [30, 45, 75]
-  hours: osm
+  hours: { osm: "Tu-Su 12:00-17:00; Mo off", valid: { from: 2026-04-05, to: 2026-10-18 }, status: verified, url: "https://www.bazg.admin.ch/it/museo-doganale-lugano-visita-informazioni", checked: 2026-09-28, note: "Dal 5 aprile al 18 ottobre 2026, martedì–domenica 12–17; gli orari seguono quelli dei battelli SNL (sito dell'UDSC)." }
   prices:
-    - { label: "Ingresso", min: 0, max: 0, unit: person, status: estimate, note: "Indicato come gratuito dalla redazione, da verificare." }
+    - { label: "Ingresso", min: 0, max: 0, unit: person, status: known, url: "https://www.bazg.admin.ch/it/museo-doganale-lugano-visita-informazioni", checked: 2026-09-28, note: "Ingresso gratuito (sito dell'UDSC)." }
   booking: no
-  access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
+  access: { wheelchair: limited, stroller: unknown, stairs: unknown, url: "https://www.bazg.admin.ch/it/museo-doganale-lugano-visita-informazioni", checked: 2026-09-28, note: "Edificio storico del 1853 raggiungibile solo in battello, senza infrastrutture adeguate per persone con disabilità; il personale dichiara di fare il possibile per accogliere chi usa la sedia a rotelle." }
   occ: [family, sightseeing, guests, friends]
   weather: any
   indoor: true
@@ -581,9 +581,9 @@
   tags: [lido, lago, estate]
   moods: [chill, nature]
   visit: [60, 120, 240]
-  hours: unknown
+  hours: { osm: "Mo-Su 09:00-19:30", valid: { from: 2026-05-25, to: 2026-09-20 }, status: verified, url: "https://www.lugano.ch/vivere-lugano/cultura-e-tempo-libero/lidi-e-piscine/lido-san-domenico.html", checked: 2026-09-28, note: "Stagione 2026 dal 25 maggio al 20 settembre, lu–do 9.00–19.30 (lugano.ch)." }
   prices:
-    - { label: "Ingresso", unit: person, status: unknown }
+    - { label: "Ingresso adulti", min: 7, max: 7, unit: person, audience: adult, status: known, url: "https://www.lugano.ch/vivere-lugano/cultura-e-tempo-libero/lidi-e-piscine/lido-san-domenico.html", checked: 2026-09-28, note: "Entrata singola adulti (lugano.ch); altre tariffe non riportate." }
   booking: no
   access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
   occ: [family, friends, leisure]
@@ -621,8 +621,9 @@
   tags: [museo, montagna]
   moods: [cultural]
   visit: [20, 30, 45]
-  hours: osm
-  prices: free
+  hours: { osm: "Mo-Su 10:00-12:00,13:00-15:00", valid: { from: 2026-03-14, to: 2026-11-08 }, status: verified, url: "https://www.montesansalvatore.ch/en/culture/museum/", checked: 2026-09-28, note: "10–12 e 13–15, aperto solo quando la funicolare è in servizio (stagione 14.03–08.11.2026)." }
+  prices:
+    - { label: "Ingresso (compreso nel biglietto della funicolare)", min: 0, max: 0, unit: person, status: known, url: "https://www.montesansalvatore.ch/en/culture/museum/", checked: 2026-09-28, note: "Con un biglietto valido della funicolare l'ingresso è compreso." }
   booking: no
   access: { wheelchair: osm, stroller: unknown, stairs: unknown }
   occ: [sightseeing, family, guests]
@@ -640,8 +641,10 @@
   moods: [food, views, romantic]
   visit: [45, 75, 100]
   meal: any
-  hours: unknown
-  prices: osteria
+  hours: { osm: "Mar 14-Mar 28: 09:00-17:00; Mar 29-Jul 02: 09:00-18:00; Jul 03-Aug 29: 09:00-22:30; Aug 30-Oct 24: 09:00-18:00; Oct 25-Nov 08: 09:00-17:00", valid: { from: 2026-03-14, to: 2026-11-08 }, status: verified, url: "https://www.montesansalvatore.ch/en/portfolio/ristorante-vetta/", checked: 2026-09-28, note: "Segue gli orari della funicolare (stagione 2026 e orario della funicolare sul sito ufficiale); aperture serali estive non più in calendario." }
+  prices:
+    - { label: "Pasto (fascia osteria/ristorante)", min: 35, max: 65, unit: person, audience: adult, status: estimate, note: "Fascia indicativa per categoria. Offerta ufficiale: funicolare andata e ritorno + piatto del giorno CHF 38 (solo a pranzo)." }
+    - { label: "Pasto (bambini)", min: 15, max: 30, unit: person, audience: child, childAgeMax: 11, status: estimate, note: "Fascia indicativa per categoria." }
   booking: recommended
   access: { wheelchair: unknown, stroller: unknown, stairs: unknown }
   occ: [date, guests, friends, family]

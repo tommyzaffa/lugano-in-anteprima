@@ -167,7 +167,8 @@ export function describeDay(s: OpeningSchedule, date: string): string {
   if (!ivs.length) {
     const why = s.exceptions.find((e) => e.date === date && e.closed && e.note)?.note;
     if (why) return `Chiuso (${why})`;
-    const hol = holidayName(date);
+    // il nome della festività spiega la chiusura solo se l'orario dichiara i festivi chiusi
+    const hol = s.holidays === 'closed' ? holidayName(date) : null;
     return hol ? `Chiuso (${hol})` : 'Chiuso';
   }
   return ivs.map((i) => `${i.start.toFormat('HH:mm')}–${i.end.toFormat('HH:mm')}${i.end.toFormat('yyyy-MM-dd') !== date ? ' (+1)' : ''}${i.lastEntry ? ` · ultimo ingresso ${i.lastEntry.toFormat('HH:mm')}` : ''}`).join(', ');

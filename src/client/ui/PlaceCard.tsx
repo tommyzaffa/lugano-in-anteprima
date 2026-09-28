@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useApp } from '../store.ts';
 import { get, send } from '../api.ts';
-import { Badge, EvidenceBadge, Modal, Spinner } from './common.tsx';
+import { Badge, EvidenceBadge, Modal, Spinner, SourceLink, closureRanges } from './common.tsx';
+
+const fmtDay = (d: string) => new Date(`${d}T12:00:00Z`).toLocaleDateString('it-CH', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 import { CATEGORY } from '../i18n.ts';
 import { fmtRange } from '../../shared/pricing.ts';
 import { hhmm } from '../../shared/time.ts';
@@ -48,13 +50,16 @@ export default function PlaceCard() {
           {p.schedules.length ? (
             <>
               <table className="hours"><tbody>{data.week.map((w: any) => <tr key={w.date}><th scope="row">{new Date(`${w.date}T12:00:00Z`).toLocaleDateString('it-CH', { weekday: 'short', day: 'numeric', month: 'numeric', timeZone: 'UTC' })}</th><td>{w.schedules.map((s: any) => s.text).join(' · ')}</td></tr>)}</tbody></table>
-              <div className="muted">Fonte: <EvidenceBadge status={p.schedules[0].evidence.status} /> {p.schedules[0].evidence.note ?? ''}</div>
+              <div className="muted">Fonte: <EvidenceBadge status={p.schedules[0].evidence.status} /> {p.schedules[0].evidence.note ?? ''}<SourceLink evidence={p.schedules[0].evidence} /></div>
+              {closureRanges(p.schedules[0].exceptions ?? [], new Date().toISOString().slice(0, 10)).map((c) => (
+                <div key={c.from} className="notice warn">Chiusura straordinaria {c.from === c.to ? `il ${fmtDay(c.from)}` : `dal ${fmtDay(c.from)} al ${fmtDay(c.to)}`}: {c.note}</div>
+              ))}
             </>
           ) : <div><Badge kind="bad">orari non disponibili</Badge> <span className="muted">Da verificare sul posto o sul sito ufficiale.</span></div>}
           <h3>Prezzi</h3>
-          <ul className="prices">{p.prices.map((x: any) => <li key={x.id}>{x.label}: {x.status === 'unknown' ? 'sconosciuto' : x.unit === 'free' ? 'gratuito' : `${fmtRange(x.min ?? null, x.max ?? null)}${x.unit === 'person' ? ' a persona' : ' per gruppo'}`} <EvidenceBadge status={x.status === 'known' ? x.evidence.status : x.status} />{x.note ? <span className="muted"> {x.note}</span> : null}</li>)}</ul>
+          <ul className="prices">{p.prices.map((x: any) => <li key={x.id}>{x.label}: {x.status === 'unknown' ? 'sconosciuto' : x.unit === 'free' ? 'gratuito' : `${fmtRange(x.min ?? null, x.max ?? null)}${x.unit === 'person' ? ' a persona' : ' per gruppo'}`} <EvidenceBadge status={x.status === 'known' ? x.evidence.status : x.status} />{x.note ? <span className="muted"> {x.note}</span> : null}<SourceLink evidence={x.evidence} /></li>)}</ul>
           <h3>Accessibilità</h3>
-          <div>Sedia a rotelle: {label3(p.accessibility.wheelchair)} · Passeggino: {label3(p.accessibility.stroller)} · Scale: {({ none: 'nessuna', some: 'alcune', many: 'molte', unknown: 'non note' } as any)[p.accessibility.stairs]} <EvidenceBadge status={p.accessibility.evidence.status} /></div>
+          <div>Sedia a rotelle: {label3(p.accessibility.wheelchair)} · Passeggino: {label3(p.accessibility.stroller)} · Scale: {({ none: 'nessuna', some: 'alcune', many: 'molte', unknown: 'non note' } as any)[p.accessibility.stairs]} <EvidenceBadge status={p.accessibility.evidence.status} /><SourceLink evidence={p.accessibility.evidence} /></div>
           {p.accessibility.note ? <div className="muted">{p.accessibility.note}</div> : null}
           <div className="muted">Un luogo senza dati sulle scale non è considerato accessibile.</div>
           {p.suitability.habitualAtmosphere !== 'unknown' ? <div className="muted">Atmosfera abituale (curata dalla redazione, non affluenza reale): {({ usually_lively: 'di solito animato', usually_quiet: 'di solito tranquillo', varies: 'variabile' } as any)[p.suitability.habitualAtmosphere]}</div> : null}

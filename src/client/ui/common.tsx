@@ -14,6 +14,28 @@ export function EvidenceBadge({ status }: { status?: string }) {
   return <Badge kind={kind as any} title="Stato della verifica del dato">{STATUS[s] ?? s}</Badge>;
 }
 
+/** Link alla fonte ufficiale di un dato verificato, con la data di consultazione. */
+export function SourceLink({ evidence }: { evidence?: { url?: string; lastCheckedAt?: string } }) {
+  if (!evidence?.url) return null;
+  let host = evidence.url;
+  try { host = new URL(evidence.url).hostname.replace(/^www\d?\./, ''); } catch { /* url non valido: si mostra com'è */ }
+  const when = evidence.lastCheckedAt ? new Date(`${evidence.lastCheckedAt.slice(0, 10)}T12:00:00Z`).toLocaleDateString('it-CH', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }) : null;
+  return <span className="source-link"> · <a href={evidence.url} target="_blank" rel="noopener noreferrer">{host}</a>{when ? `, consultato il ${when}` : ''}</span>;
+}
+
+/** Chiusure straordinarie future (giorni consecutivi raggruppati). */
+export function closureRanges(exceptions: { date: string; closed?: boolean; note?: string }[], today: string): { from: string; to: string; note?: string }[] {
+  const days = exceptions.filter((e) => e.closed && e.note && e.date >= today).sort((a, b) => a.date.localeCompare(b.date));
+  const out: { from: string; to: string; note?: string }[] = [];
+  for (const d of days) {
+    const last = out[out.length - 1];
+    const next = last ? new Date(Date.parse(`${last.to}T12:00:00Z`) + 86400_000).toISOString().slice(0, 10) : '';
+    if (last && next === d.date && last.note === d.note) last.to = d.date;
+    else out.push({ from: d.date, to: d.date, note: d.note });
+  }
+  return out;
+}
+
 export function Cost({ min, max, unknown }: { min: number | null; max: number | null; unknown?: number }) {
   return <span className="cost">{fmtRange(min, max)}{unknown ? <span className="muted"> + {unknown} sconosciut{unknown > 1 ? 'i' : 'o'}</span> : null}</span>;
 }

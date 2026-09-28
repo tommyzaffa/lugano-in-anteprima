@@ -1,6 +1,6 @@
 {
- "version": "cat-2026-09-28-87p-14e-545ea8",
- "builtAt": "2026-09-28T13:02:00.186Z",
+ "version": "cat-2026-09-28-87p-14e-9217d1",
+ "builtAt": "2026-09-28T13:07:59.954Z",
  "sources": [
   {
    "id": "osm",
@@ -718,8 +718,8 @@
         6,
         7
        ],
-       "from": "06:00",
-       "to": "23:00",
+       "from": "06:30",
+       "to": "23:30",
        "seasonFrom": "03-01",
        "seasonTo": "10-31"
       },
@@ -733,7 +733,7 @@
         6,
         7
        ],
-       "from": "06:00",
+       "from": "06:30",
        "to": "21:00",
        "seasonFrom": "11-01",
        "seasonTo": "02-29"
@@ -741,14 +741,15 @@
      ],
      "holidays": "unknown",
      "exceptions": [],
-     "osmOpeningHours": "Mar-Oct: 06:00-23:00; Nov-Feb: 06:00-21:00",
+     "osmOpeningHours": "Mar-Oct: 06:30-23:30; Nov-Feb: 06:30-21:00",
      "evidence": {
       "field": "hours",
-      "sourceId": "editorial-2026-09",
-      "status": "editorial",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "Orari stagionali indicativi del parco recintato, da verificare sul sito della Città."
+      "url": "https://www.lugano.ch/vivere-lugano/cultura-e-tempo-libero/parchi-aree-gioco/parco-ciani/",
+      "note": "Estate (marzo–ottobre) lu–do 6.30–23.30, inverno (novembre–febbraio) 6.30–21.00 (lugano.ch)."
      }
     }
    ],
@@ -2109,7 +2110,57 @@
     "typical": 40,
     "max": 60
    },
-   "schedules": [],
+   "schedules": [
+    {
+     "id": "parco-tassino-public",
+     "kind": "public",
+     "tz": "Europe/Zurich",
+     "rules": [
+      {
+       "days": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "from": "06:30",
+       "to": "23:30",
+       "seasonFrom": "03-01",
+       "seasonTo": "10-31"
+      },
+      {
+       "days": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "from": "06:30",
+       "to": "21:00",
+       "seasonFrom": "11-01",
+       "seasonTo": "02-29"
+      }
+     ],
+     "holidays": "unknown",
+     "exceptions": [],
+     "osmOpeningHours": "Mar-Oct: 06:30-23:30; Nov-Feb: 06:30-21:00",
+     "evidence": {
+      "field": "hours",
+      "sourceId": "official-web",
+      "status": "verified",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "url": "https://www.lugano.ch/vivere-lugano/cultura-e-tempo-libero/parchi-aree-gioco/parco-tassino/",
+      "note": "Estate (marzo–ottobre) lu–do 6.30–23.30, inverno 6.30–21.00; area giochi per i più piccoli (lugano.ch)."
+     }
+    }
+   ],
    "prices": [
     {
      "id": "parco-tassino-free",
@@ -2216,14 +2267,6 @@
      "status": "editorial",
      "observedAt": "2026-09-28",
      "lastCheckedAt": "2026-09-28"
-    },
-    {
-     "field": "hours",
-     "sourceId": "editorial-2026-09",
-     "status": "unknown",
-     "observedAt": "2026-09-28",
-     "lastCheckedAt": "2026-09-28",
-     "note": "Orari non disponibili nel catalogo."
     },
     {
      "field": "municipality",
@@ -2951,22 +2994,23 @@
         6,
         7
        ],
-       "from": "09:00",
-       "to": "19:00",
-       "seasonFrom": "05-15",
-       "seasonTo": "09-13"
+       "from": "10:00",
+       "to": "18:00",
+       "validFrom": "2026-09-21",
+       "validTo": "2026-10-04"
       }
      ],
      "holidays": "unknown",
      "exceptions": [],
-     "osmOpeningHours": "May 15-Sep 13: 09:00-19:00",
+     "osmOpeningHours": "Mo-Su 10:00-18:00",
      "evidence": {
       "field": "hours",
-      "sourceId": "editorial-2026-09",
-      "status": "editorial",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "Stagione e orari indicativi, variano ogni anno: da verificare."
+      "url": "https://www.lugano.ch/vivere-lugano/cultura-e-tempo-libero/lidi-e-piscine/lido-lugano.html",
+      "note": "Dal 21.09 al 04.10.2026 aperta solo la zona spiaggia (balneazione nel lago), 10–18 e solo con bel tempo (lugano.ch). Dopo il 4 ottobre il sito non indica aperture: considerato chiuso."
      }
     }
    ],
@@ -2981,13 +3025,14 @@
      "audience": "adult",
      "status": "estimate",
      "essential": true,
+     "note": "Tariffa non indicata sul sito per l'apertura ridotta di fine stagione: stima.",
      "evidence": {
       "field": "price",
       "sourceId": "estimate",
       "status": "estimate",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "Tariffa indicativa, da verificare sul sito ufficiale."
+      "note": "Tariffa non indicata sul sito per l'apertura ridotta di fine stagione: stima."
      }
     },
     {
@@ -3001,13 +3046,14 @@
      "childAgeMax": 15,
      "status": "estimate",
      "essential": true,
+     "note": "Stima.",
      "evidence": {
       "field": "price",
       "sourceId": "estimate",
       "status": "estimate",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "Tariffa indicativa, da verificare sul sito ufficiale."
+      "note": "Stima."
      }
     }
    ],
@@ -4192,21 +4238,22 @@
         7
        ],
        "from": "12:00",
-       "to": "16:00",
-       "seasonFrom": "06-09",
-       "seasonTo": "10-18"
+       "to": "17:00",
+       "validFrom": "2026-04-05",
+       "validTo": "2026-10-18"
       }
      ],
      "holidays": "unknown",
      "exceptions": [],
-     "osmOpeningHours": "Jun 09-Oct 18: Tu-Su 12:00-16:00",
+     "osmOpeningHours": "Tu-Su 12:00-17:00; Mo off",
      "evidence": {
       "field": "hours",
-      "sourceId": "osm",
-      "status": "osm",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "opening_hours=\"Jun 09-Oct 18: Tu-Su 12:00-16:00\""
+      "url": "https://www.bazg.admin.ch/it/museo-doganale-lugano-visita-informazioni",
+      "note": "Dal 5 aprile al 18 ottobre 2026, martedì–domenica 12–17; gli orari seguono quelli dei battelli SNL (sito dell'UDSC)."
      }
     }
    ],
@@ -4219,16 +4266,17 @@
      "max": 0,
      "unit": "person",
      "audience": "all",
-     "status": "estimate",
+     "status": "known",
      "essential": true,
-     "note": "Indicato come gratuito dalla redazione, da verificare.",
+     "note": "Ingresso gratuito (sito dell'UDSC).",
      "evidence": {
       "field": "price",
-      "sourceId": "estimate",
-      "status": "estimate",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "Indicato come gratuito dalla redazione, da verificare."
+      "url": "https://www.bazg.admin.ch/it/museo-doganale-lugano-visita-informazioni",
+      "note": "Ingresso gratuito (sito dell'UDSC)."
      }
     }
    ],
@@ -4240,15 +4288,18 @@
     "phone": "+41 79 512 99 07"
    },
    "accessibility": {
-    "wheelchair": "unknown",
+    "wheelchair": "limited",
     "stroller": "unknown",
     "stairs": "unknown",
+    "note": "Edificio storico del 1853 raggiungibile solo in battello, senza infrastrutture adeguate per persone con disabilità; il personale dichiara di fare il possibile per accogliere chi usa la sedia a rotelle.",
     "evidence": {
      "field": "accessibility",
-     "sourceId": "editorial-2026-09",
-     "status": "unknown",
+     "sourceId": "official-web",
+     "status": "verified",
      "observedAt": "2026-09-28",
-     "lastCheckedAt": "2026-09-28"
+     "lastCheckedAt": "2026-09-28",
+     "url": "https://www.bazg.admin.ch/it/museo-doganale-lugano-visita-informazioni",
+     "note": "Edificio storico del 1853 raggiungibile solo in battello, senza infrastrutture adeguate per persone con disabilità; il personale dichiara di fare il possibile per accogliere chi usa la sedia a rotelle."
     }
    },
    "suitability": {
@@ -5664,23 +5715,62 @@
     "typical": 120,
     "max": 240
    },
-   "schedules": [],
+   "schedules": [
+    {
+     "id": "lido-san-domenico-public",
+     "kind": "public",
+     "tz": "Europe/Zurich",
+     "rules": [
+      {
+       "days": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "from": "09:00",
+       "to": "19:30",
+       "validFrom": "2026-05-25",
+       "validTo": "2026-09-20"
+      }
+     ],
+     "holidays": "unknown",
+     "exceptions": [],
+     "osmOpeningHours": "Mo-Su 09:00-19:30",
+     "evidence": {
+      "field": "hours",
+      "sourceId": "official-web",
+      "status": "verified",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "url": "https://www.lugano.ch/vivere-lugano/cultura-e-tempo-libero/lidi-e-piscine/lido-san-domenico.html",
+      "note": "Stagione 2026 dal 25 maggio al 20 settembre, lu–do 9.00–19.30 (lugano.ch)."
+     }
+    }
+   ],
    "prices": [
     {
      "id": "lido-san-domenico-p0",
-     "label": "Ingresso",
+     "label": "Ingresso adulti",
      "currency": "CHF",
+     "min": 7,
+     "max": 7,
      "unit": "person",
-     "audience": "all",
-     "status": "unknown",
+     "audience": "adult",
+     "status": "known",
      "essential": true,
+     "note": "Entrata singola adulti (lugano.ch); altre tariffe non riportate.",
      "evidence": {
       "field": "price",
-      "sourceId": "editorial-2026-09",
-      "status": "unknown",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "Tariffa indicativa, da verificare sul sito ufficiale."
+      "url": "https://www.lugano.ch/vivere-lugano/cultura-e-tempo-libero/lidi-e-piscine/lido-san-domenico.html",
+      "note": "Entrata singola adulti (lugano.ch); altre tariffe non riportate."
      }
     }
    ],
@@ -5767,14 +5857,6 @@
      "status": "editorial",
      "observedAt": "2026-09-28",
      "lastCheckedAt": "2026-09-28"
-    },
-    {
-     "field": "hours",
-     "sourceId": "editorial-2026-09",
-     "status": "unknown",
-     "observedAt": "2026-09-28",
-     "lastCheckedAt": "2026-09-28",
-     "note": "Orari non disponibili nel catalogo."
     },
     {
      "field": "municipality",
@@ -6018,6 +6100,8 @@
      "rules": [
       {
        "days": [
+        1,
+        2,
         3,
         4,
         5,
@@ -6025,10 +6109,14 @@
         7
        ],
        "from": "10:00",
-       "to": "12:00"
+       "to": "12:00",
+       "validFrom": "2026-03-14",
+       "validTo": "2026-11-08"
       },
       {
        "days": [
+        1,
+        2,
         3,
         4,
         5,
@@ -6036,40 +6124,45 @@
         7
        ],
        "from": "13:00",
-       "to": "15:00"
+       "to": "15:00",
+       "validFrom": "2026-03-14",
+       "validTo": "2026-11-08"
       }
      ],
      "holidays": "unknown",
      "exceptions": [],
-     "osmOpeningHours": "We-Su 10:00-12:00,13:00-15:00",
+     "osmOpeningHours": "Mo-Su 10:00-12:00,13:00-15:00",
      "evidence": {
       "field": "hours",
-      "sourceId": "osm",
-      "status": "osm",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "opening_hours=\"We-Su 10:00-12:00,13:00-15:00\""
+      "url": "https://www.montesansalvatore.ch/en/culture/museum/",
+      "note": "10–12 e 13–15, aperto solo quando la funicolare è in servizio (stagione 14.03–08.11.2026)."
      }
     }
    ],
    "prices": [
     {
-     "id": "museo-san-salvatore-free",
-     "label": "Accesso libero",
+     "id": "museo-san-salvatore-p0",
+     "label": "Ingresso (compreso nel biglietto della funicolare)",
      "currency": "CHF",
      "min": 0,
      "max": 0,
-     "unit": "free",
+     "unit": "person",
      "audience": "all",
      "status": "known",
      "essential": true,
+     "note": "Con un biglietto valido della funicolare l'ingresso è compreso.",
      "evidence": {
       "field": "price",
-      "sourceId": "editorial-2026-09",
-      "status": "editorial",
+      "sourceId": "official-web",
+      "status": "verified",
       "observedAt": "2026-09-28",
       "lastCheckedAt": "2026-09-28",
-      "note": "Spazio pubblico o ingresso gratuito secondo la redazione."
+      "url": "https://www.montesansalvatore.ch/en/culture/museum/",
+      "note": "Con un biglietto valido della funicolare l'ingresso è compreso."
      }
     }
    ],
@@ -6207,10 +6300,115 @@
     "typical": 75,
     "max": 100
    },
-   "schedules": [],
+   "schedules": [
+    {
+     "id": "vetta-san-salvatore-ristorante-public",
+     "kind": "public",
+     "tz": "Europe/Zurich",
+     "rules": [
+      {
+       "days": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "from": "09:00",
+       "to": "17:00",
+       "seasonFrom": "03-14",
+       "seasonTo": "03-28",
+       "validFrom": "2026-03-14",
+       "validTo": "2026-11-08"
+      },
+      {
+       "days": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "from": "09:00",
+       "to": "18:00",
+       "seasonFrom": "03-29",
+       "seasonTo": "07-02",
+       "validFrom": "2026-03-14",
+       "validTo": "2026-11-08"
+      },
+      {
+       "days": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "from": "09:00",
+       "to": "22:30",
+       "seasonFrom": "07-03",
+       "seasonTo": "08-29",
+       "validFrom": "2026-03-14",
+       "validTo": "2026-11-08"
+      },
+      {
+       "days": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "from": "09:00",
+       "to": "18:00",
+       "seasonFrom": "08-30",
+       "seasonTo": "10-24",
+       "validFrom": "2026-03-14",
+       "validTo": "2026-11-08"
+      },
+      {
+       "days": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "from": "09:00",
+       "to": "17:00",
+       "seasonFrom": "10-25",
+       "seasonTo": "11-08",
+       "validFrom": "2026-03-14",
+       "validTo": "2026-11-08"
+      }
+     ],
+     "holidays": "unknown",
+     "exceptions": [],
+     "osmOpeningHours": "Mar 14-Mar 28: 09:00-17:00; Mar 29-Jul 02: 09:00-18:00; Jul 03-Aug 29: 09:00-22:30; Aug 30-Oct 24: 09:00-18:00; Oct 25-Nov 08: 09:00-17:00",
+     "evidence": {
+      "field": "hours",
+      "sourceId": "official-web",
+      "status": "verified",
+      "observedAt": "2026-09-28",
+      "lastCheckedAt": "2026-09-28",
+      "url": "https://www.montesansalvatore.ch/en/portfolio/ristorante-vetta/",
+      "note": "Segue gli orari della funicolare (stagione 2026 e orario della funicolare sul sito ufficiale); aperture serali estive non più in calendario."
+     }
+    }
+   ],
    "prices": [
     {
-     "id": "vetta-san-salvatore-ristorante-osteria-adult",
+     "id": "vetta-san-salvatore-ristorante-p0",
      "label": "Pasto (fascia osteria/ristorante)",
      "currency": "CHF",
      "min": 35,
@@ -6219,18 +6417,19 @@
      "audience": "adult",
      "status": "estimate",
      "essential": true,
-     "note": "Fascia indicativa per categoria, non un listino.",
+     "note": "Fascia indicativa per categoria. Offerta ufficiale: funicolare andata e ritorno + piatto del giorno CHF 38 (solo a pranzo).",
      "evidence": {
       "field": "price",
       "sourceId": "estimate",
       "status": "estimate",
       "observedAt": "2026-09-28",
-      "lastCheckedAt": "2026-09-28"
+      "lastCheckedAt": "2026-09-28",
+      "note": "Fascia indicativa per categoria. Offerta ufficiale: funicolare andata e ritorno + piatto del giorno CHF 38 (solo a pranzo)."
      }
     },
     {
-     "id": "vetta-san-salvatore-ristorante-osteria-child",
-     "label": "Pasto (fascia osteria/ristorante) (bambini)",
+     "id": "vetta-san-salvatore-ristorante-p1",
+     "label": "Pasto (bambini)",
      "currency": "CHF",
      "min": 15,
      "max": 30,
@@ -6239,13 +6438,14 @@
      "childAgeMax": 11,
      "status": "estimate",
      "essential": true,
-     "note": "Fascia indicativa per categoria, non un listino.",
+     "note": "Fascia indicativa per categoria.",
      "evidence": {
       "field": "price",
       "sourceId": "estimate",
       "status": "estimate",
       "observedAt": "2026-09-28",
-      "lastCheckedAt": "2026-09-28"
+      "lastCheckedAt": "2026-09-28",
+      "note": "Fascia indicativa per categoria."
      }
     }
    ],
@@ -6335,14 +6535,6 @@
      "status": "editorial",
      "observedAt": "2026-09-28",
      "lastCheckedAt": "2026-09-28"
-    },
-    {
-     "field": "hours",
-     "sourceId": "editorial-2026-09",
-     "status": "unknown",
-     "observedAt": "2026-09-28",
-     "lastCheckedAt": "2026-09-28",
-     "note": "Orari non disponibili nel catalogo."
     },
     {
      "field": "municipality",
