@@ -41,7 +41,7 @@ Il token del pannello editoriale (`/admin`) si imposta con `ADMIN_TOKEN`; se man
 5. **Salva, condividi, esporta**: link personale di modifica, link di condivisione **revocabile** con rimozione dei dettagli sensibili e voto degli amici, calendario `.ics`, stampa, cartolina illustrata, copia offline del riepilogo.
 6. **Riepilogo pratico**: tappe, come arrivare, orari del giorno con fonte, costi stimati, cose da verificare, link ufficiali e **rivalidazione** con i dati attuali.
 7. **Esplora liberamente**: luoghi del catalogo, filtro «aperto durante la mia visita», punti OSM non curati, schede con provenienza di ogni dato, segnalazione di errori; **eventi** oggi/domani/settimana (dimostrativi).
-8. **Pannello editoriale** protetto: salute dei dati e delle fonti, modifica e verifica di orari/prezzi/accessibilità, eccezioni agli eventi, segnalazioni, statistiche aggregate, consumi AI, registro.
+8. **Pannello editoriale** protetto: salute dei dati e delle fonti, modifica e verifica di orari/prezzi/accessibilità, eccezioni agli eventi, segnalazioni, conflitti fra modifiche manuali e nuovi import, statistiche aggregate, consumi AI, registro.
 
 ## Architettura in breve
 

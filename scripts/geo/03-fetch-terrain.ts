@@ -22,7 +22,13 @@ const URL = (z: number, x: number, y: number) => `https://s3.amazonaws.com/eleva
 async function main() {
   const jobs: { z: number; x: number; y: number }[] = [];
   for (let z = MIN_Z; z <= MAX_Z; z++) {
-    for (const t of tilesInBbox(perimeter.buffer, z)) jobs.push({ z, ...t });
+    // un anello di tile reali attorno all'area: le curve di livello leggono i
+    // tile vicini per unire i bordi, e così non chiedono tile inesistenti
+    const ts = tilesInBbox(perimeter.buffer, z);
+    const xs = ts.map((t) => t.x), ys = ts.map((t) => t.y);
+    for (let x = Math.min(...xs) - 1; x <= Math.max(...xs) + 1; x++) {
+      for (let y = Math.min(...ys) - 1; y <= Math.max(...ys) + 1; y++) jobs.push({ z, x, y });
+    }
   }
   console.log(`Tile terreno da scaricare: ${jobs.length}`);
   let done = 0, skipped = 0;

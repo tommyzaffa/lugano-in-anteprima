@@ -10,7 +10,7 @@ import { GroupRequest, Decision, TZ, MAX_PEOPLE, Place, type Plan } from '../sha
 import { openIntervals, describeDay, checkVisit } from '../shared/calendar.ts';
 import { planToIcs, redactPlan, DEFAULT_REDACTION, type Redaction } from '../shared/export.ts';
 import { parseOsmOpeningHours } from '../shared/osm-hours.ts';
-import type { DataStore } from './data.ts';
+import { baseHash, type DataStore } from './data.ts';
 import type { Db } from './db.ts';
 import { config, ensureAdminToken, aiConfigured } from './config.ts';
 import { planAlternatives } from './planner/index.ts';
@@ -346,6 +346,7 @@ export function createApi(data: DataStore, db: Db) {
       stale: places.flatMap((p) => p.evidence.filter((e) => data.isStale(e, 'general')).map((e) => ({ id: p.id, field: e.field }))),
       sources: data.sources, sourceHealth: db.sourceHealth(), integrations: integrations(),
       reportsOpen: db.listReports('open').length,
+      conflicts: data.conflicts,
     });
   });
   admin.get('/places', (c) => c.json({ places: [...data.places.values()], overrides: db.listOverrides() }));
@@ -372,7 +373,7 @@ export function createApi(data: DataStore, db: Db) {
     const test = Place.safeParse({ ...base, ...patch });
     if (!patch.hidden && !test.success) return c.json({ error: 'invalid', issues: test.error.issues.slice(0, 5) }, 400);
     const prev = db.listOverrides().find((o) => o.kind === 'place' && o.id === id)?.data ?? {};
-    db.setOverride('place', id, { ...prev, ...patch }, b.note ?? 'modifica editoriale');
+    db.setOverride('place', id, { ...prev, ...patch, _baseHash: baseHash(data.basePlace(id)) }, b.note ?? 'modifica editoriale');
     data.applyOverrides(db);
     return c.json({ ok: true, catalogVersion: data.catalogVersion, place: data.place(id) ?? null });
   });
@@ -388,7 +389,7 @@ export function createApi(data: DataStore, db: Db) {
     if (field === 'price') patch.prices = p.prices.map((x) => ({ ...x, status: x.status === 'unknown' ? 'unknown' : 'known', evidence: { ...x.evidence, status: 'verified', lastCheckedAt: today, url: b.sourceUrl } }));
     if (field === 'accessibility') patch.accessibility = { ...p.accessibility, evidence: { ...p.accessibility.evidence, status: 'verified', lastCheckedAt: today, url: b.sourceUrl } };
     const prev = db.listOverrides().find((o) => o.kind === 'place' && o.id === id)?.data ?? {};
-    db.setOverride('place', id, { ...prev, ...patch }, `verifica ${field}`);
+    db.setOverride('place', id, { ...prev, ...patch, _baseHash: baseHash(data.basePlace(id)) }, `verifica ${field}`);
     data.applyOverrides(db);
     return c.json({ ok: true, place: data.place(id) });
   });

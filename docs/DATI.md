@@ -33,12 +33,12 @@ npm run data:all
 |---|---|---|
 | Perimetro | `scripts/geo/01-perimeter.ts` (Overpass, solo riferimenti) | `data/geo/perimeter.json` |
 | OSM | `scripts/data/fetch-osm.sh` — estratti Geofabrik Svizzera + Italia nord-ovest, `osmium extract --strategy=smart` sul buffer, `osmium merge`, `osmium export` GeoJSONSeq | `data/raw/osm/lugano-area.geojsonseq` (non versionato) |
-| Terreno | `scripts/geo/03-fetch-terrain.ts` — tile Terrarium z8–14 | `public/terrain/` (165 tile, 16 MB) |
+| Terreno | `scripts/geo/03-fetch-terrain.ts` — tile Terrarium z8–14 | `public/terrain/` (293 tile, 31 MB: l'area più un anello di tile per zoom, perché le curve di livello leggono i tile vicini ai bordi) |
 | Tile vettoriali | `scripts/geo/04-build-map.ts` — classificazione, ritaglio al buffer, geojson-vt + vt-pbf | `public/tiles/lugano/` (2081 tile z8–16, 13,5 MB) + `data/build/osm/*` |
 | Grafi | `scripts/geo/05-build-graphs.ts` | grafo pedonale (40 642 nodi, 46 266 archi, 2 509 km), stradale per i bus, ferroviario/funicolari |
 | Orario | `scripts/data/fetch-gtfs.sh` + `scripts/transit/01-import-gtfs.ts` | 1 185 fermate, 74 linee, 55 078 corse nell'area |
 | Rete trasporti | `scripts/transit/02-build-transit.ts` | 533 schemi di corsa, 1 641 tratte con geometria reale (3 approssimate, fuori perimetro), interscambi a piedi normali e senza gradini |
-| Catalogo | `scripts/catalog/build-catalog.ts` | 76 luoghi curati, 14 eventi demo, 991 POI OSM per l'esplorazione, 34 489 indirizzi per la ricerca locale |
+| Catalogo | `scripts/catalog/build-catalog.ts` | 87 luoghi curati, 14 eventi demo, 980 POI OSM per l'esplorazione, 34 489 indirizzi per la ricerca locale |
 
 Tempi misurati: download ~2 minuti; `npm run data:build` ~8 secondi.
 
@@ -76,7 +76,9 @@ Eventi: ricorrenze settimanali con intervallo di validità (nessuna occorrenza d
 
 ## Scadenze e rivalidazione
 
-Politica per fonte in `data/catalog/sources.yaml` (ore): OSM orari 2160, redazione orari 720 e prezzi 1440, stime prezzi 2160, GTFS trasporti 336, meteo 3. Il pannello editoriale segnala i dati oltre scadenza. Un programma salvato conserva lo **snapshot** dei dati usati; «Verifica i dati adesso» nel riepilogo confronta lo snapshot con i dati attuali (orari, prezzi, eventi, corse, versione del feed) senza riscrivere il programma; la simulazione continua a usare lo snapshot originale.
+Politica per fonte in `data/catalog/sources.yaml` (ore): OSM orari 2160, redazione orari 720 e prezzi 1440, stime prezzi 2160, GTFS trasporti 336, meteo 3. Il pannello editoriale segnala i dati oltre scadenza.
+
+**Modifiche editoriali e aggiornamenti automatici.** Le modifiche della redazione sono salvate a parte (tabella `overrides`), con l'impronta del dato di base su cui sono state fatte. Il catalogo pubblicato è sempre file + modifiche, rivalidato con lo schema. Se un nuovo import cambia il dato di base dopo una modifica, se una modifica non è più valida o se il luogo non esiste più, la modifica **non viene persa in silenzio**: il pannello la elenca in «Conflitti da risolvere» (verificato in `tests/editorial.test.ts`). Un programma salvato conserva lo **snapshot** dei dati usati; «Verifica i dati adesso» nel riepilogo confronta lo snapshot con i dati attuali (orari, prezzi, eventi, corse, versione del feed) senza riscrivere il programma; la simulazione continua a usare lo snapshot originale.
 
 ## Licenze e attribuzioni
 

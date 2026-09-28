@@ -46,11 +46,11 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-
 .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; }
 
 /* --------------------------------------------------------------- layout */
-.app { position: fixed; inset: 0; display: grid; grid-template-rows: auto 1fr; }
+.app { position: fixed; inset: 0; display: grid; grid-template-rows: auto 1fr; grid-template-columns: minmax(0, 1fr); }
 .topbar { display: flex; align-items: center; gap: .8rem; padding: .45rem .9rem; background: var(--card); border-bottom: 1.5px solid var(--line); z-index: 20; min-height: 52px; }
 .brand { display: flex; align-items: center; gap: .5rem; background: none; border: 0; font-family: var(--serif); font-size: 1.15rem; font-weight: 700; cursor: pointer; padding: .2rem; }
 .demo-pill { display: flex; align-items: center; gap: .4rem; background: none; border: 0; cursor: pointer; color: var(--muted); font-size: .82rem; }
-.topnav { margin-left: auto; display: flex; gap: .2rem; }
+.topnav { margin-left: auto; display: flex; gap: .2rem; min-width: 0; overflow-x: auto; scrollbar-width: none; }
 .topnav button { background: none; border: 0; padding: .5rem .7rem; border-radius: 8px; cursor: pointer; min-height: 40px; }
 .topnav button[aria-current='true'], .topnav button:hover { background: var(--paper-2); }
 .offline-banner { position: fixed; top: 52px; left: 0; right: 0; background: var(--gold); color: var(--ink); text-align: center; padding: .35rem; z-index: 30; font-size: .88rem; }
@@ -352,6 +352,7 @@ thead th { font-family: var(--serif); }
 .admin-edit { border: 1.5px solid var(--line); border-radius: 12px; padding: .7rem; margin-top: .8rem; background: #fffdf7; }
 .admin-edit label { display: block; margin: .4rem 0; }
 
+.list-toggle { position: absolute; z-index: 5; top: 118px; right: 10px; min-height: 36px; padding: .3rem .7rem; border-radius: 10px; border: 1.5px solid var(--line); background: var(--card); font-weight: 600; cursor: pointer; box-shadow: var(--shadow); }
 /* MapLibre */
 .maplibregl-ctrl-group { background: var(--card) !important; border: 1.5px solid var(--line); border-radius: 10px !important; box-shadow: none !important; }
 .maplibregl-ctrl-attrib { background: rgba(251, 247, 238, .85) !important; font-size: 11px; }
@@ -393,6 +394,18 @@ thead th { font-family: var(--serif); }
   .fallback { padding: .6rem .6rem 55vh; }
   .cutscene { top: 10%; }
   .toast { bottom: calc(52vh + 12px); }
+}
+@media (max-width: 420px) {
+  .topbar { gap: .25rem; padding: .3rem .35rem; }
+  .brand { gap: .3rem; }
+  .brand svg { width: 26px; height: 26px; flex-shrink: 0; }
+  .topnav button { padding: .4rem .32rem; font-size: .86rem; }
+}
+@media (max-width: 380px) {
+  .brand span { font-size: .8rem; max-width: 64px; }
+}
+@media (max-width: 340px) {
+  .brand span { display: none; }
 }
 
 /* movimento ridotto */

@@ -12,6 +12,10 @@ import { Graph } from './routing/graph.ts';
 import { TransitNetwork } from './routing/transit.ts';
 import { Router } from './routing/router.ts';
 import type { Db } from './db.ts';
+import { createHash } from 'node:crypto';
+
+/** Impronta stabile del dato di base di un luogo (per rilevare conflitti con le modifiche editoriali). */
+export function baseHash(p: unknown): string { return createHash('sha1').update(JSON.stringify(p)).digest('hex').slice(0, 12); }
 
 export interface ExplorePoi { osm: string; cls: string; name: string; lon: number; lat: number; openingHours: string | null; website: string | null; wheelchair: string | null; cuisine: string | null }
 
@@ -20,6 +24,7 @@ export class DataStore {
   perimeter: any;
   sources: Source[] = [];
   private basePlaces: Place[] = [];
+  conflicts: { kind: string; id: string; note: string }[] = [];
   private baseEvents: CatalogEvent[] = [];
   places = new Map<string, Place>();
   events = new Map<string, CatalogEvent>();
@@ -62,14 +67,19 @@ export class DataStore {
     this.places = new Map(this.basePlaces.map((p) => [p.id, structuredClone(p)]));
     this.events = new Map(this.baseEvents.map((e) => [e.id, structuredClone(e)]));
     this.hidden.clear();
+    this.conflicts = [];
     let n = 0;
     for (const o of db?.listOverrides() ?? []) {
       if (o.kind === 'place') {
         const base = this.places.get(o.id);
-        if (!base) continue;
+        if (!base) { this.conflicts.push({ kind: 'place', id: o.id, note: 'Modifica editoriale su un luogo non più presente nel catalogo di base.' }); continue; }
+        if (o.data._baseHash && o.data._baseHash !== baseHash(this.basePlaces.find((p) => p.id === o.id))) this.conflicts.push({ kind: 'place', id: o.id, note: 'Il dato di base è cambiato dopo la modifica editoriale: verificare quale versione tenere.' });
         if (o.data.hidden) { this.hidden.add(o.id); n++; continue; }
-        const merged = Place.safeParse({ ...base, ...o.data, id: base.id });
+        const { _baseHash, ...patch } = o.data;
+        void _baseHash;
+        const merged = Place.safeParse({ ...base, ...patch, id: base.id });
         if (merged.success) { this.places.set(o.id, merged.data); n++; }
+        else this.conflicts.push({ kind: 'place', id: o.id, note: 'Modifica editoriale non più valida rispetto allo schema: ignorata.' });
       } else if (o.kind === 'event') {
         const base = this.events.get(o.id);
         if (!base) continue;
@@ -83,6 +93,7 @@ export class DataStore {
   }
 
   place(id: string): Place | undefined { return this.places.get(id); }
+  basePlace(id: string): Place | undefined { return this.basePlaces.find((p) => p.id === id); }
 
   occurrences(from: DateTime, to: DateTime): EventOccurrence[] {
     const out: EventOccurrence[] = [];

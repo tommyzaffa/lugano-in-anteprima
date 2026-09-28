@@ -8,15 +8,17 @@ Esito al 28 settembre 2026 su MacBook Pro (Apple M3 Pro), macOS 26, Node 24.8, C
 npm test
 ```
 
-**56 test, tutti superati** (Vitest, fuso del processo impostato su `America/New_York` per dimostrare l'indipendenza dal fuso della macchina).
+**64 test, tutti superati** (Vitest, fuso del processo impostato su `America/New_York` per dimostrare l'indipendenza dal fuso della macchina).
 
 | File | Cosa verifica |
 |---|---|
 | `tests/calendar.test.ts` (16) | ultimo ingresso, chiusura prima della fine della visita, chiusure del lunedì e festività ticinesi (feste mobili 2026), eccezioni per data, intervallo 20:00–01:00 al giorno dopo, **cambio d'ora** 29 marzo e 25 ottobre 2026 (durate reali 5 h e 8 h), finestra oltre mezzanotte, stagioni a cavallo d'anno, 24/7; eventi: occorrenza **annullata** visibile come tale, nessuna occorrenza dopo la fine stagione, ricorrenze con offset corretto, sessioni su più giorni con esaurito |
 | `tests/osm-hours.test.ts` (9) | conversione `opening_hours` OSM: override, stagioni per mese e per data, 25:00, regole aggiuntive «,» vs sostitutive «;», PH, 24/7, rifiuto della sintassi non supportata |
 | `tests/pricing.test.ts` (5) | costo per persona/gruppo, bambini gratuiti, **costo sconosciuto ≠ zero** e budget «non verificabile», tariffe adulti/ragazzi, voci facoltative |
-| `tests/simulation.test.ts` (7) | **salto equivalente alla riproduzione** (posizione, spese, tappa), checkpoint senza spese duplicate, stato finale = totali del piano, «vai al riepilogo» fermo alle decisioni obbligatorie, posizione sempre sulla geometria reale, rami (passato invariato, tappa saltata rimossa) |
+| `tests/simulation.test.ts` (9) | **salto equivalente alla riproduzione** (posizione, spese, tappa), checkpoint senza spese duplicate, stato finale = totali del piano, «vai al riepilogo» fermo alle decisioni obbligatorie, posizione sempre sulla geometria reale, rami (passato invariato, tappa saltata rimossa); **oscuramento dei link condivisi** (alloggio e punto di partenza privati non compaiono in nessun campo, neppure nei testi delle verifiche); **iCalendar RFC 5545** (righe ≤ 75 ottetti ripiegate, CRLF, fuso Europe/Zurich) |
 | `tests/scenarios.test.ts` (19) | scenari del brief sul pianificatore reale — vedi sotto |
+| `tests/ai.test.ts` (1) | fornitore AI **simulato** (nessuna chiamata di rete): proposte con identificativi inesistenti scartate con avviso, piani etichettati «AI live» solo se nati dalla proposta AI e comunque ricalcolati e verificati dal motore |
+| `tests/editorial.test.ts` (5) | modifiche editoriali: applicazione validata con nuova versione del catalogo, **conflitto** quando il dato di base cambia dopo la modifica, modifica non valida ignorata e segnalata, luogo sparito segnalato, luogo nascosto tolto dal catalogo pubblicato |
 
 ### Scenari di accettazione (§17)
 
@@ -43,7 +45,7 @@ npm test
 npm run test:e2e
 ```
 
-**7 test, tutti superati** (desktop 1280×800 e mobile 390×844, Chrome con WebGL software):
+**8 test, tutti superati** (desktop 1280×800 e mobile 390×844, Chrome con WebGL software):
 
 1. Flusso principale: esempio → proposte (confronto, dettagli e verifiche) → simulazione (salta spostamento, prossima decisione, «vai al riepilogo» bloccato dalla decisione, scelta dell'alternativa con nuovo ramo) → riepilogo → verifica dei dati → salvataggio (URL personale) → link di condivisione → voto da un altro browser → **revoca** e link non più accessibile.
 2. Modulo manuale: limite di 12 persone spiegato; 3 persone → 3 personaggi sulla mappa.
@@ -52,6 +54,7 @@ npm run test:e2e
 5. Pannello editoriale: token errato rifiutato, modifica orari, annullamento delle modifiche.
 6. **Senza WebGL**: vista semplificata con schema del percorso e stato testuale.
 7. Telefono + movimento ridotto (scenario L).
+8. Schermi stretti (320 e 360 px): nessuno sbordamento orizzontale della pagina né della barra superiore; vista «Elenco» e ritorno alla mappa.
 
 ## Verifiche visive
 
@@ -76,15 +79,15 @@ Script: `scripts/dev/perf.mjs` (build di produzione servita in locale). Disposit
 | Telefono 390×844, 4G simulata | 0,64 s | 1,05 s | 4,3 s | 60 fps |
 | Rendering software (SwiftShader), 1280×800 | 1,3 s | — | 3,1 s | 3 fps → **7,8 fps** con dettaglio adattivo (livello 2) |
 
-Obiettivi del brief: interfaccia iniziale entro 5 s ✅ (dispositivo e rete di riferimento sopra); ≥30 fps sul dispositivo di riferimento ✅. Su dispositivi senza accelerazione grafica l'animazione resta sotto i 30 fps anche con dettaglio minimo: in quel caso consigliare la vista elenco (disponibile nelle impostazioni). Non misurato su smartphone fisici.
+Obiettivi del brief: interfaccia iniziale entro 5 s ✅ (dispositivo e rete di riferimento sopra); ≥30 fps sul dispositivo di riferimento ✅. Su dispositivi senza accelerazione grafica l'animazione resta sotto i 30 fps anche con dettaglio minimo: in quel caso consigliare la vista elenco (pulsante «Elenco» sulla mappa o impostazioni). Non misurato su smartphone fisici.
 
-Dimensioni: bundle JS 1,66 MB (465 kB compressi), CSS 17 kB compressi; tile vettoriali 13,5 MB in totale (caricati per zoom), terreno 16 MB, glifi 4,4 MB (caricati per intervallo di caratteri).
+Dimensioni: bundle JS 1,66 MB (465 kB compressi), CSS 17 kB compressi; tile vettoriali 13,5 MB in totale (caricati per zoom), terreno 31 MB (293 tile, con un anello di tile reali attorno all'area così le curve di livello non chiedono tile mancanti), glifi 4,4 MB (caricati per intervallo di caratteri).
 
 ## Problemi aperti
 
 - Nessuna verifica live di AI (Claude) e OJP: mancano le credenziali in questa sessione. Il codice è pronto e documentato; le chiamate sono protette da schema, timeout e fallback.
 - Orari dei luoghi da OSM/redazione non ancora verificati uno per uno sulle fonti ufficiali (il pannello editoriale lo permette).
-- La qualità delle proposte dipende dalla densità del catalogo (76 luoghi): alcune combinazioni restano centrate sul centro città con ritmi lenti.
+- La qualità delle proposte dipende dalla densità del catalogo (87 luoghi): alcune combinazioni restano centrate sul centro città con ritmi lenti.
 - Geometria dei battelli ricostruita su una griglia d'acqua a 30 m: corretta (mai sulla terraferma) ma semplificata rispetto alle rotte reali.
 - Quote da modello a ~30 m: dislivelli su scalinate brevi possono essere sottostimati.
 - In rendering software l'app resta lenta (vedi sopra).

@@ -86,6 +86,7 @@ export default function App() {
           : !meta ? <div className="loading-map"><Spinner /> Carico la piccola Lugano…</div>
           : showMap ? <MapView onFallback={() => { /* il componente segnala lo stato webgl */ }} /> : <Fallback />}
         <Cutscene />
+        {meta && showMap ? <button className="list-toggle" onClick={() => useApp.getState().setSettings({ listView: true })} title="Vista testuale senza mappa, con le stesse informazioni">Elenco</button> : null}
       </main>
       <aside id="panel" className={`panel ${view === 'admin' ? 'panel-wide' : ''}`} aria-label="Pannello">
         <div className="sheet-handle">

@@ -166,7 +166,7 @@ export function buildStyle(p: Palette, opts: StyleOptions): StyleSpecification {
     lugano: { type: 'vector', tiles: [`${opts.origin}/tiles/lugano/{z}/{x}/{y}.pbf`], minzoom: 8, maxzoom: 16, bounds: opts.bounds, attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors' },
     dem: { type: 'raster-dem', tiles: [`${opts.origin}/terrain/{z}/{x}/{y}.png`], encoding: 'terrarium', tileSize: 256, minzoom: 8, maxzoom: 14, bounds: opts.bounds, attribution: 'Rilievo: Terrain Tiles (AWS Open Data, SRTM e altre fonti)' },
   };
-  if (opts.contoursUrl) sources.contours = { type: 'vector', tiles: [opts.contoursUrl], maxzoom: 15, bounds: opts.bounds };
+  if (opts.contoursUrl) sources.contours = { type: 'vector', tiles: [opts.contoursUrl], minzoom: 11, maxzoom: 15, bounds: opts.bounds };
   return {
     version: 8,
     name: 'Lugano in anteprima — atlante',

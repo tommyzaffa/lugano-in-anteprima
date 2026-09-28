@@ -30,3 +30,24 @@ test('telefono e movimento ridotto (scenario L): modulo, confronto, salto e salv
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   expect(overflow).toBe(false);
 });
+
+test('schermi stretti: barra superiore senza sbordare, vista elenco e ritorno alla mappa', async ({ page }) => {
+  for (const width of [320, 360]) {
+    await page.setViewportSize({ width, height: 740 });
+    await page.goto('/');
+    await expect(page.locator('.maplibregl-canvas')).toBeVisible({ timeout: 20_000 });
+    const m = await page.evaluate(() => ({
+      page: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      nav: document.querySelector('.topnav')!.scrollWidth - document.querySelector('.topnav')!.clientWidth,
+      gear: document.querySelector('[aria-label="Impostazioni"]')!.getBoundingClientRect().right,
+    }));
+    expect(m.page).toBe(0);
+    expect(m.nav).toBe(0);
+    expect(m.gear).toBeLessThanOrEqual(width);
+  }
+  await page.getByRole('button', { name: 'Elenco' }).click();
+  await expect(page.locator('.fallback')).toBeVisible();
+  await expect(page.locator('.maplibregl-canvas')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Torna alla mappa' }).click();
+  await expect(page.locator('.maplibregl-canvas')).toBeVisible({ timeout: 20_000 });
+});

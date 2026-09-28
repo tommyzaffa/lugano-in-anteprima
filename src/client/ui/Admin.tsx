@@ -58,6 +58,7 @@ function Overview({ o, headers, reload }: { o: any; headers: Record<string, stri
       <ul>{o.sourceHealth.map((h: any) => <li key={h.source_id}><strong>{h.source_id}</strong>: <Badge kind={h.status === 'ok' || h.status === 'configured' ? 'ok' : h.status === 'error' || h.status === 'expired' ? 'bad' : 'warn'}>{h.status}</Badge> {h.detail} <span className="muted">{new Date(h.checked_at).toLocaleString('it-CH')}</span></li>)}</ul>
       <h3>Integrazioni</h3>
       <ul>{o.integrations.map((i: any) => <li key={i.id}>{i.name}: <Badge kind={i.active ? 'ok' : 'warn'}>{i.status}</Badge></li>)}</ul>
+      {o.conflicts?.length ? <><h3>Conflitti da risolvere</h3><ul>{o.conflicts.map((c: any, i: number) => <li key={i}><Badge kind="warn">{c.kind}</Badge> {c.id}: {c.note}</li>)}</ul></> : <p className="muted">Nessun conflitto fra modifiche editoriali e dati di base.</p>}
       {o.stale.length ? <><h3>Dati oltre la scadenza</h3><ul>{o.stale.map((s: any, i: number) => <li key={i}>{s.id}: {s.field}</li>)}</ul></> : <p className="muted">Nessun dato oltre la politica di scadenza delle fonti.</p>}
     </div>
   );

@@ -107,10 +107,13 @@ export default function MapView({ onFallback }: Props) {
       map = new maplibregl.Map({
         container: ref.current,
         style: buildStyle(PALETTES.day, { threeD: settings.threeD, contoursUrl: contourUrl(origin), bounds, origin }),
+        // su telefono il nucleo cittadino, nella parte di mappa lasciata libera dal foglio inferiore
         ...(window.innerWidth < 760
-          ? { center: [(meta.perimeter.perimeter.west + meta.perimeter.perimeter.east) / 2, meta.perimeter.core.south + (meta.perimeter.core.north - meta.perimeter.core.south) * 0.35], zoom: 10.6 }
+          ? { bounds: [[meta.perimeter.core.west, meta.perimeter.core.south], [meta.perimeter.core.east, meta.perimeter.core.north]], fitBoundsOptions: { padding: fitPadding() } }
           : { bounds: [[meta.perimeter.perimeter.west, meta.perimeter.perimeter.south], [meta.perimeter.perimeter.east, meta.perimeter.perimeter.north]], fitBoundsOptions: { padding: fitPadding() } }),
-        maxBounds: [[b.west - 0.03, b.south - 0.02], [b.east + 0.03, b.north + 0.02]],
+        // margini larghi a ovest e a sud: pannello laterale e foglio inferiore coprono quella parte
+        // dello schermo, e con limiti stretti la camera non riuscirebbe a centrare la zona visibile
+        maxBounds: [[b.west - 0.12, b.south - 0.22], [b.east + 0.05, b.north + 0.04]],
         minZoom: 10, maxZoom: 19,
         pitch: settings.threeD ? 38 : 0, maxPitch: 70,
         attributionControl: { compact: true, customAttribution: 'Orari: opentransportdata.swiss (GTFS)' },
@@ -124,6 +127,12 @@ export default function MapView({ onFallback }: Props) {
       return;
     }
     mapInstance = map;
+    // fitBounds con margini asimmetrici sposta davvero il centro nella parte visibile
+    // (le opzioni del costruttore non lo fanno): su telefono il foglio copre la metà bassa
+    if (window.innerWidth < 760) {
+      const c = meta.perimeter.core;
+      map.fitBounds([[c.west, c.south], [c.east, c.north]], { padding: fitPadding(), duration: 0 });
+    }
     if (import.meta.env.DEV) (window as any).__map = map;
     map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
     map.addControl(new maplibregl.ScaleControl({ unit: 'metric', maxWidth: 110 }), 'bottom-right');
@@ -135,7 +144,7 @@ export default function MapView({ onFallback }: Props) {
     map.on('load', async () => {
       try { performance.mark('map-load'); } catch { /* */ }
       installImages(map);
-      map.addSource('dem-terrain', { type: 'raster-dem', tiles: [`${origin}/terrain/{z}/{x}/{y}.png`], encoding: 'terrarium', tileSize: 256, maxzoom: 14, bounds });
+      map.addSource('dem-terrain', { type: 'raster-dem', tiles: [`${origin}/terrain/{z}/{x}/{y}.png`], encoding: 'terrarium', tileSize: 256, minzoom: 8, maxzoom: 14, bounds });
       if (settings.threeD) map.setTerrain({ source: 'dem-terrain', exaggeration: 1.35 });
       // perimetro di prodotto
       map.addSource('perimeter', { type: 'geojson', data: { type: 'Feature', properties: {}, geometry: meta.perimeter.polygon } });
