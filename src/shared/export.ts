@@ -46,7 +46,8 @@ export function planToIcs(plan: Plan, opts: { includeRides?: boolean; url?: stri
     }));
   }
   lines.push('END:VCALENDAR');
-  return lines.join('\r\n') + '\r\n';
+  // RFC 5545: ogni riga di contenuto al massimo 75 ottetti, con continuazione indentata
+  return lines.map((l) => (l.includes('\r\n') ? l : fold(l))).join('\r\n') + '\r\n';
 }
 
 export interface Redaction { hideLocations: boolean; hideNames: boolean; hideNeeds: boolean; hideBudget: boolean }
@@ -87,7 +88,12 @@ export function redactPlan(plan: Plan, r: Redaction): Plan {
   if (r.hideBudget) { req.budget = { per: 'person', strict: false }; p.checks = p.checks.filter((c) => c.id !== 'budget'); }
   // i dati di vincoli personali non servono a chi guarda la proposta
   req.resolutions = {};
-  return p;
+  if (!startSensitive) return p;
+  // ogni altra menzione del punto privato (testi dei controlli, etichette, note) viene sostituita
+  const secrets = [plan.request.start.label, plan.request.end.location?.label].filter((x): x is string => !!x && x.length > 2);
+  let json = JSON.stringify(p);
+  for (const sec of secrets) json = json.split(JSON.stringify(sec).slice(1, -1)).join('punto privato');
+  return JSON.parse(json);
 }
 
 export function planToText(plan: Plan): string {

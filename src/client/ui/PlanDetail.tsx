@@ -98,6 +98,7 @@ export default function PlanDetail({ plan, compact }: { plan: Plan; compact?: bo
       {!compact ? (
         <>
           {plan.hypothetical?.length ? <div className="notice info">Ramo ipotetico: {plan.hypothetical.join(' · ')}. Non è una notizia reale.</div> : null}
+          {plan.aiNote ? <div className="notice info">{plan.aiNote}</div> : null}
           {plan.whyThis.length ? <div className="why"><strong>Perché questo programma:</strong> {plan.whyThis.join(' · ')}</div> : null}
           {plan.tradeoffs.length ? <div className="tradeoffs"><strong>Compromessi:</strong> {plan.tradeoffs.join(' · ')}</div> : null}
           {plan.missing.length ? <div className="missing"><strong>Informazioni mancanti:</strong> {plan.missing.join(' · ')}</div> : null}

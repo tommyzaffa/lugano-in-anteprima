@@ -97,3 +97,23 @@ describe('rami (scenario G)', () => {
     expect(r.diff?.removed).toContain(target.name);
   });
 });
+
+import { redactPlan, DEFAULT_REDACTION, planToIcs } from '../src/shared/export.ts';
+describe('condivisione ed esportazioni', () => {
+  it('il link condiviso non contiene la posizione privata né le esigenze personali', () => {
+    const priv = { ...plan, request: { ...plan.request, start: { kind: 'address' as const, label: 'Via Segreta 12, Lugano', lon: 8.95, lat: 46.0, sensitive: true }, mobility: { stroller: true, wheelchair: false, avoidStairs: true, frequentBreaks: false }, freeText: 'mio figlio ha paura dei cani' } };
+    priv.checks = [...priv.checks, { id: 'return', label: 'Rientro', status: 'ok', detail: 'Arrivo a Via Segreta 12, Lugano alle 18:00' }];
+    const r = redactPlan(priv, DEFAULT_REDACTION);
+    const text = JSON.stringify(r);
+    expect(text).not.toContain('Via Segreta');
+    expect(text).not.toContain('paura dei cani');
+    expect(r.request.mobility.stroller).toBe(false);
+    expect(r.request.start.lon).toBe(0);
+  });
+  it('l\'esportazione iCalendar ha un evento per tappa e righe CRLF', () => {
+    const ics = planToIcs(plan);
+    expect(ics.startsWith('BEGIN:VCALENDAR\r\n')).toBe(true);
+    expect((ics.match(/BEGIN:VEVENT/g) ?? []).length).toBe(plan.stops.length);
+    for (const line of ics.split('\r\n')) expect(new TextEncoder().encode(line).length).toBeLessThanOrEqual(75);
+  });
+});

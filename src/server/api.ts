@@ -75,7 +75,8 @@ export function createApi(data: DataStore, db: Db) {
 
   // ---------------------------------------------------------------- catalogo ed esplorazione
   app.get('/api/places', (c) => {
-    const date = c.req.query('date') ?? DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd');
+    const qd = c.req.query('date');
+    const date = qd && /^\d{4}-\d{2}-\d{2}$/.test(qd) ? qd : DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd');
     const from = c.req.query('from'), to = c.req.query('to');
     const f = from ? DateTime.fromISO(from, { zone: TZ }) : null;
     const t = to ? DateTime.fromISO(to, { zone: TZ }) : null;
@@ -100,7 +101,8 @@ export function createApi(data: DataStore, db: Db) {
   app.get('/api/places/:id', (c) => {
     const p = data.place(c.req.param('id'));
     if (!p) return c.json({ error: 'not_found', message: 'Luogo non trovato' }, 404);
-    const date = c.req.query('date') ?? DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd');
+    const q = c.req.query('date');
+    const date = q && /^\d{4}-\d{2}-\d{2}$/.test(q) ? q : DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd');
     const week = Array.from({ length: 7 }, (_, i) => {
       const d = DateTime.fromISO(date, { zone: TZ }).plus({ days: i }).toFormat('yyyy-MM-dd');
       return { date: d, schedules: p.schedules.map((s) => ({ kind: s.kind, text: describeDay(s, d) })) };

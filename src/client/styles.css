@@ -318,7 +318,7 @@ thead th { font-family: var(--serif); }
 .view-sim .place-card { max-height: calc(100vh - var(--controls-h) - 100px); }
 .place-card .close { position: sticky; top: 0; float: right; }
 .place-card h3 { margin-top: 1rem; }
-.hours th { width: 60px; }
+.hours th { width: 92px; white-space: nowrap; text-transform: capitalize; }
 .prices { padding-left: 1rem; }
 .links { display: flex; gap: .8rem; flex-wrap: wrap; margin: .6rem 0; }
 

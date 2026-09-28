@@ -117,13 +117,14 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
   const placeNames = [...data.places.values()].map((p) => ({ id: p.id, name: p.name }));
   let hints = parseFreeText(reqIn.freeText, placeNames);
   let plannerSource: 'ai-live' | 'deterministic' = 'deterministic';
+  let aiInterpreted = false;
   const notices: string[] = [];
   if (deps.ai?.interpret && reqIn.freeText) {
     try {
       const extra = await deps.ai.interpret(reqIn, hints, deps.signal);
       if (extra) {
         hints = { ...hints, ...extra, moods: [...new Set([...hints.moods, ...(extra.moods ?? [])])], avoid: [...new Set([...hints.avoid, ...(extra.avoid ?? [])])], mentionedPlaces: [...new Set([...hints.mentionedPlaces, ...(extra.mentionedPlaces ?? [])])].filter((id) => data.places.has(id)), understood: [...hints.understood, ...(extra.understood ?? [])] };
-        plannerSource = 'ai-live';
+        aiInterpreted = true;
       }
     } catch (e) {
       notices.push('Interpretazione AI non disponibile: usata quella deterministica.');
@@ -156,7 +157,7 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
   const est = new Estimator(data.router);
   const themes = chooseThemes(ctx);
   const seed = req.surprise ? hashSeed(JSON.stringify(req) + Date.now()) : undefined;
-  const sequences: { node: SearchNode; theme: Theme }[] = [];
+  const sequences: { node: SearchNode; theme: Theme; source: 'ai' | 'search' }[] = [];
   // proposte AI (facoltative): solo identificativi esistenti, poi validazione
   if (deps.ai?.propose) {
     try {
@@ -168,7 +169,7 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
         // tempi provvisori: la validazione precisa ricalcola tutto
         let t = ctx.start;
         const seq = cands.map((c) => { const st = { cand: c, arrive: t, start: t, end: t + c.stay.typ * 60_000, travelSec: 0, mode: 'walk' as const }; t = st.end + 15 * 60_000; return st; });
-        sequences.push({ node: { t, pos: ctx.startPoint, seq, used: new Set(), usedPlaces: new Set(), costMin: 0, costMax: 0, walkM: 0, score: 1000, lunch: false, dinner: false, snacks: 0, cats: {} }, theme });
+        sequences.push({ node: { t, pos: ctx.startPoint, seq, used: new Set(), usedPlaces: new Set(), costMin: 0, costMax: 0, walkM: 0, score: 1000, lunch: false, dinner: false, snacks: 0, cats: {} }, theme, source: 'ai' });
         plannerSource = 'ai-live';
       }
     } catch { notices.push('Proposte AI non disponibili: usato il pianificatore deterministico.'); }
@@ -177,7 +178,7 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
   for (const theme of themes) {
     checkAbort(ctx);
     const nodes = search(ctx, pool, est, { theme, width: 14, maxStops: 7, penalize, seed });
-    for (const n of nodes.slice(0, 3)) sequences.push({ node: n, theme });
+    for (const n of nodes.slice(0, 3)) sequences.push({ node: n, theme, source: 'search' });
     const best = nodes[0];
     if (best) for (const s of best.seq) penalize.set(s.cand.place.id, (penalize.get(s.cand.place.id) ?? 0) + 1.5);
   }
@@ -187,7 +188,7 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
   const reasonsByStop = new Map<string, string[]>();
   sequences.sort((a, b) => b.node.score - a.node.score);
   // prima un piano per tema, poi i migliori restanti
-  const ordered = [...themes.map((t) => sequences.find((s) => s.theme.id === t.id)).filter(Boolean) as typeof sequences, ...sequences];
+  const ordered = [...sequences.filter((s) => s.source === 'ai'), ...themes.map((t) => sequences.find((s) => s.theme.id === t.id && s.source === 'search')).filter(Boolean) as typeof sequences, ...sequences];
   const tried = new Set<string>();
   for (const s of ordered) {
     if (accepted.length >= 3) break;
@@ -203,6 +204,7 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
       // preferisci temi diversi finché possibile
     }
     for (const st of plan.stops) reasonsByStop.set(st.id, st.reasons);
+    plan.plannerSource = s.source === 'ai' ? 'ai-live' : 'deterministic';
     accepted.push(plan);
   }
   if (!accepted.length) {
@@ -213,7 +215,7 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
   for (const p of accepted) {
     p.whyThis = whyThis(p, ctx, reasonsByStop);
     p.narrative = { lines: narrate(p), source: 'deterministic' };
-    p.plannerSource = plannerSource;
+    if (aiInterpreted) p.aiNote = 'Preferenze del testo libero interpretate con AI; luoghi, orari e collegamenti verificati dal motore.';
     if (p.checks.some((c) => c.id.endsWith(':demo'))) p.missing.push('Gli eventi inclusi sono dimostrativi');
   }
   // punti di decisione pre-validati
@@ -230,6 +232,7 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
       } catch { /* resta la narrazione deterministica */ }
     }
   }
+  plannerSource = accepted.some((p) => p.plannerSource === 'ai-live') ? 'ai-live' : 'deterministic';
   const stats = { candidates: report.candidates.length, sequences: sequences.length, estimatorCalls: est.calls, ms: Date.now() - t0 };
   return { status: 'ok', alternatives: accepted, understood: hints.understood, notices, plannerSource, stats };
 }

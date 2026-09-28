@@ -56,7 +56,11 @@ const NarrateSchema = z.object({
 export function aiHooks(db: Db): AiHooks | null {
   if (!aiConfigured()) return null;
   provider ??= anthropicProvider(db);
-  const p = provider;
+  return createAiHooks(provider);
+}
+
+/** Compiti AI su un fornitore qualsiasi (iniettabile nei test). */
+export function createAiHooks(p: AiProvider): AiHooks {
   return {
     async interpret(req: GroupRequest, hints: TextHints, signal?: AbortSignal) {
       if (!req.freeText) return null;
@@ -76,8 +80,8 @@ export function aiHooks(db: Db): AiHooks | null {
       const user = `Richiesta: ${ctx.people} persone, ${ctx.req.date} dalle ${ctx.req.startTime} alle ${ctx.req.endTime}, occasione ${ctx.req.occasion}, atmosfera ${[...ctx.moods].join(', ') || 'libera'}, ritmo ${ctx.req.pace}${ctx.cap != null ? `, budget ~CHF ${Math.round(ctx.cap / ctx.people)} a persona` : ''}${ctx.kids ? `, con ${ctx.kids} bambini` : ''}.\nCandidati:\n<dati>\n${JSON.stringify(list)}\n</dati>`;
       const out = await p.structured(system, user, ProposeSchema, { purpose: 'propose', signal, maxTokens: 4000, effort: 'medium' });
       if (!out) return null;
-      const valid = new Set(list.map((l) => l.key));
-      return out.proposals.filter((x) => x.placeKeys.every((k) => valid.has(k))).map((x) => ({ theme: x.theme, placeKeys: x.placeKeys }));
+      // la validazione dei riferimenti spetta al pianificatore, che scarta e segnala le proposte non valide
+      return out.proposals.map((x) => ({ theme: x.theme, placeKeys: x.placeKeys }));
     },
     async narrate(plan: Plan, signal?: AbortSignal) {
       const moments = [

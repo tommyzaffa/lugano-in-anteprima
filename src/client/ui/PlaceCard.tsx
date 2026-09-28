@@ -18,7 +18,8 @@ export default function PlaceCard() {
   useEffect(() => {
     if (!id) return;
     setData(null); setErr(null);
-    get<any>(`/api/places/${id}?date=${useApp.getState().draft?.date ?? ''}`).then((d) => {
+    const date = useApp.getState().draft?.date;
+    get<any>(`/api/places/${id}${date ? `?date=${date}` : ''}`).then((d) => {
       setData(d);
       const map = getMap();
       if (map && useApp.getState().view !== 'sim') map.easeTo({ center: [d.place.lon, d.place.lat], zoom: Math.max(map.getZoom(), 15), duration: useApp.getState().settings.reducedMotion ? 0 : 700 });
@@ -46,7 +47,7 @@ export default function PlaceCard() {
           <h3>Orari (prossimi 7 giorni)</h3>
           {p.schedules.length ? (
             <>
-              <table className="hours"><tbody>{data.week.map((w: any) => <tr key={w.date}><th scope="row">{w.date.slice(5)}</th><td>{w.schedules.map((s: any) => s.text).join(' · ')}</td></tr>)}</tbody></table>
+              <table className="hours"><tbody>{data.week.map((w: any) => <tr key={w.date}><th scope="row">{new Date(`${w.date}T12:00:00Z`).toLocaleDateString('it-CH', { weekday: 'short', day: 'numeric', month: 'numeric', timeZone: 'UTC' })}</th><td>{w.schedules.map((s: any) => s.text).join(' · ')}</td></tr>)}</tbody></table>
               <div className="muted">Fonte: <EvidenceBadge status={p.schedules[0].evidence.status} /> {p.schedules[0].evidence.note ?? ''}</div>
             </>
           ) : <div><Badge kind="bad">orari non disponibili</Badge> <span className="muted">Da verificare sul posto o sul sito ufficiale.</span></div>}
