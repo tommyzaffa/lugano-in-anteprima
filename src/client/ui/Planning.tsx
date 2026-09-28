@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useApp } from '../store.ts';
 import { cancelPlanning, resolveContradiction, runPlanning } from './planning-actions.ts';
-import { Spinner } from './common.tsx';
+import { PAWN_COLORS } from '../map/avatars.ts';
 
 export default function Planning() {
   const progress = useApp((s) => s.progress);
@@ -17,7 +17,6 @@ export default function Planning() {
     return (
       <div className="planning">
         <h2>Una cosa da chiarire</h2>
-        <p className="hint">Il testo libero dice qualcosa di diverso dal modulo. Scegliete voi: non cambiamo nulla di nascosto.</p>
         {contradictions.map((c) => (
           <div key={c.id} className="contradiction">
             <p><strong>{c.message}</strong></p>
@@ -31,15 +30,13 @@ export default function Planning() {
   if (infeasible) {
     return (
       <div className="planning">
-        <h2>Nessun programma rispetta tutti i vincoli</h2>
-        <p className="hint">Non vi proponiamo un piano che sembri valido senza esserlo. Ecco cosa lo impedisce:</p>
+        <h2>Così non ci sta</h2>
         <ul className="reasons">{infeasible.reasons.map((r, i) => <li key={i}>{r.message}</li>)}</ul>
         {result?.notices?.length ? <ul className="notices">{result.notices.map((n, i) => <li key={i}>{n}</li>)}</ul> : null}
-        <h3>Modifiche possibili</h3>
-        <p className="hint">Nessuna viene applicata senza la vostra scelta.</p>
+        <span className="label">Provate così:</span>
         <div className="suggestions">
           {infeasible.suggestions.map((s) => <button key={s.id} className="btn-ghost" onClick={() => void runPlanning(false, s.patch)}>{s.label}</button>)}
-          <button className="btn-ghost" onClick={() => set({ view: 'wizard', wizardStep: 0, infeasible: null })}>Torna al modulo</button>
+          <button className="btn-ghost" onClick={() => set({ view: 'wizard', wizardStep: 0, infeasible: null })}>Cambia la richiesta</button>
         </div>
       </div>
     );
@@ -50,20 +47,32 @@ export default function Planning() {
         <h2>Qualcosa non ha funzionato</h2>
         <div className="notice bad" role="alert">{error}</div>
         {!online ? <p className="hint">Sembra che la rete non sia disponibile.</p> : null}
-        <div className="row"><button className="btn" onClick={() => void runPlanning(false)}>Riprova</button><button className="btn-ghost" onClick={() => set({ view: 'wizard' })}>Torna al modulo</button></div>
+        <div className="row"><button className="btn primary" onClick={() => void runPlanning(false)}>Riprova</button><button className="btn-ghost" onClick={() => set({ view: 'wizard' })}>Cambia la richiesta</button></div>
       </div>
     );
   }
+  const last = progress[progress.length - 1];
   return (
     <div className="planning" aria-busy="true">
-      <h2>Prepariamo le proposte</h2>
-      <ol className="progress-list" aria-live="polite">
-        {progress.map((p, i) => <li key={i} className={i === progress.length - 1 ? 'current' : 'done'}>{i === progress.length - 1 ? <Spinner /> : '✓'} {p}</li>)}
-        {!progress.length ? <li className="current"><Spinner /> Invio della richiesta…</li> : null}
-      </ol>
-      <p className="hint">Il motore verifica aperture, ultimo ingresso, coincidenze reali, budget e rientro. Nessun ragionamento interno viene mostrato: solo motivazioni sintetiche e fonti.</p>
-      {slow ? <p className="notice" role="status">Ci vuole più del solito: il server di questa demo ha poche risorse e la ricerca può richiedere fino a mezzo minuto. Le proposte arrivano comunque verificate.</p> : null}
-      <button className="btn-ghost" onClick={cancelPlanning}>Annulla</button>
+      <div className="planning-art" aria-hidden>
+        <svg viewBox="0 0 320 120" fill="none" stroke="#2a2622" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M10 92 C60 60 90 50 130 58 C170 66 190 40 230 34 C260 30 285 44 310 40" strokeWidth="1.6" opacity=".35" />
+          <path className="route" d="M20 104 C70 96 100 110 150 94 C200 78 220 88 270 70 C290 62 300 56 306 50" stroke="#c24a31" strokeWidth="3" />
+          <circle cx="306" cy="50" r="6" fill="#c24a31" strokeWidth="1.8" />
+          {[0, 1, 2].map((i) => (
+            <g key={i} transform={`translate(${60 + i * 26} ${76 + (i % 2) * 6}) scale(.62)`} strokeWidth="2">
+              <g className={`bob b${i + 1}`}>
+                <path d="M6 39.5 Q16 43 26 39.5 L25 35.5 Q16 38 7 35.5 Z" fill={PAWN_COLORS[i]} />
+                <path d="M9 35.5 Q10.5 24 13 19.5 L19 19.5 Q21.5 24 23 35.5 Q16 37.5 9 35.5 Z" fill={PAWN_COLORS[i]} />
+                <circle cx="16" cy="11.5" r="7" fill={PAWN_COLORS[i]} />
+              </g>
+            </g>
+          ))}
+        </svg>
+      </div>
+      <p className="planning-status" role="status" aria-live="polite">{last ?? 'Preparo le proposte…'}</p>
+      {slow ? <p className="hint" style={{ textAlign: 'center' }}>Il server della demo è lento: può volerci fino a mezzo minuto.</p> : null}
+      <div className="row" style={{ justifyContent: 'center' }}><button className="btn-ghost" onClick={cancelPlanning}>Annulla</button></div>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import * as maplibregl from 'maplibre-gl';
 import type { Map as MLMap, GeoJSONSource, LngLatBoundsLike } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import mlcontour from 'maplibre-contour';
-import { buildStyle, paletteForHour, applyPalette, PALETTES } from './style.ts';
+import { buildStyle, paletteForHour, applyPalette, PALETTES, WIDE, HAND } from './style.ts';
 import { installImages, landmarkFor, placeIconFor } from './sprites.ts';
 import { avatarSvg, vehicleSvg } from './avatars.ts';
 import { useApp, useSim } from '../store.ts';
@@ -32,7 +32,8 @@ export function hasWebGL(): boolean {
   } catch { return false; }
 }
 
-const MODE_COLOR: Record<string, string> = { walk: '#2b2a27', hike: '#b8452e', bus: '#d9a441', train: '#c0392b', funicular: '#b0442c', boat: '#2f7f95', cable_car: '#7c5e9a', wait: '#999' };
+// percorso a «matita colorata»: rosso per il cammino, toni distinti ma armonici per i mezzi
+const MODE_COLOR: Record<string, string> = { walk: '#d2553a', hike: '#a3402b', bus: '#d99a2b', train: '#8e3b2e', funicular: '#b04a35', boat: '#2f6f7e', cable_car: '#6c5a8e', wait: '#999' };
 
 export function planRouteGeoJSON(plan: Plan | null, t: number | null): GeoJSON.FeatureCollection {
   const features: GeoJSON.Feature[] = [];
@@ -92,7 +93,7 @@ export default function MapView({ onFallback }: Props) {
   const plan = branches.find((b) => b.id === currentBranch)?.plan ?? null;
   const tlRef = useRef<Timeline | null>(null);
   const planRef = useRef<Plan | null>(null);
-  const markersRef = useRef<{ group: maplibregl.Marker; people: maplibregl.Marker[]; vehicle: maplibregl.Marker; els: HTMLElement[]; groupEl: HTMLElement; vehicleEl: HTMLElement } | null>(null);
+  const markersRef = useRef<{ group: maplibregl.Marker; people: maplibregl.Marker[]; vehicle: maplibregl.Marker; els: HTMLElement[]; groupEl: HTMLElement; vehicleEl: HTMLElement; spacing: number } | null>(null);
   const lastPaletteRef = useRef<number>(-1);
 
   // ------------------------------------------------------------ creazione mappa
@@ -113,8 +114,8 @@ export default function MapView({ onFallback }: Props) {
           : { bounds: [[meta.perimeter.perimeter.west, meta.perimeter.perimeter.south], [meta.perimeter.perimeter.east, meta.perimeter.perimeter.north]], fitBoundsOptions: { padding: fitPadding() } }),
         // margini larghi a ovest e a sud: pannello laterale e foglio inferiore coprono quella parte
         // dello schermo, e con limiti stretti la camera non riuscirebbe a centrare la zona visibile
-        maxBounds: [[b.west - 0.12, b.south - 0.22], [b.east + 0.05, b.north + 0.04]],
-        minZoom: 10, maxZoom: 19,
+        maxBounds: [[b.west - 0.25, b.south - 0.3], [b.east + 0.15, b.north + 0.12]],
+        minZoom: 9.5, maxZoom: 19,
         pitch: settings.threeD ? 38 : 0, maxPitch: 70,
         attributionControl: { compact: true, customAttribution: 'Orari: opentransportdata.swiss (GTFS)' },
         cooperativeGestures: false,
@@ -133,7 +134,7 @@ export default function MapView({ onFallback }: Props) {
       const c = meta.perimeter.core;
       map.fitBounds([[c.west, c.south], [c.east, c.north]], { padding: fitPadding(), duration: 0 });
     }
-    if (import.meta.env.DEV) (window as any).__map = map;
+    if (import.meta.env.DEV || location.search.includes('debug')) (window as any).__map = map;
     map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
     map.addControl(new maplibregl.ScaleControl({ unit: 'metric', maxWidth: 110 }), 'bottom-right');
     // le immagini disegnate in canvas si installano alla prima richiesta (anche prima di «load»);
@@ -145,19 +146,24 @@ export default function MapView({ onFallback }: Props) {
       if (!map.hasImage(id)) map.addImage(id, { width: 1, height: 1, data: new Uint8Array(4) });
     });
     map.once('idle', () => { try { performance.mark('map-idle'); } catch { /* */ } });
+    // attribuzioni raccolte nel pulsante «i» (restano consultabili), per non coprire la mappa
+    map.once('load', () => map.getContainer().querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show'));
     map.on('load', async () => {
       try { performance.mark('map-load'); } catch { /* */ }
       if (!imagesInstalled) { imagesInstalled = true; installImages(map); }
-      map.addSource('dem-terrain', { type: 'raster-dem', tiles: [`${origin}/terrain/{z}/{x}/{y}.png`], encoding: 'terrarium', tileSize: 256, minzoom: 8, maxzoom: 14, bounds });
+      // i simboli con scritte a mano si ridisegnano quando il carattere è disponibile
+      document.fonts?.load('20px "Architects Daughter"').then(() => { try { installImages(map); } catch { /* mappa già rimossa */ } }).catch(() => {});
+      // rilievo 3D su tutta la regione (risoluzione del contesto): niente «gradino» al bordo dell'area
+      map.addSource('dem-terrain', { type: 'raster-dem', tiles: [`${origin}/terrain/{z}/{x}/{y}.png`], encoding: 'terrarium', tileSize: 256, minzoom: 8, maxzoom: 11, bounds: WIDE });
       if (settings.threeD) map.setTerrain({ source: 'dem-terrain', exaggeration: 1.35 });
       // perimetro di prodotto
       map.addSource('perimeter', { type: 'geojson', data: { type: 'Feature', properties: {}, geometry: meta.perimeter.polygon } });
-      map.addLayer({ id: 'perimeter-line', type: 'line', source: 'perimeter', paint: { 'line-color': '#c8643c', 'line-width': 1.4, 'line-dasharray': [6, 4], 'line-opacity': 0.55 } });
+      map.addLayer({ id: 'perimeter-line', type: 'line', source: 'perimeter', paint: { 'line-color': '#d2553a', 'line-width': 1.2, 'line-dasharray': [2, 3], 'line-opacity': 0.35 } });
       // luoghi del catalogo
       map.addSource('places', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       map.addLayer({ id: 'places-landmark', type: 'symbol', source: 'places', minzoom: 11.5, filter: ['has', 'landmark'], layout: { 'icon-image': ['concat', 'lm-', ['get', 'landmark']], 'icon-size': ['interpolate', ['linear'], ['zoom'], 11.5, 0.35, 14, 0.6, 17, 0.9], 'icon-anchor': 'bottom', 'icon-allow-overlap': true, 'icon-ignore-placement': true, 'symbol-sort-key': 1 } });
       map.addLayer({ id: 'places-dot', type: 'symbol', source: 'places', minzoom: 12.5, filter: ['!', ['has', 'landmark']], layout: { 'icon-image': ['get', 'icon'], 'icon-size': ['interpolate', ['linear'], ['zoom'], 12.5, 0.55, 16, 0.9], 'icon-allow-overlap': true, 'icon-ignore-placement': true } });
-      map.addLayer({ id: 'places-label', type: 'symbol', source: 'places', minzoom: 13, layout: { 'text-field': ['get', 'name'], 'text-font': ['Open Sans Semibold'], 'text-size': ['interpolate', ['linear'], ['zoom'], 13, 10.5, 17, 13.5], 'text-offset': [0, 0.9], 'text-anchor': 'top', 'text-max-width': 9, 'text-optional': true }, paint: { 'text-color': '#3b2a1f', 'text-halo-color': '#fbf6ea', 'text-halo-width': 1.8 } });
+      map.addLayer({ id: 'places-label', type: 'symbol', source: 'places', minzoom: 13.5, layout: { 'text-field': ['get', 'name'], 'text-font': HAND, 'text-size': ['interpolate', ['linear'], ['zoom'], 13.5, 12, 17, 15], 'text-offset': [0, 0.9], 'text-anchor': 'top', 'text-max-width': 9, 'text-optional': true }, paint: { 'text-color': '#2a2622', 'text-halo-color': '#f3eee4', 'text-halo-width': 1.8 } });
       // figure decorative del modellino: poche, fisse, uguali a ogni ora (non sono presenze reali)
       map.addSource('npc', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       map.addLayer({ id: 'npc', type: 'symbol', source: 'npc', minzoom: 16, layout: { 'icon-image': ['get', 'icon'], 'icon-size': ['interpolate', ['linear'], ['zoom'], 16, 0.8, 18, 1.3, 19.5, 1.9], 'icon-anchor': 'bottom', 'icon-allow-overlap': true, 'icon-ignore-placement': true }, paint: { 'icon-opacity': ['interpolate', ['linear'], ['zoom'], 16, 0, 16.5, 0.85] } });
@@ -169,15 +175,15 @@ export default function MapView({ onFallback }: Props) {
       map.addLayer({ id: 'alt-route', type: 'line', source: 'alt-route', layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#7c5e9a', 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 2, 16, 6], 'line-opacity': 0.45, 'line-dasharray': [1.5, 1.2] } });
       // percorso del piano
       map.addSource('route', { type: 'geojson', data: { type: 'FeatureCollection', features: [] }, lineMetrics: false });
-      map.addLayer({ id: 'route-halo', type: 'line', source: 'route', layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#fbf6ea', 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 5, 16, 12], 'line-opacity': 0.9 } });
-      map.addLayer({ id: 'route-ride', type: 'line', source: 'route', filter: ['==', ['get', 'ride'], 1], layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': ['get', 'color'], 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 3, 16, 7], 'line-opacity': ['case', ['==', ['get', 'done'], 1], 0.45, 1] } });
-      map.addLayer({ id: 'route-walk', type: 'line', source: 'route', filter: ['!=', ['get', 'ride'], 1], layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': ['get', 'color'], 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 2.2, 16, 5], 'line-dasharray': [1.2, 1.1], 'line-opacity': ['case', ['==', ['get', 'done'], 1], 0.4, 1] } });
+      map.addLayer({ id: 'route-halo', type: 'line', source: 'route', layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#f3eee4', 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 6, 16, 13], 'line-opacity': 0.85 } });
+      map.addLayer({ id: 'route-ride', type: 'line', source: 'route', filter: ['==', ['get', 'ride'], 1], layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': ['get', 'color'], 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 3.2, 16, 7.5], 'line-opacity': ['case', ['==', ['get', 'done'], 1], 0.35, 0.92] } });
+      map.addLayer({ id: 'route-walk', type: 'line', source: 'route', filter: ['!=', ['get', 'ride'], 1], layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': ['get', 'color'], 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 2.6, 16, 5.5], 'line-dasharray': [1.4, 1.2], 'line-opacity': ['case', ['==', ['get', 'done'], 1], 0.35, 0.95] } });
       map.addSource('stops', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-      map.addLayer({ id: 'stops', type: 'symbol', source: 'stops', layout: { 'icon-image': ['get', 'icon'], 'icon-size': ['interpolate', ['linear'], ['zoom'], 10, 0.45, 15, 0.75], 'icon-anchor': ['case', ['==', ['get', 'kind'], 'stop'], 'bottom', ['==', ['get', 'kind'], 'start'], 'bottom-left', 'center'], 'icon-allow-overlap': true, 'text-field': ['case', ['==', ['get', 'kind'], 'stop'], ['concat', ['get', 'time'], ' · ', ['get', 'name']], ['==', ['get', 'kind'], 'decision'], '', ['get', 'name']], 'text-font': ['Open Sans Semibold'], 'text-size': 11.5, 'text-offset': [0, 0.6], 'text-anchor': 'top', 'text-optional': true, 'text-max-width': 10, 'symbol-sort-key': ['coalesce', ['get', 'n'], 0] }, paint: { 'text-color': '#2b2a27', 'text-halo-color': '#fbf6ea', 'text-halo-width': 2 } });
+      map.addLayer({ id: 'stops', type: 'symbol', source: 'stops', layout: { 'icon-image': ['get', 'icon'], 'icon-size': ['interpolate', ['linear'], ['zoom'], 10, 0.45, 15, 0.75], 'icon-anchor': ['case', ['==', ['get', 'kind'], 'stop'], 'bottom', ['==', ['get', 'kind'], 'start'], 'bottom-left', 'center'], 'icon-allow-overlap': true, 'text-field': ['case', ['==', ['get', 'kind'], 'stop'], ['concat', ['get', 'time'], ' · ', ['get', 'name']], ['==', ['get', 'kind'], 'decision'], '', ['get', 'name']], 'text-font': HAND, 'text-size': 13.5, 'text-offset': [0, 0.6], 'text-anchor': 'top', 'text-optional': true, 'text-max-width': 10, 'symbol-sort-key': ['coalesce', ['get', 'n'], 0] }, paint: { 'text-color': '#2a2622', 'text-halo-color': '#f3eee4', 'text-halo-width': 2 } });
       // eventi del calendario (vista Eventi)
       map.addSource('event-pins', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-      map.addLayer({ id: 'event-pins', type: 'circle', source: 'event-pins', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 5, 15, 9], 'circle-color': ['case', ['==', ['get', 'status'], 'scheduled'], '#6b4f8a', '#a8352a'], 'circle-stroke-color': '#fbf6ea', 'circle-stroke-width': 2 } });
-      map.addLayer({ id: 'event-pins-label', type: 'symbol', source: 'event-pins', layout: { 'text-field': ['concat', ['get', 'time'], ' · ', ['get', 'title']], 'text-font': ['Open Sans Semibold'], 'text-size': 11.5, 'text-offset': [0, 1.1], 'text-anchor': 'top', 'text-max-width': 12, 'text-optional': true }, paint: { 'text-color': '#3f2c55', 'text-halo-color': '#fbf6ea', 'text-halo-width': 2 } });
+      map.addLayer({ id: 'event-pins', type: 'circle', source: 'event-pins', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 5, 15, 9], 'circle-color': ['case', ['==', ['get', 'status'], 'scheduled'], '#2f6f7e', '#a8352a'], 'circle-stroke-color': '#f3eee4', 'circle-stroke-width': 2 } });
+      map.addLayer({ id: 'event-pins-label', type: 'symbol', source: 'event-pins', layout: { 'text-field': ['concat', ['get', 'time'], ' · ', ['get', 'title']], 'text-font': HAND, 'text-size': 13, 'text-offset': [0, 1.1], 'text-anchor': 'top', 'text-max-width': 12, 'text-optional': true }, paint: { 'text-color': '#1f4a54', 'text-halo-color': '#f3eee4', 'text-halo-width': 2 } });
       map.on('click', 'event-pins', (e) => { const id = e.features?.[0]?.properties?.placeId; if (id) useApp.getState().set({ placeCard: id }); });
       map.on('click', 'places-dot', (e) => { const id = e.features?.[0]?.properties?.id; if (id) useApp.getState().set({ placeCard: id }); });
       map.on('click', 'places-landmark', (e) => { const id = e.features?.[0]?.properties?.id; if (id) useApp.getState().set({ placeCard: id }); });
@@ -232,7 +238,7 @@ export default function MapView({ onFallback }: Props) {
     (map.getSource('stops') as GeoJSONSource)?.setData(planStopsGeoJSON(p));
     const cmp = compareBranch ? branches.find((b) => b.id === compareBranch)?.plan : null;
     (map.getSource('alt-route') as GeoJSONSource)?.setData(planRouteGeoJSON(cmp ?? null, null));
-    if (p && (view === 'results' || view === 'share' || (view === 'sim' && useSim.getState().t <= Date.parse(p.totals.startsAt)))) {
+    if (p && (view === 'results' || view === 'share' || view === 'summary' || (view === 'sim' && useSim.getState().t <= Date.parse(p.totals.startsAt)))) {
       const bb = boundsOf(planCoords(p));
       if (bb) map.fitBounds(bb, { padding: fitPadding(), duration: settings.reducedMotion ? 0 : 900, pitch: settings.threeD ? 40 : 0 });
     }
@@ -292,8 +298,8 @@ export default function MapView({ onFallback }: Props) {
       if (lowStreak >= 2 && level < 2) {
         level++;
         lowStreak = 0;
+        // in silenzio: nessun messaggio tecnico, la mappa resta fluida
         applyDetail(map, level);
-        useApp.getState().notify(level === 1 ? 'Dettaglio ridotto (rilievo e curve di livello) per mantenere la fluidità.' : 'Dettaglio minimo: edifici in pianta e risoluzione ridotta.', 'info');
       }
     };
     raf = requestAnimationFrame(tick);
@@ -343,12 +349,12 @@ export default function MapView({ onFallback }: Props) {
     const markers = people.map((person, i) => {
       const el = document.createElement('div');
       el.className = 'character';
-      el.innerHTML = `${avatarSvg(person, 36)}<div class="prop" aria-hidden="true"></div><div class="bubble" hidden></div><div class="name">${escapeHtml(person.name)}</div>`;
+      el.innerHTML = `${avatarSvg(person, 38)}<div class="prop" aria-hidden="true"></div><div class="bubble" hidden></div><div class="name">${escapeHtml(person.name)}</div>`;
       el.setAttribute('role', 'img');
       el.setAttribute('aria-label', `Personaggio: ${person.name}`);
       el.dataset.name = person.name;
       els.push(el);
-      return new maplibregl.Marker({ element: el, anchor: 'bottom', offset: formation(i, people.length) }).setLngLat([p.trips[0]?.from.lon ?? p.stops[0].lon, p.trips[0]?.from.lat ?? p.stops[0].lat]).addTo(map);
+      return new maplibregl.Marker({ element: el, anchor: 'bottom', offset: formation(i, people.length, 28) }).setLngLat([p.trips[0]?.from.lon ?? p.stops[0].lon, p.trips[0]?.from.lat ?? p.stops[0].lat]).addTo(map);
     });
     const groupEl = document.createElement('div');
     groupEl.className = 'group-marker';
@@ -361,7 +367,7 @@ export default function MapView({ onFallback }: Props) {
     vehicleEl.setAttribute('role', 'img');
     vehicleEl.setAttribute('aria-label', 'Il gruppo a bordo del mezzo');
     const vehicle = new maplibregl.Marker({ element: vehicleEl, anchor: 'bottom' }).setLngLat([p.stops[0]?.lon ?? 8.95, p.stops[0]?.lat ?? 46]).addTo(map);
-    markersRef.current = { group, people: markers, vehicle, els, groupEl, vehicleEl };
+    markersRef.current = { group, people: markers, vehicle, els, groupEl, vehicleEl, spacing: 28 };
     if (import.meta.env.DEV) (window as any).__markers = markersRef.current;
     const tl = tlRef.current;
     if (tl) placeCharacters(map, stateAt(tl, useSim.getState().t), []);
@@ -373,6 +379,11 @@ export default function MapView({ onFallback }: Props) {
     const zoom = map.getZoom();
     const riding = st.scene === 'ride' && st.mode && st.mode !== 'walk' && st.mode !== 'hike';
     const aggregated = zoom < 13.2;
+    // da vicino le pedine si allargano e mostrano il nome
+    const near = zoom >= 16;
+    const spacing = near ? 46 : 28;
+    if (m.spacing !== spacing) { m.spacing = spacing; m.people.forEach((mk, i) => mk.setOffset(formation(i, m.people.length, spacing))); }
+    map.getContainer().classList.toggle('pawns-near', near);
     const moving = st.scene === 'walk' || (st.scene === 'activity' && !!tlRef.current?.segments[st.segIndex]?.coords);
     const reduced = useApp.getState().settings.reducedMotion;
     m.vehicleEl.style.display = riding ? '' : 'none';
@@ -447,14 +458,12 @@ function propSvg(pose: string): string {
   return '';
 }
 
-function formation(i: number, n: number): [number, number] {
+/** Pedine affiancate (fino a sei per fila), leggermente sfalsate come su un tabellone. */
+function formation(i: number, n: number, spacing: number): [number, number] {
   if (n === 1) return [0, 0];
-  const ring = i < 6 ? 0 : 1;
-  const k = ring === 0 ? i : i - 6;
-  const count = ring === 0 ? Math.min(n, 6) : n - 6;
-  const r = ring === 0 ? 17 : 33;
-  const a = (k / count) * Math.PI * 2 + (ring ? Math.PI / count : 0);
-  return [Math.round(Math.cos(a) * r), Math.round(Math.sin(a) * r * 0.55)];
+  const row = Math.floor(i / 6), k = i % 6;
+  const count = Math.min(6, n - row * 6);
+  return [Math.round((k - (count - 1) / 2) * spacing), row * 20 - (k % 2 ? 4 : 0)];
 }
 
 function escapeHtml(s: string) { return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!)); }
@@ -471,7 +480,7 @@ export function applyDetail(map: MLMap, level: number) {
     for (const id of ['contours', 'contour-labels']) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
   }
   if (level >= 2) {
-    for (const id of ['building-3d', 'building-roof', 'building-windows', 'hillshade', 'bg-texture', 'lc-forest-pattern']) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
+    for (const id of ['building-3d', 'building-windows', 'hillshade', 'ctx-hillshade', 'bg-texture', 'inner-texture', 'lc-forest-pattern', 'lc-park-trees', 'water-hatch']) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
     if (map.getLayer('building-flat')) map.setLayerZoomRange('building-flat', 13, 24);
     try { (map as any).setPixelRatio?.(1); } catch { /* */ }
   }

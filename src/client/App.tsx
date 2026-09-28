@@ -1,8 +1,8 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { useApp, useSim } from './store.ts';
+import { useApp, useSim, type View } from './store.ts';
 import { get, track } from './api.ts';
 import MapView from './map/MapView.tsx';
-import Home from './ui/Home.tsx';
+import Landing from './ui/Home.tsx';
 import Wizard from './ui/Wizard.tsx';
 import Planning from './ui/Planning.tsx';
 import Results from './ui/Results.tsx';
@@ -13,12 +13,14 @@ import PlaceCard from './ui/PlaceCard.tsx';
 import Explore, { EventsView } from './ui/Explore.tsx';
 import { Saved, Settings, About, ShareView, openSaved } from './ui/Misc.tsx';
 import Fallback from './ui/Fallback.tsx';
-import { Toast, Badge, Spinner } from './ui/common.tsx';
+import { Toast, Spinner } from './ui/common.tsx';
 import { useSimulation } from './sim/useSimulation.ts';
-import { t } from './i18n.ts';
 import { skipScene, play, pause } from './sim/actions.ts';
 
 const Admin = lazy(() => import('./ui/Admin.tsx'));
+
+/** Altezza del foglio inferiore (telefono) adatta a ciascuna vista: mappa in primo piano o modulo a tutto schermo. */
+const SHEET_FOR: Partial<Record<View, 'peek' | 'half' | 'full'>> = { wizard: 'full', planning: 'half', results: 'half', sim: 'peek', summary: 'full', explore: 'half', events: 'half', about: 'full', settings: 'full', saved: 'full', share: 'half' };
 
 export default function App() {
   const view = useApp((s) => s.view);
@@ -32,8 +34,12 @@ export default function App() {
   const [shareToken, setShareToken] = useState<string | null>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   useSimulation();
-  // ogni vista si apre dall'inizio (non dalla posizione di scorrimento della vista precedente)
-  useEffect(() => { bodyRef.current?.scrollTo({ top: 0, behavior: 'instant' }); }, [view]);
+  // ogni vista si apre dall'inizio, con il foglio (telefono) all'altezza adatta
+  useEffect(() => {
+    bodyRef.current?.scrollTo({ top: 0, behavior: 'instant' });
+    const s = SHEET_FOR[view];
+    if (s) set({ sheet: s });
+  }, [view, set]);
 
   // metadati e instradamento iniziale
   useEffect(() => {
@@ -67,39 +73,29 @@ export default function App() {
   useEffect(() => { if (webgl !== 'ok') track('webgl_fallback'); }, [webgl]);
 
   const showMap = webgl === 'ok' && !settings.listView;
-  const nav = (v: typeof view) => { set({ view: v, placeCard: null }); if (v !== 'share' && location.pathname !== '/') history.pushState(null, '', '/'); };
+  // sotto la schermata iniziale nulla è raggiungibile da tastiera o lettore di schermo
+  const behind = view === 'home' ? { inert: true } : {};
+  const nav = (v: View) => { set({ view: v, placeCard: null }); if (v !== 'share' && location.pathname !== '/') history.pushState(null, '', '/'); };
 
   return (
     <div className={`app view-${view} sheet-${sheet}`}>
-      <header className="topbar">
+      <header className="topbar" {...behind}>
         <button className="brand" onClick={() => nav('home')} aria-label="Torna all'inizio">
-          <svg viewBox="0 0 64 64" width="30" height="30" aria-hidden><path d="M6 44 C18 30 26 34 32 24 C38 14 46 22 58 12 L58 58 L6 58Z" fill="#a9b98f" stroke="#2b2a27" strokeWidth="3" /><path d="M6 50 C20 46 34 52 58 46 L58 58 L6 58Z" fill="#7fb7c9" stroke="#2b2a27" strokeWidth="3" /><circle cx="46" cy="18" r="5" fill="#c8643c" stroke="#2b2a27" strokeWidth="2.5" /></svg>
-          <span>{t('app.name')}</span>
+          <svg viewBox="0 0 64 64" width="32" height="32" aria-hidden><circle cx="32" cy="32" r="30" fill="#fbf8f2" stroke="#2a2622" strokeWidth="3" /><path d="M8 38 C18 30 24 30 30 24 C36 17 42 14 48 22 C52 28 56 32 58 36" fill="none" stroke="#2a2622" strokeWidth="3" strokeLinecap="round" /><path d="M10 46 h14 M30 48 h18 M18 54 h22" stroke="#2f6f7e" strokeWidth="3" strokeLinecap="round" /><circle cx="44" cy="17" r="5" fill="#c24a31" stroke="#2a2622" strokeWidth="2.5" /></svg>
+          <span>Lugano in anteprima</span>
         </button>
-        <button className="demo-pill" onClick={() => nav('about')} title={t('demo.text')}><Badge kind="demo">{t('demo.badge')}</Badge><span className="demo-text">{meta?.ai.configured ? 'AI live · dati parziali' : 'dati dimostrativi e stime'}</span></button>
-        <nav className="topnav" aria-label="Navigazione principale">
-          <button onClick={() => nav('explore')} aria-current={view === 'explore'}>Esplora</button>
-          <button onClick={() => nav('events')} aria-current={view === 'events'}>Eventi</button>
-          {meta?.features?.sharing ? <button onClick={() => nav('saved')} aria-current={view === 'saved'}>Salvati</button> : null}
-          <button onClick={() => nav('settings')} aria-current={view === 'settings'} aria-label="Impostazioni">⚙︎</button>
-        </nav>
+        <TopNav view={view} nav={nav} />
       </header>
-      {!online ? <div className="offline-banner" role="status">Siete offline: potete consultare i programmi salvati su questo dispositivo, ma senza verifiche aggiornate.</div> : null}
-      <main className="stage">
+      {!online ? <div className="offline-banner" role="status">Siete offline</div> : null}
+      <main className="stage" {...behind}>
         {metaError ? <div className="fatal"><h2>Servizio non raggiungibile</h2><p>{metaError}</p><button className="btn" onClick={() => location.reload()}>Riprova</button></div>
-          : !meta ? <div className="loading-map"><Spinner /> Carico la piccola Lugano…</div>
+          : !meta ? <div className="loading-map"><Spinner /></div>
           : showMap ? <MapView onFallback={() => { /* il componente segnala lo stato webgl */ }} /> : <Fallback />}
         <Cutscene />
-        {meta && showMap ? <button className="list-toggle" onClick={() => useApp.getState().setSettings({ listView: true })} title="Vista testuale senza mappa, con le stesse informazioni">Elenco</button> : null}
       </main>
-      <aside id="panel" className={`panel ${view === 'admin' ? 'panel-wide' : ''}`} aria-label="Pannello">
-        <div className="sheet-handle">
-          <button aria-label="Riduci il pannello" onClick={() => set({ sheet: sheet === 'full' ? 'half' : 'peek' })}>▾</button>
-          <span />
-          <button aria-label="Espandi il pannello" onClick={() => set({ sheet: sheet === 'peek' ? 'half' : 'full' })}>▴</button>
-        </div>
+      <aside id="panel" className={`panel ${view === 'admin' ? 'panel-wide' : ''}`} aria-label="Pannello" {...behind}>
+        <SheetHandle />
         <div className="panel-body" ref={bodyRef}>
-          {view === 'home' && <Home />}
           {view === 'wizard' && <Wizard />}
           {view === 'planning' && <Planning />}
           {view === 'results' && <Results />}
@@ -116,7 +112,69 @@ export default function App() {
       </aside>
       {view === 'sim' ? <SimControls /> : null}
       <PlaceCard />
+      {view === 'home' ? <Landing /> : null}
       <Toast />
+    </div>
+  );
+}
+
+function TopNav({ view, nav }: { view: View; nav: (v: View) => void }) {
+  const [open, setOpen] = useState(false);
+  const sharing = useApp((s) => !!s.meta?.features?.sharing);
+  const listView = useApp((s) => s.settings.listView);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => { if (!ref.current?.contains(e.target as Node)) setOpen(false); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    window.addEventListener('mousedown', onDown); window.addEventListener('keydown', onKey);
+    return () => { window.removeEventListener('mousedown', onDown); window.removeEventListener('keydown', onKey); };
+  }, [open]);
+  const pick = (fn: () => void) => { setOpen(false); fn(); };
+  return (
+    <div className="nav-wrap" ref={ref}>
+      <nav className="topnav" aria-label="Navigazione principale">
+        <button onClick={() => nav('explore')} aria-current={view === 'explore'}>Esplora</button>
+        <button onClick={() => nav('events')} aria-current={view === 'events'}>Eventi</button>
+        <button className="more" onClick={() => setOpen(!open)} aria-expanded={open} aria-haspopup="menu" aria-label="Altro">⋯</button>
+      </nav>
+      {open ? (
+        <div className="menu-pop" role="menu">
+          <button role="menuitem" onClick={() => pick(() => nav('wizard'))}>Organizza una giornata</button>
+          {sharing ? <button role="menuitem" onClick={() => pick(() => nav('saved'))}>Programmi salvati</button> : null}
+          <button role="menuitem" onClick={() => pick(() => useApp.getState().setSettings({ listView: !listView }))}>{listView ? 'Torna alla mappa' : 'Vista elenco (senza mappa)'}</button>
+          <button role="menuitem" onClick={() => pick(() => nav('settings'))}>Impostazioni</button>
+          <button role="menuitem" onClick={() => pick(() => nav('about'))}>Dati, fonti e limiti</button>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/** Maniglia del foglio inferiore (telefono): trascinare in su o in giù, oppure toccare per alternare. */
+function SheetHandle() {
+  const sheet = useApp((s) => s.sheet);
+  const set = useApp((s) => s.set);
+  const start = useRef<number | null>(null);
+  const dragged = useRef(false);
+  const order = ['peek', 'half', 'full'] as const;
+  const move = (dir: 1 | -1) => set({ sheet: order[Math.max(0, Math.min(2, order.indexOf(sheet) + dir))] });
+  return (
+    <div className="sheet-handle">
+      <button
+        aria-label={sheet === 'full' ? 'Riduci il pannello' : 'Espandi il pannello'}
+        onPointerDown={(e) => { start.current = e.clientY; dragged.current = false; }}
+        onPointerUp={(e) => {
+          const s = start.current; start.current = null;
+          if (s == null) return;
+          const dy = e.clientY - s;
+          if (Math.abs(dy) > 24) { dragged.current = true; move(dy < 0 ? 1 : -1); }
+        }}
+        onClick={() => {
+          if (dragged.current) { dragged.current = false; return; }
+          set({ sheet: sheet === 'full' ? 'half' : 'full' });
+        }}
+      ><span /></button>
     </div>
   );
 }
@@ -128,7 +186,7 @@ function Cutscene() {
     <button className="cutscene" onClick={() => useSim.getState().set({ cutscene: null })} aria-label="Salta la scena (Esc)">
       <span className="cs-time">{c.subtitle}</span>
       <span className="cs-title">{c.title}</span>
-      <span className="cs-skip">Tocca o premi Esc per saltare</span>
+      <span className="cs-skip">tocca per saltare</span>
     </button>
   );
 }

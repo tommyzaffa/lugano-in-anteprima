@@ -28,7 +28,7 @@ COPY --from=build /app/dist ./dist
 COPY src/server ./src/server
 COPY src/shared ./src/shared
 COPY data/geo ./data/geo
-COPY data/build/catalog.json data/build/explore.json data/build/addresses.json data/build/graph-walk.json data/build/transit.json ./data/build/
+COPY data/build/catalog.json data/build/explore.json data/build/addresses.json data/build/graph-walk.json data/build/transit.json data/build/events-live.json ./data/build/
 COPY public/tiles ./public/tiles
 COPY public/terrain ./public/terrain
 COPY public/glyphs ./public/glyphs

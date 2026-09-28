@@ -30,57 +30,60 @@ export default function PlaceCard() {
   if (!id) return null;
   const close = () => set({ placeCard: null });
   const p = data?.place;
+  const week = data?.week ?? [];
   return (
     <aside className="place-card" aria-label="Scheda del luogo">
       <button className="icon-btn close" onClick={close} aria-label="Chiudi scheda">✕</button>
       {err ? <div className="notice bad">{err}</div> : !p ? <Spinner /> : (
         <>
           <h2>{p.name}</h2>
-          <div className="muted">{CATEGORY[p.category] ?? p.category} · {p.area ?? ''} · Comune di {p.municipality.name} ({p.municipality.country === 'IT' ? 'Italia' : 'Svizzera'})</div>
-          <p>{p.description}</p>
+          <div className="muted">{CATEGORY[p.category] ?? p.category}{p.area ? ` · ${p.area}` : ''}{p.municipality.country === 'IT' ? ' · Italia' : ''}</div>
+          {p.description ? <p>{p.description}</p> : null}
+          <div className="today">{p.schedules.length && week[0] ? <>🕑 {new Date(`${week[0].date}T12:00:00Z`).toLocaleDateString('it-CH', { weekday: 'long', timeZone: 'UTC' })}: {week[0].schedules.map((s: any) => s.text).join(' · ')}</> : <span className="muted">Orari non disponibili: da verificare</span>}</div>
           {p.mountain ? (
             <div className="notice info">
               <strong>Montagna{p.mountain.elevation ? ` · ${p.mountain.elevation} m` : ''}</strong>
               <ul>{p.mountain.access.map((a: string) => <li key={a}>{a}</li>)}</ul>
               {p.mountain.returnNote ? <div>{p.mountain.returnNote}</div> : null}
-              {!p.mountain.conditionsVerified && p.mountain.kind === 'hike' ? <div><Badge kind="warn">condizioni del sentiero non verificate</Badge></div> : null}
             </div>
           ) : null}
-          <h3>Orari (prossimi 7 giorni)</h3>
-          {p.schedules.length ? (
-            <>
-              <table className="hours"><tbody>{data.week.map((w: any) => <tr key={w.date}><th scope="row">{new Date(`${w.date}T12:00:00Z`).toLocaleDateString('it-CH', { weekday: 'short', day: 'numeric', month: 'numeric', timeZone: 'UTC' })}</th><td>{w.schedules.map((s: any) => s.text).join(' · ')}</td></tr>)}</tbody></table>
-              <div className="muted">Fonte: <EvidenceBadge status={p.schedules[0].evidence.status} /> {p.schedules[0].evidence.note ?? ''}<SourceLink evidence={p.schedules[0].evidence} /></div>
-              {closureRanges(p.schedules[0].exceptions ?? [], new Date().toISOString().slice(0, 10)).map((c) => (
-                <div key={c.from} className="notice warn">Chiusura straordinaria {c.from === c.to ? `il ${fmtDay(c.from)}` : `dal ${fmtDay(c.from)} al ${fmtDay(c.to)}`}: {c.note}</div>
-              ))}
-            </>
-          ) : <div><Badge kind="bad">orari non disponibili</Badge> <span className="muted">Da verificare sul posto o sul sito ufficiale.</span></div>}
-          <h3>Prezzi</h3>
-          <ul className="prices">{p.prices.map((x: any) => <li key={x.id}>{x.label}: {x.status === 'unknown' ? 'sconosciuto' : x.unit === 'free' ? 'gratuito' : `${fmtRange(x.min ?? null, x.max ?? null)}${x.unit === 'person' ? ' a persona' : ' per gruppo'}`} <EvidenceBadge status={x.status === 'known' ? x.evidence.status : x.status} />{x.note ? <span className="muted"> {x.note}</span> : null}<SourceLink evidence={x.evidence} /></li>)}</ul>
-          <h3>Accessibilità</h3>
-          <div>Sedia a rotelle: {label3(p.accessibility.wheelchair)} · Passeggino: {label3(p.accessibility.stroller)} · Scale: {({ none: 'nessuna', some: 'alcune', many: 'molte', unknown: 'non note' } as any)[p.accessibility.stairs]} <EvidenceBadge status={p.accessibility.evidence.status} /><SourceLink evidence={p.accessibility.evidence} /></div>
-          {p.accessibility.note ? <div className="muted">{p.accessibility.note}</div> : null}
-          <div className="muted">Un luogo senza dati sulle scale non è considerato accessibile.</div>
-          {p.suitability.habitualAtmosphere !== 'unknown' ? <div className="muted">Atmosfera abituale (curata dalla redazione, non affluenza reale): {({ usually_lively: 'di solito animato', usually_quiet: 'di solito tranquillo', varies: 'variabile' } as any)[p.suitability.habitualAtmosphere]}</div> : null}
-          {data.events.length ? (
-            <>
-              <h3>Eventi (dimostrativi)</h3>
-              <ul>{data.events.slice(0, 6).map((o: any) => <li key={o.sessionId}>{o.start.slice(5, 10)} {hhmm(o.start)} {o.title} {o.status !== 'scheduled' ? <Badge kind="bad">{({ cancelled: 'annullato', sold_out: 'esaurito', postponed: 'rinviato' } as any)[o.status]}</Badge> : null}</li>)}</ul>
-            </>
-          ) : null}
-          <h3>Come arrivare</h3>
-          <ul>{p.nearestStops.map((s: any) => <li key={s.id}>{s.name} · {s.distanceM} m · {s.modes.join(', ')}</li>)}</ul>
-          <div className="links">
-            {p.links.website ? <a href={p.links.website} target="_blank" rel="noopener noreferrer">Sito ufficiale</a> : null}
-            <a href={`https://www.openstreetmap.org/${p.osm?.[0] === 'n' ? 'node' : p.osm?.[0] === 'w' ? 'way' : 'relation'}/${p.osm?.slice(1)}`} target="_blank" rel="noopener noreferrer">Oggetto su OpenStreetMap</a>
+          {closureRanges(p.schedules[0]?.exceptions ?? [], new Date().toISOString().slice(0, 10)).map((c) => (
+            <div key={c.from} className="notice warn">Chiuso {c.from === c.to ? `il ${fmtDay(c.from)}` : `dal ${fmtDay(c.from)} al ${fmtDay(c.to)}`}: {c.note}</div>
+          ))}
+          <div className="pc-actions">
+            <button className="btn-ghost" onClick={() => { useApp.getState().setDraft((d) => ({ ...d, mustSee: [...new Set([...d.mustSee, p.id])] })); useApp.getState().notify(`${p.name}: da non perdere nella prossima giornata.`, 'ok'); }}>Da non perdere</button>
+            <button className="btn-ghost" aria-pressed={favs.includes(p.id)} onClick={() => toggleFav(p.id)} aria-label="Preferito">{favs.includes(p.id) ? '★' : '☆'}</button>
+            <button className="btn-ghost" aria-pressed={visited.includes(p.id)} onClick={() => toggleVisited(p.id)}>{visited.includes(p.id) ? '✓ Visitato' : 'Già visitato'}</button>
+            {p.links.website ? <a className="btn-ghost" href={p.links.website} target="_blank" rel="noopener noreferrer">Sito</a> : null}
           </div>
-          <div className="muted small">Fonti: {data.sources.map((s: any) => s.name).join(' · ')} · ultimo controllo redazionale {p.lastEditorialCheck ?? 'n.d.'}</div>
-          <div className="row">
-            <button className="btn-ghost" onClick={() => { useApp.getState().setDraft((d) => ({ ...d, mustSee: [...new Set([...d.mustSee, p.id])] })); useApp.getState().notify(`${p.name} aggiunto alle tappe da non perdere.`, 'ok'); }}>Da non perdere</button>
-            <button className="btn-ghost" aria-pressed={favs.includes(p.id)} onClick={() => toggleFav(p.id)}>{favs.includes(p.id) ? '★ Preferito' : '☆ Preferito'}</button>
-            <button className="btn-ghost" aria-pressed={visited.includes(p.id)} onClick={() => toggleVisited(p.id)}>{visited.includes(p.id) ? '✓ Già visitato' : 'Già visitato'}</button>
-            <button className="btn-ghost" onClick={() => setReport(true)}>Segnala un errore</button>
+          {data.events.length ? (
+            <details className="more" open>
+              <summary>Eventi qui <span className="muted">· {data.events.length}</span></summary>
+              <ul>{data.events.slice(0, 6).map((o: any) => <li key={o.sessionId}>{o.start.slice(8, 10)}/{o.start.slice(5, 7)} {hhmm(o.start)} {o.title} {o.status !== 'scheduled' ? <Badge kind="bad">{({ cancelled: 'annullato', sold_out: 'esaurito', postponed: 'rinviato' } as any)[o.status]}</Badge> : null}</li>)}</ul>
+            </details>
+          ) : null}
+          {p.schedules.length ? (
+            <details className="more">
+              <summary>Orari della settimana</summary>
+              <table className="hours"><tbody>{week.map((w: any) => <tr key={w.date}><th scope="row">{new Date(`${w.date}T12:00:00Z`).toLocaleDateString('it-CH', { weekday: 'short', day: 'numeric', month: 'numeric', timeZone: 'UTC' })}</th><td>{w.schedules.map((s: any) => s.text).join(' · ')}</td></tr>)}</tbody></table>
+              <div className="muted small">Fonte: <EvidenceBadge status={p.schedules[0].evidence.status} /> {p.schedules[0].evidence.note ?? ''}<SourceLink evidence={p.schedules[0].evidence} /></div>
+            </details>
+          ) : null}
+          <details className="more">
+            <summary>Prezzi</summary>
+            <ul className="prices">{p.prices.map((x: any) => <li key={x.id}>{x.label}: {x.status === 'unknown' ? 'sconosciuto' : x.unit === 'free' ? 'gratuito' : `${fmtRange(x.min ?? null, x.max ?? null)}${x.unit === 'person' ? ' a persona' : ' per gruppo'}`} <EvidenceBadge status={x.status === 'known' ? x.evidence.status : x.status} /><SourceLink evidence={x.evidence} /></li>)}</ul>
+          </details>
+          <details className="more">
+            <summary>Accessibilità</summary>
+            <div>Sedia a rotelle: {label3(p.accessibility.wheelchair)} · Passeggino: {label3(p.accessibility.stroller)} · Scale: {({ none: 'nessuna', some: 'alcune', many: 'molte', unknown: 'non note' } as any)[p.accessibility.stairs]} <EvidenceBadge status={p.accessibility.evidence.status} /></div>
+            {p.accessibility.note ? <div className="muted">{p.accessibility.note}</div> : null}
+          </details>
+          <details className="more">
+            <summary>Come arrivare</summary>
+            <ul>{p.nearestStops.map((s: any) => <li key={s.id}>{s.name} · {s.distanceM} m · {s.modes.join(', ')}</li>)}</ul>
+          </details>
+          <div className="muted small" style={{ marginTop: '.6rem' }}>
+            Fonti: {data.sources.map((s: any) => s.name).join(' · ')} · <a href={`https://www.openstreetmap.org/${p.osm?.[0] === 'n' ? 'node' : p.osm?.[0] === 'w' ? 'way' : 'relation'}/${p.osm?.slice(1)}`} target="_blank" rel="noopener noreferrer">OpenStreetMap</a> · <button className="link" onClick={() => setReport(true)}>Segnala un errore</button>
           </div>
           {report ? <ReportDialog targetId={p.id} onClose={() => setReport(false)} /> : null}
         </>

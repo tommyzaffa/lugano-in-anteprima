@@ -28,7 +28,9 @@
     "data:update": "npm run data:osm && npm run data:gtfs && npm run data:build && npm run data:diff",
     "data:gtfs-auto": "tsx scripts/data/update-gtfs.ts",
     "data:events": "tsx scripts/data/fetch-events.ts",
-    "data:probe": "tsx scripts/data/probe-sources.ts"
+    "data:probe": "tsx scripts/data/probe-sources.ts",
+    "data:context": "tsx scripts/geo/07-context.ts",
+    "data:glyphs": "node scripts/dev/build-glyphs.mjs"
   },
   "keywords": [],
   "author": "",
@@ -40,6 +42,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@fontsource/architects-daughter": "^5.3.0",
     "@hono/node-server": "^2.1.1",
     "fast-xml-parser": "^5.11.1",
     "geokdbush": "^2.1.0",
@@ -58,6 +62,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
+    "@mapbox/tiny-sdf": "^2.2.0",
     "@playwright/test": "^1.63.0",
     "@turf/turf": "^7.4.0",
     "@types/geojson": "^7946.0.16",
@@ -74,6 +79,7 @@
     "geojson-vt": "^5.0.2",
     "geotiff": "^3.0.5",
     "osmtogeojson": "^3.0.0-beta.5",
+    "pbf": "^5.1.2",
     "pngjs": "^7.0.0",
     "polylabel": "^2.1.0",
     "proj4": "^2.22.0",

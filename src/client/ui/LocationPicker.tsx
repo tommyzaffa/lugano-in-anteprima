@@ -59,7 +59,7 @@ export default function LocationPicker({ value, onChange, id, allowSensitive = t
 
   return (
     <div className="loc-picker">
-      <div className="loc-current" aria-live="polite">{value ? <>📍 <strong>{value.label}</strong>{value.sensitive ? <span className="muted"> · non verrà condiviso</span> : null}</> : <span className="muted">Nessun punto scelto</span>}</div>
+      <div className="loc-current" aria-live="polite">{value ? <><span aria-hidden>📍</span> <strong>{value.label}</strong></> : <span className="muted">Nessun punto scelto</span>}</div>
       <div className="loc-quick">
         {QUICK.map((l) => <button type="button" key={l.label} className={`chip ${value?.label === l.label ? 'on' : ''}`} onClick={() => onChange(l)}>{l.label}</button>)}
       </div>
@@ -74,8 +74,8 @@ export default function LocationPicker({ value, onChange, id, allowSensitive = t
         ) : null}
       </div>
       <div className="loc-actions">
-        <button type="button" className="btn-ghost" onClick={pickOnMap} aria-pressed={picking}>{picking ? 'Toccate la mappa…' : 'Scegli sulla mappa'}</button>
-        {allowSensitive ? <button type="button" className="btn-ghost" onClick={geolocate}>Usa la mia posizione</button> : null}
+        <button type="button" className="link" onClick={pickOnMap} aria-pressed={picking}>{picking ? 'Toccate la mappa…' : 'Scegli sulla mappa'}</button>
+        {allowSensitive ? <button type="button" className="link" onClick={geolocate}>Usa la mia posizione</button> : null}
       </div>
     </div>
   );

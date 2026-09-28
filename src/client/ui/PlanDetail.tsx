@@ -53,7 +53,6 @@ export function TripBlock({ trip, label }: { trip: Trip; label?: string }) {
     <div className="trip">
       <div className="trip-head"><span>{label ?? trip.summary.label}</span><span className="muted">{fmtDuration(trip.summary.durationMin)}{trip.cost.length ? <> · <Cost min={sum(trip.cost, 'min')} max={sum(trip.cost, 'max')} /></> : null}</span></div>
       <ul className="legs">{trip.legs.map((l) => <LegLine key={l.id} leg={l} />)}</ul>
-      {trip.alternatives?.length ? <div className="trip-alt muted">Alternative considerate: {trip.alternatives.map((a) => `${a.mode} ${a.durationMin} min`).join(' · ')}</div> : null}
     </div>
   );
 }
@@ -72,60 +71,49 @@ export function StopBlock({ stop, n, current }: { stop: PlanStop; n: number; cur
       <div className="stop-body">
         <div className="stop-head">
           <button className="stop-name link" onClick={() => stop.placeId && set({ placeCard: stop.placeId })}>{stop.name}</button>
-          {stop.locked ? <Badge kind="info">🔒 bloccata</Badge> : null}
-          {stop.kind === 'event' ? <Badge kind="demo">evento demo</Badge> : null}
+          {stop.locked ? <Badge kind="info">🔒 prenotato</Badge> : null}
         </div>
         <div className="stop-meta">
-          <span>{hhmm(stop.start)}–{hhmm(stop.end)}</span> · <span>{CATEGORY[stop.category] ?? stop.category}</span> · <span>{fmtDuration(stop.stayMin)}</span>
+          <span>{hhmm(stop.start)}–{hhmm(stop.end)}</span> · <span>{CATEGORY[stop.category] ?? stop.category}</span>
           {stop.cost.length ? <> · <Cost min={sum(stop.cost, 'min')} max={sum(stop.cost, 'max')} unknown={stop.cost.filter((c) => c.min == null && c.essential).length || undefined} /></> : null}
         </div>
-        {stop.reasons.length ? <div className="stop-reasons">{stop.reasons.slice(0, 2).join(' · ')}</div> : null}
-        {stop.checks.filter((c) => c.id === 'hours').map((c) => <div key={c.id} className="check-line ok">⏱ {c.detail}</div>)}
+        {stop.reasons.length ? <div className="stop-reasons">{stop.reasons[0]}</div> : null}
         {nonOk.map((c) => <div key={c.id} className={`check-line ${c.status}`}>{c.status === 'violated' ? '✗' : '?'} {c.detail}</div>)}
-        {stop.activityPath ? <div className="muted">Percorso a piedi durante l'attività: {(stop.activityPath.lengthM / 1000).toFixed(1)} km, +{stop.activityPath.upM} m, fino a {stop.exit?.label}</div> : null}
       </div>
     </div>
   );
 }
 
-export default function PlanDetail({ plan, compact }: { plan: Plan; compact?: boolean }) {
+export default function PlanDetail({ plan }: { plan: Plan; compact?: boolean }) {
   const t = useSim((s) => s.t);
   const view = useApp((s) => s.view);
   const ret = plan.trips.length > plan.stops.length ? plan.trips[plan.trips.length - 1] : null;
   const currentStop = view === 'sim' ? plan.stops.findIndex((s) => Date.parse(s.arrival) <= t && Date.parse(s.departure) > t) : -1;
+  const toCheck = plan.checks.filter((c) => c.status !== 'ok').length;
   return (
     <div className="plan-detail">
-      {!compact ? (
-        <>
-          {plan.hypothetical?.length ? <div className="notice info">Ramo ipotetico: {plan.hypothetical.join(' · ')}. Non è una notizia reale.</div> : null}
-          {plan.aiNote ? <div className="notice info">{plan.aiNote}</div> : null}
-          {plan.whyThis.length ? <div className="why"><strong>Perché questo programma:</strong> {plan.whyThis.join(' · ')}</div> : null}
-          {plan.tradeoffs.length ? <div className="tradeoffs"><strong>Compromessi:</strong> {plan.tradeoffs.join(' · ')}</div> : null}
-          {plan.missing.length ? <div className="missing"><strong>Informazioni mancanti:</strong> {plan.missing.join(' · ')}</div> : null}
-        </>
-      ) : null}
+      {plan.hypothetical?.length ? <div className="notice info">Ipotesi: {plan.hypothetical.join(' · ')}. Non è una notizia reale.</div> : null}
+      {plan.aiNote ? <div className="notice info">{plan.aiNote}</div> : null}
+      {plan.whyThis.length ? <p className="why">{plan.whyThis.slice(0, 2).join(' · ')}</p> : null}
       <div className="itinerary">
         {plan.stops.map((s, i) => (
           <div key={s.id}>
             <TripBlock trip={plan.trips[i]} />
             <StopBlock stop={s} n={i + 1} current={i === currentStop} />
-            {plan.decisions.filter((d) => d.afterStop === i).map((d) => <div key={d.id} className={`decision-mark ${d.chosen ? 'chosen' : ''}`}>◆ {d.prompt}{d.chosen ? ` — scelto: ${d.options.find((o) => o.id === d.chosen)?.label ?? d.chosen}` : ' (decisione durante la simulazione)'}</div>)}
+            {plan.decisions.filter((d) => d.afterStop === i).map((d) => <div key={d.id} className={`decision-mark ${d.chosen ? 'chosen' : ''}`}>◆ {d.prompt}{d.chosen ? ` — ${d.options.find((o) => o.id === d.chosen)?.label ?? d.chosen}` : ''}</div>)}
           </div>
         ))}
-        {ret ? <TripBlock trip={ret} label={`Rientro a ${plan.end.label}: ${ret.summary.label}`} /> : <div className="muted">Fine libera all'ultima tappa.</div>}
+        {ret ? <TripBlock trip={ret} label={`Rientro: ${ret.summary.label}`} /> : null}
       </div>
-      {!compact ? (
-        <>
-          <h4>Controlli</h4>
-          <ul className="checks">
-            {[...plan.checks].sort((a, b) => order(a.status) - order(b.status)).map((c) => <li key={c.id} className={c.status}><span className="check-icon">{c.status === 'ok' ? '✓' : c.status === 'violated' ? '✗' : '?'}</span> <strong>{c.label}:</strong> {c.detail}</li>)}
-          </ul>
-          <div className="snapshot muted">
-            Dati: catalogo {plan.snapshot.catalogVersion} · orario {plan.snapshot.transitFeed} · calcolato {new Date(plan.snapshot.computedAt).toLocaleString('it-CH')}
-            {plan.snapshot.weather ? <> · meteo: {plan.snapshot.weather.status === 'demo' ? 'dimostrativo' : plan.snapshot.weather.status === 'live' ? plan.snapshot.weather.summary : plan.snapshot.weather.note}</> : null}
-          </div>
-        </>
-      ) : null}
+      <details className="more">
+        <summary>Verifiche <span className="muted">· {toCheck ? `${toCheck} da controllare` : 'tutto in ordine'}</span></summary>
+        <ul className="checks">
+          {[...plan.checks].sort((a, b) => order(a.status) - order(b.status)).map((c) => <li key={c.id} className={c.status}><span className="check-icon">{c.status === 'ok' ? '✓' : c.status === 'violated' ? '✗' : '?'}</span> <strong>{c.label}:</strong> {c.detail}</li>)}
+        </ul>
+        {plan.tradeoffs.length ? <p className="tradeoffs">Compromessi: {plan.tradeoffs.join(' · ')}</p> : null}
+        {plan.missing.length ? <p className="missing">Mancano: {plan.missing.join(' · ')}</p> : null}
+        <div className="snapshot muted">Dati: catalogo {plan.snapshot.catalogVersion} · orario {plan.snapshot.transitFeed} · calcolato {new Date(plan.snapshot.computedAt).toLocaleString('it-CH')}</div>
+      </details>
     </div>
   );
 }

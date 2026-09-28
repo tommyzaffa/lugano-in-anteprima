@@ -79,13 +79,13 @@ export function Settings() {
   return (
     <div className="settings">
       <h2>Impostazioni</h2>
-      {row('threeD', 'Vista 2.5D con rilievo ed edifici in rilievo', 'Disattivate per una vista dall\'alto più leggera.')}
-      {row('reducedMotion', 'Movimento ridotto', 'Niente voli di camera né animazioni dei personaggi: tutte le informazioni restano disponibili.')}
-      {row('cutscenes', 'Cutscene agli arrivi')}
-      {row('dialogues', 'Battute dei personaggi')}
-      {row('sound', 'Suoni ambientali', 'Disattivati di default; si avviano solo durante la simulazione.')}
-      {row('listView', 'Vista elenco invece della mappa', 'Alternativa testuale completa.')}
-      <label className="check block"><input type="checkbox" checked={s.lighting === 'sim'} onChange={(e) => setS({ lighting: e.target.checked ? 'sim' : 'day' })} /> Luce collegata all'ora simulata <span className="hint">(effetto artistico, non calcolo astronomico)</span></label>
+      {row('threeD', 'Rilievo ed edifici in 3D', 'Disattivate per una mappa più leggera, vista dall\'alto.')}
+      {row('reducedMotion', 'Movimento ridotto', 'Niente voli di camera né animazioni.')}
+      {row('cutscenes', 'Titoli agli arrivi')}
+      {row('dialogues', 'Fumetti delle pedine')}
+      {row('sound', 'Suoni ambientali', 'Solo durante la simulazione.')}
+      {row('listView', 'Vista elenco invece della mappa', 'Stesse informazioni, senza grafica.')}
+      <label className="check block"><input type="checkbox" checked={s.lighting === 'sim'} onChange={(e) => setS({ lighting: e.target.checked ? 'sim' : 'day' })} /> Luce che segue l'ora simulata</label>
     </div>
   );
 }
@@ -96,8 +96,8 @@ export function About() {
   return (
     <div className="about">
       <h2>Dati, fonti e limiti</h2>
-      <div className="notice demo">Prototipo dimostrativo, in sviluppo: non è un servizio ufficiale della Città di Lugano né di Lugano Region. Luoghi, strade, sentieri e orari dei mezzi vengono da dati reali; eventi e meteo sono esempi, i prezzi sono stime. L'app non prenota né acquista nulla.{meta.hosting?.ephemeralStorage && meta.features?.sharing ? ' In questa demo pubblica i programmi salvati e i link condivisi possono sparire quando il server si riavvia.' : ''}</div>
-      <p>Area coperta: {meta.perimeter.sizeKm.width}×{meta.perimeter.sizeKm.height} km. Include comuni distinti (Lugano, Paradiso, Melide, Massagno, Sorengo, Muzzano, Collina d'Oro, Canobbio e altri) e il confine con l'Italia (Campione d'Italia, Monte Boglia): non sono tutti quartieri del Comune di Lugano.</p>
+      <div className="notice">Prototipo indipendente, in sviluppo: non è un servizio ufficiale della Città di Lugano né di Lugano Region. Luoghi, strade, sentieri, orari dei mezzi, eventi e meteo vengono da fonti pubbliche reali, aggiornate automaticamente; i prezzi sono stime. L'app non prenota né acquista nulla.{meta.hosting?.ephemeralStorage && meta.features?.sharing ? ' In questa demo pubblica i programmi salvati possono sparire quando il server si riavvia.' : ''}</div>
+      <p>Area coperta: {meta.perimeter.sizeKm.width}×{meta.perimeter.sizeKm.height} km, dal Monte Boglia al San Salvatore, da Canobbio a Melide: comuni diversi (Lugano, Paradiso, Massagno, Sorengo, Collina d'Oro…) e il confine con l'Italia (Campione d'Italia). Fuori da quest'area la mappa è solo un contesto disegnato.</p>
       <h3>Integrazioni</h3>
       <ul className="integrations">
         {meta.integrations.map((i) => (

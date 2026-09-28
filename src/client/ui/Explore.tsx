@@ -52,40 +52,38 @@ export default function Explore() {
   }, []);
   return (
     <div className="explore">
-      <h2>Esplora liberamente</h2>
+      <h2>Esplora</h2>
       <input type="search" placeholder="Cerca un luogo…" value={f.q} onChange={(e) => setF({ q: e.target.value })} aria-label="Cerca un luogo" />
       <div className="chips">{Object.keys(GROUPS).map((g) => <Chip key={g} on={f.cats.includes(g)} onClick={() => setF({ cats: f.cats.includes(g) ? f.cats.filter((x) => x !== g) : [...f.cats, g] })}>{g}</Chip>)}</div>
-      <fieldset className="open-during">
-        <legend>Aperto durante la mia visita</legend>
-        <div className="row wrap">
+      <details className="more open-during" open={!!(from || to)}>
+        <summary>Aperto quando ci andate <span className="muted">{from && to ? `· ${from}–${to}` : ''}</span></summary>
+        <div className="row">
           <input type="date" value={date} min={today} onChange={(e) => setDate(e.target.value)} aria-label="Data" />
           <input type="time" value={from} onChange={(e) => setFrom(e.target.value)} aria-label="Dalle" />
           <input type="time" value={to} onChange={(e) => setTo(e.target.value)} aria-label="Alle" />
-          {from || to ? <button className="link" onClick={() => { setFrom(''); setTo(''); }}>azzera</button> : null}
         </div>
-        <p className="hint">Filtra sull'intervallo richiesto, non solo sull'ora attuale. I luoghi senza orari noti restano visibili come «da verificare».</p>
-      </fieldset>
-      <label className="check"><input type="checkbox" checked={onlyFavs} onChange={(e) => setOnlyFavs(e.target.checked)} /> Solo i miei preferiti ({favs.length})</label>
-      <label className="check"><input type="checkbox" checked={f.showOsm} onChange={(e) => setF({ showOsm: e.target.checked })} /> Mostra anche i punti OpenStreetMap non curati (da verificare)</label>
-      <details className="legend">
-        <summary>Legenda della mappa</summary>
-        <ul>
-          <li><span className="sw sw-yellow" aria-hidden /> escursionistico</li>
-          <li><span className="sw sw-red" aria-hidden /> di montagna (bianco-rosso-bianco)</li>
-          <li><span className="sw sw-blue" aria-hidden /> alpino (bianco-blu-bianco)</li>
-        </ul>
-        <p className="hint">Colori ricavati dalla difficoltà indicata in OpenStreetMap (sac_scale), non dalla segnaletica ufficiale: sul posto vale quella dei cartelli. Condizioni del sentiero non verificate.</p>
-        <p className="hint">Le piccole figure nelle piazze e nei parchi (visibili da vicino) sono decorative: sempre le stesse, a ogni ora. Non indicano quante persone ci sono davvero.</p>
+        {from || to ? <button className="link" onClick={() => { setFrom(''); setTo(''); }}>azzera</button> : null}
+      </details>
+      <details className="more">
+        <summary>Altre opzioni</summary>
+        <label className="check block"><input type="checkbox" checked={onlyFavs} onChange={(e) => setOnlyFavs(e.target.checked)} /> Solo i preferiti ({favs.length})</label>
+        <label className="check block"><input type="checkbox" checked={f.showOsm} onChange={(e) => setF({ showOsm: e.target.checked })} /> Anche i punti OpenStreetMap non curati</label>
+        <div className="legend">
+          <ul>
+            <li><span className="sw sw-yellow" aria-hidden /> sentiero escursionistico</li>
+            <li><span className="sw sw-red" aria-hidden /> di montagna (bianco-rosso-bianco)</li>
+            <li><span className="sw sw-blue" aria-hidden /> alpino (bianco-blu-bianco)</li>
+          </ul>
+          <p className="hint">Difficoltà da OpenStreetMap: sul posto vale la segnaletica. Le figurine nelle piazze sono decorative.</p>
+        </div>
       </details>
       {err ? <div className="notice bad">{err}</div> : !places ? <Spinner /> : !shown.length ? <Empty title="Nessun luogo con questi filtri" /> : (
         <ul className="place-list">
           {shown.map((p) => (
             <li key={p.id}>
               <button className="place-row" onClick={() => set({ placeCard: p.id })}>
-                <span className="pr-name">{favs.includes(p.id) ? '★ ' : ''}{p.name}{visited.includes(p.id) ? <span className="muted"> · già visitato</span> : null}</span>
-                <span className="pr-meta">{CATEGORY[p.category] ?? p.category} · {p.area ?? p.municipality?.name}</span>
-                <span className="pr-hours">{p.hoursToday ?? 'orari non disponibili'} {from && to ? (p.openDuring === 'open' ? <Badge kind="ok">aperto nell'intervallo</Badge> : p.openDuring === 'unknown' ? <Badge kind="warn">da verificare</Badge> : null) : null}</span>
-                <span className="pr-price muted">{p.priceHint}</span>
+                <span className="pr-name">{favs.includes(p.id) ? '★ ' : ''}{p.name}{visited.includes(p.id) ? <span className="muted"> · visitato</span> : null}</span>
+                <span className="pr-meta">{CATEGORY[p.category] ?? p.category} · {p.hoursToday ?? 'orari non noti'} {from && to ? (p.openDuring === 'open' ? <Badge kind="ok">aperto</Badge> : p.openDuring === 'unknown' ? <Badge kind="warn">da verificare</Badge> : null) : null}</span>
               </button>
             </li>
           ))}
@@ -106,7 +104,6 @@ export function EventsView() {
   const [data, setData] = useState<any>(null);
   const [q, setQ] = useState('');
   const [cats, setCats] = useState<string[]>([]);
-  const [showOff, setShowOff] = useState(true);
   const today = meta?.today ?? new Date().toISOString().slice(0, 10);
   useEffect(() => {
     const from = tab === 'tomorrow' ? nextDay(today) : today;
@@ -118,10 +115,9 @@ export function EventsView() {
   const shown = useMemo(() => {
     const needle = q.trim().toLowerCase();
     return (data?.occurrences ?? []).filter((o: any) =>
-      (showOff || o.status === 'scheduled')
-      && (!cats.length || cats.includes(o.category))
+      (!cats.length || cats.includes(o.category))
       && (!needle || `${o.title} ${o.placeName ?? ''} ${o.description ?? ''}`.toLowerCase().includes(needle)));
-  }, [data, q, cats, showOff]);
+  }, [data, q, cats]);
   // segnaposti sulla mappa per gli eventi mostrati; si tolgono uscendo dalla vista
   // un segnaposto per evento e luogo (la prima occorrenza in programma); nella settimana l'etichetta porta la data
   const pins = useMemo(() => {
@@ -148,34 +144,59 @@ export function EventsView() {
     app.set({ draft: { ...base, date, startTime, endTime, mustSee: [...new Set([...base.mustSee.filter((m) => !base.mustSeeLabels?.[m]), o.eventId])], mustSeeLabels: { [o.eventId]: `${o.title} (evento)` } }, view: 'wizard', placeCard: null });
     app.notify(`«${o.title}» aggiunto come tappa obbligatoria per il ${date.split('-').reverse().join('.')}. Completate il modulo.`, 'ok');
   };
+  const byDay = useMemo(() => {
+    const m = new Map<string, any[]>();
+    for (const o of shown) { const d = o.start.slice(0, 10); if (!m.has(d)) m.set(d, []); m.get(d)!.push(o); }
+    return [...m.entries()];
+  }, [shown]);
+  const ongoing: any[] = data?.ongoing ?? [];
   return (
     <div className="events">
       <h2>Eventi</h2>
       <div className="seg" role="tablist">
         {([['today', 'Oggi'], ['tomorrow', 'Domani'], ['week', 'Settimana']] as const).map(([k, v]) => <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{v}</button>)}
       </div>
-      {data?.demo === false ? <div className="notice">{data.notice}</div> : <div className="notice demo"><Badge kind="demo">DEMO</Badge> {data?.notice ?? 'Calendario dimostrativo.'}</div>}
-      <input type="search" placeholder="Cerca per titolo, luogo o descrizione…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Cerca negli eventi" />
+      {data?.demo ? <div className="notice demo"><Badge kind="demo">DEMO</Badge> {data.notice}</div> : null}
+      <input type="search" placeholder="Cerca un evento o un luogo…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Cerca negli eventi" />
       {categories.length > 1 ? <div className="chips">{categories.map((c) => <Chip key={c} on={cats.includes(c)} onClick={() => setCats((x) => x.includes(c) ? x.filter((y) => y !== c) : [...x, c])}>{EVENT_CAT[c] ?? c}</Chip>)}</div> : null}
-      <label className="check"><input type="checkbox" checked={showOff} onChange={(e) => setShowOff(e.target.checked)} /> Mostra anche annullati, rinviati ed esauriti</label>
-      {data ? <p className="muted event-pins-status" role="status">{pins.length ? `${pins.length} ${pins.length === 1 ? 'evento segnato' : 'eventi segnati'} sulla mappa (viola; rosso se annullato, rinviato o esaurito).` : 'Nessun evento da segnare sulla mappa.'}</p> : null}
-      {!data ? <Spinner /> : !shown.length ? <Empty title={data.occurrences.length ? 'Nessun evento corrisponde ai filtri' : 'Nessun evento in questo periodo'}>{data.occurrences.length ? 'Provate a togliere un filtro.' : 'Non inventiamo eventi per riempire una giornata vuota. Gli esempi del calendario dimostrativo si concentrano fra settembre e dicembre 2026.'}</Empty> : (
-        <ul className="event-list">
-          {shown.map((o: any) => (
-            <li key={o.sessionId} className={o.status !== 'scheduled' ? 'off' : ''}>
-              <div className="ev-time">{o.start.slice(8, 10)}/{o.start.slice(5, 7)} {o.timeCertain ? hhmm(o.start) : 'orario da confermare'}{o.end ? `–${hhmm(o.end)}` : ''}</div>
-              <div className="ev-body">
-                <strong>{o.title}</strong> {o.status !== 'scheduled' ? <Badge kind="bad">{({ cancelled: 'annullato', sold_out: 'esaurito', postponed: 'rinviato' } as any)[o.status]}</Badge> : null}
-                <div className="muted">{EVENT_CAT[o.category] ?? o.category ?? ''}{o.placeName ? ` · ${o.placeName}` : ''}{o.note ? ` · ${o.note}` : ''}</div>
-                <div className="row wrap">
-                  {o.url ? <a className="link" href={o.url} target="_blank" rel="noopener noreferrer">Scheda ufficiale</a> : <button className="link" onClick={() => set({ placeCard: o.placeId })}>Scheda del luogo</button>}
-                  {o.status === 'scheduled' && Date.parse(o.start) > Date.now() ? <button className="link" onClick={() => planWith(o)}>Organizza una giornata con questo evento</button> : null}
+      {!data ? <Spinner /> : !shown.length ? <Empty title={data.occurrences.length ? 'Nessun evento con questi filtri' : 'Nessun evento in questo periodo'}>{data.occurrences.length ? 'Provate a togliere un filtro.' : 'Non inventiamo eventi per riempire una giornata vuota.'}</Empty> : byDay.map(([day, list]) => (
+        <div key={day}>
+          {tab === 'week' ? <h3 className="day-head">{new Date(`${day}T12:00:00Z`).toLocaleDateString('it-CH', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' })}</h3> : null}
+          <ul className="event-list">
+            {list.map((o: any) => (
+              <li key={o.sessionId} className={o.status !== 'scheduled' ? 'off' : ''}>
+                <div className="ev-time">{o.timeCertain ? hhmm(o.start) : '—'}</div>
+                <div className="ev-body">
+                  <strong>{o.title}</strong>
+                  <div className="muted">{o.placeName ?? ''}{o.status !== 'scheduled' ? <> · <Badge kind="bad">{({ cancelled: 'annullato', sold_out: 'esaurito', postponed: 'rinviato' } as any)[o.status]}</Badge></> : null}</div>
+                  <div className="ev-actions">
+                    {o.status === 'scheduled' && Date.parse(o.start) > Date.now() ? <button className="link" onClick={() => planWith(o)}>Organizza la giornata</button> : null}
+                    {o.url ? <a href={o.url} target="_blank" rel="noopener noreferrer">Scheda ufficiale</a> : <button className="link" onClick={() => set({ placeCard: o.placeId })}>Il luogo</button>}
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      {ongoing.length ? (
+        <details className="more">
+          <summary>Mostre in corso <span className="muted">· {ongoing.length}</span></summary>
+          <ul className="event-list">
+            {ongoing.map((o) => (
+              <li key={o.eventId}>
+                <div className="ev-time" aria-hidden>🖼</div>
+                <div className="ev-body">
+                  <strong>{o.title}</strong>
+                  <div className="muted">{o.placeName ?? ''} · fino al {o.to.slice(8, 10)}/{o.to.slice(5, 7)}</div>
+                  <div className="ev-actions">{o.url ? <a href={o.url} target="_blank" rel="noopener noreferrer">Scheda ufficiale</a> : null}{o.placeId ? <button className="link" onClick={() => set({ placeCard: o.placeId })}>Il luogo</button> : null}</div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ) : null}
+      {data && !data.demo ? <p className="source-line">{data.notice}</p> : null}
     </div>
   );
 }
