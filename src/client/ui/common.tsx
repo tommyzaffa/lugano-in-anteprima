@@ -37,7 +37,12 @@ export function Section({ title, children, right, id }: { title: string; childre
 
 export function Modal({ title, onClose, children, wide, labelledBy }: { title: string; onClose: () => void; children: ReactNode; wide?: boolean; labelledBy?: string }) {
   const ref = useRef<HTMLDivElement>(null);
+  // il focus iniziale e il ripristino avvengono una volta sola, anche se il genitore
+  // passa una nuova funzione onClose a ogni rendering
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
   useEffect(() => {
+    const onClose = () => closeRef.current();
     const prev = document.activeElement as HTMLElement | null;
     const first = ref.current?.querySelector<HTMLElement>('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
     first?.focus();
@@ -51,11 +56,16 @@ export function Modal({ title, onClose, children, wide, labelledBy }: { title: s
       }
     };
     window.addEventListener('keydown', onKey);
-    return () => { window.removeEventListener('keydown', onKey); prev?.focus?.(); };
-  }, [onClose]);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      // se l'elemento di partenza non esiste più (es. un menu chiuso), si torna al suo pulsante di apertura
+      if (prev && prev.isConnected && prev !== document.body) prev.focus();
+      else document.querySelector<HTMLElement>('[data-focus-return]')?.focus();
+    };
+  }, []);
   const hid = labelledBy ?? `m-${title.replace(/\W+/g, '-')}`;
   return createPortal(
-    <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+    <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) closeRef.current(); }}>
       <div className={`modal ${wide ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby={hid} ref={ref}>
         <div className="modal-head"><h2 id={hid}>{title}</h2><button className="icon-btn" onClick={onClose} aria-label="Chiudi">✕</button></div>
         <div className="modal-body">{children}</div>

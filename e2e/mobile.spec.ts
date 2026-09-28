@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 test('telefono e movimento ridotto (scenario L): modulo, confronto, salto e salvataggio', async ({ page }) => {
   await page.goto('/');
@@ -50,4 +51,13 @@ test('schermi stretti: barra superiore senza sbordare, vista elenco e ritorno al
   await expect(page.locator('.maplibregl-canvas')).toHaveCount(0);
   await page.getByRole('button', { name: 'Torna alla mappa' }).click();
   await expect(page.locator('.maplibregl-canvas')).toBeVisible({ timeout: 20_000 });
+});
+
+test('accessibilità su telefono: home e modulo senza violazioni WCAG AA', async ({ page }) => {
+  const check = async () => (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).exclude('.maplibregl-canvas').analyze()).violations.map((v) => v.id);
+  await page.goto('/');
+  await expect(page.getByText('Racconta la giornata che vuoi vivere')).toBeVisible();
+  expect(await check()).toEqual([]);
+  await page.getByRole('button', { name: /Organizza una giornata/ }).click();
+  expect(await check()).toEqual([]);
 });

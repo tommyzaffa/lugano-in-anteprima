@@ -53,7 +53,7 @@ export default function SimPanel() {
       <p className="fineprint">La spesa simulata non è un addebito: nessuna prenotazione o acquisto avviene facendo avanzare il gioco.</p>
 
       <div className="change-bar">
-        <button className="btn" onClick={() => setMenu(!menu)} aria-expanded={menu}>Cambia idea…</button>
+        <button className="btn" onClick={() => setMenu(!menu)} aria-expanded={menu} data-focus-return>Cambia idea…</button>
         {curStop ? <>
           <button className="btn-ghost" onClick={() => requestChange({ kind: 'extend', minutes: 15, stopId: curStop.id })}>+15 min</button>
           <button className="btn-ghost" onClick={() => requestChange({ kind: 'extend', minutes: 30, stopId: curStop.id })}>+30</button>

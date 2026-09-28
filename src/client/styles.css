@@ -121,7 +121,7 @@ thead th { font-family: var(--serif); }
 .big-action:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
 .big-action.primary { background: var(--accent); color: #fff; border-color: var(--accent-ink); box-shadow: 3px 3px 0 var(--accent-ink); }
 .ba-title { font-family: var(--serif); font-size: 1.25rem; font-weight: 700; }
-.ba-sub { font-size: .9rem; opacity: .9; }
+.ba-sub { font-size: .9rem; }
 .small-title { font-size: .95rem; margin-top: 1.3rem; }
 .presets { display: grid; gap: .45rem; }
 .preset { text-align: left; background: transparent; border: 1.5px dashed var(--line); border-radius: 10px; padding: .6rem .8rem; cursor: pointer; display: grid; }
