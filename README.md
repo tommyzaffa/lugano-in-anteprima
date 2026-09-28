@@ -76,7 +76,7 @@ Esito attuale e verifiche visive: [docs/TEST.md](docs/TEST.md).
 
 - Mappa, luoghi, strade e sentieri: © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors, ODbL (estratti Geofabrik).
 - Orari: orario ufficiale svizzero GTFS, [opentransportdata.swiss](https://opentransportdata.swiss).
-- Rilievo: Terrain Tiles (AWS Open Data; SRTM, GMTED2010, ETOPO1 e altre fonti).
+- Rilievo: swissALTI3D © swisstopo sul territorio svizzero; altrove Terrain Tiles (AWS Open Data; SRTM, GMTED2010, ETOPO1 e altre fonti).
 - Glifi: font Open Sans / PT Sans / Noto Sans (licenze OFL/Apache, pacchetto openmaptiles/fonts).
 
 Nessun server pubblico di tile viene usato come backend: tutta la cartografia è generata e servita in locale.

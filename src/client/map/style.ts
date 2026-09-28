@@ -170,7 +170,7 @@ export function buildStyle(p: Palette, opts: StyleOptions): StyleSpecification {
   ];
   const sources: StyleSpecification['sources'] = {
     lugano: { type: 'vector', tiles: [`${opts.origin}/tiles/lugano/{z}/{x}/{y}.pbf`], minzoom: 8, maxzoom: 16, bounds: opts.bounds, attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors' },
-    dem: { type: 'raster-dem', tiles: [`${opts.origin}/terrain/{z}/{x}/{y}.png`], encoding: 'terrarium', tileSize: 256, minzoom: 8, maxzoom: 14, bounds: opts.bounds, attribution: 'Rilievo: Terrain Tiles (AWS Open Data, SRTM e altre fonti)' },
+    dem: { type: 'raster-dem', tiles: [`${opts.origin}/terrain/{z}/{x}/{y}.png`], encoding: 'terrarium', tileSize: 256, minzoom: 8, maxzoom: 14, bounds: opts.bounds, attribution: 'Rilievo: swissALTI3D © swisstopo; Terrain Tiles (AWS Open Data, SRTM e altre fonti)' },
   };
   sources.frame = { type: 'geojson', data: frameGeoJSON(opts.bounds) };
   if (opts.contoursUrl) sources.contours = { type: 'vector', tiles: [opts.contoursUrl], minzoom: 11, maxzoom: 15, bounds: opts.bounds };

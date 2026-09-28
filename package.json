@@ -21,8 +21,9 @@
     "data:transit": "node --max-old-space-size=8192 --import tsx scripts/transit/02-build-transit.ts",
     "data:catalog": "node --max-old-space-size=8192 --import tsx scripts/catalog/build-catalog.ts",
     "data:build": "npm run data:map && npm run data:graphs && npm run data:transit && npm run data:catalog",
-    "data:all": "npm run data:perimeter && npm run data:osm && npm run data:terrain && npm run data:gtfs && npm run data:build",
-    "test:all": "vitest run && playwright test"
+    "data:all": "npm run data:perimeter && npm run data:osm && npm run data:terrain && npm run data:terrain-ch && npm run data:gtfs && npm run data:build",
+    "test:all": "vitest run && playwright test",
+    "data:terrain-ch": "node --max-old-space-size=8192 --import tsx scripts/geo/06-swissalti3d.ts"
   },
   "keywords": [],
   "author": "",
@@ -63,6 +64,7 @@
     "concurrently": "^10.0.5",
     "csv-parse": "^7.0.3",
     "geojson-vt": "^5.0.2",
+    "geotiff": "^3.0.5",
     "osmtogeojson": "^3.0.0-beta.5",
     "pngjs": "^7.0.0",
     "polylabel": "^2.1.0",

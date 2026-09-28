@@ -62,7 +62,7 @@ I **rami** (`replan`) conservano tappe e tratte già vissute — anche una tratt
 - Grafi serializzati in microgradi (×1e6) e lunghezze/quote in decimetri, per non confondere metri e gradi.
 - Distanze geodetiche con formula dell'haversine; quote in metri s.l.m. dal DEM Terrarium (z14).
 - L'esagerazione verticale del terreno sulla mappa (1,35×) è solo visiva e non entra nei tempi di percorrenza.
-- Per dati svizzeri in LV95 (EPSG:2056), come swissALTI3D, è prevista la conversione con `proj4` (backlog).
+- Dati svizzeri in LV95 (EPSG:2056): swissALTI3D è convertito con le formule ufficiali swisstopo WGS84→LV95 (precisione ~1 m) in `scripts/geo/06-swissalti3d.ts`; per conversioni di precisione è disponibile `proj4`.
 
 ## Sicurezza e privacy
 

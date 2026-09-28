@@ -33,7 +33,8 @@ npm run data:all
 |---|---|---|
 | Perimetro | `scripts/geo/01-perimeter.ts` (Overpass, solo riferimenti) | `data/geo/perimeter.json` |
 | OSM | `scripts/data/fetch-osm.sh` — estratti Geofabrik Svizzera + Italia nord-ovest, `osmium extract --strategy=smart` sul buffer, `osmium merge`, `osmium export` GeoJSONSeq | `data/raw/osm/lugano-area.geojsonseq` (non versionato) |
-| Terreno | `scripts/geo/03-fetch-terrain.ts` — tile Terrarium z8–14 | `public/terrain/` (293 tile, 31 MB: l'area più un anello di tile per zoom, perché le curve di livello leggono i tile vicini ai bordi) |
+| Terreno | `scripts/geo/03-fetch-terrain.ts` — tile Terrarium z8–14 | `public/terrain/` (293 tile, 34 MB: l'area più un anello di tile per zoom, perché le curve di livello leggono i tile vicini ai bordi) |
+| Terreno svizzero | `scripts/geo/06-swissalti3d.ts` — 397 celle swissALTI3D 2 m dal catalogo STAC, conversione WGS84→LV95 con le formule ufficiali swisstopo (verificata sull'esempio della documentazione: scarto 0,3 m), media dei punti nell'impronta di ogni pixel; dove manca il dato svizzero resta Terrain Tiles | stessi tile (55 % dei pixel). Vette: San Salvatore 912 m (prima 871), Monte Brè 928 (908), Monte Boglia 1516 (1479) |
 | Tile vettoriali | `scripts/geo/04-build-map.ts` — classificazione, ritaglio al buffer, geojson-vt + vt-pbf | `public/tiles/lugano/` (2081 tile z8–16, 13,5 MB) + `data/build/osm/*` |
 | Grafi | `scripts/geo/05-build-graphs.ts` | grafo pedonale (40 642 nodi, 46 266 archi, 2 509 km), stradale per i bus, ferroviario/funicolari |
 | Orario | `scripts/data/fetch-gtfs.sh` + `scripts/transit/01-import-gtfs.ts` | 1 185 fermate, 74 linee, 55 078 corse nell'area |
@@ -85,5 +86,6 @@ Politica per fonte in `data/catalog/sources.yaml` (ore): OSM orari 2160, redazio
 - OpenStreetMap: ODbL 1.0 — attribuzione «© OpenStreetMap contributors» nella mappa, nei riepiloghi e nella cartolina. I derivati (tile, grafi, catalogo) sono database derivati soggetti a ODbL.
 - GTFS: condizioni d'uso di opentransportdata.swiss (riutilizzo consentito citando la fonte).
 - Terrain Tiles: attribuzione alle fonti (SRTM, GMTED2010, ETOPO1 e altre) secondo la documentazione Tilezen.
+- swissALTI3D: dati liberi di swisstopo (OGD), attribuzione «© swisstopo» nella mappa.
 - Font dei glifi: Open Sans e PT Sans (OFL), Noto Sans (OFL).
 - Open-Meteo (se attivato): CC BY 4.0, gratuito solo per uso non commerciale.

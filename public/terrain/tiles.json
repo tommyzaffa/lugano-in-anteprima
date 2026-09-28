@@ -10,6 +10,13 @@
     9.05928,
     46.07259
   ],
-  "attribution": "Terrain Tiles (Mapzen/AWS Open Data): SRTM, GMTED2010, ETOPO1 e altre fonti",
-  "fetchedAt": "2026-09-28T10:54:23.114Z"
+  "attribution": "swissALTI3D © swisstopo (territorio svizzero, 2 m); altrove Terrain Tiles (Mapzen/AWS Open Data): SRTM, GMTED2010, ETOPO1 e altre fonti",
+  "fetchedAt": "2026-09-28T10:54:23.114Z",
+  "swissalti3d": {
+    "tiles": 397,
+    "years": [
+      2022
+    ],
+    "fusedAt": "2026-09-28T12:35:10.880Z"
+  }
 }

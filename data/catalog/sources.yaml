@@ -22,7 +22,15 @@
   license: Attribuzione alle fonti SRTM, GMTED2010, ETOPO1 e altre
   reuse: open
   freshnessHours: { general: 87600 }
-  note: Quote indicative (risoluzione ~30 m); dislivelli stimati.
+  note: Quote indicative (risoluzione ~30 m) fuori dalla Svizzera; dislivelli stimati.
+- id: swissalti3d
+  name: swissALTI3D (swisstopo)
+  kind: terrain
+  url: https://www.swisstopo.admin.ch/it/modello-altimetrico-swissalti3d
+  license: Dati geografici liberi (OGD) di swisstopo, attribuzione «© swisstopo»
+  reuse: open
+  freshnessHours: { general: 87600 }
+  note: Modello altimetrico a 2 m (LV95), ricampionato nei tile Terrarium sul territorio svizzero.
 - id: editorial-2026-09
   name: Redazione Lugano in anteprima (settembre 2026)
   kind: editorial

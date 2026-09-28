@@ -14,7 +14,7 @@ Separato da ciò che è già implementato (in fondo).
 
 ## P2 — estensioni vicine
 
-8. **Terreno swisstopo swissALTI3D** (2 m, LV95 → Web Mercator con `proj4`) per dislivelli più precisi e rilievo più nitido sul territorio svizzero.
+8. ~~Terreno swisstopo swissALTI3D~~ — fatto (`npm run data:terrain-ch`). Resta: zoom 15–16 del terreno per il dettaglio in città.
 9. **Densità del catalogo**: più luoghi fuori dal centro (Pregassona, Canobbio, Davesco-Soragno, Muzzano, Melide), attività stagionali, laboratori, impianti sportivi; foto con diritti chiari.
 10. **Sentieri**: dati SchweizMobil/Wanderland (se riutilizzabili) per durate ufficiali e condizioni; segnaletica gialla/bianco-rosso-bianco sulla mappa.
 11. **Rotte dei battelli** dalle relazioni OSM `route=ferry` o dai dati SNL invece della griglia d'acqua.

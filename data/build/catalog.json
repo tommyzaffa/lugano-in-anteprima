@@ -1,6 +1,6 @@
 {
  "version": "cat-2026-09-28-87p-14e",
- "builtAt": "2026-09-28T10:46:32.311Z",
+ "builtAt": "2026-09-28T12:39:13.147Z",
  "sources": [
   {
    "id": "osm",
@@ -40,7 +40,20 @@
     "general": 87600
    },
    "acquiredAt": "2026-09-28",
-   "note": "Quote indicative (risoluzione ~30 m); dislivelli stimati."
+   "note": "Quote indicative (risoluzione ~30 m) fuori dalla Svizzera; dislivelli stimati."
+  },
+  {
+   "id": "swissalti3d",
+   "name": "swissALTI3D (swisstopo)",
+   "kind": "terrain",
+   "url": "https://www.swisstopo.admin.ch/it/modello-altimetrico-swissalti3d",
+   "license": "Dati geografici liberi (OGD) di swisstopo, attribuzione «© swisstopo»",
+   "reuse": "open",
+   "freshnessHours": {
+    "general": 87600
+   },
+   "acquiredAt": "2026-09-28",
+   "note": "Modello altimetrico a 2 m (LV95), ricampionato nei tile Terrarium sul territorio svizzero."
   },
   {
    "id": "editorial-2026-09",
