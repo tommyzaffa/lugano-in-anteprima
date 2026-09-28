@@ -17,7 +17,7 @@
 
 ```text
 interfaccia / modulo / accessibilità   src/client/ui/*, src/client/App.tsx, src/client/styles.css, src/client/i18n.ts
-mappa / stile / terreno / personaggi   src/client/map/* (style.ts, MapView.tsx, avatars.ts, sprites.ts)
+mappa / stile / terreno / pedine       src/client/map/* (style.ts, MapView.tsx, avatars.ts, sprites.ts)
 catalogo / eventi / calendari          data/catalog/*.yaml → scripts/catalog/build-catalog.ts → data/build/catalog.json
                                         src/shared/calendar.ts, src/shared/osm-hours.ts
 adattatori / import / cache            scripts/geo/*, scripts/transit/*, src/server/adapters/{weather,ojp}.ts, src/server/data.ts
@@ -49,7 +49,7 @@ Tutti gli istanti sono ISO con offset in **Europe/Zurich** e i calcoli usano mil
 
 `buildTimeline(plan)` trasforma il piano in segmenti (cammino, attesa, corsa, attività, pausa) con geometria reale e distanze cumulative; `stateAt(timeline, t)` è una **funzione pura** che restituisce posizione, scena, tappa, spese maturate (dalle voci di costo con istante ≤ t) e decisione in attesa. Conseguenze:
 
-- «Salta spostamento», «Prossima decisione», checkpoint e timeline impostano solo `t`: lo stato è identico a quello della riproduzione completa (test automatico).
+- «Salta spostamento», «Fine», le tappe sulla barra di avanzamento e il cursore impostano solo `t`: lo stato è identico a quello della riproduzione completa (test automatico).
 - Tornare indietro non duplica spese né eventi.
 - Le cutscene sono solo presentazione (camera e cartelli) e fermano l'orologio per un istante.
 - L'orologio simulato è separato dall'orologio reale (1× = 1 minuto simulato al secondo) e dall'animazione.

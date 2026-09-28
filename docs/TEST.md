@@ -55,7 +55,7 @@ npm run test:e2e
 **12 test, tutti superati** (desktop 1280×800 e mobile 390×844, Chrome con WebGL software):
 
 1. Flusso principale: esempio → proposte (confronto, dettagli e verifiche) → simulazione (salta spostamento, prossima decisione, «vai al riepilogo» bloccato dalla decisione, scelta dell'alternativa con nuovo ramo) → riepilogo → verifica dei dati → piano B se piove → salvataggio (URL personale) → link di condivisione → voto da un altro browser → **revoca** e link non più accessibile.
-2. Modulo manuale: limite di 12 persone spiegato; 3 persone → 3 personaggi sulla mappa.
+2. Modulo manuale: limite di 12 persone spiegato; pedine con nome e colore (limite di 12 spiegato), 3 persone → 3 pedine sulla mappa con il nome scelto.
 3. Esplorazione, filtro «Cultura», scheda luogo con provenienza, segnalazione di errore.
 4. Eventi dichiarati dimostrativi; ricerca, segnaposti sulla mappa e «Organizza una giornata con questo evento» fino alle proposte, che lo contengono tutte.
 5. Pannello editoriale: token errato rifiutato, modifica orari, annullamento delle modifiche.
@@ -75,7 +75,7 @@ Schermate controllate durante lo sviluppo con Chrome headless (script `scripts/d
 
 - vista regionale all'avvio (desktop e telefono), rilievo 3D, lago, vette quotate, confine CH/IT nel lago, landmark disegnati;
 - proposte con percorso per modalità (cammino tratteggiato, bus, battello sul lago, funicolari), tappe numerate, decisione;
-- simulazione in città a zoom 17: edifici 3D con tetti variati, personaggi in formazione, battute;
+- simulazione in città a zoom 17: edifici 3D con tetti variati, pedine affiancate con il nome, fumetti;
 - luce: giorno, tramonto, notte (mappa scura, finestre accese, percorso in chiaro);
 - modulo in tutti i passaggi, dialogo «E se… piove» con tabella prima/dopo, riepilogo con piano B, tutte le schede del pannello editoriale;
 - larghezze 320, 360, 375, 390 px e 1280 px; bordi dell'area a zoom 13,5 (cornice «plastico» senza tagli netti di lago e boschi).

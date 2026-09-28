@@ -52,10 +52,11 @@ Si è scelto l'estratto Geofabrik invece di Overpass per la massa dei dati: i se
 | 8–11 (regionale) | lago, rilievo ombreggiato, bosco, insediamenti, strade principali, ferrovie, confini di Stato, nomi di città e vette |
 | 11–13 | curve di livello (50/250 m), strade secondarie, sentieri di montagna (tratteggio rosso), funicolari, rotte dei battelli, landmark disegnati, luoghi del catalogo |
 | 13–15 (quartiere) | edifici in pianta, strade locali, sentieri e scalinate, vigneti e boschi con texture, fermate |
-| ≥ 15 (ravvicinata) | edifici 3D con tetti variati, vicoli e scalinate, POI, nomi delle vie, singoli personaggi (sotto 13,2 il gruppo diventa un segnaposto con il numero) |
+| ≥ 15 (ravvicinata) | edifici 3D con tetti variati, vicoli e scalinate, POI, nomi delle vie, singole pedine, con il nome da zoom 16 (sotto 13,2 il gruppo diventa un segnaposto con il numero) |
 
 - I percorsi del piano restano leggibili a ogni livello (alone chiaro, colori per modalità, tratteggio per il cammino).
-- I personaggi sono marcatori HTML sempre sopra gli edifici: non vengono mai nascosti.
+- Le pedine sono marcatori HTML sempre sopra gli edifici: non vengono mai nascoste.
+- Fuori dall'area coperta la mappa mostra un contesto disegnato (`public/data/contesto.geojson`, `npm run data:context`): rilievo della regione (tile del terreno z8–11), laghi, fiumi e confine da Natural Earth, paesi da Nominatim, sfumati verso il bordo. Le scritte usano Architects Daughter (glifi SDF generati con `npm run data:glyphs`).
 - Tile vettoriali caricati progressivamente per zoom; gli edifici solo da z13; nessun caricamento globale in memoria.
 - **Dettaglio adattivo**: se durante la simulazione i fotogrammi scendono sotto ~24 fps, vengono disattivati prima il rilievo 3D e le curve di livello, poi edifici 3D, ombreggiatura e texture, con risoluzione 1×.
 - La geometria non viene deformata: la semplificazione per zoom (geojson-vt) conserva connessioni e orientamento.

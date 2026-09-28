@@ -1,10 +1,10 @@
 # Lugano in anteprima
 
-> Racconta la giornata che vuoi vivere. Provala nella piccola Lugano. Poi esci davvero.
+> Prova la giornata sulla mappa. Poi vivila davvero.
 
-Applicazione web (desktop e smartphone) che unisce una **mappa illustrata di Lugano e dintorni** — dal Monte Boglia al San Salvatore, da Canobbio a Melide — a un **pianificatore di giornate** e a una **simulazione** in cui il vostro gruppo di personaggi percorre il programma su strade, sentieri, bus, funicolari e battelli reali.
+Applicazione web (desktop e smartphone) che unisce una **mappa di Lugano e dintorni in stile schizzo architettonico** — dal Monte Boglia al San Salvatore, da Canobbio a Melide, con la regione attorno disegnata come contesto — a un **pianificatore di giornate** e a una **simulazione** in cui le pedine del vostro gruppo percorrono il programma su strade, sentieri, bus, funicolari e battelli reali.
 
-Stato: **prima versione funzionante in modalità demo** (nessuna credenziale necessaria). I dati geografici e gli orari dei mezzi sono reali; eventi, meteo e prezzi sono dimostrativi o stimati e sono sempre dichiarati come tali. Vedi [docs/INTEGRAZIONI.md](docs/INTEGRAZIONI.md).
+Stato: **prototipo funzionante** (nessuna credenziale necessaria). Dati geografici, orari dei mezzi, eventi (calendario ufficiale luganoeventi.ch) e meteo (MeteoSvizzera via Open-Meteo) sono reali e si aggiornano da soli con GitHub Actions; i prezzi sono stime dichiarate. Vedi [docs/INTEGRAZIONI.md](docs/INTEGRAZIONI.md).
 
 ## Avvio rapido
 
@@ -40,13 +40,13 @@ Il blueprint [render.yaml](render.yaml) crea un servizio web dal [Dockerfile](Do
 
 ## Cosa si può fare
 
-1. **Organizza una giornata**: modulo guidato in 6 passaggi (gruppo e personaggi, quando e dove, atmosfera, budget e ritmo, esigenze, riepilogo). Testo libero facoltativo: se contraddice il modulo, viene chiesto di scegliere.
+1. **Organizza una giornata**: schermata iniziale con idee pronte (un tocco e partono le proposte) oppure modulo in 3 passi — chi siete (una pedina per persona: nome e colore), quando e da dove, cosa vi va (atmosfera, budget; esigenze e preferenze a scomparsa). Testo libero facoltativo: se contraddice il modulo, viene chiesto di scegliere.
 2. **Fino a tre alternative realmente diverse** (temi: lago e borghi, panorami, arte e storia, sapori, natura, famiglia, oltre il centro), con controlli espliciti (apertura per tutta la permanenza, ultimo ingresso, coincidenze reali, budget, cammino, mobilità, rientro), compromessi e dati mancanti. Se nessun programma è possibile, il sistema spiega perché e propone modifiche.
-3. **Simulazione** con play/pausa, velocità 1×/4×/10×, salta spostamento, prossima decisione, vai al riepilogo (che non inventa risposte alle decisioni obbligatorie), timeline con checkpoint, camera segui/libera/tutto il percorso, cutscene saltabili, luce collegata all'ora simulata, battute brevi, suoni ambientali facoltativi.
-4. **Cambiare idea e «E se…»**: +15/30/60 minuti, salta o sostituisci una tappa, riduci il budget, meno cammino, pausa, al coperto, cambia rientro, blocca una tappa; ipotesi dichiarate (perdiamo la corsa, restiamo mezz'ora, piove, posto non disponibile). Ogni modifica crea un **ramo** confrontabile e reversibile, con differenze di orario, costo, cammino, tappe, coincidenze perse e rientro.
-5. **Salva, condividi, esporta**: link personale di modifica, link di condivisione **revocabile** con rimozione dei dettagli sensibili (anche nelle decisioni pre-calcolate) e voto degli amici con commenti brevi e proposta in testa, calendario `.ics`, stampa, cartolina illustrata, copia offline del riepilogo.
+3. **Simulazione** con una sola barra di comandi: orologio, velocità (1×/4×/10×), avvio/pausa, salta spostamento, fine (che non inventa risposte alle decisioni obbligatorie); avanzamento con le tappe toccabili; riquadro «Adesso»; la camera segue il gruppo (e torna a farlo con un tocco); titoli agli arrivi, luce collegata all'ora simulata, fumetti brevi, suoni facoltativi.
+4. **Cambiare idea e «E se…»**: +30 minuti, salta o sostituisci la prossima tappa, pausa, meno cammino, «E se piove?»; in «Altro» budget, rientro, blocco di una tappa, solo al coperto, corsa persa, posto chiuso. Ogni modifica crea una **versione** confrontabile e reversibile, con differenze di orario, costo, cammino, tappe, coincidenze perse e rientro.
+5. **Esporta**: calendario `.ics`, stampa, testo da copiare, cartolina illustrata. Salvataggio, link condivisi revocabili e voto degli amici esistono ma sono disattivati nella demo (`SAVE_AND_SHARE=true` per riattivarli).
 6. **Riepilogo pratico**: tappe, come arrivare, orari del giorno con fonte, costi stimati, cose da verificare, link ufficiali, **rivalidazione** con i dati attuali e **piano B se piove** (per ogni tappa all'aperto fino a due alternative al coperto, aperte in quella fascia e raggiungibili a piedi; in montagna si cerca in basso).
-7. **Esplora liberamente**: luoghi del catalogo, filtro «aperto durante la mia visita», punti OSM non curati, schede con provenienza di ogni dato, segnalazione di errori; **eventi** oggi/domani/settimana (dimostrativi) con ricerca, categorie, segnaposti sulla mappa e «organizza una giornata con questo evento».
+7. **Esplora liberamente**: luoghi del catalogo, filtro «aperto quando ci andate», punti OSM non curati, schede con provenienza di ogni dato, segnalazione di errori; **eventi** reali oggi/domani/settimana raggruppati per giorno, mostre in corso, ricerca, categorie, segnaposti sulla mappa, link alla scheda ufficiale e «organizza la giornata» attorno a un evento.
 8. **Pannello editoriale** protetto: salute dei dati e delle fonti, modifica e verifica di orari/prezzi/accessibilità, eccezioni agli eventi, segnalazioni, conflitti fra modifiche manuali e nuovi import, statistiche aggregate, consumi AI, registro.
 
 ## Architettura in breve
@@ -54,7 +54,7 @@ Il blueprint [render.yaml](render.yaml) crea un servizio web dal [Dockerfile](Do
 ```text
 src/shared/     modelli e schemi (zod), tempo Europe/Zurich, calendario, prezzi, simulazione, esportazioni
 src/server/     API (Hono), dati, routing (grafo pedonale OSM + orario GTFS con CSA), pianificatore, AI, adattatori, SQLite
-src/client/     React + MapLibre GL: stile «atlante», personaggi, simulazione, modulo, schede, pannello editoriale
+src/client/     React + MapLibre GL: stile a schizzo, pedine, simulazione, modulo, schede, pannello editoriale
 scripts/        pipeline dati riproducibile (perimetro, OSM, terreno, tile, grafi, GTFS, catalogo)
 data/catalog/   contenuti editoriali (luoghi, eventi demo, fonti) in YAML
 data/build/     derivati costruiti (catalogo validato, grafi, rete trasporti)
