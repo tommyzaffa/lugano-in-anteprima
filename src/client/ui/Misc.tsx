@@ -1,3 +1,4 @@
+import { tx, getLocale } from '../locale.ts';
 import { useEffect, useMemo, useState } from 'react';
 import { useApp, useSim } from '../store.ts';
 import { get, send, ApiError } from '../api.ts';
@@ -15,24 +16,24 @@ export function Saved() {
     try { localStorage.removeItem(`lia.offline.${id}`); } catch { /* */ }
     set({ saved: saved.filter((s) => s.id !== id) });
   };
-  if (!saved.length) return <Empty title="Nessun programma salvato">Salvate un programma dalla simulazione o dal riepilogo.</Empty>;
+  if (!saved.length) return <Empty title={tx("Nessun programma salvato")}>{tx("Salvate un programma dalla simulazione o dal riepilogo.")}</Empty>;
   return (
     <div className="saved">
-      <h2>Programmi salvati</h2>
+      <h2>{tx("Programmi salvati")}</h2>
       <ul className="saved-list">
         {saved.map((s) => (
           <li key={s.id}>
-            <strong>{s.title}</strong> <span className="muted">{s.date} · salvato {new Date(s.savedAt).toLocaleDateString('it-CH')}</span>
+            <strong>{tx(s.title)}</strong> <span className="muted">{tx(s.date)}{tx(" · salvato ")}{tx(new Date(s.savedAt).toLocaleDateString(getLocale()))}</span>
             <div className="row wrap">
-              <button className="btn" onClick={() => void openSaved(s.id, s.token)}>Apri</button>
-              <button className="btn-ghost" onClick={() => setOffline(s.id)}>Versione offline</button>
-              <button className="btn-ghost" onClick={() => void remove(s.id, s.token)}>Elimina</button>
+              <button className="btn" onClick={() => void openSaved(s.id, s.token)}>{tx("Apri")}</button>
+              <button className="btn-ghost" onClick={() => setOffline(s.id)}>{tx("Versione offline")}</button>
+              <button className="btn-ghost" onClick={() => void remove(s.id, s.token)}>{tx("Elimina")}</button>
             </div>
             {offline === s.id ? <OfflineSummary id={s.id} /> : null}
           </li>
         ))}
       </ul>
-      <p className="hint">I link personali permettono di modificare il programma: non condivideteli. Per mostrarlo ad altri usate «Condividi», revocabile.</p>
+      <p className="hint">{tx("I link personali permettono di modificare il programma: non condivideteli. Per mostrarlo ad altri usate «Condividi», revocabile.")}</p>
     </div>
   );
 }
@@ -40,11 +41,10 @@ export function Saved() {
 function OfflineSummary({ id }: { id: string }) {
   let data: { plan: Plan; savedAt: string } | null = null;
   try { data = JSON.parse(localStorage.getItem(`lia.offline.${id}`) ?? 'null'); } catch { data = null; }
-  if (!data) return <div className="notice">Nessuna copia offline su questo dispositivo.</div>;
+  if (!data) return <div className="notice">{tx("Nessuna copia offline su questo dispositivo.")}</div>;
   return (
     <div className="notice">
-      <strong>Copia offline del {new Date(data.savedAt).toLocaleString('it-CH')}</strong> (nessuna garanzia live: orari e corse possono essere cambiati)
-      <ol>{data.plan.stops.map((s) => <li key={s.id}>{hhmm(s.start)} {s.name}</li>)}</ol>
+      <strong>{tx("Copia offline del ")}{tx(new Date(data.savedAt).toLocaleString(getLocale()))}</strong>{tx(" (nessuna garanzia live: orari e corse possono essere cambiati)")}<ol>{data.plan.stops.map((s) => <li key={s.id}>{tx(hhmm(s.start))} {tx(s.name)}</li>)}</ol>
     </div>
   );
 }
@@ -74,18 +74,18 @@ export function Settings() {
   const s = useApp((x) => x.settings);
   const setS = useApp((x) => x.setSettings);
   const row = (k: keyof typeof s, label: string, hint?: string) => (
-    <label className="check block"><input type="checkbox" checked={!!s[k]} onChange={(e) => setS({ [k]: e.target.checked } as any)} /> {label}{hint ? <span className="hint"> {hint}</span> : null}</label>
+    <label className="check block"><input type="checkbox" checked={!!s[k]} onChange={(e) => setS({ [k]: e.target.checked } as any)} /> {tx(label)}{hint ? <span className="hint"> {tx(hint)}</span> : null}</label>
   );
   return (
     <div className="settings">
-      <h2>Impostazioni</h2>
-      {row('threeD', 'Rilievo ed edifici in 3D', 'Disattivate per una mappa più leggera, vista dall\'alto.')}
-      {row('reducedMotion', 'Movimento ridotto', 'Niente voli di camera né animazioni.')}
-      {row('cutscenes', 'Titoli agli arrivi')}
-      {row('dialogues', 'Fumetti delle pedine')}
-      {row('sound', 'Suoni ambientali', 'Solo durante la simulazione.')}
-      {row('listView', 'Vista elenco invece della mappa', 'Stesse informazioni, senza grafica.')}
-      <label className="check block"><input type="checkbox" checked={s.lighting === 'sim'} onChange={(e) => setS({ lighting: e.target.checked ? 'sim' : 'day' })} /> Luce che segue l'ora simulata</label>
+      <h2>{tx("Impostazioni")}</h2>
+      {tx(row('threeD', 'Rilievo ed edifici in 3D', 'Disattivate per una mappa più leggera, vista dall\'alto.'))}
+      {tx(row('reducedMotion', 'Movimento ridotto', 'Niente voli di camera né animazioni.'))}
+      {tx(row('cutscenes', 'Titoli agli arrivi'))}
+      {tx(row('dialogues', 'Fumetti delle pedine'))}
+      {tx(row('sound', 'Suoni ambientali', 'Solo durante la simulazione.'))}
+      {tx(row('listView', 'Vista elenco invece della mappa', 'Stesse informazioni, senza grafica.'))}
+      <label className="check block"><input type="checkbox" checked={s.lighting === 'sim'} onChange={(e) => setS({ lighting: e.target.checked ? 'sim' : 'day' })} />{tx(" Luce che segue l'ora simulata")}</label>
     </div>
   );
 }
@@ -95,33 +95,33 @@ export function About() {
   if (!meta) return <Spinner />;
   return (
     <div className="about">
-      <h2>Dati, fonti e limiti</h2>
-      <div className="notice">Prototipo indipendente, in sviluppo: non è un servizio ufficiale della Città di Lugano né di Lugano Region. Luoghi, strade, sentieri, orari dei mezzi, eventi e meteo vengono da fonti pubbliche reali, aggiornate automaticamente; i prezzi sono stime. L'app non prenota né acquista nulla.{meta.hosting?.ephemeralStorage && meta.features?.sharing ? ' In questa demo pubblica i programmi salvati possono sparire quando il server si riavvia.' : ''}</div>
-      <p>Area coperta: {meta.perimeter.sizeKm.width}×{meta.perimeter.sizeKm.height} km, dal Monte Boglia al San Salvatore, da Canobbio a Melide: comuni diversi (Lugano, Paradiso, Massagno, Sorengo, Collina d'Oro…) e il confine con l'Italia (Campione d'Italia). Fuori da quest'area la mappa è solo un contesto disegnato.</p>
-      <h3>Integrazioni</h3>
+      <h2>{tx("Dati, fonti e limiti")}</h2>
+      <div className="notice">{tx("Prototipo indipendente, in sviluppo: non è un servizio ufficiale della Città di Lugano né di Lugano Region. Luoghi, strade, sentieri, orari dei mezzi, eventi e meteo vengono da fonti pubbliche reali, aggiornate automaticamente; i prezzi sono stime. L'app non prenota né acquista nulla.")}{tx(meta.hosting?.ephemeralStorage && meta.features?.sharing ? ' In questa demo pubblica i programmi salvati possono sparire quando il server si riavvia.' : '')}</div>
+      <p>{tx("Area coperta: ")}{tx(meta.perimeter.sizeKm.width)}×{tx(meta.perimeter.sizeKm.height)}{tx(" km. Lugano e dintorni, inclusi Caslano, Comano, Cureglia e le altre località della mappa. Fuori da quest’area la cartografia è solo un contesto disegnato.")}</p>
+      <h3>{tx("Integrazioni")}</h3>
       <ul className="integrations">
         {meta.integrations.map((i) => (
           <li key={i.id}>
-            <div className="int-head"><strong>{i.name}</strong> <Badge kind={i.status === 'implementata' ? 'ok' : i.status === 'bloccata' ? 'bad' : i.status === 'dimostrativa' ? 'demo' : 'warn'}>{i.status}</Badge></div>
-            <p>{i.detail}</p>
-            <p className="muted">{i.activation}</p>
+            <div className="int-head"><strong>{tx(i.name)}</strong> <Badge kind={i.status === 'implementata' ? 'ok' : i.status === 'bloccata' ? 'bad' : i.status === 'dimostrativa' ? 'demo' : 'warn'}>{tx(i.status)}</Badge></div>
+            <p>{tx(i.detail)}</p>
+            <p className="muted">{tx(i.activation)}</p>
           </li>
         ))}
       </ul>
-      <h3>Fonti</h3>
-      <ul>{meta.sources.map((s: any) => <li key={s.id}><strong>{s.name}</strong> — {s.license ?? 'uso interno'}{s.note ? `. ${s.note}` : ''}</li>)}</ul>
-      <h3>Riferimenti territoriali verificati</h3>
-      <p className="muted">Coordinate lette da OpenStreetMap: {meta.perimeter.references.map((r: any) => r.label).join(' · ')}.</p>
-      <h3>Cosa significa</h3>
+      <h3>{tx("Fonti")}</h3>
+      <ul>{meta.sources.map((s: any) => <li key={s.id}><strong>{tx(s.name)}</strong> — {tx(s.license ?? 'uso interno')}{tx(s.note ? `. ${s.note}` : '')}</li>)}</ul>
+      <h3>{tx("Riferimenti territoriali verificati")}</h3>
+      <p className="muted">{tx("Coordinate lette da OpenStreetMap: ")}{tx(meta.perimeter.references.map((r: any) => r.label).join(' · '))}.</p>
+      <h3>{tx("Cosa significa")}</h3>
       <ul>
-        <li><Badge kind="ok">verificato</Badge> controllato dalla redazione su fonte ufficiale, con data.</li>
-        <li><Badge kind="ok">dato ufficiale</Badge> importato da un dataset ufficiale (orario GTFS).</li>
-        <li><Badge kind="warn">OpenStreetMap</Badge> / <Badge kind="warn">redazione</Badge> dati plausibili da verificare.</li>
-        <li><Badge kind="info">stima</Badge> fascia indicativa o calcolo (tempi a piedi, dislivelli, prezzi per categoria).</li>
-        <li><Badge kind="demo">dimostrativo</Badge> esempio inventato per la demo (eventi, meteo demo).</li>
-        <li><Badge kind="bad">mancante</Badge> informazione non disponibile: non viene mai trattata come zero.</li>
+        <li><Badge kind="ok">{tx("verificato")}</Badge>{tx(" controllato dalla redazione su fonte ufficiale, con data.")}</li>
+        <li><Badge kind="ok">{tx("dato ufficiale")}</Badge>{tx(" importato da un dataset ufficiale (orario GTFS).")}</li>
+        <li><Badge kind="warn">{tx("OpenStreetMap")}</Badge> / <Badge kind="warn">{tx("redazione")}</Badge>{tx(" dati plausibili da verificare.")}</li>
+        <li><Badge kind="info">{tx("stima")}</Badge>{tx(" fascia indicativa o calcolo (tempi a piedi, dislivelli, prezzi per categoria).")}</li>
+        <li><Badge kind="demo">{tx("dimostrativo")}</Badge>{tx(" esempio inventato per la demo (eventi, meteo demo).")}</li>
+        <li><Badge kind="bad">{tx("mancante")}</Badge>{tx(" informazione non disponibile: non viene mai trattata come zero.")}</li>
       </ul>
-      <p className="muted">La folla e le animazioni del modellino sono decorative: non rappresentano presenze reali. L'app non prenota né acquista nulla.</p>
+      <p className="muted">{tx("La folla e le animazioni del modellino sono decorative: non rappresentano presenze reali. L'app non prenota né acquista nulla.")}</p>
     </div>
   );
 }
@@ -153,7 +153,7 @@ export function ShareView({ token }: { token: string }) {
       useApp.getState().notify('Voto registrato. Potete cambiarlo quando volete.', 'ok');
     } catch (e) { useApp.getState().notify((e as Error).message, 'error'); }
   };
-  if (err) return <div className="share-view"><h2>Link non disponibile</h2><div className="notice bad">{err}</div></div>;
+  if (err) return <div className="share-view"><h2>{tx("Link non disponibile")}</h2><div className="notice bad">{tx(err)}</div></div>;
   if (!data) return <Spinner />;
   const letter = (id: string) => String.fromCharCode(65 + Math.max(0, data.alternatives.findIndex((p: Plan) => p.id === id)));
   const total = Object.values(tally ?? {}).reduce((a: number, b) => a + (b as number), 0);
@@ -161,39 +161,39 @@ export function ShareView({ token }: { token: string }) {
   const leaders = Object.entries(tally ?? {}).filter(([, n]) => n === max && max > 0).map(([id]) => id);
   return (
     <div className="share-view">
-      <h2>{data.title}</h2>
-      <p className="hint">Proposta condivisa con «Lugano in anteprima». Alcuni dettagli personali possono essere stati nascosti da chi l'ha creata.</p>
-      {data.allowVotes ? (
+      <h2>{tx(data.title)}</h2>
+      <p className="hint">{tx("Proposta condivisa con «Lugano in anteprima». Alcuni dettagli personali possono essere stati nascosti da chi l'ha creata.")}</p>
+      {tx(data.allowVotes ? (
         <div className="vote-box">
-          <p><strong>Votate la vostra preferita.</strong> {total ? `${total} ${total === 1 ? 'voto' : 'voti'} finora${leaders.length === 1 ? `: in testa la proposta ${letter(leaders[0])}` : leaders.length > 1 ? `: parità fra ${leaders.map(letter).join(' e ')}` : ''}.` : 'Nessun voto finora.'}</p>
+          <p><strong>{tx("Votate la vostra preferita.")}</strong> {tx(total ? `${total} ${total === 1 ? 'voto' : 'voti'} finora${leaders.length === 1 ? `: in testa la proposta ${letter(leaders[0])}` : leaders.length > 1 ? `: parità fra ${leaders.map(letter).join(' e ')}` : ''}.` : 'Nessun voto finora.')}</p>
           <div className="row wrap">
-            <label>Nome (facoltativo) <input value={name} maxLength={30} onChange={(e) => setName(e.target.value)} placeholder="es. Sara" /></label>
-            <label className="grow">Commento breve (facoltativo) <input value={comment} maxLength={140} onChange={(e) => setComment(e.target.value)} placeholder="es. meglio se rientriamo presto" /></label>
+            <label>{tx("Nome (facoltativo) ")}<input value={name} maxLength={30} onChange={(e) => setName(e.target.value)} placeholder={tx("es. Sara")} /></label>
+            <label className="grow">{tx("Commento breve (facoltativo) ")}<input value={comment} maxLength={140} onChange={(e) => setComment(e.target.value)} placeholder={tx("es. meglio se rientriamo presto")} /></label>
           </div>
-          <p className="hint">Nome e commento sono visibili a chi ha il link. Non scrivete dati personali.</p>
+          <p className="hint">{tx("Nome e commento sono visibili a chi ha il link. Non scrivete dati personali.")}</p>
         </div>
-      ) : null}
+      ) : null)}
       <ul className="alt-cards">
         {data.alternatives.map((p: Plan, i: number) => {
           const n = tally?.[p.id] ?? 0;
           const lead = leaders.length === 1 && leaders[0] === p.id;
           return (
             <li key={p.id} className={`alt-card ${lead ? 'leading' : ''} ${mine?.optionId === p.id ? 'my-vote' : ''}`} onMouseEnter={() => set({ selected: i })} onFocus={() => set({ selected: i })} onClick={() => set({ selected: i })}>
-              <div className="alt-top"><span className="alt-letter">{String.fromCharCode(65 + i)}</span><h3>{p.title}</h3>{lead ? <Badge kind="ok">in testa</Badge> : null}</div>
-              <p className="alt-summary">{p.summary}</p>
-              <ol className="alt-stops">{p.stops.map((s) => <li key={s.id}><span className="muted">{hhmm(s.start)}</span> {s.name}</li>)}</ol>
-              {data.allowVotes ? (
+              <div className="alt-top"><span className="alt-letter">{tx(String.fromCharCode(65 + i))}</span><h3>{tx(p.title)}</h3>{lead ? <Badge kind="ok">{tx("in testa")}</Badge> : null}</div>
+              <p className="alt-summary">{tx(p.summary)}</p>
+              <ol className="alt-stops">{p.stops.map((s) => <li key={s.id}><span className="muted">{tx(hhmm(s.start))}</span> {tx(s.name)}</li>)}</ol>
+              {tx(data.allowVotes ? (
                 <>
-                  {total ? <div className="vote-bar" aria-label={`${n} voti su ${total}`}><span style={{ width: `${Math.round((n / total) * 100)}%` }} /></div> : null}
-                  <button className={mine?.optionId === p.id ? 'btn primary' : 'btn'} onClick={() => void vote(p.id)} aria-pressed={mine?.optionId === p.id}>{mine?.optionId === p.id ? `Il vostro voto (${n})` : `Voto questa${n ? ` (${n})` : ''}`}</button>
-                  {comments.filter((c) => c.optionId === p.id).map((c, k) => <blockquote key={k} className="vote-comment">«{c.comment}»{c.name ? <span className="muted"> — {c.name}</span> : null}</blockquote>)}
+                  {total ? <div className="vote-bar" aria-label={tx(`${n} voti su ${total}`)}><span style={{ width: `${Math.round((n / total) * 100)}%` }} /></div> : null}
+                  <button className={mine?.optionId === p.id ? 'btn primary' : 'btn'} onClick={() => void vote(p.id)} aria-pressed={mine?.optionId === p.id}>{tx(mine?.optionId === p.id ? `Il vostro voto (${n})` : `Voto questa${n ? ` (${n})` : ''}`)}</button>
+                  {comments.filter((c) => c.optionId === p.id).map((c, k) => <blockquote key={k} className="vote-comment">«{tx(c.comment)}»{c.name ? <span className="muted"> — {tx(c.name)}</span> : null}</blockquote>)}
                 </>
-              ) : null}
+              ) : null)}
             </li>
           );
         })}
       </ul>
-      <button className="btn-ghost" onClick={() => { set({ view: 'home' }); history.pushState(null, '', '/'); }}>Crea il vostro programma</button>
+      <button className="btn-ghost" onClick={() => { set({ view: 'home' }); history.pushState(null, '', '/'); }}>{tx("Crea il vostro programma")}</button>
     </div>
   );
 }

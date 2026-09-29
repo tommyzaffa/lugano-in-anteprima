@@ -7,7 +7,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { buildTimeline, advance, stateAt } from '../../shared/simulation.ts';
 import { useApp, useSim } from '../store.ts';
-import { getMap } from '../map/MapView.tsx';
+import { getMap } from '../map/map-state.ts';
 import { hhmm } from '../../shared/time.ts';
 import { track } from '../api.ts';
 import { ambient } from './sound.ts';

@@ -1,3 +1,4 @@
+import { tx, getLocale } from '../locale.ts';
 import { useMemo } from 'react';
 import { useApp, useSim } from '../store.ts';
 import { buildTimeline, stateAt } from '../../shared/simulation.ts';
@@ -20,26 +21,26 @@ export default function SimControls() {
   const nextSpeed = SPEEDS[(SPEEDS.indexOf(speed) + 1) % SPEEDS.length];
   return (
     <>
-      {camera === 'free' ? <button className="follow-chip" onClick={() => cameraMode('follow')}>◎ Segui il gruppo</button> : null}
-      <div className="sim-controls" role="region" aria-label="Comandi della simulazione">
+      {camera === 'free' ? <button className="follow-chip" onClick={() => cameraMode('follow')}>{tx("◎ Segui il gruppo")}</button> : null}
+      <div className="sim-controls" role="region" aria-label={tx("Comandi della simulazione")}>
         <div className="sim-pill">
           <div className="sim-row">
-            <div className="clock"><span className="clock-time">{hhmm(t)}</span><span className="clock-label">{blocked ? 'Tocca a voi scegliere' : st.label}</span></div>
-            <button className="ctl speed" onClick={() => setSpeed(nextSpeed)} aria-label={`Velocità ${speed}×: passa a ${nextSpeed}×`} title="Velocità">{speed}×</button>
+            <div className="clock"><span className="clock-time">{tx(hhmm(t))}</span><span className="clock-label">{tx(blocked ? 'Tocca a voi scegliere' : st.label)}</span></div>
+            <button className="ctl speed" onClick={() => setSpeed(nextSpeed)} aria-label={tx(`Velocità ${speed}×: passa a ${nextSpeed}×`)} title={tx("Velocità")}>{tx(speed)}×</button>
             {playing
-              ? <button className="ctl play" onClick={pause} aria-label="Pausa">❚❚</button>
-              : <button className="ctl play" onClick={play} aria-label="Avvia" disabled={st.finished || blocked}>▶</button>}
-            <button className="ctl" onClick={skipMove} disabled={st.finished || blocked} aria-label="Salta spostamento" title="Salta lo spostamento">⏭</button>
-            <button className="ctl" onClick={goToSummary} aria-label="Fine: riepilogo" title="Vai al riepilogo"><span aria-hidden>✓</span><span className="lbl">Fine</span></button>
+              ? <button className="ctl play" onClick={pause} aria-label={tx("Pausa")}>❚❚</button>
+              : <button className="ctl play" onClick={play} aria-label={tx("Avvia")} disabled={st.finished || blocked}>▶</button>}
+            <button className="ctl" onClick={skipMove} disabled={st.finished || blocked} aria-label={tx("Salta spostamento")} title={tx("Salta lo spostamento")}>⏭</button>
+            <button className="ctl" onClick={goToSummary} aria-label={tx("Fine: riepilogo")} title={tx("Vai al riepilogo")}><span aria-hidden>✓</span><span className="lbl">{tx("Fine")}</span></button>
           </div>
           <div className="progress">
             <div className="bar" />
             <div className="fill" style={{ width: pct(t) }} />
             {tl.checkpoints.filter((c) => c.kind === 'arrive' || c.kind === 'decision').map((c) => (
-              <button key={c.id} className={`cp ${c.kind === 'decision' ? 'decision' : ''} ${c.t <= t ? 'passed' : ''}`} style={{ left: pct(c.t) }} onClick={() => { pause(); seek(c.t); track('sim_checkpoint'); }} title={`${hhmm(c.t)} · ${c.label}`} aria-label={`Vai a ${hhmm(c.t)}: ${c.label}`} tabIndex={-1} />
+              <button key={c.id} className={`cp ${c.kind === 'decision' ? 'decision' : ''} ${c.t <= t ? 'passed' : ''}`} style={{ left: pct(c.t) }} onClick={() => { pause(); seek(c.t); track('sim_checkpoint'); }} title={tx(`${hhmm(c.t)} · ${c.label}`)} aria-label={tx(`Vai a ${hhmm(c.t)}: ${c.label}`)} tabIndex={-1} />
             ))}
             <div className="knob" style={{ left: pct(t) }} />
-            <input type="range" min={tl.start} max={tl.end} step={60000} value={t} onChange={(e) => { pause(); seek(Number(e.target.value)); }} aria-label="Ora simulata" aria-valuetext={hhmm(t)} />
+            <input type="range" min={tl.start} max={tl.end} step={60000} value={t} onChange={(e) => { pause(); seek(Number(e.target.value)); }} aria-label={tx("Ora simulata")} aria-valuetext={hhmm(t)} />
           </div>
         </div>
       </div>

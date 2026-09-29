@@ -13,6 +13,7 @@ import type { TextHints } from './text.ts';
 import { config } from '../config.ts';
 
 export interface PlanContext {
+  searchDeadline?: number;
   req: GroupRequest;
   hints: TextHints;
   start: number;

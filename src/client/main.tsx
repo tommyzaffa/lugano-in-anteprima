@@ -1,3 +1,4 @@
+import { translate, getLocale } from './locale.ts';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
@@ -5,6 +6,8 @@ import '@fontsource/architects-daughter/400.css';
 import '@fontsource-variable/dm-sans';
 import './styles.css';
 
+const skip = document.querySelector<HTMLAnchorElement>('.skip-link');
+if (skip) skip.textContent = translate('Vai al pannello');
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />

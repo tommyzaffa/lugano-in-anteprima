@@ -261,7 +261,7 @@ export function finalize(ctx: PlanContext, data: DataStore, stops: PlanStop[], t
     branchId: meta.branchId ?? 'main',
     parentPlanId: meta.parentPlanId,
     createdAt: new Date().toISOString(),
-    title: `${meta.themeLabel}${main.length ? `: ${main.join(' e ')}` : ''}`,
+    title: `${meta.themeLabel}${main.length ? `: ${main.join({ it: ' e ', en: ' and ', fr: ' et ', de: ' und ' }[ctx.req.locale])}` : ''}`,
     theme: meta.theme,
     summary: `${n} tapp${n === 1 ? 'a' : 'e'} · ${fmtDuration((endMs - Date.parse(startsAt)) / 60000)} · ${(walkM / 1000).toFixed(1)} km a piedi · ${cost.unknownEssential ? 'costi in parte sconosciuti' : `${fmtRange(cost.perPersonMin, cost.perPersonMax)} a persona`}`,
     request: ctx.req,

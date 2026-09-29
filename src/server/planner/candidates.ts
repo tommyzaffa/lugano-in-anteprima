@@ -3,6 +3,7 @@
  * filtrati dai vincoli rigidi (evitare, mobilità, età, esclusioni) e valutati
  * sulle preferenze. Ogni esclusione è contata per spiegare un eventuale fallimento.
  */
+import { inArea } from '../../shared/area.ts';
 import { DateTime } from 'luxon';
 import type { Place, EventOccurrence, PriceEstimate, CatalogEvent } from '../../shared/types.ts';
 import { openIntervals } from '../../shared/calendar.ts';
@@ -63,7 +64,7 @@ export function selectCandidates(ctx: PlanContext, data: DataStore): CandidateRe
   const excluded: Record<string, number> = {};
   const excludedMustSee: { id: string; reason: string; name?: string }[] = [];
   const req = ctx.req;
-  const from = DateTime.fromMillis(ctx.start), to = DateTime.fromMillis(ctx.end);
+  const from = DateTime.fromMillis(ctx.start, { zone: 'Europe/Zurich' }), to = DateTime.fromMillis(ctx.end, { zone: 'Europe/Zurich' });
   const out: Candidate[] = [];
   const mustSee = new Set(req.mustSee);
   const minKidAge = ctx.kids ? Math.min(...req.people.filter((p) => p.kind === 'child').map((p) => (p.ageBand === '0-5' ? 3 : p.ageBand === '6-11' ? 6 : p.ageBand === '12-15' ? 12 : p.ageBand === '16-17' ? 16 : 6))) : 99;
@@ -74,6 +75,7 @@ export function selectCandidates(ctx: PlanContext, data: DataStore): CandidateRe
   };
 
   const baseChecks = (p: Place, id: string, extra?: { noise?: string; alcohol?: string; minAge?: number; indoor?: boolean; tags?: string[] }): string | null => {
+    if (!inArea(p.entrance, req.area) || (p.walkTo && !inArea(data.place(p.walkTo)?.entrance ?? p.entrance, req.area))) return 'fuori dalla zona scelta';
     if (req.exclude.includes(p.id)) return 'escluso dall\'utente';
     const tags = new Set([...(p.tags ?? []), ...(extra?.tags ?? [])]);
     const noise = extra?.noise ?? p.suitability.noise;
@@ -216,6 +218,7 @@ export function selectCandidates(ctx: PlanContext, data: DataStore): CandidateRe
   for (const l of req.locked) {
     const p = l.placeId ? data.place(l.placeId) : undefined;
     if (!p) { excludedMustSee.push({ id: l.placeId ?? l.eventId ?? '?', reason: 'tappa bloccata non presente nel catalogo' }); continue; }
+    if (!inArea(p.entrance, req.area)) { excludedMustSee.push({ id: p.id, name: p.name, reason: 'fuori dalla zona scelta' }); continue; }
     let s0 = localToInstant(req.date, l.start).toMillis();
     if (s0 < ctx.start) s0 = localToInstant(req.date, l.start, 1).toMillis();
     let e0 = localToInstant(req.date, l.end).toMillis();

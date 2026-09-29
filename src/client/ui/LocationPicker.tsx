@@ -1,9 +1,9 @@
+import { tx, getLocale } from '../locale.ts';
 import { useEffect, useRef, useState } from 'react';
 import type { Location } from '../../shared/types.ts';
 import { get, track } from '../api.ts';
-import { getMap } from '../map/MapView.tsx';
+import { getMap } from '../map/map-state.ts';
 import { useApp } from '../store.ts';
-import * as maplibregl from 'maplibre-gl';
 
 interface Result { kind: 'place' | 'stop' | 'address' | 'poi'; id: string; label: string; sub: string; lon: number; lat: number }
 
@@ -40,7 +40,8 @@ export default function LocationPicker({ value, onChange, id, allowSensitive = t
     );
   };
 
-  const pickOnMap = () => {
+  const pickOnMap = async () => {
+    const maplibregl = await import('maplibre-gl');
     const map = getMap();
     if (!map) { notify('Mappa non disponibile: usate la ricerca.', 'error'); return; }
     setPicking(true);
@@ -59,23 +60,23 @@ export default function LocationPicker({ value, onChange, id, allowSensitive = t
 
   return (
     <div className="loc-picker">
-      <div className="loc-current" aria-live="polite">{value ? <><span aria-hidden>📍</span> <strong>{value.label}</strong></> : <span className="muted">Nessun punto scelto</span>}</div>
+      <div className="loc-current" aria-live="polite">{value ? <><span aria-hidden>📍</span> <strong>{tx(value.label)}</strong></> : <span className="muted">{tx("Nessun punto scelto")}</span>}</div>
       <div className="loc-quick">
-        {QUICK.map((l) => <button type="button" key={l.label} className={`chip ${value?.label === l.label ? 'on' : ''}`} onClick={() => onChange(l)}>{l.label}</button>)}
+        {QUICK.map((l) => <button type="button" key={l.label} className={`chip ${value?.label === l.label ? 'on' : ''}`} onClick={() => onChange(l)}>{tx(l.label)}</button>)}
       </div>
       <div className="loc-search">
-        <input id={id} type="search" placeholder="Cerca luogo, fermata o indirizzo…" value={q} onChange={(e) => setQ(e.target.value)} aria-autocomplete="list" aria-controls={results.length ? `${id}-list` : undefined} autoComplete="off" />
-        {results.length ? (
+        <input id={id} type="search" placeholder={tx("Cerca luogo, fermata o indirizzo…")} value={q} onChange={(e) => setQ(e.target.value)} aria-autocomplete="list" aria-controls={results.length ? `${id}-list` : undefined} autoComplete="off" />
+        {tx(results.length ? (
           <ul className="loc-results" id={`${id}-list`} role="listbox">
             {results.map((r) => (
-              <li key={`${r.kind}-${r.id}`} role="option" aria-selected={false}><button type="button" onClick={() => choose(r)}><strong>{r.label}</strong><span>{r.sub}</span></button></li>
+              <li key={`${r.kind}-${r.id}`} role="option" aria-selected={false}><button type="button" onClick={() => choose(r)}><strong>{tx(r.label)}</strong><span>{tx(r.sub)}</span></button></li>
             ))}
           </ul>
-        ) : null}
+        ) : null)}
       </div>
       <div className="loc-actions">
-        <button type="button" className="link" onClick={pickOnMap} aria-pressed={picking}>{picking ? 'Toccate la mappa…' : 'Scegli sulla mappa'}</button>
-        {allowSensitive ? <button type="button" className="link" onClick={geolocate}>Usa la mia posizione</button> : null}
+        <button type="button" className="link" onClick={pickOnMap} aria-pressed={picking}>{tx(picking ? 'Toccate la mappa…' : 'Scegli sulla mappa')}</button>
+        {allowSensitive ? <button type="button" className="link" onClick={geolocate}>{tx("Usa la mia posizione")}</button> : null}
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import { inArea } from '../../shared/area.ts';
 /**
  * Cambiare idea e scenari «E se…» (§10 del brief).
  * Il passato del ramo resta invariato (tappe e tratte già vissute, anche una
@@ -31,7 +32,7 @@ const WHATIF_LABEL: Record<string, string> = {
 
 function candidateFromStop(ctx: PlanContext, data: DataStore, s: PlanStop): Candidate | null {
   const p = data.place(s.placeId);
-  if (!p) return null;
+  if (!p || !inArea(p.entrance, ctx.req.area)) return null;
   if (s.kind === 'event' && s.eventId) {
     const ev = data.events.get(s.eventId);
     const occ = ev ? data.occurrences(requestWindow(ctx.req.date, '00:00', '23:59').start.minus({ days: 1 }), requestWindow(ctx.req.date, '00:00', '23:59').end.plus({ days: 1 })).find((o) => o.eventId === ev.id && o.start === s.occurrenceStart) : undefined;
@@ -94,6 +95,7 @@ export function replan(plan: Plan, decision: Decision, data: DataStore): ReplanR
   }
   const hints = parseFreeText(req.freeText, []);
   const ctx = buildContext(req, hints, plan.snapshot.weather ?? null, () => {});
+  ctx.searchDeadline = Date.now() + 8000;
   if (decision.kind === 'whatif_rain') ctx.rainLikely = true;
   const tau = Date.parse(decision.atTime);
   const tl = buildTimeline(plan);

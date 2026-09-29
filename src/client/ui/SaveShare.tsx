@@ -1,3 +1,4 @@
+import { tx, getLocale } from '../locale.ts';
 import { useEffect, useState } from 'react';
 import { useApp } from '../store.ts';
 import { send, get, track, ApiError } from '../api.ts';
@@ -38,9 +39,9 @@ export function SaveShareButtons() {
   const sharing = useApp((s) => !!s.meta?.features?.sharing);
   return (
     <div className="save-share">
-      {sharing ? <button className="btn-ghost" onClick={() => void savePlan()}>Salva</button> : null}
-      {sharing ? <button className="btn-ghost" onClick={() => setShare(true)}>Condividi</button> : null}
-      <button className="btn-ghost" onClick={() => set({ view: 'summary' })}>Riepilogo pratico</button>
+      {sharing ? <button className="btn-ghost" onClick={() => void savePlan()}>{tx("Salva")}</button> : null}
+      {sharing ? <button className="btn-ghost" onClick={() => setShare(true)}>{tx("Condividi")}</button> : null}
+      <button className="btn-ghost" onClick={() => set({ view: 'summary' })}>{tx("Riepilogo pratico")}</button>
       {share ? <ShareDialog onClose={() => setShare(false)} /> : null}
     </div>
   );
@@ -68,24 +69,24 @@ export function ShareDialog({ onClose }: { onClose: () => void }) {
     useApp.getState().notify('Link revocato: non è più accessibile.', 'ok');
     void load();
   };
-  const opt = (k: keyof Redaction, label: string) => <label className="check"><input type="checkbox" checked={red[k]} onChange={(e) => setRed({ ...red, [k]: e.target.checked })} /> {label}</label>;
+  const opt = (k: keyof Redaction, label: string) => <label className="check"><input type="checkbox" checked={red[k]} onChange={(e) => setRed({ ...red, [k]: e.target.checked })} /> {tx(label)}</label>;
   return (
-    <Modal title="Condividi il programma" onClose={onClose}>
-      <p className="hint">Chi riceve il link vede le proposte senza account. Potete togliere i dettagli personali e revocare il link in ogni momento.</p>
-      {ephemeral ? <div className="notice warn">Demo pubblica: i link condivisi valgono finché il server non si riavvia (ad esempio dopo un periodo di inattività o un aggiornamento).</div> : null}
-      {opt('hideLocations', 'Nascondi partenza, alloggio e posizione')}
-      {opt('hideNeeds', 'Nascondi esigenze personali, alimentazione e testo libero')}
-      {opt('hideNames', 'Nascondi i nomi dei personaggi')}
-      {opt('hideBudget', 'Nascondi il budget')}
-      <label className="check"><input type="checkbox" checked={votes} onChange={(e) => setVotes(e.target.checked)} /> Permetti agli amici di votare l'alternativa preferita</label>
-      <div className="row"><button className="btn primary" onClick={() => void create()}>Crea link</button></div>
-      {link ? <div className="share-link"><input readOnly value={link} aria-label="Link di condivisione" onFocus={(e) => e.target.select()} /><button className="btn-ghost" onClick={() => copy(link)}>Copia</button></div> : null}
-      {shares.length ? (
+    <Modal title={tx("Condividi il programma")} onClose={onClose}>
+      <p className="hint">{tx("Chi riceve il link vede le proposte senza account. Potete togliere i dettagli personali e revocare il link in ogni momento.")}</p>
+      {ephemeral ? <div className="notice warn">{tx("Demo pubblica: i link condivisi valgono finché il server non si riavvia (ad esempio dopo un periodo di inattività o un aggiornamento).")}</div> : null}
+      {tx(opt('hideLocations', 'Nascondi partenza, alloggio e posizione'))}
+      {tx(opt('hideNeeds', 'Nascondi esigenze personali, alimentazione e testo libero'))}
+      {tx(opt('hideNames', 'Nascondi i nomi dei personaggi'))}
+      {tx(opt('hideBudget', 'Nascondi il budget'))}
+      <label className="check"><input type="checkbox" checked={votes} onChange={(e) => setVotes(e.target.checked)} />{tx(" Permetti agli amici di votare l'alternativa preferita")}</label>
+      <div className="row"><button className="btn primary" onClick={() => void create()}>{tx("Crea link")}</button></div>
+      {link ? <div className="share-link"><input readOnly value={link} aria-label={tx("Link di condivisione")} onFocus={(e) => e.target.select()} /><button className="btn-ghost" onClick={() => copy(link)}>{tx("Copia")}</button></div> : null}
+      {tx(shares.length ? (
         <>
-          <h4>Link esistenti</h4>
-          <ul className="share-list">{shares.map((s) => <li key={s.token}><code>/s/{s.token.slice(0, 6)}…</code> {new Date(s.createdAt).toLocaleString('it-CH')} {s.tally && Object.keys(s.tally).length ? <span className="muted"> · voti: {Object.values(s.tally as Record<string, number>).reduce((a, b) => a + b, 0)}{s.comments ? `, commenti: ${s.comments}` : ''}</span> : null} {s.revokedAt ? <span className="muted">revocato</span> : <button className="link" onClick={() => void revoke(s.token)}>revoca</button>}</li>)}</ul>
+          <h4>{tx("Link esistenti")}</h4>
+          <ul className="share-list">{shares.map((s) => <li key={s.token}><code>{tx("/s/")}{tx(s.token.slice(0, 6))}…</code> {tx(new Date(s.createdAt).toLocaleString(getLocale()))} {s.tally && Object.keys(s.tally).length ? <span className="muted">{tx(" · voti: ")}{tx(Object.values(s.tally as Record<string, number>).reduce((a, b) => a + b, 0))}{tx(s.comments ? `, commenti: ${s.comments}` : '')}</span> : null} {s.revokedAt ? <span className="muted">{tx("revocato")}</span> : <button className="link" onClick={() => void revoke(s.token)}>{tx("revoca")}</button>}</li>)}</ul>
         </>
-      ) : null}
+      ) : null)}
     </Modal>
   );
 }

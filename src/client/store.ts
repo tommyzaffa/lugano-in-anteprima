@@ -1,7 +1,9 @@
+import { getLocale, translate } from './locale.ts';
 /**
  * Stato dell'applicazione (zustand). L'orologio simulato vive in uno store
  * separato e leggero, aggiornato a ogni fotogramma senza ridisegnare l'intera UI.
  */
+import type { AreaAdvice, MapArea } from '../shared/area.ts';
 import { create } from 'zustand';
 import type { GroupRequest, Plan, Branch, Contradiction, InfeasibleResult, Decision, PlanDiff, Person, Location } from '../shared/types.ts';
 import { defaultAvatar } from './map/avatars.ts';
@@ -11,6 +13,7 @@ export type View = 'home' | 'wizard' | 'planning' | 'results' | 'sim' | 'summary
 
 export interface Meta {
   perimeter: { core: { south: number; west: number; north: number; east: number }; perimeter: { south: number; west: number; north: number; east: number }; buffer: { south: number; west: number; north: number; east: number }; references: any[]; sizeKm: { width: number; height: number }; polygon: any };
+  areas?: MapArea[];
   catalogVersion: string;
   transit: { feedVersion: string; range: { start: string; end: string }; source: string };
   sources: any[];
@@ -34,7 +37,7 @@ const LS = {
 };
 
 export function makePerson(i: number, kind: 'adult' | 'child' = 'adult'): Person {
-  return { id: `p${Date.now().toString(36)}${i}${Math.random().toString(36).slice(2, 5)}`, name: kind === 'child' ? `Bimbo ${i + 1}` : `Persona ${i + 1}`, kind, avatar: defaultAvatar(i), interests: [] };
+  return { id: `p${Date.now().toString(36)}${i}${Math.random().toString(36).slice(2, 5)}`, name: translate(kind === 'child' ? `Bimbo ${i + 1}` : `Persona ${i + 1}`), kind, avatar: defaultAvatar(i), interests: [] };
 }
 
 export function defaultDraft(today: string): Draft {
@@ -49,7 +52,7 @@ export function defaultDraft(today: string): Draft {
     pace: 'balanced', transport: { walk: true, bus: true, train: true, boat: true, funicular: true },
     avoid: [], mobility: { stroller: false, wheelchair: false, avoidStairs: false, frequentBreaks: false },
     diet: [], environment: 'any', rainTolerance: 'medium', mustSee: [], locked: [], passes: [], exclude: [], favorites: [],
-    freeText: '', resolutions: {}, locale: 'it', surprise: false,
+    freeText: '', resolutions: {}, locale: getLocale(), surprise: false,
   };
 }
 
@@ -70,7 +73,7 @@ interface AppState {
   wizardStep: number;
   progress: string[];
   planError: string | null;
-  result: { alternatives: Plan[]; understood: string[]; notices: string[]; plannerSource: string } | null;
+  result: { alternatives: Plan[]; understood: string[]; notices: string[]; plannerSource: string; areaAdvice?: AreaAdvice } | null;
   contradictions: Contradiction[] | null;
   infeasible: InfeasibleResult | null;
   selected: number;

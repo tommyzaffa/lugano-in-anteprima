@@ -1,3 +1,5 @@
+import { tx, getLocale } from '../locale.ts';
+import { safeUrl } from '../safe-url.ts';
 import { useState } from 'react';
 import { useApp } from '../store.ts';
 import { hhmm, fmtDuration, formatDateIt, localToInstant } from '../../shared/time.ts';
@@ -37,20 +39,20 @@ export default function Summary({ planOverride, readOnly }: { planOverride?: Pla
   const estimated = plan.checks.some((c) => c.id === 'transit' && c.detail.startsWith('Orario stimato'));
   return (
     <div className="summary">
-      {!readOnly ? <button className="link no-print" onClick={() => set({ view: 'sim' })} style={{ justifySelf: 'start' }}>← Torna alla simulazione</button> : null}
+      {!readOnly ? <button className="link no-print" onClick={() => set({ view: 'sim' })} style={{ justifySelf: 'start' }}>{tx("← Torna alla simulazione")}</button> : null}
       <div className="summary-head">
-        <h2><PlanTitle title={plan.title} /></h2>
-        <p>{formatDateIt(date)} · {hhmm(plan.totals.startsAt)}–{hhmm(plan.totals.endsAt)}</p>
-        <div className="summary-pawns" aria-label={plan.request.people.map((p) => p.name).join(', ')}>{plan.request.people.map((p) => <span key={p.id} title={p.name} dangerouslySetInnerHTML={{ __html: avatarSvg(p, 30) }} />)}</div>
+        <h2><PlanTitle title={tx(plan.title)} /></h2>
+        <p>{tx(formatDateIt(date, getLocale()))} · {tx(hhmm(plan.totals.startsAt))}–{tx(hhmm(plan.totals.endsAt))}</p>
+        <div className="summary-pawns" aria-label={tx(plan.request.people.map((p) => p.name).join(', '))}>{plan.request.people.map((p) => <span key={p.id} title={tx(p.name)} dangerouslySetInnerHTML={{ __html: avatarSvg(p, 30) }} />)}</div>
         <PlanStats plan={plan} />
       </div>
       <div className="summary-actions no-print">
-        <button onClick={() => { download('lugano-in-anteprima.ics', planToIcs(plan, { includeRides: true }), 'text/calendar'); track('export_ics'); }}><span className="ai" aria-hidden>📅</span>Calendario</button>
-        <button onClick={() => { window.print(); track('print'); }}><span className="ai" aria-hidden>🖨</span>Stampa</button>
-        <button onClick={() => copy(planToText(plan))}><span className="ai" aria-hidden>📋</span>Copia</button>
-        <button onClick={() => void makePostcard(plan)}><span className="ai" aria-hidden>🖼</span>Cartolina</button>
+        <button onClick={() => { download('lugano-in-anteprima.ics', planToIcs(plan, { includeRides: true }), 'text/calendar'); track('export_ics'); }}><span className="ai" aria-hidden>📅</span>{tx("Calendario")}</button>
+        <button onClick={() => { window.print(); track('print'); }}><span className="ai" aria-hidden>🖨</span>{tx("Stampa")}</button>
+        <button onClick={() => copy(planToText(plan))}><span className="ai" aria-hidden>📋</span>{tx("Copia")}</button>
+        <button onClick={() => void makePostcard(plan)}><span className="ai" aria-hidden>🖼</span>{tx("Cartolina")}</button>
       </div>
-      {sharing && !readOnly ? <div className="row no-print"><button className="btn-ghost" onClick={() => void savePlan()}>Salva</button><button className="btn-ghost" onClick={() => setShare(true)}>Condividi</button></div> : null}
+      {sharing && !readOnly ? <div className="row no-print"><button className="btn-ghost" onClick={() => void savePlan()}>{tx("Salva")}</button><button className="btn-ghost" onClick={() => setShare(true)}>{tx("Condividi")}</button></div> : null}
       <ol className="summary-list">
         {plan.stops.map((s, i) => {
           const snap = plan.snapshot.places[s.placeId];
@@ -58,59 +60,59 @@ export default function Summary({ planOverride, readOnly }: { planOverride?: Pla
           const trip = plan.trips[i];
           return (
             <li key={s.id} className="summary-item">
-              <span className="si-time">{hhmm(s.start)}</span>
+              <span className="si-time">{tx(hhmm(s.start))}</span>
               <div className="si-body">
-                <h3><button onClick={() => s.placeId && set({ placeCard: s.placeId })}>{s.name}</button></h3>
-                <div className="si-how">{howTo(trip)} · fino alle {hhmm(s.end)}{s.cost.length ? ` · ${sum(s.cost, 'max') === 0 ? 'gratis' : fmtRange(sum(s.cost, 'min'), sum(s.cost, 'max'))}` : ''}</div>
-                {s.checks.filter((c) => c.status !== 'ok').map((c) => <div key={c.id} className="check-line uncertain">? {c.detail}</div>)}
+                <h3><button onClick={() => s.placeId && set({ placeCard: s.placeId })}>{tx(s.name)}</button></h3>
+                <div className="si-how">{tx(howTo(trip))}{tx(" · fino alle ")}{tx(hhmm(s.end))}{tx(s.cost.length ? ` · ${sum(s.cost, 'max') === 0 ? 'gratis' : fmtRange(sum(s.cost, 'min'), sum(s.cost, 'max'))}` : '')}</div>
+                {s.checks.filter((c) => c.status !== 'ok').map((c) => <div key={c.id} className="check-line uncertain">? {tx(c.detail)}</div>)}
                 <details>
-                  <summary>Percorso e dettagli</summary>
+                  <summary>{tx("Percorso e dettagli")}</summary>
                   <ul className="legs">{trip.legs.filter((l) => l.mode !== 'wait').map((l) => <LegLine key={l.id} leg={l} />)}</ul>
-                  <div className="muted">{CATEGORY[s.category] ?? s.category}</div>
-                  {pub ? <div>Orari: {describeDay(pub, date)} <EvidenceBadge status={pub.evidence.status} /><SourceLink evidence={pub.evidence} /></div> : s.placeId ? <div>Orari: <Badge kind="bad">non disponibili</Badge></div> : null}
-                  {s.cost.length ? <div>{s.cost.map((c) => <span key={c.id} className="cost-line">{c.label}: {fmtRange(c.min, c.max)} <EvidenceBadge status={c.evidenceStatus ?? c.status} /></span>)}</div> : null}
-                  <div><a href={`https://www.openstreetmap.org/?mlat=${s.lat}&mlon=${s.lon}#map=18/${s.lat}/${s.lon}`} target="_blank" rel="noopener noreferrer">Apri la posizione</a> · <PlaceLinks placeId={s.placeId} /></div>
+                  <div className="muted">{tx(CATEGORY[s.category] ?? s.category)}</div>
+                  {pub ? <div>{tx("Orari: ")}{tx(describeDay(pub, date))} <EvidenceBadge status={pub.evidence.status} /><SourceLink evidence={pub.evidence} /></div> : s.placeId ? <div>{tx("Orari: ")}<Badge kind="bad">{tx("non disponibili")}</Badge></div> : null}
+                  {s.cost.length ? <div>{s.cost.map((c) => <span key={c.id} className="cost-line">{tx(c.label)}: {tx(fmtRange(c.min, c.max))} <EvidenceBadge status={c.evidenceStatus ?? c.status} /></span>)}</div> : null}
+                  <div><a href={`https://www.openstreetmap.org/?mlat=${s.lat}&mlon=${s.lon}#map=18/${s.lat}/${s.lon}`} target="_blank" rel="noopener noreferrer">{tx("Apri la posizione")}</a> · <PlaceLinks placeId={s.placeId} /></div>
                 </details>
               </div>
             </li>
           );
         })}
-        {ret ? (
+        {tx(ret ? (
           <li className="summary-item">
-            <span className="si-time">{hhmm(ret.departure)}</span>
+            <span className="si-time">{tx(hhmm(ret.departure))}</span>
             <div className="si-body ret">
-              <h3>Rientro</h3>
-              <div className="si-how">{howTo(ret)} · a {plan.end.label}, arrivo {hhmm(ret.arrival)}</div>
-              <details><summary>Percorso</summary><ul className="legs">{ret.legs.filter((l) => l.mode !== 'wait').map((l) => <LegLine key={l.id} leg={l} />)}</ul></details>
+              <h3>{tx("Rientro")}</h3>
+              <div className="si-how">{tx(howTo(ret))}{tx(" · a ")}{tx(plan.end.label)}{tx(", arrivo ")}{tx(hhmm(ret.arrival))}</div>
+              <details><summary>{tx("Percorso")}</summary><ul className="legs">{ret.legs.filter((l) => l.mode !== 'wait').map((l) => <LegLine key={l.id} leg={l} />)}</ul></details>
             </div>
           </li>
-        ) : null}
+        ) : null)}
       </ol>
 
       {!readOnly ? <OutingNow plan={plan} /> : null}
       <details className="more to-verify">
-        <summary>Prima di partire <span className="muted">· {toVerify.length ? `${toVerify.length} cose da controllare` : 'verifica i dati'}</span></summary>
-        {toVerify.length ? <ul>{toVerify.map((x, i) => <li key={i}>{x}</li>)}</ul> : null}
+        <summary>{tx("Prima di partire ")}<span className="muted">· {tx(toVerify.length ? `${toVerify.length} cose da controllare` : 'verifica i dati')}</span></summary>
+        {toVerify.length ? <ul>{toVerify.map((x, i) => <li key={i}>{tx(x)}</li>)}</ul> : null}
         <div className="reval no-print">
-          <button className="btn-ghost" onClick={() => void revalidate()} disabled={checking}>{checking ? <Spinner /> : null} Verifica i dati adesso</button>
-          {reval ? (
+          <button className="btn-ghost" onClick={() => void revalidate()} disabled={checking}>{checking ? <Spinner /> : null}{tx(" Verifica i dati adesso")}</button>
+          {tx(reval ? (
             <div className={`notice ${reval.status === 'blocking' ? 'bad' : reval.status === 'changed' ? 'warn' : 'ok'}`}>
-              <strong>{reval.status === 'blocking' ? 'Alcune tappe non sono più valide' : reval.status === 'changed' ? 'Alcuni dati sono cambiati' : 'Nessun cambiamento'}</strong>
-              <ul>{reval.items.map((i, k) => <li key={k} className={i.severity}>{i.message}</li>)}</ul>
-              <span className="muted">Verificato alle {new Date(reval.checkedAt).toLocaleTimeString('it-CH')}</span>
+              <strong>{tx(reval.status === 'blocking' ? 'Alcune tappe non sono più valide' : reval.status === 'changed' ? 'Alcuni dati sono cambiati' : 'Nessun cambiamento')}</strong>
+              <ul>{reval.items.map((i, k) => <li key={k} className={i.severity}>{tx(i.message)}</li>)}</ul>
+              <span className="muted">{tx("Verificato alle ")}{tx(new Date(reval.checkedAt).toLocaleTimeString(getLocale()))}</span>
             </div>
-          ) : null}
+          ) : null)}
         </div>
       </details>
       <PlanBSection plan={plan} />
       <details className="more sources-used">
-        <summary>Fonti e limiti</summary>
+        <summary>{tx("Fonti e limiti")}</summary>
         <ul>
-          <li>Luoghi, strade e sentieri: © OpenStreetMap contributors (ODbL).</li>
-          <li>Mezzi: orario ufficiale {plan.snapshot.transitFeed} (opentransportdata.swiss), senza ritardi in tempo reale.{estimated ? ' Per questa data le corse sono stimate: verificatele prima di partire.' : ''}</li>
-          <li>Tempi a piedi e dislivelli: calcolati sulla rete pedonale e sul terreno (stime).</li>
-          <li>Prezzi: stime indicative; nessun acquisto o prenotazione è stato fatto.</li>
-          <li>Eventi: calendario ufficiale luganoeventi.ch, da confermare sulla scheda dell'evento.</li>
+          <li>{tx("Luoghi, strade e sentieri: © OpenStreetMap contributors (ODbL).")}</li>
+          <li>{tx("Mezzi: orario ufficiale ")}{tx(plan.snapshot.transitFeed)}{tx(" (opentransportdata.swiss), senza ritardi in tempo reale.")}{tx(estimated ? ' Per questa data le corse sono stimate: verificatele prima di partire.' : '')}</li>
+          <li>{tx("Tempi a piedi e dislivelli: calcolati sulla rete pedonale e sul terreno (stime).")}</li>
+          <li>{tx("Prezzi: stime indicative; nessun acquisto o prenotazione è stato fatto.")}</li>
+          <li>{tx("Eventi: calendario ufficiale luganoeventi.ch, da confermare sulla scheda dell'evento.")}</li>
         </ul>
       </details>
       {share ? <ShareDialog onClose={() => setShare(false)} /> : null}
@@ -177,14 +179,14 @@ function OutingNow({ plan }: { plan: Plan }) {
   };
   return (
     <details className="more outing-now no-print">
-      <summary>Siete già in giro? Ricalcola il resto</summary>
-      <p className="hint">Segnate le tappe fatte: ricalcoliamo il resto da dove siete, con l'ora reale.</p>
+      <summary>{tx("Siete già in giro? Ricalcola il resto")}</summary>
+      <p className="hint">{tx("Segnate le tappe fatte: ricalcoliamo il resto da dove siete, con l'ora reale.")}</p>
       <ul className="done-list">
         {plan.stops.map((s) => (
-          <li key={s.id}><label className="check"><input type="checkbox" checked={done.has(s.id)} onChange={(e) => setDone((d) => { const n = new Set(d); if (e.target.checked) n.add(s.id); else n.delete(s.id); return n; })} /> {hhmm(s.start)} {s.name}</label></li>
+          <li key={s.id}><label className="check"><input type="checkbox" checked={done.has(s.id)} onChange={(e) => setDone((d) => { const n = new Set(d); if (e.target.checked) n.add(s.id); else n.delete(s.id); return n; })} /> {tx(hhmm(s.start))} {tx(s.name)}</label></li>
         ))}
       </ul>
-      <button className="btn primary" disabled={busy || done.size === plan.stops.length} onClick={() => void recompute()}>{busy ? <Spinner /> : null} Ricalcola il resto da qui</button>
+      <button className="btn primary" disabled={busy || done.size === plan.stops.length} onClick={() => void recompute()}>{busy ? <Spinner /> : null}{tx(" Ricalcola il resto da qui")}</button>
     </details>
   );
 }
@@ -203,25 +205,25 @@ function PlanBSection({ plan }: { plan: Plan }) {
   };
   return (
     <details className="more planb" onToggle={(e) => { if ((e.target as HTMLDetailsElement).open && !data && state === 'idle') void load(); }}>
-      <summary>Piano B se piove</summary>
-      {state === 'loading' ? <p><Spinner /> Cerco alternative al coperto…</p> : null}
-      {state === 'error' ? <div className="notice bad">Calcolo non riuscito. <button className="link" onClick={() => void load()}>Riprova</button></div> : null}
-      {!data ? null : !data.items.length ? <p className="muted">Tutte le tappe sono al coperto: nessun piano B necessario.</p> : (
+      <summary>{tx("Piano B se piove")}</summary>
+      {state === 'loading' ? <p><Spinner />{tx(" Cerco alternative al coperto…")}</p> : null}
+      {state === 'error' ? <div className="notice bad">{tx("Calcolo non riuscito. ")}<button className="link" onClick={() => void load()}>{tx("Riprova")}</button></div> : null}
+      {tx(!data ? null : !data.items.length ? <p className="muted">{tx("Tutte le tappe sono al coperto: nessun piano B necessario.")}</p> : (
         <ul className="planb-list">
           {data.items.map((it) => (
             <li key={it.stopId}>
-              <strong>Al posto di {it.stopName}</strong> <span className="muted">alle {hhmm(it.start)}</span>
-              {it.options.length ? (
+              <strong>{tx("Al posto di ")}{tx(it.stopName)}</strong> <span className="muted">{tx("alle ")}{tx(hhmm(it.start))}</span>
+              {tx(it.options.length ? (
                 <ul>{it.options.map((o) => (
                   <li key={o.placeId}>
-                    <button className="link" onClick={() => set({ placeCard: o.placeId })}>{o.name}</button> <span className="muted">· {o.walkMin} min a piedi · {o.costUnknown ? 'costo non noto' : fmtRange(o.costMin, o.costMax)}{o.hours === 'open' ? '' : ' · orari da verificare'}{o.booking === 'yes' ? ' · su prenotazione' : ''}</span>
+                    <button className="link" onClick={() => set({ placeCard: o.placeId })}>{tx(o.name)}</button> <span className="muted">· {tx(o.walkMin)}{tx(" min a piedi · ")}{tx(o.costUnknown ? 'costo non noto' : fmtRange(o.costMin, o.costMax))}{tx(o.hours === 'open' ? '' : ' · orari da verificare')}{tx(o.booking === 'yes' ? ' · su prenotazione' : '')}</span>
                   </li>
                 ))}</ul>
-              ) : <div className="muted">{it.none}</div>}
+              ) : <div className="muted">{tx(it.none)}</div>)}
             </li>
           ))}
         </ul>
-      )}
+      ))}
     </details>
   );
 }
@@ -230,14 +232,14 @@ function PlaceLinks({ placeId }: { placeId: string }) {
   const [info, setInfo] = useState<any>(null);
   const [asked, setAsked] = useState(false);
   if (!placeId) return null;
-  if (!asked) return <button className="link" onClick={() => { setAsked(true); fetch(`/api/places/${placeId}`).then((r) => r.json()).then(setInfo).catch(() => {}); }}>Sito e prenotazione</button>;
+  if (!asked) return <button className="link" onClick={() => { setAsked(true); fetch(`/api/places/${placeId}`).then((r) => r.json()).then(setInfo).catch(() => {}); }}>{tx("Sito e prenotazione")}</button>;
   if (!info?.place) return <span className="muted">…</span>;
   const p = info.place;
   return (
     <span className="place-links">
-      {p.links?.website ? <a href={p.links.website} target="_blank" rel="noopener noreferrer">Sito ufficiale</a> : <span className="muted">Nessun sito</span>}
-      {p.links?.phone ? <> · <a href={`tel:${p.links.phone}`}>{p.links.phone}</a></> : null}
-      {' · '}prenotazione {({ yes: 'necessaria', no: 'non necessaria', recommended: 'consigliata', unknown: 'non nota' } as any)[p.booking.required]}
+      {p.links?.website ? <a href={safeUrl(p.links.website)} target="_blank" rel="noopener noreferrer">{tx("Sito ufficiale")}</a> : <span className="muted">{tx("Nessun sito")}</span>}
+      {p.links?.phone ? <> · <a href={`tel:${p.links.phone}`}>{tx(p.links.phone)}</a></> : null}
+      {tx(' · ')}{tx("prenotazione ")}{tx(({ yes: 'necessaria', no: 'non necessaria', recommended: 'consigliata', unknown: 'non nota' } as any)[p.booking.required])}
     </span>
   );
 }

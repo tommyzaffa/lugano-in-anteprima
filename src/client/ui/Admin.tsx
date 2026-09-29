@@ -1,3 +1,4 @@
+import { tx, getLocale } from '../locale.ts';
 import { useEffect, useState } from 'react';
 import { get, send, ApiError } from '../api.ts';
 import { Badge, EvidenceBadge, Spinner } from './common.tsx';
@@ -19,26 +20,26 @@ export default function Admin() {
   if (!ok) {
     return (
       <div className="admin">
-        <h2>Pannello editoriale</h2>
-        <p className="hint">Accesso protetto lato server. Il token è impostato con ADMIN_TOKEN (o stampato nel terminale all'avvio in sviluppo).</p>
-        <input type="password" placeholder="Token editoriale" value={token} onChange={(e) => setToken(e.target.value)} aria-label="Token editoriale" />
-        <button className="btn" onClick={() => void login()}>Entra</button>
-        {ok === false ? <div className="notice bad">Token non valido.</div> : null}
+        <h2>{tx("Pannello editoriale")}</h2>
+        <p className="hint">{tx("Accesso protetto lato server. Il token è impostato con ADMIN_TOKEN (o stampato nel terminale all'avvio in sviluppo).")}</p>
+        <input type="password" placeholder={tx("Token editoriale")} value={token} onChange={(e) => setToken(e.target.value)} aria-label={tx("Token editoriale")} />
+        <button className="btn" onClick={() => void login()}>{tx("Entra")}</button>
+        {ok === false ? <div className="notice bad">{tx("Token non valido.")}</div> : null}
       </div>
     );
   }
   return (
     <div className="admin">
-      <h2>Pannello editoriale</h2>
+      <h2>{tx("Pannello editoriale")}</h2>
       <div className="seg" role="tablist">
-        {([['overview', 'Salute dei dati'], ['places', 'Luoghi'], ['events', 'Eventi'], ['reports', 'Segnalazioni'], ['stats', 'Statistiche'], ['audit', 'Registro']] as const).map(([k, v]) => <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{v}</button>)}
+        {([['overview', 'Salute dei dati'], ['places', 'Luoghi'], ['events', 'Eventi'], ['reports', 'Segnalazioni'], ['stats', 'Statistiche'], ['audit', 'Registro']] as const).map(([k, v]) => <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{tx(v)}</button>)}
       </div>
-      {tab === 'overview' && <Overview o={overview} headers={headers} reload={() => void login()} />}
-      {tab === 'places' && <Places headers={headers} />}
-      {tab === 'events' && <Events headers={headers} />}
-      {tab === 'reports' && <Reports headers={headers} />}
-      {tab === 'stats' && <Stats headers={headers} />}
-      {tab === 'audit' && <Audit headers={headers} />}
+      {tx(tab === 'overview' && <Overview o={overview} headers={headers} reload={() => void login()} />)}
+      {tx(tab === 'places' && <Places headers={headers} />)}
+      {tx(tab === 'events' && <Events headers={headers} />)}
+      {tx(tab === 'reports' && <Reports headers={headers} />)}
+      {tx(tab === 'stats' && <Stats headers={headers} />)}
+      {tx(tab === 'audit' && <Audit headers={headers} />)}
     </div>
   );
 }
@@ -48,24 +49,24 @@ function Overview({ o, headers, reload }: { o: any; headers: Record<string, stri
   const check = async () => { await send('POST', '/api/admin/sources/check', {}, { headers }); reload(); };
   return (
     <div>
-      <p>Catalogo <strong>{o.catalogVersion}</strong> (base {o.baseVersion}) · {o.places} luoghi · {o.events} eventi · segnalazioni aperte: {o.reportsOpen}</p>
+      <p>{tx("Catalogo ")}<strong>{tx(o.catalogVersion)}</strong>{tx(" (base ")}{tx(o.baseVersion)}) · {tx(o.places)}{tx(" luoghi · ")}{tx(o.events)}{tx(" eventi · segnalazioni aperte: ")}{tx(o.reportsOpen)}</p>
       <div className="grid3">
-        <Dist title="Orari" d={o.hoursStatus} />
-        <Dist title="Prezzi" d={o.priceStatus} />
-        <Dist title="Accessibilità" d={o.accessStatus} />
+        <Dist title={tx("Orari")} d={o.hoursStatus} />
+        <Dist title={tx("Prezzi")} d={o.priceStatus} />
+        <Dist title={tx("Accessibilità")} d={o.accessStatus} />
       </div>
-      <h3>Salute delle fonti <button className="btn-ghost" onClick={() => void check()}>Controlla ora</button></h3>
-      <ul>{o.sourceHealth.map((h: any) => <li key={h.source_id}><strong>{h.source_id}</strong>: <Badge kind={h.status === 'ok' || h.status === 'configured' ? 'ok' : h.status === 'error' || h.status === 'expired' ? 'bad' : 'warn'}>{h.status}</Badge> {h.detail} <span className="muted">{new Date(h.checked_at).toLocaleString('it-CH')}</span></li>)}</ul>
-      <h3>Integrazioni</h3>
-      <ul>{o.integrations.map((i: any) => <li key={i.id}>{i.name}: <Badge kind={i.active ? 'ok' : 'warn'}>{i.status}</Badge></li>)}</ul>
-      {o.conflicts?.length ? <><h3>Conflitti da risolvere</h3><ul>{o.conflicts.map((c: any, i: number) => <li key={i}><Badge kind="warn">{c.kind}</Badge> {c.id}: {c.note}</li>)}</ul></> : <p className="muted">Nessun conflitto fra modifiche editoriali e dati di base.</p>}
-      {o.stale.length ? <><h3>Dati oltre la scadenza</h3><ul>{o.stale.map((s: any, i: number) => <li key={i}>{s.id}: {s.field}</li>)}</ul></> : <p className="muted">Nessun dato oltre la politica di scadenza delle fonti.</p>}
+      <h3>{tx("Salute delle fonti ")}<button className="btn-ghost" onClick={() => void check()}>{tx("Controlla ora")}</button></h3>
+      <ul>{o.sourceHealth.map((h: any) => <li key={h.source_id}><strong>{tx(h.source_id)}</strong>: <Badge kind={h.status === 'ok' || h.status === 'configured' ? 'ok' : h.status === 'error' || h.status === 'expired' ? 'bad' : 'warn'}>{tx(h.status)}</Badge> {tx(h.detail)} <span className="muted">{tx(new Date(h.checked_at).toLocaleString(getLocale()))}</span></li>)}</ul>
+      <h3>{tx("Integrazioni")}</h3>
+      <ul>{o.integrations.map((i: any) => <li key={i.id}>{tx(i.name)}: <Badge kind={i.active ? 'ok' : 'warn'}>{tx(i.status)}</Badge></li>)}</ul>
+      {o.conflicts?.length ? <><h3>{tx("Conflitti da risolvere")}</h3><ul>{o.conflicts.map((c: any, i: number) => <li key={i}><Badge kind="warn">{tx(c.kind)}</Badge> {tx(c.id)}: {tx(c.note)}</li>)}</ul></> : <p className="muted">{tx("Nessun conflitto fra modifiche editoriali e dati di base.")}</p>}
+      {o.stale.length ? <><h3>{tx("Dati oltre la scadenza")}</h3><ul>{o.stale.map((s: any, i: number) => <li key={i}>{tx(s.id)}: {tx(s.field)}</li>)}</ul></> : <p className="muted">{tx("Nessun dato oltre la politica di scadenza delle fonti.")}</p>}
     </div>
   );
 }
 
 function Dist({ title, d }: { title: string; d: Record<string, number> }) {
-  return <div className="dist"><h4>{title}</h4><ul>{Object.entries(d).map(([k, v]) => <li key={k}><EvidenceBadge status={k === 'known' ? 'verified' : k} /> {v}</li>)}</ul></div>;
+  return <div className="dist"><h4>{tx(title)}</h4><ul>{Object.entries(d).map(([k, v]) => <li key={k}><EvidenceBadge status={k === 'known' ? 'verified' : k} /> {tx(v)}</li>)}</ul></div>;
 }
 
 function Places({ headers }: { headers: Record<string, string> }) {
@@ -87,34 +88,34 @@ function Places({ headers }: { headers: Record<string, string> }) {
   const reset = async () => { await send('DELETE', `/api/admin/places/${edit.id}/override`, null, { headers }); setMsg('Modifiche editoriali rimosse.'); void load(); };
   return (
     <div className="admin-places">
-      <input type="search" placeholder="Filtra…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Filtra luoghi" />
+      <input type="search" placeholder={tx("Filtra…")} value={q} onChange={(e) => setQ(e.target.value)} aria-label={tx("Filtra luoghi")} />
       <div className="table-wrap">
         <table>
-          <thead><tr><th>Luogo</th><th>Orari</th><th>Prezzi</th><th>Access.</th><th></th></tr></thead>
+          <thead><tr><th>{tx("Luogo")}</th><th>{tx("Orari")}</th><th>{tx("Prezzi")}</th><th>{tx("Access.")}</th><th></th></tr></thead>
           <tbody>{data.places.filter((p: any) => p.name.toLowerCase().includes(q.toLowerCase())).map((p: any) => (
-            <tr key={p.id}><td>{p.name}<br /><span className="muted">{p.id}</span></td><td><EvidenceBadge status={p.schedules[0]?.evidence.status ?? 'unknown'} /></td><td><EvidenceBadge status={p.prices[0]?.status === 'known' ? p.prices[0].evidence.status : p.prices[0]?.status} /></td><td><EvidenceBadge status={p.accessibility.evidence.status} /></td><td><button className="link" onClick={() => open(p)}>modifica</button></td></tr>
+            <tr key={p.id}><td>{tx(p.name)}<br /><span className="muted">{tx(p.id)}</span></td><td><EvidenceBadge status={p.schedules[0]?.evidence.status ?? 'unknown'} /></td><td><EvidenceBadge status={p.prices[0]?.status === 'known' ? p.prices[0].evidence.status : p.prices[0]?.status} /></td><td><EvidenceBadge status={p.accessibility.evidence.status} /></td><td><button className="link" onClick={() => open(p)}>{tx("modifica")}</button></td></tr>
           ))}</tbody>
         </table>
       </div>
-      {edit ? (
+      {tx(edit ? (
         <div className="admin-edit">
-          <h3>{edit.name}</h3>
-          <label>Orari (sintassi OSM opening_hours)<input value={form.hoursOsm} onChange={(e) => setForm({ ...form, hoursOsm: e.target.value })} placeholder="Tu-Su 10:00-18:00; Mo off; PH off" /></label>
-          <label>Descrizione<textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></label>
-          <label>Fonte (URL)<input value={form.sourceUrl} onChange={(e) => setForm({ ...form, sourceUrl: e.target.value })} /></label>
-          <label>Nota<input value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} /></label>
-          <label className="check"><input type="checkbox" checked={form.verified} onChange={(e) => setForm({ ...form, verified: e.target.checked })} /> Verificato oggi sulla fonte ufficiale</label>
+          <h3>{tx(edit.name)}</h3>
+          <label>{tx("Orari (sintassi OSM opening_hours)")}<input value={form.hoursOsm} onChange={(e) => setForm({ ...form, hoursOsm: e.target.value })} placeholder={tx("Tu-Su 10:00-18:00; Mo off; PH off")} /></label>
+          <label>{tx("Descrizione")}<textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></label>
+          <label>{tx("Fonte (URL)")}<input value={form.sourceUrl} onChange={(e) => setForm({ ...form, sourceUrl: e.target.value })} /></label>
+          <label>{tx("Nota")}<input value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} /></label>
+          <label className="check"><input type="checkbox" checked={form.verified} onChange={(e) => setForm({ ...form, verified: e.target.checked })} />{tx(" Verificato oggi sulla fonte ufficiale")}</label>
           <div className="row wrap">
-            <button className="btn" onClick={() => void save()}>Salva</button>
-            <button className="btn-ghost" onClick={() => void verify('hours')}>Verifica orari</button>
-            <button className="btn-ghost" onClick={() => void verify('price')}>Verifica prezzi</button>
-            <button className="btn-ghost" onClick={() => void verify('accessibility')}>Verifica accessibilità</button>
-            <button className="btn-ghost" onClick={() => void hide(true)}>Nascondi</button>
-            <button className="btn-ghost" onClick={() => void reset()}>Annulla modifiche</button>
+            <button className="btn" onClick={() => void save()}>{tx("Salva")}</button>
+            <button className="btn-ghost" onClick={() => void verify('hours')}>{tx("Verifica orari")}</button>
+            <button className="btn-ghost" onClick={() => void verify('price')}>{tx("Verifica prezzi")}</button>
+            <button className="btn-ghost" onClick={() => void verify('accessibility')}>{tx("Verifica accessibilità")}</button>
+            <button className="btn-ghost" onClick={() => void hide(true)}>{tx("Nascondi")}</button>
+            <button className="btn-ghost" onClick={() => void reset()}>{tx("Annulla modifiche")}</button>
           </div>
-          {msg ? <div className="notice">{msg}</div> : null}
+          {msg ? <div className="notice">{tx(msg)}</div> : null}
         </div>
-      ) : null}
+      ) : null)}
     </div>
   );
 }
@@ -129,16 +130,16 @@ function Events({ headers }: { headers: Record<string, string> }) {
   const save = async () => { try { await send('POST', `/api/admin/events/${form.id}/exception`, { date: form.date, status: form.status, note: form.note }, { headers }); setMsg('Eccezione registrata.'); void load(); } catch (e) { setMsg((e as Error).message); } };
   return (
     <div>
-      <p className="hint">Gli eventi del pilota sono fixture dimostrative. Le eccezioni (annullamenti, esauriti, rinvii) valgono per una singola data.</p>
-      <ul>{evs.map((e) => <li key={e.id}><strong>{e.title}</strong> {e.recurrence ? <span className="muted">ogni {e.recurrence.byDay.join(',')} {e.recurrence.from} · {e.recurrence.validFrom}→{e.recurrence.validTo} · eccezioni: {e.recurrence.exceptions.map((x: any) => `${x.date} ${x.status}`).join(', ') || 'nessuna'}</span> : <span className="muted">{e.sessions.length} sessioni</span>}</li>)}</ul>
+      <p className="hint">{tx("Gli eventi del pilota sono fixture dimostrative. Le eccezioni (annullamenti, esauriti, rinvii) valgono per una singola data.")}</p>
+      <ul>{evs.map((e) => <li key={e.id}><strong>{tx(e.title)}</strong> {e.recurrence ? <span className="muted">{tx("ogni ")}{tx(e.recurrence.byDay.join(','))} {tx(e.recurrence.from)} · {tx(e.recurrence.validFrom)}→{tx(e.recurrence.validTo)}{tx(" · eccezioni: ")}{tx(e.recurrence.exceptions.map((x: any) => `${x.date} ${x.status}`).join(', ') || 'nessuna')}</span> : <span className="muted">{tx(e.sessions.length)}{tx(" sessioni")}</span>}</li>)}</ul>
       <div className="row wrap">
-        <select value={form.id} onChange={(e) => setForm({ ...form, id: e.target.value })} aria-label="Evento ricorrente"><option value="">Evento ricorrente…</option>{evs.filter((e) => e.recurrence).map((e) => <option key={e.id} value={e.id}>{e.title}</option>)}</select>
-        <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} aria-label="Data" />
-        <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} aria-label="Stato"><option value="cancelled">annullato</option><option value="sold_out">esaurito</option><option value="postponed">rinviato</option><option value="scheduled">ripristina</option></select>
-        <input placeholder="nota" value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} aria-label="Nota" />
-        <button className="btn" disabled={!form.id || !form.date} onClick={() => void save()}>Registra</button>
+        <select value={form.id} onChange={(e) => setForm({ ...form, id: e.target.value })} aria-label={tx("Evento ricorrente")}><option value="">{tx("Evento ricorrente…")}</option>{evs.filter((e) => e.recurrence).map((e) => <option key={e.id} value={e.id}>{tx(e.title)}</option>)}</select>
+        <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} aria-label={tx("Data")} />
+        <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} aria-label={tx("Stato")}><option value="cancelled">{tx("annullato")}</option><option value="sold_out">{tx("esaurito")}</option><option value="postponed">{tx("rinviato")}</option><option value="scheduled">{tx("ripristina")}</option></select>
+        <input placeholder={tx("nota")} value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} aria-label={tx("Nota")} />
+        <button className="btn" disabled={!form.id || !form.date} onClick={() => void save()}>{tx("Registra")}</button>
       </div>
-      {msg ? <div className="notice">{msg}</div> : null}
+      {msg ? <div className="notice">{tx(msg)}</div> : null}
     </div>
   );
 }
@@ -148,9 +149,9 @@ function Reports({ headers }: { headers: Record<string, string> }) {
   const load = () => get<any>('/api/admin/reports', { headers }).then((x) => setR(x.reports));
   useEffect(() => { void load(); }, []);
   if (!r) return <Spinner />;
-  if (!r.length) return <p className="muted">Nessuna segnalazione.</p>;
+  if (!r.length) return <p className="muted">{tx("Nessuna segnalazione.")}</p>;
   const resolve = async (id: string, status: string) => { await send('POST', `/api/admin/reports/${id}`, { status, resolution: status }, { headers }); void load(); };
-  return <ul className="reports">{r.map((x) => <li key={x.id}><Badge kind={x.status === 'open' ? 'warn' : 'ok'}>{x.status}</Badge> <strong>{x.targetKind}:{x.targetId}</strong> [{x.field}] {x.message} <span className="muted">{new Date(x.createdAt).toLocaleString('it-CH')}</span> {x.status === 'open' ? <><button className="link" onClick={() => void resolve(x.id, 'resolved')}>risolta</button> <button className="link" onClick={() => void resolve(x.id, 'rejected')}>respinta</button></> : null}</li>)}</ul>;
+  return <ul className="reports">{r.map((x) => <li key={x.id}><Badge kind={x.status === 'open' ? 'warn' : 'ok'}>{tx(x.status)}</Badge> <strong>{tx(x.targetKind)}:{tx(x.targetId)}</strong> [{tx(x.field)}] {tx(x.message)} <span className="muted">{tx(new Date(x.createdAt).toLocaleString(getLocale()))}</span> {x.status === 'open' ? <><button className="link" onClick={() => void resolve(x.id, 'resolved')}>{tx("risolta")}</button> <button className="link" onClick={() => void resolve(x.id, 'rejected')}>{tx("respinta")}</button></> : null}</li>)}</ul>;
 }
 
 const STAT_LABEL: Record<string, string> = {
@@ -174,16 +175,16 @@ function statLabel(k: string): string {
 function Funnel({ totals }: { totals: Record<string, number> }) {
   const steps: [string, string][] = [['plan_requested', 'Pianificazioni richieste'], ['plan_ok', 'Con proposte'], ['sim_started', 'Simulazioni avviate'], ['sim_finished', 'Simulazioni concluse'], ['plan_saved', 'Programmi salvati'], ['plan_shared', 'Condivisi']];
   const first = totals[steps[0][0]] ?? 0;
-  if (!first) return <p className="muted">Imbuto d'uso: ancora nessuna pianificazione registrata.</p>;
+  if (!first) return <p className="muted">{tx("Imbuto d'uso: ancora nessuna pianificazione registrata.")}</p>;
   return (
-    <div className="funnel" aria-label="Imbuto d'uso">
-      <h3>Imbuto d'uso (30 giorni)</h3>
+    <div className="funnel" aria-label={tx("Imbuto d'uso")}>
+      <h3>{tx("Imbuto d'uso (30 giorni)")}</h3>
       {steps.map(([k, label]) => {
         const n = totals[k] ?? 0;
         const pct = Math.round((n / first) * 100);
-        return <div key={k} className="funnel-row"><span className="funnel-label">{label}</span><span className="funnel-bar"><span style={{ width: `${Math.min(100, pct)}%` }} /></span><span className="funnel-n">{n} <span className="muted">({pct}%)</span></span></div>;
+        return <div key={k} className="funnel-row"><span className="funnel-label">{tx(label)}</span><span className="funnel-bar"><span style={{ width: `${Math.min(100, pct)}%` }} /></span><span className="funnel-n">{tx(n)} <span className="muted">({tx(pct)}%)</span></span></div>;
       })}
-      <p className="hint">Conteggi aggregati per giorno: non collegano fra loro le azioni di una stessa persona, quindi le percentuali sono indicative.</p>
+      <p className="hint">{tx("Conteggi aggregati per giorno: non collegano fra loro le azioni di una stessa persona, quindi le percentuali sono indicative.")}</p>
     </div>
   );
 }
@@ -196,12 +197,12 @@ function Stats({ headers }: { headers: Record<string, string> }) {
   for (const r of s.stats) totals[r.key] = (totals[r.key] ?? 0) + r.count;
   return (
     <div>
-      <p className="hint">{s.note}</p>
+      <p className="hint">{tx(s.note)}</p>
       <Funnel totals={totals} />
-      <div className="table-wrap"><table><thead><tr><th>Indicatore (30 giorni)</th><th>Totale</th></tr></thead><tbody>{Object.entries(totals).sort().map(([k, v]) => <tr key={k}><td>{statLabel(k)} <span className="muted">{k}</span></td><td>{v}</td></tr>)}</tbody></table></div>
-      <h3>Consumi AI</h3>
-      <p>Token oggi: {s.aiTokensToday}</p>
-      {s.ai.length ? <div className="table-wrap"><table><thead><tr><th>Giorno</th><th>Modello</th><th>Uso</th><th>Esito</th><th>Chiamate</th><th>Input</th><th>Output</th><th>ms medi</th></tr></thead><tbody>{s.ai.map((a: any, i: number) => <tr key={i}><td>{a.day}</td><td>{a.model}</td><td>{a.purpose}</td><td>{a.status}</td><td>{a.calls}</td><td>{a.input ?? 0}</td><td>{a.output ?? 0}</td><td>{Math.round(a.avg_ms)}</td></tr>)}</tbody></table></div> : <p className="muted">Nessuna chiamata AI registrata.</p>}
+      <div className="table-wrap"><table><thead><tr><th>{tx("Indicatore (30 giorni)")}</th><th>{tx("Totale")}</th></tr></thead><tbody>{Object.entries(totals).sort().map(([k, v]) => <tr key={k}><td>{tx(statLabel(k))} <span className="muted">{tx(k)}</span></td><td>{tx(v)}</td></tr>)}</tbody></table></div>
+      <h3>{tx("Consumi AI")}</h3>
+      <p>{tx("Token oggi: ")}{tx(s.aiTokensToday)}</p>
+      {s.ai.length ? <div className="table-wrap"><table><thead><tr><th>{tx("Giorno")}</th><th>{tx("Modello")}</th><th>{tx("Uso")}</th><th>{tx("Esito")}</th><th>{tx("Chiamate")}</th><th>{tx("Input")}</th><th>{tx("Output")}</th><th>{tx("ms medi")}</th></tr></thead><tbody>{s.ai.map((a: any, i: number) => <tr key={i}><td>{tx(a.day)}</td><td>{tx(a.model)}</td><td>{tx(a.purpose)}</td><td>{tx(a.status)}</td><td>{tx(a.calls)}</td><td>{tx(a.input ?? 0)}</td><td>{tx(a.output ?? 0)}</td><td>{tx(Math.round(a.avg_ms))}</td></tr>)}</tbody></table></div> : <p className="muted">{tx("Nessuna chiamata AI registrata.")}</p>}
     </div>
   );
 }
@@ -210,5 +211,5 @@ function Audit({ headers }: { headers: Record<string, string> }) {
   const [a, setA] = useState<any[] | null>(null);
   useEffect(() => { void get<any>('/api/admin/audit', { headers }).then((r) => setA(r.audit)); }, []);
   if (!a) return <Spinner />;
-  return <ul>{a.map((x) => <li key={x.id}><span className="muted">{new Date(x.ts).toLocaleString('it-CH')}</span> {x.action} {x.target} {x.detail ?? ''}</li>)}</ul>;
+  return <ul>{a.map((x) => <li key={x.id}><span className="muted">{tx(new Date(x.ts).toLocaleString(getLocale()))}</span> {tx(x.action)} {tx(x.target)} {tx(x.detail ?? '')}</li>)}</ul>;
 }

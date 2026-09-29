@@ -1,0 +1,4227 @@
+{
+  "Prova la giornata sulla mappa. Poi vivila davvero.": [
+    "Try your day on the map. Then enjoy it for real.",
+    "Essayez votre journée sur la carte. Puis vivez-la vraiment.",
+    "Erlebe deinen Tag zuerst auf der Karte. Dann in echt."
+  ],
+  "Organizza una giornata": [
+    "Plan a day",
+    "Organiser une journée",
+    "Einen Tag planen"
+  ],
+  "Esplora la mappa": [
+    "Explore the map",
+    "Explorer la carte",
+    "Karte erkunden"
+  ],
+  "Esplora": [
+    "Explore",
+    "Explorer",
+    "Erkunden"
+  ],
+  "Eventi": [
+    "Events",
+    "Événements",
+    "Veranstaltungen"
+  ],
+  "Altro": [
+    "More",
+    "Plus",
+    "Mehr"
+  ],
+  "oppure parti da un'idea": [
+    "or start with an idea",
+    "ou partez d’une idée",
+    "oder starte mit einer Idee"
+  ],
+  "Serata fra amici": [
+    "An evening with friends",
+    "Une soirée entre amis",
+    "Ein Abend mit Freunden"
+  ],
+  "Panorami e cultura": [
+    "Views and culture",
+    "Panoramas et culture",
+    "Aussichten und Kultur"
+  ],
+  "Famiglia con passeggino": [
+    "Family with a stroller",
+    "Famille avec poussette",
+    "Familie mit Kinderwagen"
+  ],
+  "Monte e rientro": [
+    "Mountain trip and return",
+    "Excursion en montagne et retour",
+    "Bergtour mit Rückweg"
+  ],
+  "Siamo già in giro": [
+    "We’re already out",
+    "Nous sommes déjà en route",
+    "Wir sind schon unterwegs"
+  ],
+  "Prototipo indipendente, non ufficiale": [
+    "Independent, unofficial prototype",
+    "Prototype indépendant, non officiel",
+    "Unabhängiger, inoffizieller Prototyp"
+  ],
+  "Dati e fonti": [
+    "Data and sources",
+    "Données et sources",
+    "Daten und Quellen"
+  ],
+  "Disegno la mappa…": [
+    "Preparing the map…",
+    "Préparation de la carte…",
+    "Karte wird vorbereitet…"
+  ],
+  "Chi siete": [
+    "Your group",
+    "Votre groupe",
+    "Eure Gruppe"
+  ],
+  "Quando e da dove": [
+    "When and where",
+    "Quand et où",
+    "Wann und wo"
+  ],
+  "Cosa vi va": [
+    "Your preferences",
+    "Vos envies",
+    "Eure Wünsche"
+  ],
+  "Passaggi": [
+    "Steps",
+    "Étapes",
+    "Schritte"
+  ],
+  "Indietro": [
+    "Back",
+    "Retour",
+    "Zurück"
+  ],
+  "Annulla": [
+    "Cancel",
+    "Annuler",
+    "Abbrechen"
+  ],
+  "Avanti": [
+    "Next",
+    "Suivant",
+    "Weiter"
+  ],
+  "Mostrami le proposte": [
+    "Show me the ideas",
+    "Voir les propositions",
+    "Vorschläge anzeigen"
+  ],
+  "Sorprendimi": [
+    "Surprise me",
+    "Surprenez-moi",
+    "Überrasch mich"
+  ],
+  "Sorprendimi: una combinazione a sorpresa entro i vostri vincoli": [
+    "Surprise me: a new combination within your preferences",
+    "Surprenez-moi : une combinaison qui respecte vos critères",
+    "Überrasch mich: eine neue Kombination nach euren Vorgaben"
+  ],
+  "Una pedina per persona: toccatela per cambiarle colore.": [
+    "One piece per person: tap it to change its colour.",
+    "Un pion par personne : touchez-le pour changer sa couleur.",
+    "Eine Spielfigur pro Person: antippen, um die Farbe zu ändern."
+  ],
+  "Aggiungi una persona": [
+    "Add a person",
+    "Ajouter une personne",
+    "Person hinzufügen"
+  ],
+  "Aggiungi": [
+    "Add",
+    "Ajouter",
+    "Hinzufügen"
+  ],
+  "Persona {0}": [
+    "Person {0}",
+    "Personne {0}",
+    "Person {0}"
+  ],
+  "Bimbo {0}": [
+    "Child {0}",
+    "Enfant {0}",
+    "Kind {0}"
+  ],
+  "Togli {0}": [
+    "Remove {0}",
+    "Retirer {0}",
+    "{0} entfernen"
+  ],
+  "Colore di {0}": [
+    "Colour for {0}",
+    "Couleur de {0}",
+    "Farbe von {0}"
+  ],
+  "Colore {0}": [
+    "Colour {0}",
+    "Couleur {0}",
+    "Farbe {0}"
+  ],
+  "Nome persona {0}": [
+    "Name of person {0}",
+    "Nom de la personne {0}",
+    "Name der Person {0}"
+  ],
+  "Età di {0}": [
+    "Age of {0}",
+    "Âge de {0}",
+    "Alter von {0}"
+  ],
+  "bambino": [
+    "child",
+    "enfant",
+    "Kind"
+  ],
+  "adulto": [
+    "adult",
+    "adulte",
+    "Erwachsene Person"
+  ],
+  "anni": [
+    "years",
+    "ans",
+    "Jahre"
+  ],
+  "Occasione": [
+    "Occasion",
+    "Occasion",
+    "Anlass"
+  ],
+  "Amici": [
+    "Friends",
+    "Amis",
+    "Freunde"
+  ],
+  "In coppia": [
+    "As a couple",
+    "En couple",
+    "Zu zweit"
+  ],
+  "Famiglia": [
+    "Family",
+    "Famille",
+    "Familie"
+  ],
+  "Ospiti": [
+    "Guests",
+    "Invités",
+    "Gäste"
+  ],
+  "Compleanno": [
+    "Birthday",
+    "Anniversaire",
+    "Geburtstag"
+  ],
+  "Tempo libero": [
+    "Leisure",
+    "Loisirs",
+    "Freizeit"
+  ],
+  "Appuntamento": [
+    "Date",
+    "Rendez-vous",
+    "Verabredung"
+  ],
+  "Visita turistica": [
+    "Sightseeing",
+    "Visite touristique",
+    "Stadtbesichtigung"
+  ],
+  "Giorno": [
+    "Day",
+    "Jour",
+    "Tag"
+  ],
+  "Oggi": [
+    "Today",
+    "Aujourd’hui",
+    "Heute"
+  ],
+  "Domani": [
+    "Tomorrow",
+    "Demain",
+    "Morgen"
+  ],
+  "Sabato": [
+    "Saturday",
+    "Samedi",
+    "Samstag"
+  ],
+  "Domenica": [
+    "Sunday",
+    "Dimanche",
+    "Sonntag"
+  ],
+  "Altra data": [
+    "Another date",
+    "Autre date",
+    "Anderes Datum"
+  ],
+  "Data": [
+    "Date",
+    "Date",
+    "Datum"
+  ],
+  "Per questa data gli orari dei mezzi sono stimati: da ricontrollare prima di partire.": [
+    "Transport timetables for this date are estimates: check before travelling.",
+    "Les horaires de transport pour cette date sont estimés : vérifiez-les avant de partir.",
+    "Die Fahrpläne für dieses Datum sind geschätzt: vor der Abfahrt prüfen."
+  ],
+  "Orario": [
+    "Time",
+    "Horaire",
+    "Uhrzeit"
+  ],
+  "Mattina": [
+    "Morning",
+    "Matin",
+    "Vormittag"
+  ],
+  "Pomeriggio": [
+    "Afternoon",
+    "Après-midi",
+    "Nachmittag"
+  ],
+  "Sera": [
+    "Evening",
+    "Soir",
+    "Abend"
+  ],
+  "Giornata": [
+    "Full day",
+    "Journée",
+    "Ganzer Tag"
+  ],
+  "dalle": [
+    "from",
+    "de",
+    "von"
+  ],
+  "alle": [
+    "to",
+    "à",
+    "bis"
+  ],
+  "Ora di partenza": [
+    "Start time",
+    "Heure de départ",
+    "Startzeit"
+  ],
+  "Ora di fine": [
+    "End time",
+    "Heure de fin",
+    "Endzeit"
+  ],
+  "Fine il giorno dopo, alle": [
+    "Ends the next day at",
+    "Fin le lendemain à",
+    "Endet am nächsten Tag um"
+  ],
+  "Da dove partite?": [
+    "Where are you starting?",
+    "D’où partez-vous ?",
+    "Wo startet ihr?"
+  ],
+  "Dove volete trascorrere la giornata?": [
+    "Where would you like to spend your day?",
+    "Où souhaitez-vous passer la journée ?",
+    "Wo möchtet ihr den Tag verbringen?"
+  ],
+  "La zona delle attività è indipendente dal punto di partenza. Gli spostamenti possono attraversare altre zone.": [
+    "The activity area is separate from your starting point. Transfers may cross other areas.",
+    "La zone des activités est indépendante du point de départ. Les trajets peuvent traverser d’autres zones.",
+    "Das Gebiet für Aktivitäten ist unabhängig vom Startpunkt. Wege dürfen durch andere Gebiete führen."
+  ],
+  "Zona dell’itinerario": [
+    "Itinerary area",
+    "Zone de l’itinéraire",
+    "Gebiet der Route"
+  ],
+  "Ovunque nella mappa": [
+    "Anywhere on the map",
+    "Partout sur la carte",
+    "Überall auf der Karte"
+  ],
+  "Vicino a un punto a scelta": [
+    "Near a point of your choice",
+    "Près d’un point de votre choix",
+    "In der Nähe eines gewählten Ortes"
+  ],
+  "Dintorni inclusi": [
+    "Include surroundings",
+    "Inclure les environs",
+    "Umgebung einbeziehen"
+  ],
+  "Le tappe resteranno entro questo raggio. Se non ci sono eventi compatibili, vi proporremo zone vicine prima di cambiare destinazione.": [
+    "Stops will stay within this radius. If no events match, we’ll suggest nearby areas before changing your destination.",
+    "Les étapes resteront dans ce rayon. Si aucun événement ne convient, nous vous proposerons des zones proches avant de changer de destination.",
+    "Die Stationen bleiben innerhalb dieses Radius. Falls keine passenden Veranstaltungen verfügbar sind, schlagen wir nahe Gebiete vor, bevor ihr das Ziel ändert."
+  ],
+  "Disponibilità nella zona": [
+    "Availability in this area",
+    "Disponibilités dans la zone",
+    "Verfügbarkeit im Gebiet"
+  ],
+  "Nessuna attività compatibile nella zona e negli orari scelti.": [
+    "No activities match this area and time window.",
+    "Aucune activité ne correspond à cette zone et à ces horaires.",
+    "Keine passenden Aktivitäten im gewählten Gebiet und Zeitraum."
+  ],
+  "Non risultano eventi compatibili nella zona e negli orari scelti. Potete comunque visitare i luoghi disponibili.": [
+    "No events match this area and time window. You can still visit the available places.",
+    "Aucun événement ne correspond à cette zone et à ces horaires. Vous pouvez visiter les lieux disponibles.",
+    "Keine passenden Veranstaltungen im gewählten Gebiet und Zeitraum. Ihr könnt die verfügbaren Orte trotzdem besuchen."
+  ],
+  "Le attività sono nella zona scelta.": [
+    "Activities are within your chosen area.",
+    "Les activités sont dans la zone choisie.",
+    "Die Aktivitäten liegen im gewählten Gebiet."
+  ],
+  "Alternative nelle zone più vicine con disponibilità nel catalogo:": [
+    "Nearby areas with available activities in the catalog:",
+    "Zones proches avec des activités disponibles dans le catalogue :",
+    "Nahe Gebiete mit verfügbaren Aktivitäten im Katalog:"
+  ],
+  "Distanze in linea d’aria dal centro della zona scelta. I collegamenti saranno verificati quando scegliete un’alternativa.": [
+    "Straight-line distances from the centre of your chosen area. Routes will be checked when you select an alternative.",
+    "Distances à vol d’oiseau depuis le centre de la zone choisie. Les trajets seront vérifiés au choix d’une alternative.",
+    "Luftlinie ab dem Mittelpunkt des gewählten Gebiets. Verbindungen werden bei der Auswahl einer Alternative geprüft."
+  ],
+  "Finire altrove": [
+    "Finish elsewhere",
+    "Terminer ailleurs",
+    "Woanders enden"
+  ],
+  "stesso punto": [
+    "same point",
+    "même point",
+    "gleicher Ort"
+  ],
+  "punto libero": [
+    "any endpoint",
+    "point libre",
+    "beliebiger Endpunkt"
+  ],
+  "stazione": [
+    "station",
+    "gare",
+    "Bahnhof"
+  ],
+  "da scegliere": [
+    "choose a point",
+    "à choisir",
+    "noch zu wählen"
+  ],
+  "Stesso punto": [
+    "Same point",
+    "Même point",
+    "Gleicher Ort"
+  ],
+  "Stazione": [
+    "Station",
+    "Gare",
+    "Bahnhof"
+  ],
+  "Alloggio": [
+    "Accommodation",
+    "Hébergement",
+    "Unterkunft"
+  ],
+  "Altro punto": [
+    "Another point",
+    "Autre point",
+    "Anderer Ort"
+  ],
+  "Nessun rientro": [
+    "No return trip",
+    "Sans retour",
+    "Ohne Rückweg"
+  ],
+  "La mia posizione": [
+    "My location",
+    "Ma position",
+    "Mein Standort"
+  ],
+  "Nessun punto scelto": [
+    "No point selected",
+    "Aucun point choisi",
+    "Kein Ort gewählt"
+  ],
+  "Cerca luogo, fermata o indirizzo…": [
+    "Search for a place, stop or address…",
+    "Chercher un lieu, un arrêt ou une adresse…",
+    "Ort, Haltestelle oder Adresse suchen…"
+  ],
+  "Cerca": [
+    "Search",
+    "Chercher",
+    "Suchen"
+  ],
+  "Sulla mappa": [
+    "On the map",
+    "Sur la carte",
+    "Auf der Karte"
+  ],
+  "Scegli sulla mappa": [
+    "Pick on the map",
+    "Choisir sur la carte",
+    "Auf der Karte auswählen"
+  ],
+  "Usa la mia posizione": [
+    "Use my location",
+    "Utiliser ma position",
+    "Meinen Standort verwenden"
+  ],
+  "Tocca la mappa": [
+    "Tap the map",
+    "Touchez la carte",
+    "Karte antippen"
+  ],
+  "Nessun risultato": [
+    "No results",
+    "Aucun résultat",
+    "Keine Ergebnisse"
+  ],
+  "Atmosfera": [
+    "Mood",
+    "Ambiance",
+    "Stimmung"
+  ],
+  "Chill": [
+    "Chill",
+    "Détente",
+    "Entspannt"
+  ],
+  "Vivace": [
+    "Lively",
+    "Animée",
+    "Lebhaft"
+  ],
+  "Romantica": [
+    "Romantic",
+    "Romantique",
+    "Romantisch"
+  ],
+  "Culturale": [
+    "Cultural",
+    "Culturelle",
+    "Kulturell"
+  ],
+  "Natura": [
+    "Nature",
+    "Nature",
+    "Natur"
+  ],
+  "Panorami": [
+    "Views",
+    "Panoramas",
+    "Aussichten"
+  ],
+  "Gastronomia": [
+    "Food",
+    "Gastronomie",
+    "Gastronomie"
+  ],
+  "Avventura leggera": [
+    "Light adventure",
+    "Aventure douce",
+    "Leichtes Abenteuer"
+  ],
+  "Budget": [
+    "Budget",
+    "Budget",
+    "Budget"
+  ],
+  "Qualsiasi": [
+    "Any",
+    "Indifférent",
+    "Beliebig"
+  ],
+  "a persona": [
+    "per person",
+    "par personne",
+    "pro Person"
+  ],
+  "per il gruppo": [
+    "for the group",
+    "pour le groupe",
+    "für die Gruppe"
+  ],
+  "in totale": [
+    "in total",
+    "au total",
+    "insgesamt"
+  ],
+  "Limite rigido": [
+    "Strict limit",
+    "Limite stricte",
+    "Feste Obergrenze"
+  ],
+  "Ritmo": [
+    "Pace",
+    "Rythme",
+    "Tempo"
+  ],
+  "Rilassato": [
+    "Relaxed",
+    "Détendu",
+    "Gemütlich"
+  ],
+  "Equilibrato": [
+    "Balanced",
+    "Équilibré",
+    "Ausgewogen"
+  ],
+  "Intenso": [
+    "Intense",
+    "Soutenu",
+    "Intensiv"
+  ],
+  "Mezzi": [
+    "Transport",
+    "Transports",
+    "Verkehrsmittel"
+  ],
+  "A piedi": [
+    "Walking",
+    "À pied",
+    "Zu Fuss"
+  ],
+  "Treno": [
+    "Train",
+    "Train",
+    "Zug"
+  ],
+  "Battello": [
+    "Boat",
+    "Bateau",
+    "Schiff"
+  ],
+  "Battelli": [
+    "Boats",
+    "Bateaux",
+    "Schiffe"
+  ],
+  "Funicolare": [
+    "Funicular",
+    "Funiculaire",
+    "Standseilbahn"
+  ],
+  "Funicolari": [
+    "Funiculars",
+    "Funiculaires",
+    "Standseilbahnen"
+  ],
+  "Funivia": [
+    "Cable car",
+    "Téléphérique",
+    "Seilbahn"
+  ],
+  "Attesa": [
+    "Waiting",
+    "Attente",
+    "Warten"
+  ],
+  "Da evitare": [
+    "Avoid",
+    "À éviter",
+    "Vermeiden"
+  ],
+  "Discoteche": [
+    "Nightclubs",
+    "Discothèques",
+    "Diskotheken"
+  ],
+  "Luoghi rumorosi": [
+    "Noisy places",
+    "Lieux bruyants",
+    "Laute Orte"
+  ],
+  "Alcol": [
+    "Alcohol",
+    "Alcool",
+    "Alkohol"
+  ],
+  "Salite ed escursioni": [
+    "Climbs and hikes",
+    "Montées et randonnées",
+    "Anstiege und Wanderungen"
+  ],
+  "Posti costosi": [
+    "Expensive places",
+    "Lieux chers",
+    "Teure Orte"
+  ],
+  "Posti affollati": [
+    "Crowded places",
+    "Lieux très fréquentés",
+    "Belebte Orte"
+  ],
+  "Posti già visitati": [
+    "Places already visited",
+    "Lieux déjà visités",
+    "Bereits besuchte Orte"
+  ],
+  "Altezze": [
+    "Heights",
+    "Hauteurs",
+    "Höhen"
+  ],
+  "Altre esigenze": [
+    "Other needs",
+    "Autres besoins",
+    "Weitere Bedürfnisse"
+  ],
+  "Passeggino": [
+    "Stroller",
+    "Poussette",
+    "Kinderwagen"
+  ],
+  "Sedia a rotelle": [
+    "Wheelchair",
+    "Fauteuil roulant",
+    "Rollstuhl"
+  ],
+  "Evita le scale": [
+    "Avoid stairs",
+    "Éviter les escaliers",
+    "Treppen vermeiden"
+  ],
+  "Pause frequenti": [
+    "Frequent breaks",
+    "Pauses fréquentes",
+    "Häufige Pausen"
+  ],
+  "Al coperto": [
+    "Indoors",
+    "À l’intérieur",
+    "Drinnen"
+  ],
+  "All'aperto": [
+    "Outdoors",
+    "En plein air",
+    "Draussen"
+  ],
+  "Indifferente": [
+    "Either",
+    "Indifférent",
+    "Beides"
+  ],
+  "Tappe obbligatorie": [
+    "Must-see stops",
+    "Étapes incontournables",
+    "Pflichtstationen"
+  ],
+  "Aggiungi una tappa": [
+    "Add a stop",
+    "Ajouter une étape",
+    "Station hinzufügen"
+  ],
+  "Note libere": [
+    "Your notes",
+    "Vos remarques",
+    "Eure Hinweise"
+  ],
+  "es. «vorremmo vedere il tramonto e finire con un gelato»": [
+    "e.g. “we’d like to see the sunset and finish with ice cream”",
+    "p. ex. « voir le coucher du soleil et terminer par une glace »",
+    "z. B. «Wir möchten den Sonnenuntergang sehen und zum Schluss ein Eis essen»"
+  ],
+  "Cambia richiesta": [
+    "Change request",
+    "Modifier la demande",
+    "Anfrage ändern"
+  ],
+  "Cambia la richiesta": [
+    "Change your request",
+    "Modifier votre demande",
+    "Anfrage ändern"
+  ],
+  "Un'idea per voi": [
+    "An idea for you",
+    "Une idée pour vous",
+    "Eine Idee für euch"
+  ],
+  "{0} idee per voi": [
+    "{0} ideas for you",
+    "{0} idées pour vous",
+    "{0} Ideen für euch"
+  ],
+  "Abbiamo capito:": [
+    "We understood:",
+    "Nous avons compris :",
+    "Wir haben verstanden:"
+  ],
+  "Prova questa giornata": [
+    "Try this day",
+    "Essayer cette journée",
+    "Diesen Tag ausprobieren"
+  ],
+  "Chiudi": [
+    "Close",
+    "Fermer",
+    "Schliessen"
+  ],
+  "Dettagli": [
+    "Details",
+    "Détails",
+    "Details"
+  ],
+  "Note": [
+    "Notes",
+    "Remarques",
+    "Hinweise"
+  ],
+  "Durata": [
+    "Duration",
+    "Durée",
+    "Dauer"
+  ],
+  "Spesa stimata a persona": [
+    "Estimated cost per person",
+    "Coût estimé par personne",
+    "Geschätzte Kosten pro Person"
+  ],
+  "gratis": [
+    "free",
+    "gratuit",
+    "kostenlos"
+  ],
+  "a pers.": [
+    "per person",
+    "par pers.",
+    "pro Person"
+  ],
+  "da verificare": [
+    "to check",
+    "à vérifier",
+    "zu prüfen"
+  ],
+  "dato": [
+    "item",
+    "donnée",
+    "Angabe"
+  ],
+  "dati": [
+    "items",
+    "données",
+    "Angaben"
+  ],
+  "Una cosa da chiarire": [
+    "One thing to clarify",
+    "Un point à clarifier",
+    "Eine Sache noch klären"
+  ],
+  "Modulo": [
+    "Form",
+    "Formulaire",
+    "Formular"
+  ],
+  "Testo": [
+    "Text",
+    "Texte",
+    "Text"
+  ],
+  "Così non ci sta": [
+    "This combination doesn’t fit",
+    "Cette combinaison ne convient pas",
+    "Diese Kombination passt nicht"
+  ],
+  "Provate così:": [
+    "Try this:",
+    "Essayez ceci :",
+    "Probiert Folgendes:"
+  ],
+  "Qualcosa non ha funzionato": [
+    "Something went wrong",
+    "Un problème est survenu",
+    "Etwas ist schiefgelaufen"
+  ],
+  "Riprova": [
+    "Try again",
+    "Réessayer",
+    "Erneut versuchen"
+  ],
+  "Sembra che la rete non sia disponibile.": [
+    "The network seems unavailable.",
+    "Le réseau semble indisponible.",
+    "Das Netzwerk scheint nicht verfügbar zu sein."
+  ],
+  "Preparo le proposte…": [
+    "Preparing your ideas…",
+    "Préparation des propositions…",
+    "Vorschläge werden vorbereitet…"
+  ],
+  "Il server della demo è lento: può volerci fino a mezzo minuto.": [
+    "The demo server is slow: this may take up to half a minute.",
+    "Le serveur de démonstration est lent : cela peut prendre une trentaine de secondes.",
+    "Der Demoserver ist langsam: Es kann bis zu einer halben Minute dauern."
+  ],
+  "Leggo la vostra richiesta": [
+    "Reading your request",
+    "Lecture de votre demande",
+    "Eure Anfrage wird gelesen"
+  ],
+  "Controllo le previsioni meteo": [
+    "Checking the weather forecast",
+    "Vérification de la météo",
+    "Wettervorhersage wird geprüft"
+  ],
+  "Cerco attività compatibili": [
+    "Finding suitable activities",
+    "Recherche d’activités adaptées",
+    "Passende Aktivitäten werden gesucht"
+  ],
+  "Verifico i collegamenti": [
+    "Checking connections",
+    "Vérification des trajets",
+    "Verbindungen werden geprüft"
+  ],
+  "Controllo orari, rientro e budget": [
+    "Checking opening hours, return and budget",
+    "Vérification des horaires, du retour et du budget",
+    "Öffnungszeiten, Rückweg und Budget werden geprüft"
+  ],
+  "Preparo le alternative": [
+    "Preparing alternatives",
+    "Préparation des alternatives",
+    "Alternativen werden vorbereitet"
+  ],
+  "Il meglio per voi": [
+    "The best for you",
+    "Le meilleur pour vous",
+    "Das Beste für euch"
+  ],
+  "Lago e borghi": [
+    "Lake and villages",
+    "Lac et villages",
+    "See und Dörfer"
+  ],
+  "Panorami dall'alto": [
+    "Views from above",
+    "Panoramas d’en haut",
+    "Aussichten von oben"
+  ],
+  "Arte e storia": [
+    "Art and history",
+    "Art et histoire",
+    "Kunst und Geschichte"
+  ],
+  "Sapori e serata": [
+    "Food and evening",
+    "Saveurs et soirée",
+    "Genuss und Abend"
+  ],
+  "Natura tranquilla": [
+    "Peaceful nature",
+    "Nature paisible",
+    "Ruhige Natur"
+  ],
+  "A misura di bambini": [
+    "Made for children",
+    "Adapté aux enfants",
+    "Für Kinder geeignet"
+  ],
+  "Serata in città": [
+    "An evening in town",
+    "Soirée en ville",
+    "Abend in der Stadt"
+  ],
+  "Oltre il centro": [
+    "Beyond the centre",
+    "Au-delà du centre",
+    "Ausserhalb des Zentrums"
+  ],
+  "Parco": [
+    "Park",
+    "Parc",
+    "Park"
+  ],
+  "Museo": [
+    "Museum",
+    "Musée",
+    "Museum"
+  ],
+  "Cultura": [
+    "Culture",
+    "Culture",
+    "Kultur"
+  ],
+  "Belvedere": [
+    "Viewpoint",
+    "Belvédère",
+    "Aussichtspunkt"
+  ],
+  "Passeggiata": [
+    "Walk",
+    "Promenade",
+    "Spaziergang"
+  ],
+  "Lido": [
+    "Lido",
+    "Plage aménagée",
+    "Strandbad"
+  ],
+  "Impianto": [
+    "Lift",
+    "Remontée",
+    "Bergbahn"
+  ],
+  "Ristorante": [
+    "Restaurant",
+    "Restaurant",
+    "Restaurant"
+  ],
+  "Caffè": [
+    "Café",
+    "Café",
+    "Café"
+  ],
+  "Vita notturna": [
+    "Nightlife",
+    "Vie nocturne",
+    "Nachtleben"
+  ],
+  "Mercato": [
+    "Market",
+    "Marché",
+    "Markt"
+  ],
+  "Spettacoli": [
+    "Shows",
+    "Spectacles",
+    "Vorstellungen"
+  ],
+  "Laboratorio": [
+    "Workshop",
+    "Atelier",
+    "Workshop"
+  ],
+  "Stagionale": [
+    "Seasonal",
+    "Saisonnier",
+    "Saisonal"
+  ],
+  "Chiesa": [
+    "Church",
+    "Église",
+    "Kirche"
+  ],
+  "Borgo": [
+    "Village",
+    "Village",
+    "Dorf"
+  ],
+  "Escursione": [
+    "Hike",
+    "Randonnée",
+    "Wanderung"
+  ],
+  "Giochi": [
+    "Playground",
+    "Aire de jeux",
+    "Spielplatz"
+  ],
+  "Gelateria": [
+    "Ice cream shop",
+    "Glacier",
+    "Eisdiele"
+  ],
+  "Vetta": [
+    "Summit",
+    "Sommet",
+    "Gipfel"
+  ],
+  "Attrazione": [
+    "Attraction",
+    "Attraction",
+    "Sehenswürdigkeit"
+  ],
+  "Pausa": [
+    "Pause",
+    "Pause",
+    "Pause"
+  ],
+  "verificato": [
+    "verified",
+    "vérifié",
+    "geprüft"
+  ],
+  "dato ufficiale": [
+    "official data",
+    "donnée officielle",
+    "offizielle Angabe"
+  ],
+  "redazione": [
+    "editorial",
+    "rédaction",
+    "Redaktion"
+  ],
+  "stima": [
+    "estimate",
+    "estimation",
+    "Schätzung"
+  ],
+  "dimostrativo": [
+    "demo",
+    "démonstration",
+    "Demo"
+  ],
+  "mancante": [
+    "missing",
+    "manquant",
+    "fehlend"
+  ],
+  "Verificato sui dati disponibili": [
+    "Checked against available data",
+    "Vérifié sur les données disponibles",
+    "Anhand verfügbarer Daten geprüft"
+  ],
+  "Con dati da verificare": [
+    "Contains data to check",
+    "Avec des données à vérifier",
+    "Mit Angaben, die zu prüfen sind"
+  ],
+  "Non valido": [
+    "Invalid",
+    "Non valide",
+    "Ungültig"
+  ],
+  "Tutti": [
+    "All",
+    "Tous",
+    "Alle"
+  ],
+  "Tutte": [
+    "All",
+    "Toutes",
+    "Alle"
+  ],
+  "Luoghi": [
+    "Places",
+    "Lieux",
+    "Orte"
+  ],
+  "Preferiti": [
+    "Favourites",
+    "Favoris",
+    "Favoriten"
+  ],
+  "Già visitati": [
+    "Already visited",
+    "Déjà visités",
+    "Bereits besucht"
+  ],
+  "Aperti": [
+    "Open",
+    "Ouverts",
+    "Geöffnet"
+  ],
+  "Aperto": [
+    "Open",
+    "Ouvert",
+    "Geöffnet"
+  ],
+  "Chiuso": [
+    "Closed",
+    "Fermé",
+    "Geschlossen"
+  ],
+  "Sconosciuto": [
+    "Unknown",
+    "Inconnu",
+    "Unbekannt"
+  ],
+  "Nessun luogo con questi filtri": [
+    "No places match these filters",
+    "Aucun lieu ne correspond à ces filtres",
+    "Keine Orte entsprechen diesen Filtern"
+  ],
+  "Nessun evento con questi filtri": [
+    "No events match these filters",
+    "Aucun événement ne correspond à ces filtres",
+    "Keine Veranstaltungen entsprechen diesen Filtern"
+  ],
+  "Nessun evento in questo periodo": [
+    "No events in this period",
+    "Aucun événement à cette période",
+    "Keine Veranstaltungen in diesem Zeitraum"
+  ],
+  "Non inventiamo eventi per riempire una giornata vuota.": [
+    "We don’t invent events to fill an empty day.",
+    "Nous n’inventons pas d’événements pour remplir une journée vide.",
+    "Wir erfinden keine Veranstaltungen, um einen leeren Tag zu füllen."
+  ],
+  "Settimana": [
+    "Week",
+    "Semaine",
+    "Woche"
+  ],
+  "Prossimi 30 giorni": [
+    "Next 30 days",
+    "30 prochains jours",
+    "Nächste 30 Tage"
+  ],
+  "In corso": [
+    "Ongoing",
+    "En cours",
+    "Laufend"
+  ],
+  "Scheda ufficiale": [
+    "Official event page",
+    "Page officielle",
+    "Offizielle Veranstaltungsseite"
+  ],
+  "Il luogo": [
+    "The venue",
+    "Le lieu",
+    "Der Veranstaltungsort"
+  ],
+  "Gratis": [
+    "Free",
+    "Gratuit",
+    "Kostenlos"
+  ],
+  "Annullato": [
+    "Cancelled",
+    "Annulé",
+    "Abgesagt"
+  ],
+  "Esaurito": [
+    "Sold out",
+    "Complet",
+    "Ausverkauft"
+  ],
+  "Rinviato": [
+    "Postponed",
+    "Reporté",
+    "Verschoben"
+  ],
+  "Aggiungi al programma": [
+    "Add to itinerary",
+    "Ajouter à l’itinéraire",
+    "Zur Route hinzufügen"
+  ],
+  "Sito": [
+    "Website",
+    "Site",
+    "Website"
+  ],
+  "Sito ufficiale": [
+    "Official website",
+    "Site officiel",
+    "Offizielle Website"
+  ],
+  "Nessun sito": [
+    "No website",
+    "Aucun site",
+    "Keine Website"
+  ],
+  "Orari": [
+    "Opening hours",
+    "Horaires",
+    "Öffnungszeiten"
+  ],
+  "Prezzi": [
+    "Prices",
+    "Prix",
+    "Preise"
+  ],
+  "Accessibilità": [
+    "Accessibility",
+    "Accessibilité",
+    "Barrierefreiheit"
+  ],
+  "Fonti:": [
+    "Sources:",
+    "Sources :",
+    "Quellen:"
+  ],
+  "Segnala un errore": [
+    "Report an error",
+    "Signaler une erreur",
+    "Fehler melden"
+  ],
+  "Orari non disponibili: da verificare": [
+    "Opening hours unavailable: please check",
+    "Horaires indisponibles : à vérifier",
+    "Öffnungszeiten nicht verfügbar: bitte prüfen"
+  ],
+  "Orari non disponibili: da verificare prima di andare": [
+    "Opening hours unavailable: check before you go",
+    "Horaires indisponibles : vérifiez avant de partir",
+    "Öffnungszeiten nicht verfügbar: vor dem Besuch prüfen"
+  ],
+  "Costo non disponibile": [
+    "Cost unavailable",
+    "Coût indisponible",
+    "Kosten nicht verfügbar"
+  ],
+  "Costi non disponibili": [
+    "Costs unavailable",
+    "Coûts indisponibles",
+    "Kosten nicht verfügbar"
+  ],
+  "Luogo importato da OpenStreetMap. Orari, prezzi e accessibilità vanno verificati con il gestore.": [
+    "Place imported from OpenStreetMap. Check opening hours, prices and accessibility with the operator.",
+    "Lieu importé d’OpenStreetMap. Vérifiez les horaires, prix et accès auprès du responsable.",
+    "Aus OpenStreetMap importierter Ort. Öffnungszeiten, Preise und Zugänglichkeit beim Betreiber prüfen."
+  ],
+  "Stazione FFS di Lugano": [
+    "Lugano railway station",
+    "Gare CFF de Lugano",
+    "Bahnhof Lugano SBB"
+  ],
+  "Fermata": [
+    "Stop",
+    "Arrêt",
+    "Haltestelle"
+  ],
+  "Indirizzo (OSM)": [
+    "Address (OSM)",
+    "Adresse (OSM)",
+    "Adresse (OSM)"
+  ],
+  "fuori dalla zona scelta": [
+    "outside the selected area",
+    "hors de la zone choisie",
+    "ausserhalb des gewählten Gebiets"
+  ],
+  "Torna all'inizio": [
+    "Back to start",
+    "Retour à l’accueil",
+    "Zur Startseite"
+  ],
+  "Navigazione principale": [
+    "Main navigation",
+    "Navigation principale",
+    "Hauptnavigation"
+  ],
+  "Pannello": [
+    "Panel",
+    "Panneau",
+    "Bereich"
+  ],
+  "Siete offline": [
+    "You’re offline",
+    "Vous êtes hors ligne",
+    "Ihr seid offline"
+  ],
+  "Servizio non raggiungibile": [
+    "Service unavailable",
+    "Service indisponible",
+    "Dienst nicht erreichbar"
+  ],
+  "Impostazioni": [
+    "Settings",
+    "Réglages",
+    "Einstellungen"
+  ],
+  "Programmi salvati": [
+    "Saved itineraries",
+    "Itinéraires enregistrés",
+    "Gespeicherte Routen"
+  ],
+  "Nuovo programma": [
+    "New itinerary",
+    "Nouvel itinéraire",
+    "Neue Route"
+  ],
+  "Riepilogo": [
+    "Summary",
+    "Récapitulatif",
+    "Übersicht"
+  ],
+  "Simulazione": [
+    "Simulation",
+    "Simulation",
+    "Simulation"
+  ],
+  "Avvia": [
+    "Play",
+    "Lancer",
+    "Starten"
+  ],
+  "Riprendi": [
+    "Resume",
+    "Reprendre",
+    "Fortsetzen"
+  ],
+  "Salta spostamento": [
+    "Skip transfer",
+    "Passer le trajet",
+    "Weg überspringen"
+  ],
+  "Prossima decisione": [
+    "Next decision",
+    "Prochaine décision",
+    "Nächste Entscheidung"
+  ],
+  "Vai al riepilogo": [
+    "Go to summary",
+    "Voir le récapitulatif",
+    "Zur Übersicht"
+  ],
+  "Segui il gruppo": [
+    "Follow the group",
+    "Suivre le groupe",
+    "Gruppe folgen"
+  ],
+  "Camera libera": [
+    "Free camera",
+    "Caméra libre",
+    "Freie Kamera"
+  ],
+  "Tutto il percorso": [
+    "Whole route",
+    "Tout le parcours",
+    "Gesamte Route"
+  ],
+  "Velocità": [
+    "Speed",
+    "Vitesse",
+    "Geschwindigkeit"
+  ],
+  "Cambia idea": [
+    "Change plans",
+    "Changer d’idée",
+    "Plan ändern"
+  ],
+  "Confronta": [
+    "Compare",
+    "Comparer",
+    "Vergleichen"
+  ],
+  "Condividi": [
+    "Share",
+    "Partager",
+    "Teilen"
+  ],
+  "Salva": [
+    "Save",
+    "Enregistrer",
+    "Speichern"
+  ],
+  "Copia testo": [
+    "Copy text",
+    "Copier le texte",
+    "Text kopieren"
+  ],
+  "Stampa": [
+    "Print",
+    "Imprimer",
+    "Drucken"
+  ],
+  "Calendario": [
+    "Calendar",
+    "Calendrier",
+    "Kalender"
+  ],
+  "Verifica i dati adesso": [
+    "Check data now",
+    "Vérifier les données maintenant",
+    "Daten jetzt prüfen"
+  ],
+  "Testo copiato": [
+    "Text copied",
+    "Texte copié",
+    "Text kopiert"
+  ],
+  "Ritorna alla simulazione": [
+    "Back to simulation",
+    "Retour à la simulation",
+    "Zurück zur Simulation"
+  ],
+  "Ricalcola": [
+    "Recalculate",
+    "Recalculer",
+    "Neu berechnen"
+  ],
+  "Ricalcolo il resto della giornata…": [
+    "Recalculating the rest of your day…",
+    "Recalcul du reste de votre journée…",
+    "Der restliche Tag wird neu berechnet…"
+  ],
+  "Applica": [
+    "Apply",
+    "Appliquer",
+    "Anwenden"
+  ],
+  "Mantieni": [
+    "Keep",
+    "Conserver",
+    "Beibehalten"
+  ],
+  "Sì": [
+    "Yes",
+    "Oui",
+    "Ja"
+  ],
+  "No": [
+    "No",
+    "Non",
+    "Nein"
+  ],
+  "Anche i punti OpenStreetMap non curati": [
+    "Also show uncurated OpenStreetMap points",
+    "Afficher aussi les points OpenStreetMap non vérifiés",
+    "Auch redaktionell ungeprüfte OpenStreetMap-Punkte anzeigen"
+  ],
+  "Connessione non disponibile. Controllate la rete e riprovate.": [
+    "Connection unavailable. Check your network and try again.",
+    "Connexion indisponible. Vérifiez le réseau et réessayez.",
+    "Keine Verbindung. Netzwerk prüfen und erneut versuchen."
+  ],
+  "Ricerca annullata o troppo lunga.": [
+    "Search cancelled or timed out.",
+    "Recherche annulée ou trop longue.",
+    "Suche abgebrochen oder Zeitlimit erreicht."
+  ],
+  "Richiesta non valida": [
+    "Invalid request",
+    "Demande non valide",
+    "Ungültige Anfrage"
+  ],
+  "Piano non valido": [
+    "Invalid itinerary",
+    "Itinéraire non valide",
+    "Ungültige Route"
+  ],
+  "Troppe richieste.": [
+    "Too many requests.",
+    "Trop de demandes.",
+    "Zu viele Anfragen."
+  ],
+  "Il server sta preparando altri itinerari. Riprovate fra pochi secondi.": [
+    "The server is preparing other itineraries. Try again in a few seconds.",
+    "Le serveur prépare d’autres itinéraires. Réessayez dans quelques secondes.",
+    "Der Server erstellt andere Routen. In wenigen Sekunden erneut versuchen."
+  ],
+  "Natura e parchi": [
+    "Nature and parks",
+    "Nature et parcs",
+    "Natur und Parks"
+  ],
+  "Borghi": [
+    "Villages",
+    "Villages",
+    "Dörfer"
+  ],
+  "Mangiare": [
+    "Food",
+    "Manger",
+    "Essen"
+  ],
+  "Cerca un luogo…": [
+    "Search for a place…",
+    "Chercher un lieu…",
+    "Ort suchen…"
+  ],
+  "Cerca un luogo": [
+    "Search for a place",
+    "Chercher un lieu",
+    "Ort suchen"
+  ],
+  "Aperto quando ci andate": [
+    "Open during your visit",
+    "Ouvert lors de votre visite",
+    "Während eures Besuchs geöffnet"
+  ],
+  "Dalle": [
+    "From",
+    "De",
+    "Von"
+  ],
+  "Alle": [
+    "To",
+    "À",
+    "Bis"
+  ],
+  "azzera": [
+    "reset",
+    "réinitialiser",
+    "zurücksetzen"
+  ],
+  "Altre opzioni": [
+    "More options",
+    "Autres options",
+    "Weitere Optionen"
+  ],
+  "Solo i preferiti (": [
+    "Favourites only (",
+    "Favoris uniquement (",
+    "Nur Favoriten ("
+  ],
+  "sentiero escursionistico": [
+    "hiking trail",
+    "sentier de randonnée",
+    "Wanderweg"
+  ],
+  "di montagna (bianco-rosso-bianco)": [
+    "mountain trail (white-red-white)",
+    "sentier de montagne (blanc-rouge-blanc)",
+    "Bergwanderweg (weiss-rot-weiss)"
+  ],
+  "alpino (bianco-blu-bianco)": [
+    "alpine trail (white-blue-white)",
+    "sentier alpin (blanc-bleu-blanc)",
+    "Alpinwanderweg (weiss-blau-weiss)"
+  ],
+  "Difficoltà da OpenStreetMap: sul posto vale la segnaletica. Le figurine nelle piazze sono decorative.": [
+    "Difficulty from OpenStreetMap: follow the signs on site. Figures in squares are decorative.",
+    "Difficulté issue d’OpenStreetMap : suivez la signalisation sur place. Les figurines sont décoratives.",
+    "Schwierigkeit laut OpenStreetMap: Vor Ort gilt die Beschilderung. Figuren auf Plätzen sind dekorativ."
+  ],
+  "· visitato": [
+    "· visited",
+    "· visité",
+    "· besucht"
+  ],
+  "orari non noti": [
+    "hours unknown",
+    "horaires inconnus",
+    "Öffnungszeiten unbekannt"
+  ],
+  "aperto": [
+    "open",
+    "ouvert",
+    "geöffnet"
+  ],
+  "Concerti": [
+    "Concerts",
+    "Concerts",
+    "Konzerte"
+  ],
+  "Feste e festival": [
+    "Festivals and celebrations",
+    "Fêtes et festivals",
+    "Feste und Festivals"
+  ],
+  "Serate": [
+    "Evenings",
+    "Soirées",
+    "Abendveranstaltungen"
+  ],
+  "Mercati": [
+    "Markets",
+    "Marchés",
+    "Märkte"
+  ],
+  "Laboratori": [
+    "Workshops",
+    "Ateliers",
+    "Workshops"
+  ],
+  "Visite guidate": [
+    "Guided tours",
+    "Visites guidées",
+    "Führungen"
+  ],
+  "Mostre": [
+    "Exhibitions",
+    "Expositions",
+    "Ausstellungen"
+  ],
+  "Calendario non disponibile.": [
+    "Calendar unavailable.",
+    "Calendrier indisponible.",
+    "Kalender nicht verfügbar."
+  ],
+  "Cerca un evento o un luogo…": [
+    "Search for an event or venue…",
+    "Chercher un événement ou un lieu…",
+    "Veranstaltung oder Ort suchen…"
+  ],
+  "Cerca negli eventi": [
+    "Search events",
+    "Chercher des événements",
+    "Veranstaltungen suchen"
+  ],
+  "Provate a togliere un filtro.": [
+    "Try removing a filter.",
+    "Essayez de retirer un filtre.",
+    "Versucht, einen Filter zu entfernen."
+  ],
+  "Organizza la giornata": [
+    "Plan your day",
+    "Organiser la journée",
+    "Tag planen"
+  ],
+  "Mostre in corso": [
+    "Current exhibitions",
+    "Expositions en cours",
+    "Laufende Ausstellungen"
+  ],
+  "· fino al": [
+    "· until",
+    "· jusqu’au",
+    "· bis"
+  ],
+  "Vista semplificata del percorso": [
+    "Simplified route view",
+    "Vue simplifiée du parcours",
+    "Vereinfachte Routenansicht"
+  ],
+  "La scheda grafica ha perso il contesto WebGL: mostriamo una vista semplificata.": [
+    "The graphics card lost its WebGL context: a simplified view is shown.",
+    "Le contexte WebGL a été perdu : une vue simplifiée est affichée.",
+    "Die Grafikkarte hat den WebGL-Kontext verloren: Eine vereinfachte Ansicht wird angezeigt."
+  ],
+  "WebGL non è disponibile su questo dispositivo: mostriamo una vista semplificata con tutte le informazioni.": [
+    "WebGL is unavailable on this device: a simplified view contains all the information.",
+    "WebGL est indisponible sur cet appareil : une vue simplifiée contient toutes les informations.",
+    "WebGL ist auf diesem Gerät nicht verfügbar: Die vereinfachte Ansicht enthält alle Informationen."
+  ],
+  "Ricarica la mappa": [
+    "Reload the map",
+    "Recharger la carte",
+    "Karte neu laden"
+  ],
+  "Vista elenco attiva.": [
+    "List view enabled.",
+    "Vue en liste activée.",
+    "Listenansicht aktiv."
+  ],
+  "Torna alla mappa": [
+    "Back to map",
+    "Retour à la carte",
+    "Zurück zur Karte"
+  ],
+  "tappe completate": [
+    "stops completed",
+    "étapes terminées",
+    "Stationen abgeschlossen"
+  ],
+  "Scegliete un programma per vederne lo schema.": [
+    "Choose an itinerary to see its overview.",
+    "Choisissez un itinéraire pour voir son aperçu.",
+    "Wählt eine Route, um ihre Übersicht zu sehen."
+  ],
+  "Posizione non concessa: scegliete da dove partite.": [
+    "Location access denied: choose your starting point.",
+    "Accès à la position refusé : choisissez votre point de départ.",
+    "Standortzugriff verweigert: Wählt euren Startpunkt."
+  ],
+  "Posizione non disponibile su questo dispositivo.": [
+    "Location is unavailable on this device.",
+    "Position indisponible sur cet appareil.",
+    "Standort auf diesem Gerät nicht verfügbar."
+  ],
+  "Posizione non concessa: potete scegliere un luogo o una fermata.": [
+    "Location access denied: choose a place or stop.",
+    "Accès à la position refusé : choisissez un lieu ou un arrêt.",
+    "Standortzugriff verweigert: Wählt einen Ort oder eine Haltestelle."
+  ],
+  "Mappa non disponibile: usate la ricerca.": [
+    "Map unavailable: use the search.",
+    "Carte indisponible : utilisez la recherche.",
+    "Karte nicht verfügbar: Verwendet die Suche."
+  ],
+  "Il servizio non risponde (": [
+    "The service isn’t responding (",
+    "Le service ne répond pas (",
+    "Der Dienst antwortet nicht ("
+  ],
+  "Toccate la mappa…": [
+    "Tap the map…",
+    "Touchez la carte…",
+    "Karte antippen…"
+  ],
+  "Nessun programma salvato": [
+    "No saved itineraries",
+    "Aucun itinéraire enregistré",
+    "Keine gespeicherten Routen"
+  ],
+  "Salvate un programma dalla simulazione o dal riepilogo.": [
+    "Save an itinerary from the simulation or summary.",
+    "Enregistrez un itinéraire depuis la simulation ou le récapitulatif.",
+    "Speichert eine Route aus der Simulation oder Übersicht."
+  ],
+  "· salvato": [
+    "· saved",
+    "· enregistré",
+    "· gespeichert"
+  ],
+  "Apri": [
+    "Open",
+    "Ouvrir",
+    "Öffnen"
+  ],
+  "Versione offline": [
+    "Offline version",
+    "Version hors ligne",
+    "Offlineversion"
+  ],
+  "Elimina": [
+    "Delete",
+    "Supprimer",
+    "Löschen"
+  ],
+  "I link personali permettono di modificare il programma: non condivideteli. Per mostrarlo ad altri usate «Condividi», revocabile.": [
+    "Personal links allow editing: keep them private. Use the revocable Share link to show others.",
+    "Les liens personnels permettent la modification : gardez-les privés. Utilisez « Partager », révocable, pour montrer le programme.",
+    "Persönliche Links erlauben Änderungen: Gebt sie nicht weiter. Nutzt zum Zeigen den widerrufbaren Link «Teilen»."
+  ],
+  "Nessuna copia offline su questo dispositivo.": [
+    "No offline copy on this device.",
+    "Aucune copie hors ligne sur cet appareil.",
+    "Keine Offlinekopie auf diesem Gerät."
+  ],
+  "Copia offline del": [
+    "Offline copy from",
+    "Copie hors ligne du",
+    "Offlinekopie vom"
+  ],
+  "(nessuna garanzia live: orari e corse possono essere cambiati)": [
+    "(no live guarantee: times and services may have changed)",
+    "(sans garantie en temps réel : horaires et services peuvent avoir changé)",
+    "(keine Livegarantie: Zeiten und Verbindungen können sich geändert haben)"
+  ],
+  "Programma": [
+    "Itinerary",
+    "Itinéraire",
+    "Route"
+  ],
+  "Programma salvato: la simulazione usa lo snapshot originale dei dati. Usate «Verifica i dati adesso» nel riepilogo per l'uso reale.": [
+    "Saved itinerary: the simulation uses the original data snapshot. Use “Check data now” in the summary before travelling.",
+    "Itinéraire enregistré : la simulation utilise les données d’origine. Utilisez « Vérifier les données maintenant » avant de partir.",
+    "Gespeicherte Route: Die Simulation nutzt den ursprünglichen Datenstand. Prüft vor der Reise die aktuellen Daten in der Übersicht."
+  ],
+  "Impossibile aprire il programma.": [
+    "Unable to open the itinerary.",
+    "Impossible d’ouvrir l’itinéraire.",
+    "Route kann nicht geöffnet werden."
+  ],
+  "Copia offline": [
+    "Offline copy",
+    "Copie hors ligne",
+    "Offlinekopie"
+  ],
+  "Aperta la copia offline salvata su questo dispositivo.": [
+    "Opened the offline copy stored on this device.",
+    "Copie hors ligne de cet appareil ouverte.",
+    "Die Offlinekopie auf diesem Gerät wurde geöffnet."
+  ],
+  "Rilievo ed edifici in 3D": [
+    "3D terrain and buildings",
+    "Relief et bâtiments en 3D",
+    "Gelände und Gebäude in 3D"
+  ],
+  "Disattivate per una mappa più leggera, vista dall'alto.": [
+    "Disable for a lighter, top-down map.",
+    "Désactivez pour une carte plus légère, vue de dessus.",
+    "Für eine einfachere Karte aus der Vogelperspektive deaktivieren."
+  ],
+  "Movimento ridotto": [
+    "Reduced motion",
+    "Mouvements réduits",
+    "Reduzierte Bewegung"
+  ],
+  "Niente voli di camera né animazioni.": [
+    "No camera flights or animations.",
+    "Aucun déplacement animé de caméra ni animation.",
+    "Keine Kameraflüge oder Animationen."
+  ],
+  "Titoli agli arrivi": [
+    "Arrival titles",
+    "Titres à l’arrivée",
+    "Titel bei Ankunft"
+  ],
+  "Fumetti delle pedine": [
+    "Speech bubbles",
+    "Bulles des personnages",
+    "Sprechblasen der Figuren"
+  ],
+  "Suoni ambientali": [
+    "Ambient sounds",
+    "Sons d’ambiance",
+    "Umgebungsgeräusche"
+  ],
+  "Solo durante la simulazione.": [
+    "Only during the simulation.",
+    "Uniquement pendant la simulation.",
+    "Nur während der Simulation."
+  ],
+  "Vista elenco invece della mappa": [
+    "List view instead of map",
+    "Liste au lieu de la carte",
+    "Listenansicht statt Karte"
+  ],
+  "Stesse informazioni, senza grafica.": [
+    "The same information without graphics.",
+    "Les mêmes informations sans graphismes.",
+    "Gleiche Informationen ohne Grafik."
+  ],
+  "Luce che segue l'ora simulata": [
+    "Lighting follows simulated time",
+    "Lumière selon l’heure simulée",
+    "Licht folgt der simulierten Uhrzeit"
+  ],
+  "Dati, fonti e limiti": [
+    "Data, sources and limitations",
+    "Données, sources et limites",
+    "Daten, Quellen und Grenzen"
+  ],
+  "Prototipo indipendente, in sviluppo: non è un servizio ufficiale della Città di Lugano né di Lugano Region. Luoghi, strade, sentieri, orari dei mezzi, eventi e meteo vengono da fonti pubbliche reali, aggiornate automaticamente; i prezzi sono stime. L'app non prenota né acquista nulla.": [
+    "Independent prototype under development, not an official service of the City of Lugano or Lugano Region. Places, streets, trails, timetables, events and weather come from real public sources, updated automatically; prices are estimates. The app makes no bookings or purchases.",
+    "Prototype indépendant en développement, sans affiliation officielle à la Ville de Lugano ou à Lugano Region. Lieux, routes, sentiers, horaires, événements et météo proviennent de sources publiques réelles, actualisées automatiquement ; les prix sont estimés. L’application ne réserve ni n’achète rien.",
+    "Unabhängiger Prototyp in Entwicklung, kein offizieller Dienst der Stadt Lugano oder von Lugano Region. Orte, Strassen, Wege, Fahrpläne, Veranstaltungen und Wetter stammen aus realen, automatisch aktualisierten öffentlichen Quellen; Preise sind Schätzungen. Die App bucht und kauft nichts."
+  ],
+  "In questa demo pubblica i programmi salvati possono sparire quando il server si riavvia.": [
+    "Saved itineraries in this public demo may disappear when the server restarts.",
+    "Les itinéraires enregistrés dans cette démo publique peuvent disparaître au redémarrage du serveur.",
+    "Gespeicherte Routen dieser öffentlichen Demo können bei einem Serverneustart verschwinden."
+  ],
+  "Area coperta:": [
+    "Covered area:",
+    "Zone couverte :",
+    "Abgedecktes Gebiet:"
+  ],
+  "Fonti": [
+    "Sources",
+    "Sources",
+    "Quellen"
+  ],
+  "uso interno": [
+    "internal use",
+    "usage interne",
+    "interne Nutzung"
+  ],
+  "Riferimenti territoriali verificati": [
+    "Verified geographical references",
+    "Références géographiques vérifiées",
+    "Geprüfte geografische Bezugspunkte"
+  ],
+  "Coordinate lette da OpenStreetMap:": [
+    "Coordinates from OpenStreetMap:",
+    "Coordonnées issues d’OpenStreetMap :",
+    "Koordinaten aus OpenStreetMap:"
+  ],
+  "Cosa significa": [
+    "What it means",
+    "Signification",
+    "Bedeutung"
+  ],
+  "controllato dalla redazione su fonte ufficiale, con data.": [
+    "checked by an editor against an official source, with date.",
+    "vérifié par la rédaction sur une source officielle, avec date.",
+    "redaktionell anhand einer offiziellen Quelle mit Datum geprüft."
+  ],
+  "importato da un dataset ufficiale (orario GTFS).": [
+    "imported from an official dataset (GTFS timetable).",
+    "importé d’un jeu de données officiel (horaires GTFS).",
+    "aus einem offiziellen Datensatz importiert (GTFS-Fahrplan)."
+  ],
+  "dati plausibili da verificare.": [
+    "plausible data to be verified.",
+    "données plausibles à vérifier.",
+    "plausible Angaben, die zu prüfen sind."
+  ],
+  "fascia indicativa o calcolo (tempi a piedi, dislivelli, prezzi per categoria).": [
+    "indicative range or calculation (walking times, elevation, prices by category).",
+    "fourchette indicative ou calcul (marche, dénivelés, prix par catégorie).",
+    "Richtwert oder Berechnung (Gehzeiten, Höhenmeter, Preise nach Kategorie)."
+  ],
+  "esempio inventato per la demo (eventi, meteo demo).": [
+    "fictional demo example (events, demo weather).",
+    "exemple fictif de démonstration (événements, météo démo).",
+    "erfundenes Demobeispiel (Veranstaltungen, Demowetter)."
+  ],
+  "informazione non disponibile: non viene mai trattata come zero.": [
+    "unavailable information: never treated as zero.",
+    "information indisponible : jamais considérée comme zéro.",
+    "fehlende Angabe: wird nie als null behandelt."
+  ],
+  "La folla e le animazioni del modellino sono decorative: non rappresentano presenze reali. L'app non prenota né acquista nulla.": [
+    "Crowds and model animations are decorative, not real attendance data. The app makes no bookings or purchases.",
+    "Les foules et animations sont décoratives, sans représenter la fréquentation réelle. L’application ne réserve ni n’achète rien.",
+    "Menschenmengen und Animationen sind dekorativ und zeigen keine tatsächliche Auslastung. Die App bucht und kauft nichts."
+  ],
+  "Voto registrato. Potete cambiarlo quando volete.": [
+    "Vote recorded. You can change it anytime.",
+    "Vote enregistré. Vous pouvez le modifier à tout moment.",
+    "Stimme gespeichert. Ihr könnt sie jederzeit ändern."
+  ],
+  "Link non disponibile": [
+    "Link unavailable",
+    "Lien indisponible",
+    "Link nicht verfügbar"
+  ],
+  "Proposta condivisa con «Lugano in anteprima». Alcuni dettagli personali possono essere stati nascosti da chi l'ha creata.": [
+    "Shared with “Lugano in anteprima”. Some personal details may have been hidden by its creator.",
+    "Partagé avec « Lugano in anteprima ». Certains détails personnels peuvent avoir été masqués par son auteur.",
+    "Mit «Lugano in anteprima» geteilt. Manche persönlichen Details können von der erstellenden Person ausgeblendet worden sein."
+  ],
+  "Votate la vostra preferita.": [
+    "Vote for your favourite.",
+    "Votez pour votre préférée.",
+    "Stimmt für euren Favoriten ab."
+  ],
+  "Nessun voto finora.": [
+    "No votes yet.",
+    "Aucun vote pour le moment.",
+    "Noch keine Stimmen."
+  ],
+  "Nome (facoltativo)": [
+    "Name (optional)",
+    "Nom (facultatif)",
+    "Name (optional)"
+  ],
+  "es. Sara": [
+    "e.g. Sara",
+    "p. ex. Sara",
+    "z. B. Sara"
+  ],
+  "Commento breve (facoltativo)": [
+    "Short comment (optional)",
+    "Commentaire bref (facultatif)",
+    "Kurzer Kommentar (optional)"
+  ],
+  "es. meglio se rientriamo presto": [
+    "e.g. we’d prefer to return early",
+    "p. ex. nous préférons rentrer tôt",
+    "z. B. wir möchten lieber früh zurück sein"
+  ],
+  "Nome e commento sono visibili a chi ha il link. Non scrivete dati personali.": [
+    "Name and comment are visible to anyone with the link. Don’t include personal data.",
+    "Nom et commentaire sont visibles par toute personne ayant le lien. N’indiquez pas de données personnelles.",
+    "Name und Kommentar sind für alle mit dem Link sichtbar. Keine persönlichen Daten angeben."
+  ],
+  "in testa": [
+    "leading",
+    "en tête",
+    "vorne"
+  ],
+  "Crea il vostro programma": [
+    "Create your itinerary",
+    "Créer votre itinéraire",
+    "Eure Route erstellen"
+  ],
+  "Scheda del luogo": [
+    "Place details",
+    "Fiche du lieu",
+    "Ortsdetails"
+  ],
+  "Chiudi scheda": [
+    "Close details",
+    "Fermer la fiche",
+    "Details schliessen"
+  ],
+  "Montagna": [
+    "Mountain",
+    "Montagne",
+    "Berg"
+  ],
+  "Da non perdere": [
+    "Must see",
+    "À ne pas manquer",
+    "Nicht verpassen"
+  ],
+  "Preferito": [
+    "Favourite",
+    "Favori",
+    "Favorit"
+  ],
+  "Già visitato": [
+    "Already visited",
+    "Déjà visité",
+    "Bereits besucht"
+  ],
+  "Eventi qui": [
+    "Events here",
+    "Événements ici",
+    "Veranstaltungen hier"
+  ],
+  "Orari della settimana": [
+    "This week’s opening hours",
+    "Horaires de la semaine",
+    "Öffnungszeiten dieser Woche"
+  ],
+  "Descrizione": [
+    "Description",
+    "Description",
+    "Beschreibung"
+  ],
+  "Fonte:": [
+    "Source:",
+    "Source :",
+    "Quelle:"
+  ],
+  "per gruppo": [
+    "per group",
+    "par groupe",
+    "pro Gruppe"
+  ],
+  "Sedia a rotelle:": [
+    "Wheelchair:",
+    "Fauteuil roulant :",
+    "Rollstuhl:"
+  ],
+  "· Passeggino:": [
+    "· Stroller:",
+    "· Poussette :",
+    "· Kinderwagen:"
+  ],
+  "· Scale:": [
+    "· Stairs:",
+    "· Escaliers :",
+    "· Treppen:"
+  ],
+  "non note": [
+    "unknown",
+    "inconnues",
+    "unbekannt"
+  ],
+  "Come arrivare": [
+    "Getting there",
+    "Comment y aller",
+    "Anreise"
+  ],
+  "sì": [
+    "yes",
+    "oui",
+    "ja"
+  ],
+  "non verificata": [
+    "unverified",
+    "non vérifiée",
+    "nicht geprüft"
+  ],
+  "Segnala un errore nei dati": [
+    "Report a data error",
+    "Signaler une erreur de données",
+    "Datenfehler melden"
+  ],
+  "Che cosa non va?": [
+    "What is wrong?",
+    "Quel est le problème ?",
+    "Was stimmt nicht?"
+  ],
+  "Posizione": [
+    "Location",
+    "Position",
+    "Standort"
+  ],
+  "Evento": [
+    "Event",
+    "Événement",
+    "Veranstaltung"
+  ],
+  "Es. «il museo ora chiude alle 17:00, vedi sito ufficiale»": [
+    "e.g. “the museum now closes at 17:00, see official website”",
+    "p. ex. « le musée ferme désormais à 17 h, voir le site officiel »",
+    "z. B. «Das Museum schliesst jetzt um 17 Uhr, siehe offizielle Website»"
+  ],
+  "La segnalazione va alla redazione e non modifica i dati finché non è verificata. Non inserite dati personali.": [
+    "Reports go to the editor and don’t change the data until verified. Don’t include personal data.",
+    "Les signalements sont envoyés à la rédaction et ne modifient les données qu’après vérification. N’indiquez pas de données personnelles.",
+    "Meldungen gehen an die Redaktion und ändern Daten erst nach Prüfung. Keine persönlichen Daten angeben."
+  ],
+  "Invia": [
+    "Send",
+    "Envoyer",
+    "Senden"
+  ],
+  "Stato della verifica del programma": [
+    "Itinerary verification status",
+    "État de vérification de l’itinéraire",
+    "Prüfstatus der Route"
+  ],
+  "Proposta generata con AI e validata dal motore": [
+    "AI-generated proposal validated by the planner",
+    "Proposition générée par IA et validée par le moteur",
+    "KI-Vorschlag vom Planer geprüft"
+  ],
+  "Nessun modello AI: combinazioni generate dal pianificatore deterministico": [
+    "No AI model: combinations generated by the deterministic planner",
+    "Sans modèle IA : combinaisons générées par le planificateur déterministe",
+    "Ohne KI-Modell: Kombinationen vom deterministischen Planer erstellt"
+  ],
+  "Pianificatore deterministico": [
+    "Deterministic planner",
+    "Planificateur déterministe",
+    "Deterministischer Planer"
+  ],
+  "Riepilogo numerico": [
+    "Key figures",
+    "Chiffres clés",
+    "Kennzahlen"
+  ],
+  "Rientro": [
+    "Return",
+    "Retour",
+    "Rückweg"
+  ],
+  "A persona": [
+    "Per person",
+    "Par personne",
+    "Pro Person"
+  ],
+  "Gruppo": [
+    "Group",
+    "Groupe",
+    "Gruppe"
+  ],
+  "Salita": [
+    "Ascent",
+    "Montée",
+    "Aufstieg"
+  ],
+  "min a": [
+    "min at",
+    "min à",
+    "min bei"
+  ],
+  "direzione": [
+    "towards",
+    "direction",
+    "Richtung"
+  ],
+  ": da": [
+    ": from",
+    ": de",
+    ": von"
+  ],
+  "a": [
+    "to",
+    "à",
+    "nach"
+  ],
+  "(cadenza, orario indicativo)": [
+    "(frequency-based, approximate time)",
+    "(fréquence, horaire indicatif)",
+    "(Taktverkehr, ungefähre Uhrzeit)"
+  ],
+  "scale": [
+    "stairs",
+    "escaliers",
+    "Treppen"
+  ],
+  "sentiero": [
+    "trail",
+    "sentier",
+    "Wanderweg"
+  ],
+  "🔒 prenotato": [
+    "🔒 booked",
+    "🔒 réservé",
+    "🔒 gebucht"
+  ],
+  "Ipotesi:": [
+    "Scenario:",
+    "Hypothèse :",
+    "Szenario:"
+  ],
+  "Verifiche": [
+    "Checks",
+    "Vérifications",
+    "Prüfungen"
+  ],
+  "tutto in ordine": [
+    "all checked",
+    "tout est en ordre",
+    "alles geprüft"
+  ],
+  "Compromessi:": [
+    "Trade-offs:",
+    "Compromis :",
+    "Kompromisse:"
+  ],
+  "Mancano:": [
+    "Missing:",
+    "Manquant :",
+    "Fehlend:"
+  ],
+  "Dati: catalogo": [
+    "Data: catalog",
+    "Données : catalogue",
+    "Daten: Katalog"
+  ],
+  "· orario": [
+    "· timetable",
+    "· horaires",
+    "· Fahrplan"
+  ],
+  "· calcolato": [
+    "· calculated",
+    "· calculé",
+    "· berechnet"
+  ],
+  "Meteo dimostrativo": [
+    "Demo weather",
+    "Météo de démonstration",
+    "Demowetter"
+  ],
+  "Previsione MeteoSvizzera (Open-Meteo)": [
+    "MeteoSwiss forecast (Open-Meteo)",
+    "Prévision MétéoSuisse (Open-Meteo)",
+    "MeteoSchweiz-Vorhersage (Open-Meteo)"
+  ],
+  "◎ Segui il gruppo": [
+    "◎ Follow the group",
+    "◎ Suivre le groupe",
+    "◎ Gruppe folgen"
+  ],
+  "Comandi della simulazione": [
+    "Simulation controls",
+    "Commandes de simulation",
+    "Simulationssteuerung"
+  ],
+  "Tocca a voi scegliere": [
+    "Your turn to choose",
+    "À vous de choisir",
+    "Jetzt seid ihr dran"
+  ],
+  "Salta lo spostamento": [
+    "Skip the transfer",
+    "Passer le trajet",
+    "Weg überspringen"
+  ],
+  "Fine: riepilogo": [
+    "Finish: summary",
+    "Fin : récapitulatif",
+    "Ende: Übersicht"
+  ],
+  "Fine": [
+    "End",
+    "Fin",
+    "Ende"
+  ],
+  "Ora simulata": [
+    "Simulated time",
+    "Heure simulée",
+    "Simulierte Uhrzeit"
+  ],
+  "Fine della giornata": [
+    "End of the day",
+    "Fin de la journée",
+    "Ende des Tages"
+  ],
+  "Adesso": [
+    "Now",
+    "Maintenant",
+    "Jetzt"
+  ],
+  "Poi:": [
+    "Next:",
+    "Puis :",
+    "Danach:"
+  ],
+  "Spesi finora:": [
+    "Spent so far:",
+    "Dépensé jusqu’ici :",
+    "Bisher ausgegeben:"
+  ],
+  "+30 min qui": [
+    "+30 min here",
+    "+30 min ici",
+    "+30 Min. hier"
+  ],
+  "Tappe": [
+    "Stops",
+    "Étapes",
+    "Stationen"
+  ],
+  "Versioni": [
+    "Versions",
+    "Versions",
+    "Versionen"
+  ],
+  "· rientro": [
+    "· return",
+    "· retour",
+    "· Rückweg"
+  ],
+  "Saltiamo": [
+    "Skip this",
+    "Passer",
+    "Überspringen"
+  ],
+  "Al posto di": [
+    "Instead of",
+    "À la place de",
+    "Anstelle von"
+  ],
+  "Una pausa": [
+    "A break",
+    "Une pause",
+    "Eine Pause"
+  ],
+  "Meno cammino": [
+    "Less walking",
+    "Moins de marche",
+    "Weniger gehen"
+  ],
+  "E se piove?": [
+    "What if it rains?",
+    "Et s’il pleut ?",
+    "Was, wenn es regnet?"
+  ],
+  "Tappa": [
+    "Stop",
+    "Étape",
+    "Station"
+  ],
+  "Blocca": [
+    "Lock",
+    "Verrouiller",
+    "Fixieren"
+  ],
+  "E se è chiusa?": [
+    "What if it’s closed?",
+    "Et si c’est fermé ?",
+    "Was, wenn es geschlossen ist?"
+  ],
+  "Nuovo budget residuo": [
+    "New remaining budget",
+    "Nouveau budget restant",
+    "Neues Restbudget"
+  ],
+  "Riduci budget": [
+    "Reduce budget",
+    "Réduire le budget",
+    "Budget senken"
+  ],
+  "Nuovo orario di rientro": [
+    "New return time",
+    "Nouvelle heure de retour",
+    "Neue Rückkehrzeit"
+  ],
+  "Cambia rientro": [
+    "Change return",
+    "Modifier le retour",
+    "Rückweg ändern"
+  ],
+  "Solo al coperto": [
+    "Indoors only",
+    "Uniquement à l’intérieur",
+    "Nur drinnen"
+  ],
+  "E se perdiamo la corsa?": [
+    "What if we miss the service?",
+    "Et si nous manquons le départ ?",
+    "Was, wenn wir die Verbindung verpassen?"
+  ],
+  "E se restiamo di più?": [
+    "What if we stay longer?",
+    "Et si nous restons plus longtemps ?",
+    "Was, wenn wir länger bleiben?"
+  ],
+  "nessuna differenza rilevante": [
+    "no significant difference",
+    "aucune différence notable",
+    "kein wesentlicher Unterschied"
+  ],
+  "Scenario ipotetico: non è una notizia reale.": [
+    "Hypothetical scenario, not real news.",
+    "Scénario hypothétique, pas une information réelle.",
+    "Hypothetisches Szenario, keine reale Nachricht."
+  ],
+  "Coincidenze perse:": [
+    "Missed connections:",
+    "Correspondances manquées :",
+    "Verpasste Anschlüsse:"
+  ],
+  "Va bene, continuiamo": [
+    "Okay, let’s continue",
+    "D’accord, continuons",
+    "Gut, weiter geht’s"
+  ],
+  "Prima": [
+    "Before",
+    "Avant",
+    "Vorher"
+  ],
+  "Dopo": [
+    "After",
+    "Après",
+    "Nachher"
+  ],
+  "Verifica non riuscita: controllate la rete.": [
+    "Check failed: verify your connection.",
+    "Échec de la vérification : contrôlez le réseau.",
+    "Prüfung fehlgeschlagen: Verbindung prüfen."
+  ],
+  "Orario stimato": [
+    "Estimated timetable",
+    "Horaire estimé",
+    "Geschätzter Fahrplan"
+  ],
+  "← Torna alla simulazione": [
+    "← Back to simulation",
+    "← Retour à la simulation",
+    "← Zurück zur Simulation"
+  ],
+  "Cartolina": [
+    "Postcard",
+    "Carte postale",
+    "Postkarte"
+  ],
+  "· fino alle": [
+    "· until",
+    "· jusqu’à",
+    "· bis"
+  ],
+  "Percorso e dettagli": [
+    "Route and details",
+    "Parcours et détails",
+    "Route und Details"
+  ],
+  "Orari:": [
+    "Opening hours:",
+    "Horaires :",
+    "Öffnungszeiten:"
+  ],
+  "non disponibili": [
+    "unavailable",
+    "indisponibles",
+    "nicht verfügbar"
+  ],
+  "Apri la posizione": [
+    "Open location",
+    "Ouvrir la position",
+    "Standort öffnen"
+  ],
+  "· a": [
+    "· to",
+    "· à",
+    "· nach"
+  ],
+  ", arrivo": [
+    ", arrival",
+    ", arrivée",
+    ", Ankunft"
+  ],
+  "Percorso": [
+    "Route",
+    "Parcours",
+    "Route"
+  ],
+  "Prima di partire": [
+    "Before you go",
+    "Avant de partir",
+    "Vor der Abfahrt"
+  ],
+  "verifica i dati": [
+    "check the data",
+    "vérifier les données",
+    "Daten prüfen"
+  ],
+  "Alcune tappe non sono più valide": [
+    "Some stops are no longer valid",
+    "Certaines étapes ne sont plus valides",
+    "Einige Stationen sind nicht mehr gültig"
+  ],
+  "Alcuni dati sono cambiati": [
+    "Some data has changed",
+    "Certaines données ont changé",
+    "Einige Daten haben sich geändert"
+  ],
+  "Nessun cambiamento": [
+    "No changes",
+    "Aucun changement",
+    "Keine Änderungen"
+  ],
+  "Verificato alle": [
+    "Checked at",
+    "Vérifié à",
+    "Geprüft um"
+  ],
+  "Fonti e limiti": [
+    "Sources and limitations",
+    "Sources et limites",
+    "Quellen und Grenzen"
+  ],
+  "Luoghi, strade e sentieri: © OpenStreetMap contributors (ODbL).": [
+    "Places, roads and trails: © OpenStreetMap contributors (ODbL).",
+    "Lieux, routes et sentiers : © OpenStreetMap contributors (ODbL).",
+    "Orte, Strassen und Wege: © OpenStreetMap contributors (ODbL)."
+  ],
+  "Mezzi: orario ufficiale": [
+    "Transport: official timetable",
+    "Transports : horaires officiels",
+    "Verkehrsmittel: offizieller Fahrplan"
+  ],
+  "(opentransportdata.swiss), senza ritardi in tempo reale.": [
+    "(opentransportdata.swiss), without real-time delays.",
+    "(opentransportdata.swiss), sans retards en temps réel.",
+    "(opentransportdata.swiss), ohne Echtzeitverspätungen."
+  ],
+  "Per questa data le corse sono stimate: verificatele prima di partire.": [
+    "Services for this date are estimated: check before travelling.",
+    "Les services pour cette date sont estimés : vérifiez avant de partir.",
+    "Verbindungen für dieses Datum sind geschätzt: vor der Abfahrt prüfen."
+  ],
+  "Tempi a piedi e dislivelli: calcolati sulla rete pedonale e sul terreno (stime).": [
+    "Walking times and elevation: calculated from footpaths and terrain (estimates).",
+    "Temps de marche et dénivelés : calculés à partir du réseau piéton et du terrain (estimations).",
+    "Gehzeiten und Höhenmeter: aus Fusswegen und Gelände berechnet (Schätzungen)."
+  ],
+  "Prezzi: stime indicative; nessun acquisto o prenotazione è stato fatto.": [
+    "Prices are estimates; no purchases or bookings have been made.",
+    "Prix indicatifs ; aucun achat ni réservation n’a été effectué.",
+    "Preise sind Schätzungen; es wurde nichts gekauft oder gebucht."
+  ],
+  "Eventi: calendario ufficiale luganoeventi.ch, da confermare sulla scheda dell'evento.": [
+    "Events: official luganoeventi.ch calendar; confirm on the event page.",
+    "Événements : calendrier officiel luganoeventi.ch ; à confirmer sur la fiche.",
+    "Veranstaltungen: offizieller Kalender luganoeventi.ch; auf der Veranstaltungsseite bestätigen."
+  ],
+  "già qui": [
+    "already here",
+    "déjà ici",
+    "bereits hier"
+  ],
+  "a piedi,": [
+    "on foot,",
+    "à pied,",
+    "zu Fuss,"
+  ],
+  "Siete già in giro? Ricalcola il resto": [
+    "Already out? Recalculate the rest",
+    "Déjà en route ? Recalculer la suite",
+    "Schon unterwegs? Rest neu berechnen"
+  ],
+  "Segnate le tappe fatte: ricalcoliamo il resto da dove siete, con l'ora reale.": [
+    "Mark completed stops: we’ll recalculate from your location and the current time.",
+    "Marquez les étapes terminées : nous recalculons depuis votre position à l’heure réelle.",
+    "Markiert besuchte Stationen: Wir berechnen den Rest ab eurem Standort und der aktuellen Uhrzeit."
+  ],
+  "Ricalcola il resto da qui": [
+    "Recalculate the rest from here",
+    "Recalculer la suite depuis ici",
+    "Rest ab hier neu berechnen"
+  ],
+  "Piano B se piove": [
+    "Rainy-day plan B",
+    "Plan B en cas de pluie",
+    "Plan B bei Regen"
+  ],
+  "Cerco alternative al coperto…": [
+    "Finding indoor alternatives…",
+    "Recherche d’alternatives à l’intérieur…",
+    "Alternativen drinnen werden gesucht…"
+  ],
+  "Calcolo non riuscito.": [
+    "Calculation failed.",
+    "Échec du calcul.",
+    "Berechnung fehlgeschlagen."
+  ],
+  "Tutte le tappe sono al coperto: nessun piano B necessario.": [
+    "All stops are indoors: no plan B needed.",
+    "Toutes les étapes sont à l’intérieur : aucun plan B nécessaire.",
+    "Alle Stationen sind drinnen: Kein Plan B nötig."
+  ],
+  "min a piedi ·": [
+    "min on foot ·",
+    "min à pied ·",
+    "Min. zu Fuss ·"
+  ],
+  "costo non noto": [
+    "cost unknown",
+    "coût inconnu",
+    "Kosten unbekannt"
+  ],
+  "· orari da verificare": [
+    "· check opening hours",
+    "· horaires à vérifier",
+    "· Öffnungszeiten prüfen"
+  ],
+  "· su prenotazione": [
+    "· booking required",
+    "· sur réservation",
+    "· mit Reservierung"
+  ],
+  "Sito e prenotazione": [
+    "Website and booking",
+    "Site et réservation",
+    "Website und Reservierung"
+  ],
+  "prenotazione": [
+    "booking",
+    "réservation",
+    "Reservierung"
+  ],
+  "non necessaria": [
+    "not needed",
+    "non nécessaire",
+    "nicht erforderlich"
+  ],
+  "non nota": [
+    "unknown",
+    "inconnue",
+    "unbekannt"
+  ],
+  "di": [
+    "of",
+    "sur",
+    "von"
+  ],
+  "Per ora gruppi fino a": [
+    "Currently supports groups of up to",
+    "Pour le moment, groupes jusqu’à",
+    "Derzeit Gruppen bis zu"
+  ],
+  "persone. Con più persone potete preparare due programmi paralleli.": [
+    "people. Larger groups can create two parallel itineraries.",
+    "personnes. Les groupes plus grands peuvent préparer deux itinéraires parallèles.",
+    "Personen. Grössere Gruppen können zwei parallele Routen erstellen."
+  ],
+  "Avventura": [
+    "Adventure",
+    "Aventure",
+    "Abenteuer"
+  ],
+  "Budget a persona (CHF)": [
+    "Budget per person (CHF)",
+    "Budget par personne (CHF)",
+    "Budget pro Person (CHF)"
+  ],
+  "Qualcos'altro?": [
+    "Anything else?",
+    "Autre chose ?",
+    "Noch etwas?"
+  ],
+  "Esigenze e preferenze": [
+    "Needs and preferences",
+    "Besoins et préférences",
+    "Bedürfnisse und Wünsche"
+  ],
+  "attive": [
+    "active",
+    "actives",
+    "aktiv"
+  ],
+  "Mobilità": [
+    "Mobility",
+    "Mobilité",
+    "Mobilität"
+  ],
+  "Niente scale": [
+    "No stairs",
+    "Sans escaliers",
+    "Keine Treppen"
+  ],
+  "Dentro o fuori": [
+    "Indoors or outdoors",
+    "Dedans ou dehors",
+    "Drinnen oder draussen"
+  ],
+  "Se piove": [
+    "If it rains",
+    "En cas de pluie",
+    "Bei Regen"
+  ],
+  "Qualche goccia ok": [
+    "A little rain is fine",
+    "Quelques gouttes, ça va",
+    "Etwas Regen ist okay"
+  ],
+  "Non ci ferma": [
+    "Rain won’t stop us",
+    "La pluie ne nous arrête pas",
+    "Regen hält uns nicht auf"
+  ],
+  "Alimentazione": [
+    "Diet",
+    "Alimentation",
+    "Ernährung"
+  ],
+  "Vegetariano": [
+    "Vegetarian",
+    "Végétarien",
+    "Vegetarisch"
+  ],
+  "Vegano": [
+    "Vegan",
+    "Végétalien",
+    "Vegan"
+  ],
+  "Senza glutine": [
+    "Gluten-free",
+    "Sans gluten",
+    "Glutenfrei"
+  ],
+  "Senza lattosio": [
+    "Lactose-free",
+    "Sans lactose",
+    "Laktosefrei"
+  ],
+  "Cammino massimo (km)": [
+    "Maximum walking (km)",
+    "Marche maximale (km)",
+    "Maximale Gehstrecke (km)"
+  ],
+  "nessun limite": [
+    "no limit",
+    "sans limite",
+    "keine Grenze"
+  ],
+  "Da escludere": [
+    "Exclude",
+    "À exclure",
+    "Ausschliessen"
+  ],
+  "Da non perdere:": [
+    "Must see:",
+    "À ne pas manquer :",
+    "Nicht verpassen:"
+  ],
+  "Togli": [
+    "Remove",
+    "Retirer",
+    "Entfernen"
+  ],
+  "Prenotazioni già fatte": [
+    "Existing bookings",
+    "Réservations déjà faites",
+    "Bestehende Reservierungen"
+  ],
+  "togli": [
+    "remove",
+    "retirer",
+    "entfernen"
+  ],
+  "Luogo prenotato": [
+    "Booked place",
+    "Lieu réservé",
+    "Reservierter Ort"
+  ],
+  "Scegli il luogo…": [
+    "Choose a place…",
+    "Choisir un lieu…",
+    "Ort auswählen…"
+  ],
+  "Stato della verifica del dato": [
+    "Data verification status",
+    "État de vérification de la donnée",
+    "Prüfstatus der Angabe"
+  ],
+  "{0} costi sconosciuti": [
+    "{0} unknown costs",
+    "{0} coûts inconnus",
+    "{0} unbekannte Kosten"
+  ],
+  "Caricamento": [
+    "Loading",
+    "Chargement",
+    "Laden"
+  ],
+  "Copiato negli appunti": [
+    "Copied to clipboard",
+    "Copié dans le presse-papiers",
+    "In die Zwischenablage kopiert"
+  ],
+  "Copia non disponibile: selezionate il testo manualmente.": [
+    "Copy unavailable: select the text manually.",
+    "Copie indisponible : sélectionnez le texte manuellement.",
+    "Kopieren nicht verfügbar: Text manuell auswählen."
+  ],
+  "Vista elenco (senza mappa)": [
+    "List view (no map)",
+    "Vue en liste (sans carte)",
+    "Listenansicht (ohne Karte)"
+  ],
+  "Riduci il pannello": [
+    "Collapse panel",
+    "Réduire le panneau",
+    "Bereich verkleinern"
+  ],
+  "Espandi il pannello": [
+    "Expand panel",
+    "Agrandir le panneau",
+    "Bereich vergrössern"
+  ],
+  "Salta la scena (Esc)": [
+    "Skip scene (Esc)",
+    "Passer la scène (Échap)",
+    "Szene überspringen (Esc)"
+  ],
+  "tocca per saltare": [
+    "tap to skip",
+    "toucher pour passer",
+    "zum Überspringen antippen"
+  ],
+  "km. Lugano e dintorni, inclusi Caslano, Comano, Cureglia e le altre località della mappa. Fuori da quest’area la cartografia è solo un contesto disegnato.": [
+    "km. Lugano and surroundings, including Caslano, Comano, Cureglia and the other places on the map. Outside this area, the map is only a drawn backdrop.",
+    "km. Lugano et ses environs, dont Caslano, Comano, Cureglia et les autres localités de la carte. Au-delà, la carte n’est qu’un décor.",
+    "km. Lugano und Umgebung, darunter Caslano, Comano, Cureglia und die weiteren Orte auf der Karte. Ausserhalb dient die Karte nur als Hintergrund."
+  ],
+  "Descrizioni e titoli delle fonti restano nella lingua originale.": [
+    "Source descriptions and event titles remain in their original language.",
+    "Les descriptions des sources et titres d’événements restent dans leur langue d’origine.",
+    "Beschreibungen der Quellen und Veranstaltungstitel bleiben in der Originalsprache."
+  ],
+  "Zona": [
+    "Area",
+    "Zone",
+    "Gebiet"
+  ],
+  "Sempre accessibile": [
+    "Always accessible",
+    "Toujours accessible",
+    "Immer zugänglich"
+  ],
+  "Aperto fino alle {0}": [
+    "Open until {0}",
+    "Ouvert jusqu’à {0}",
+    "Geöffnet bis {0}"
+  ],
+  "Chiuso ({0})": [
+    "Closed ({0})",
+    "Fermé ({0})",
+    "Geschlossen ({0})"
+  ],
+  "Chiuso in questa data: {0}": [
+    "Closed on this date: {0}",
+    "Fermé à cette date : {0}",
+    "An diesem Datum geschlossen: {0}"
+  ],
+  "Chiuso all'arrivo; apre alle {0}": [
+    "Closed on arrival; opens at {0}",
+    "Fermé à l’arrivée ; ouvre à {0}",
+    "Bei Ankunft geschlossen; öffnet um {0}"
+  ],
+  "Chiuso all'orario previsto": [
+    "Closed at the planned time",
+    "Fermé à l’heure prévue",
+    "Zur geplanten Uhrzeit geschlossen"
+  ],
+  "{0} (ultimo ingresso {1})": [
+    "{0} (last entry {1})",
+    "{0} (dernière entrée {1})",
+    "{0} (letzter Einlass {1})"
+  ],
+  "{0} km a piedi": [
+    "{0} km walking",
+    "{0} km à pied",
+    "{0} km zu Fuss"
+  ],
+  "{0} a persona": [
+    "{0} per person",
+    "{0} par personne",
+    "{0} pro Person"
+  ],
+  "{0} tappe": [
+    "{0} stops",
+    "{0} étapes",
+    "{0} Stationen"
+  ],
+  "{0} tappa": [
+    "{0} stop",
+    "{0} étape",
+    "{0} Station"
+  ],
+  "costi in parte sconosciuti": [
+    "some costs unknown",
+    "certains coûts inconnus",
+    "einige Kosten unbekannt"
+  ],
+  "Accessibilità con passeggino non verificata": [
+    "Stroller access unverified",
+    "Accès avec poussette non vérifié",
+    "Kinderwagenzugang nicht geprüft"
+  ],
+  "Condizioni del sentiero non verificate": [
+    "Trail conditions unverified",
+    "État du sentier non vérifié",
+    "Wegzustand nicht geprüft"
+  ],
+  "Adatto all'atmosfera: {0}": [
+    "Matches your mood: {0}",
+    "Correspond à votre ambiance : {0}",
+    "Passend zur Stimmung: {0}"
+  ],
+  "Indicato per {0}": [
+    "Suitable for {0}",
+    "Adapté pour {0}",
+    "Geeignet für {0}"
+  ],
+  "Interessi del gruppo: {0}": [
+    "Group interests: {0}",
+    "Intérêts du groupe : {0}",
+    "Interessen der Gruppe: {0}"
+  ],
+  "Citato nella vostra richiesta": [
+    "Mentioned in your request",
+    "Mentionné dans votre demande",
+    "In eurer Anfrage erwähnt"
+  ],
+  "Tra i vostri preferiti": [
+    "One of your favourites",
+    "Parmi vos favoris",
+    "Unter euren Favoriten"
+  ],
+  "Adatto ai bambini": [
+    "Suitable for children",
+    "Adapté aux enfants",
+    "Für Kinder geeignet"
+  ],
+  "Al coperto: previsione di pioggia": [
+    "Indoors: rain forecast",
+    "À l’intérieur : pluie prévue",
+    "Drinnen: Regen vorhergesagt"
+  ],
+  "Luogo abitualmente animato (caratteristica curata, non affluenza reale)": [
+    "Usually lively (editorial description, not live attendance)",
+    "Lieu habituellement animé (description éditoriale, pas la fréquentation en direct)",
+    "Üblicherweise belebt (redaktionelle Angabe, keine Liveauslastung)"
+  ],
+  "Opzioni vegetariane segnalate (da verificare)": [
+    "Vegetarian options reported (please check)",
+    "Options végétariennes signalées (à vérifier)",
+    "Vegetarische Optionen gemeldet (bitte prüfen)"
+  ],
+  "In corso: {0}": [
+    "Currently: {0}",
+    "En cours : {0}",
+    "Aktuell: {0}"
+  ],
+  "uscite fra amici": [
+    "outings with friends",
+    "sorties entre amis",
+    "Ausflüge mit Freunden"
+  ],
+  "un appuntamento": [
+    "a date",
+    "un rendez-vous",
+    "eine Verabredung"
+  ],
+  "famiglie": [
+    "families",
+    "les familles",
+    "Familien"
+  ],
+  "visite turistiche": [
+    "sightseeing",
+    "les visites touristiques",
+    "Stadtbesichtigungen"
+  ],
+  "un compleanno": [
+    "a birthday",
+    "un anniversaire",
+    "einen Geburtstag"
+  ],
+  "accogliere ospiti": [
+    "welcoming guests",
+    "accueillir des invités",
+    "Gäste empfangen"
+  ],
+  "il tempo libero": [
+    "leisure time",
+    "les loisirs",
+    "die Freizeit"
+  ],
+  "la vostra occasione": [
+    "your occasion",
+    "votre occasion",
+    "euren Anlass"
+  ],
+  "chill": [
+    "chill",
+    "détente",
+    "entspannt"
+  ],
+  "vivace": [
+    "lively",
+    "animée",
+    "lebhaft"
+  ],
+  "romantica": [
+    "romantic",
+    "romantique",
+    "romantisch"
+  ],
+  "culturale": [
+    "cultural",
+    "culturelle",
+    "kulturell"
+  ],
+  "natura": [
+    "nature",
+    "nature",
+    "Natur"
+  ],
+  "panorami": [
+    "views",
+    "panoramas",
+    "Aussichten"
+  ],
+  "gastronomia": [
+    "food",
+    "gastronomie",
+    "Gastronomie"
+  ],
+  "avventura leggera": [
+    "light adventure",
+    "aventure douce",
+    "leichtes Abenteuer"
+  ],
+  "La più economica fra le proposte": [
+    "The least expensive option",
+    "La proposition la moins chère",
+    "Der günstigste Vorschlag"
+  ],
+  "Il minor cammino": [
+    "The least walking",
+    "Le moins de marche",
+    "Die kürzeste Gehstrecke"
+  ],
+  "Alcuni dati sono da verificare": [
+    "Some data needs checking",
+    "Certaines données sont à vérifier",
+    "Einige Angaben müssen geprüft werden"
+  ],
+  "Alcuni costi sono sconosciuti": [
+    "Some costs are unknown",
+    "Certains coûts sont inconnus",
+    "Einige Kosten sind unbekannt"
+  ],
+  "+{0} km a piedi rispetto alla più comoda": [
+    "+{0} km walking compared with the easiest option",
+    "+{0} km à pied par rapport à la plus facile",
+    "+{0} km zu Fuss gegenüber der bequemsten Option"
+  ],
+  "Rientro più tardi ({0})": [
+    "Later return ({0})",
+    "Retour plus tard ({0})",
+    "Spätere Rückkehr ({0})"
+  ],
+  "Fino a {0} a persona in più della più economica": [
+    "Up to {0} more per person than the cheapest option",
+    "Jusqu’à {0} de plus par personne que la moins chère",
+    "Bis zu {0} mehr pro Person als der günstigste Vorschlag"
+  ],
+  "Dislivello importante: {0} m in salita (stima)": [
+    "Significant elevation: {0} m ascent (estimate)",
+    "Dénivelé important : {0} m de montée (estimation)",
+    "Erheblicher Höhenunterschied: {0} m Aufstieg (Schätzung)"
+  ],
+  "Esce dal centro: {0}": [
+    "Beyond the centre: {0}",
+    "Hors du centre : {0}",
+    "Ausserhalb des Zentrums: {0}"
+  ],
+  "Include una funicolare con orario ufficiale": [
+    "Includes a funicular with an official timetable",
+    "Inclut un funiculaire avec horaire officiel",
+    "Mit Standseilbahn nach offiziellem Fahrplan"
+  ],
+  "Include una funicolare (orario stimato, da verificare)": [
+    "Includes a funicular (estimated timetable, please check)",
+    "Inclut un funiculaire (horaire estimé, à vérifier)",
+    "Mit Standseilbahn (geschätzter Fahrplan, bitte prüfen)"
+  ],
+  "Include un tratto in battello": [
+    "Includes a boat trip",
+    "Inclut un trajet en bateau",
+    "Mit einer Schifffahrt"
+  ],
+  "Poco cammino, adatto a un ritmo rilassato": [
+    "Little walking, suitable for a relaxed pace",
+    "Peu de marche, adapté à un rythme détendu",
+    "Wenig Gehstrecke, passend zu gemütlichem Tempo"
+  ],
+  "Tappa obbligatoria non possibile: {0} ({1}).": [
+    "Required stop unavailable: {0} ({1}).",
+    "Étape obligatoire impossible : {0} ({1}).",
+    "Pflichtstation nicht möglich: {0} ({1})."
+  ],
+  "Rendi facoltative le tappe obbligatorie": [
+    "Make required stops optional",
+    "Rendre les étapes obligatoires facultatives",
+    "Pflichtstationen optional machen"
+  ],
+  "Nessuna attività compatibile. Esclusioni principali: {0}.": [
+    "No matching activities. Main exclusions: {0}.",
+    "Aucune activité adaptée. Principales exclusions : {0}.",
+    "Keine passenden Aktivitäten. Hauptgründe: {0}."
+  ],
+  "La finestra di {0} minuti è troppo breve per un'uscita con rientro.": [
+    "The {0}-minute window is too short for an outing with a return trip.",
+    "Le créneau de {0} minutes est trop court pour une sortie avec retour.",
+    "Das Zeitfenster von {0} Minuten ist für einen Ausflug mit Rückweg zu kurz."
+  ],
+  "Tratta il budget come preferenza": [
+    "Treat the budget as a preference",
+    "Traiter le budget comme une préférence",
+    "Budget als Wunsch behandeln"
+  ],
+  "Aumenta il budget a CHF {0}": [
+    "Increase the budget to CHF {0}",
+    "Augmenter le budget à CHF {0}",
+    "Budget auf CHF {0} erhöhen"
+  ],
+  "Accetta fino a {0} km a piedi": [
+    "Allow up to {0} km walking",
+    "Accepter jusqu’à {0} km à pied",
+    "Bis zu {0} km Gehstrecke zulassen"
+  ],
+  "Rimuovi il limite di dislivello": [
+    "Remove the elevation limit",
+    "Supprimer la limite de dénivelé",
+    "Höhenmetergrenze entfernen"
+  ],
+  "Termina alle {0}": [
+    "Finish at {0}",
+    "Terminer à {0}",
+    "Um {0} enden"
+  ],
+  "Consenti tutti i mezzi pubblici": [
+    "Allow all public transport",
+    "Autoriser tous les transports publics",
+    "Alle öffentlichen Verkehrsmittel erlauben"
+  ],
+  "Allenta i filtri «da evitare»": [
+    "Relax the “avoid” filters",
+    "Assouplir les filtres « à éviter »",
+    "Filter «Vermeiden» lockern"
+  ],
+  "Nessuna combinazione rispetta insieme durata, orari, rientro e vincoli indicati.": [
+    "No combination satisfies the duration, times, return and requested constraints together.",
+    "Aucune combinaison ne respecte à la fois la durée, les horaires, le retour et les contraintes.",
+    "Keine Kombination erfüllt Dauer, Zeiten, Rückweg und alle Vorgaben zugleich."
+  ],
+  "Ultimi problemi riscontrati: {0}": [
+    "Last issues found: {0}",
+    "Derniers problèmes rencontrés : {0}",
+    "Zuletzt gefundene Probleme: {0}"
+  ],
+  "Ricerca interrotta per limite di tempo: proposte parziali.": [
+    "Search stopped at the time limit: partial suggestions.",
+    "Recherche arrêtée à la limite de temps : propositions partielles.",
+    "Suche am Zeitlimit beendet: teilweise Vorschläge."
+  ],
+  "Previsioni meteo non ancora disponibili per quella data.": [
+    "Weather forecasts are not available yet for that date.",
+    "Prévisions météo pas encore disponibles pour cette date.",
+    "Für dieses Datum gibt es noch keine Wettervorhersage."
+  ],
+  "Orari della giornata": [
+    "Day schedule",
+    "Horaires de la journée",
+    "Tageszeiten"
+  ],
+  "Trasporti": [
+    "Transport",
+    "Transports",
+    "Verkehrsmittel"
+  ],
+  "Cammino": [
+    "Walking",
+    "Marche",
+    "Gehstrecke"
+  ],
+  "Dislivello": [
+    "Elevation",
+    "Dénivelé",
+    "Höhenunterschied"
+  ],
+  "Meteo": [
+    "Weather",
+    "Météo",
+    "Wetter"
+  ],
+  "Punto finale libero: nessun rientro calcolato.": [
+    "Free endpoint: no return trip calculated.",
+    "Point final libre : aucun retour calculé.",
+    "Freier Endpunkt: kein Rückweg berechnet."
+  ],
+  "Attività all'aperto con pioggia prevista.": [
+    "Outdoor activity with rain forecast.",
+    "Activité en plein air avec pluie prévue.",
+    "Aktivität im Freien bei vorhergesagtem Regen."
+  ],
+  "Accessibilità limitata": [
+    "Limited accessibility",
+    "Accessibilité limitée",
+    "Eingeschränkte Zugänglichkeit"
+  ],
+  "Accessibilità non verificata: nessun dato sulle scale all'interno.": [
+    "Access unverified: no data about stairs inside.",
+    "Accès non vérifié : aucune donnée sur les escaliers à l’intérieur.",
+    "Zugänglichkeit nicht geprüft: keine Angaben zu Treppen im Inneren."
+  ],
+  "Tappa bloccata da voi (prenotazione o impegno)": [
+    "Stop locked by you (booking or appointment)",
+    "Étape verrouillée par vous (réservation ou rendez-vous)",
+    "Von euch fixierte Station (Reservierung oder Termin)"
+  ],
+  "Inclusa su vostra richiesta anche se non rispetta alcuni filtri": [
+    "Included at your request despite not meeting some filters",
+    "Incluse à votre demande malgré certains filtres",
+    "Auf euren Wunsch trotz einzelner Filter aufgenommen"
+  ],
+  "Accesso libero": [
+    "Free access",
+    "Accès libre",
+    "Freier Zugang"
+  ],
+  "Costo": [
+    "Cost",
+    "Coût",
+    "Kosten"
+  ],
+  "Pasto (fascia osteria/ristorante)": [
+    "Meal (restaurant estimate)",
+    "Repas (estimation restaurant)",
+    "Mahlzeit (Restaurantschätzung)"
+  ],
+  "Consumazione caffè/dolce": [
+    "Coffee or cake",
+    "Café ou pâtisserie",
+    "Kaffee oder Kuchen"
+  ],
+  "Consumazione al bar": [
+    "Drink at a bar",
+    "Consommation au bar",
+    "Getränk in einer Bar"
+  ],
+  "Gelato": [
+    "Ice cream",
+    "Glace",
+    "Eis"
+  ],
+  "Fascia indicativa per categoria, non un listino.": [
+    "Indicative range by category, not a price list.",
+    "Fourchette indicative par catégorie, pas un tarif officiel.",
+    "Richtwert nach Kategorie, keine Preisliste."
+  ],
+  "Fascia indicativa per categoria.": [
+    "Indicative range by category.",
+    "Fourchette indicative par catégorie.",
+    "Richtwert nach Kategorie."
+  ],
+  "Si parte! Prima tappa: {0}.": [
+    "Let’s go! First stop: {0}.",
+    "C’est parti ! Première étape : {0}.",
+    "Los geht’s! Erste Station: {0}."
+  ],
+  "Pronti? Ci aspetta {0}.": [
+    "Ready? {0} is waiting for us.",
+    "Prêts ? {0} nous attend.",
+    "Bereit? {0} wartet auf uns."
+  ],
+  "Zaino in spalla, andiamo.": [
+    "Backpacks on, let’s go.",
+    "Sac sur le dos, allons-y.",
+    "Rucksack auf, los geht’s."
+  ],
+  "Eccoci arrivati.": [
+    "Here we are.",
+    "Nous voilà arrivés.",
+    "Da sind wir."
+  ],
+  "Si mangia!": [
+    "Time to eat!",
+    "À table !",
+    "Zeit zum Essen!"
+  ],
+  "Ho già deciso cosa ordinare.": [
+    "I already know what to order.",
+    "Je sais déjà quoi commander.",
+    "Ich weiss schon, was ich bestelle."
+  ],
+  "Una pausa ci voleva.": [
+    "We needed a break.",
+    "Une pause était bienvenue.",
+    "Eine Pause war nötig."
+  ],
+  "Caffè per tutti?": [
+    "Coffee for everyone?",
+    "Un café pour tout le monde ?",
+    "Kaffee für alle?"
+  ],
+  "Foto di gruppo?": [
+    "Group photo?",
+    "Photo de groupe ?",
+    "Gruppenfoto?"
+  ],
+  "Che panorama.": [
+    "What a view.",
+    "Quel panorama.",
+    "Was für eine Aussicht."
+  ],
+  "Guardate che vista!": [
+    "Look at that view!",
+    "Regardez cette vue !",
+    "Schaut euch diese Aussicht an!"
+  ],
+  "Da quassù si vede tutto il lago.": [
+    "You can see the whole lake from here.",
+    "D’ici, on voit tout le lac.",
+    "Von hier sieht man den ganzen See."
+  ],
+  "Un po' di verde.": [
+    "A little greenery.",
+    "Un peu de verdure.",
+    "Ein bisschen Grün."
+  ],
+  "Sediamoci un attimo sul prato.": [
+    "Let’s sit on the grass for a moment.",
+    "Asseyons-nous un instant dans l’herbe.",
+    "Setzen wir uns kurz ins Gras."
+  ],
+  "Si torna: bella giornata.": [
+    "Heading back: a lovely day.",
+    "On rentre : une belle journée.",
+    "Zurück geht’s: ein schöner Tag."
+  ],
+  "Rientro previsto alle {0}.": [
+    "Expected return at {0}.",
+    "Retour prévu à {0}.",
+    "Voraussichtliche Rückkehr um {0}."
+  ],
+  "Ultimo tratto, poi a casa.": [
+    "Last stretch, then home.",
+    "Dernier trajet, puis à la maison.",
+    "Letzte Etappe, dann nach Hause."
+  ],
+  "Camminiamo un po': circa {0} km.": [
+    "Let’s walk a little: about {0} km.",
+    "Marchons un peu : environ {0} km.",
+    "Gehen wir ein Stück: etwa {0} km."
+  ],
+  "Si passeggia con calma.": [
+    "A leisurely walk.",
+    "On se promène tranquillement.",
+    "Wir spazieren gemütlich."
+  ],
+  "Che bella passeggiata.": [
+    "What a lovely walk.",
+    "Quelle belle promenade.",
+    "Was für ein schöner Spaziergang."
+  ],
+  "Un brindisi?": [
+    "A toast?",
+    "On trinque ?",
+    "Anstossen?"
+  ],
+  "Due chiacchiere e si riparte.": [
+    "A quick chat, then off again.",
+    "On discute un peu, puis on repart.",
+    "Kurz plaudern, dann weiter."
+  ],
+  "Qui dentro si potrebbe restare ore.": [
+    "You could spend hours here.",
+    "On pourrait rester ici des heures.",
+    "Hier könnte man Stunden verbringen."
+  ],
+  "Un museo: si parla sottovoce.": [
+    "A museum: keep your voice down.",
+    "Un musée : on parle doucement.",
+    "Ein Museum: Wir sprechen leise."
+  ],
+  "Che architettura!": [
+    "What architecture!",
+    "Quelle architecture !",
+    "Was für eine Architektur!"
+  ],
+  "Diamo un'occhiata al programma.": [
+    "Let’s check the programme.",
+    "Regardons le programme.",
+    "Schauen wir ins Programm."
+  ],
+  "Gelato: il momento più atteso.": [
+    "Ice cream: the moment we’ve waited for.",
+    "Une glace : le moment tant attendu.",
+    "Eis: der lang ersehnte Moment."
+  ],
+  "Io prendo due gusti.": [
+    "I’m choosing two flavours.",
+    "Je prends deux parfums.",
+    "Ich nehme zwei Sorten."
+  ],
+  "Che vicoli!": [
+    "What lovely lanes!",
+    "Quelles ruelles !",
+    "Was für Gassen!"
+  ],
+  "Sembra di essere tornati indietro nel tempo.": [
+    "It feels like stepping back in time.",
+    "On se croirait dans une autre époque.",
+    "Wie eine Reise in die Vergangenheit."
+  ],
+  "Entriamo un momento.": [
+    "Let’s go inside for a moment.",
+    "Entrons un instant.",
+    "Gehen wir kurz hinein."
+  ],
+  "Guardate gli affreschi.": [
+    "Look at the frescoes.",
+    "Regardez les fresques.",
+    "Schaut euch die Fresken an."
+  ],
+  "Si comincia tra poco!": [
+    "It starts soon!",
+    "Ça commence bientôt !",
+    "Es geht bald los!"
+  ],
+  "Posti presi.": [
+    "Seats secured.",
+    "Places prises.",
+    "Plätze gesichert."
+  ],
+  "Che dettagli.": [
+    "Look at those details.",
+    "Quels détails.",
+    "Was für Details."
+  ],
+  "Tutto in miniatura, come noi!": [
+    "Everything in miniature, like us!",
+    "Tout en miniature, comme nous !",
+    "Alles in Miniatur, wie wir!"
+  ],
+  "Arrivati giusti per l'inizio.": [
+    "Just in time for the start.",
+    "Juste à temps pour le début.",
+    "Pünktlich zum Beginn."
+  ],
+  "Eccoci, sta per cominciare.": [
+    "Here we are, it’s about to begin.",
+    "Nous voilà, ça va commencer.",
+    "Da sind wir, gleich geht’s los."
+  ],
+  "Si sale in funicolare: tenetevi forte!": [
+    "Going up by funicular: hold on!",
+    "On monte en funiculaire : accrochez-vous !",
+    "Mit der Standseilbahn nach oben: festhalten!"
+  ],
+  "Funicolare: la città si rimpicciolisce sotto di noi.": [
+    "Funicular: the city shrinks beneath us.",
+    "Funiculaire : la ville devient petite sous nos pieds.",
+    "Standseilbahn: Die Stadt wird unter uns kleiner."
+  ],
+  "In battello: il lago da qui è un'altra cosa.": [
+    "On the boat: the lake looks different from here.",
+    "En bateau : le lac est différent vu d’ici.",
+    "Auf dem Schiff: Der See sieht von hier ganz anders aus."
+  ],
+  "Si naviga! Occhio agli spruzzi.": [
+    "We’re sailing! Watch out for splashes.",
+    "On navigue ! Attention aux éclaboussures.",
+    "Wir fahren los! Achtung, Spritzwasser."
+  ],
+  "Due fermate di treno e ci siamo.": [
+    "Two train stops and we’re there.",
+    "Deux arrêts de train et nous y sommes.",
+    "Zwei Zughalte, dann sind wir da."
+  ],
+  "Prendiamo il {0} {1} per {2}.": [
+    "Let’s take {0} {1} towards {2}.",
+    "Prenons {0} {1} vers {2}.",
+    "Wir nehmen {0} {1} Richtung {2}."
+  ],
+  "{0} {1}: comodi comodi.": [
+    "{0} {1}: nice and comfortable.",
+    "{0} {1} : bien installés.",
+    "{0} {1}: ganz bequem."
+  ],
+  ", consultato il {0}": [
+    ", checked on {0}",
+    ", consulté le {0}",
+    ", geprüft am {0}"
+  ],
+  "Eventi dal calendario ufficiale {0}, aggiornato il {1}. Prima di andare verificate sulla scheda ufficiale.": [
+    "Events from the official {0} calendar, updated {1}. Check the official event page before going.",
+    "Événements du calendrier officiel {0}, mis à jour le {1}. Vérifiez la fiche officielle avant de partir.",
+    "Veranstaltungen aus dem offiziellen Kalender {0}, aktualisiert am {1}. Vor dem Besuch die offizielle Seite prüfen."
+  ],
+  "Programma salvato. In questa demo pubblica i salvataggi possono sparire quando il server si riavvia: tenete anche il riepilogo (Copia testo, calendario o stampa).": [
+    "Itinerary saved. This demo may lose saved data after a restart: keep a summary too (copy text, calendar or print).",
+    "Itinéraire enregistré. Cette démo peut perdre les données au redémarrage : conservez aussi le récapitulatif (texte, calendrier ou impression).",
+    "Route gespeichert. Diese Demo kann Daten beim Neustart verlieren: Bewahrt auch die Übersicht auf (Text, Kalender oder Druck)."
+  ],
+  "Programma salvato. Il link personale permette di riaprirlo e modificarlo.": [
+    "Itinerary saved. The personal link lets you reopen and edit it.",
+    "Itinéraire enregistré. Le lien personnel permet de le rouvrir et de le modifier.",
+    "Route gespeichert. Mit dem persönlichen Link könnt ihr sie wieder öffnen und ändern."
+  ],
+  "Salvataggio non riuscito.": [
+    "Save failed.",
+    "Échec de l’enregistrement.",
+    "Speichern fehlgeschlagen."
+  ],
+  "Riepilogo pratico": [
+    "Practical summary",
+    "Récapitulatif pratique",
+    "Praktische Übersicht"
+  ],
+  "Link revocato: non è più accessibile.": [
+    "Link revoked: no longer accessible.",
+    "Lien révoqué : il n’est plus accessible.",
+    "Link widerrufen: nicht mehr zugänglich."
+  ],
+  "Condividi il programma": [
+    "Share the itinerary",
+    "Partager l’itinéraire",
+    "Route teilen"
+  ],
+  "Chi riceve il link vede le proposte senza account. Potete togliere i dettagli personali e revocare il link in ogni momento.": [
+    "Recipients can view proposals without an account. You can hide personal details and revoke the link anytime.",
+    "Les destinataires voient les propositions sans compte. Vous pouvez masquer les détails personnels et révoquer le lien à tout moment.",
+    "Empfänger sehen Vorschläge ohne Konto. Ihr könnt persönliche Details ausblenden und den Link jederzeit widerrufen."
+  ],
+  "Demo pubblica: i link condivisi valgono finché il server non si riavvia (ad esempio dopo un periodo di inattività o un aggiornamento).": [
+    "Public demo: shared links last until the server restarts, for example after inactivity or an update.",
+    "Démo publique : les liens durent jusqu’au redémarrage du serveur, après inactivité ou mise à jour par exemple.",
+    "Öffentliche Demo: Geteilte Links gelten bis zum Serverneustart, etwa nach Inaktivität oder einer Aktualisierung."
+  ],
+  "Nascondi partenza, alloggio e posizione": [
+    "Hide start, accommodation and location",
+    "Masquer départ, hébergement et position",
+    "Start, Unterkunft und Standort ausblenden"
+  ],
+  "Nascondi esigenze personali, alimentazione e testo libero": [
+    "Hide personal needs, diet and notes",
+    "Masquer besoins personnels, alimentation et texte libre",
+    "Persönliche Bedürfnisse, Ernährung und Notizen ausblenden"
+  ],
+  "Nascondi i nomi dei personaggi": [
+    "Hide people’s names",
+    "Masquer les noms",
+    "Namen ausblenden"
+  ],
+  "Nascondi il budget": [
+    "Hide budget",
+    "Masquer le budget",
+    "Budget ausblenden"
+  ],
+  "Permetti agli amici di votare l'alternativa preferita": [
+    "Let friends vote for their favourite",
+    "Permettre aux amis de voter pour leur préférée",
+    "Freunde für ihren Favoriten abstimmen lassen"
+  ],
+  "Crea link": [
+    "Create link",
+    "Créer un lien",
+    "Link erstellen"
+  ],
+  "Link di condivisione": [
+    "Sharing link",
+    "Lien de partage",
+    "Freigabelink"
+  ],
+  "Copia": [
+    "Copy",
+    "Copier",
+    "Kopieren"
+  ],
+  "Link esistenti": [
+    "Existing links",
+    "Liens existants",
+    "Bestehende Links"
+  ],
+  "· voti:": [
+    "· votes:",
+    "· votes :",
+    "· Stimmen:"
+  ],
+  "revocato": [
+    "revoked",
+    "révoqué",
+    "widerrufen"
+  ],
+  "revoca": [
+    "revoke",
+    "révoquer",
+    "widerrufen"
+  ],
+  "Vai al pannello": [
+    "Go to panel",
+    "Aller au panneau",
+    "Zum Bereich"
+  ],
+  "Ingrandisci": [
+    "Zoom in",
+    "Agrandir",
+    "Vergrössern"
+  ],
+  "Riduci": [
+    "Zoom out",
+    "Réduire",
+    "Verkleinern"
+  ],
+  "Ripristina il nord": [
+    "Reset north",
+    "Orienter vers le nord",
+    "Nach Norden ausrichten"
+  ],
+  "Mostra attribuzioni": [
+    "Show attribution",
+    "Afficher les crédits",
+    "Quellenangaben anzeigen"
+  ],
+  "Mappa illustrata di Lugano e dintorni. Usate il pannello o la vista elenco per le stesse informazioni in forma testuale.": [
+    "Illustrated map of Lugano and surroundings. Use the panel or list view for the same information as text.",
+    "Carte illustrée de Lugano et environs. Utilisez le panneau ou la liste pour les mêmes informations en texte.",
+    "Illustrierte Karte von Lugano und Umgebung. Dieselben Informationen findet ihr als Text im Bereich oder in der Listenansicht."
+  ],
+  "Pannello editoriale": [
+    "Editorial panel",
+    "Panneau éditorial",
+    "Redaktionsbereich"
+  ],
+  "Accesso protetto lato server. Il token è impostato con ADMIN_TOKEN (o stampato nel terminale all'avvio in sviluppo).": [
+    "Server-protected access. Set the token with ADMIN_TOKEN (or read it in the development startup terminal).",
+    "Accès protégé côté serveur. Définissez le jeton avec ADMIN_TOKEN (ou consultez le terminal au démarrage en développement).",
+    "Serverseitig geschützter Zugang. Token über ADMIN_TOKEN setzen (oder beim Entwicklungsstart im Terminal ablesen)."
+  ],
+  "Token editoriale": [
+    "Editorial token",
+    "Jeton éditorial",
+    "Redaktionstoken"
+  ],
+  "Entra": [
+    "Sign in",
+    "Entrer",
+    "Anmelden"
+  ],
+  "Token non valido.": [
+    "Invalid token.",
+    "Jeton non valide.",
+    "Ungültiges Token."
+  ],
+  "Salute dei dati": [
+    "Data health",
+    "État des données",
+    "Datenzustand"
+  ],
+  "Segnalazioni": [
+    "Reports",
+    "Signalements",
+    "Meldungen"
+  ],
+  "Statistiche": [
+    "Statistics",
+    "Statistiques",
+    "Statistiken"
+  ],
+  "Registro": [
+    "Log",
+    "Journal",
+    "Protokoll"
+  ],
+  "Catalogo": [
+    "Catalog",
+    "Catalogue",
+    "Katalog"
+  ],
+  "(base": [
+    "(base",
+    "(base",
+    "(Basis"
+  ],
+  "luoghi ·": [
+    "places ·",
+    "lieux ·",
+    "Orte ·"
+  ],
+  "eventi · segnalazioni aperte:": [
+    "events · open reports:",
+    "événements · signalements ouverts :",
+    "Veranstaltungen · offene Meldungen:"
+  ],
+  "Salute delle fonti": [
+    "Source health",
+    "État des sources",
+    "Quellenzustand"
+  ],
+  "Controlla ora": [
+    "Check now",
+    "Vérifier maintenant",
+    "Jetzt prüfen"
+  ],
+  "Integrazioni": [
+    "Integrations",
+    "Intégrations",
+    "Anbindungen"
+  ],
+  "Conflitti da risolvere": [
+    "Conflicts to resolve",
+    "Conflits à résoudre",
+    "Zu lösende Konflikte"
+  ],
+  "Nessun conflitto fra modifiche editoriali e dati di base.": [
+    "No conflicts between editorial changes and base data.",
+    "Aucun conflit entre modifications éditoriales et données de base.",
+    "Keine Konflikte zwischen redaktionellen Änderungen und Basisdaten."
+  ],
+  "Dati oltre la scadenza": [
+    "Expired data",
+    "Données expirées",
+    "Abgelaufene Daten"
+  ],
+  "Nessun dato oltre la politica di scadenza delle fonti.": [
+    "No data exceeds the sources’ expiry policy.",
+    "Aucune donnée ne dépasse le délai de validité des sources.",
+    "Keine Daten überschreiten die Gültigkeitsfrist der Quellen."
+  ],
+  "Salvato: il catalogo pubblicato è aggiornato.": [
+    "Saved: published catalog updated.",
+    "Enregistré : catalogue publié mis à jour.",
+    "Gespeichert: veröffentlichter Katalog aktualisiert."
+  ],
+  "Errore": [
+    "Error",
+    "Erreur",
+    "Fehler"
+  ],
+  "Luogo nascosto dal catalogo.": [
+    "Place hidden from the catalog.",
+    "Lieu masqué dans le catalogue.",
+    "Ort im Katalog ausgeblendet."
+  ],
+  "Ripristinato.": [
+    "Restored.",
+    "Rétabli.",
+    "Wiederhergestellt."
+  ],
+  "Modifiche editoriali rimosse.": [
+    "Editorial changes removed.",
+    "Modifications éditoriales supprimées.",
+    "Redaktionelle Änderungen entfernt."
+  ],
+  "Filtra…": [
+    "Filter…",
+    "Filtrer…",
+    "Filtern…"
+  ],
+  "Filtra luoghi": [
+    "Filter places",
+    "Filtrer les lieux",
+    "Orte filtern"
+  ],
+  "Luogo": [
+    "Place",
+    "Lieu",
+    "Ort"
+  ],
+  "Access.": [
+    "Access",
+    "Accès",
+    "Zugang"
+  ],
+  "modifica": [
+    "edit",
+    "modifier",
+    "bearbeiten"
+  ],
+  "Orari (sintassi OSM opening_hours)": [
+    "Hours (OSM opening_hours syntax)",
+    "Horaires (syntaxe OSM opening_hours)",
+    "Zeiten (OSM-opening_hours-Syntax)"
+  ],
+  "Fonte (URL)": [
+    "Source (URL)",
+    "Source (URL)",
+    "Quelle (URL)"
+  ],
+  "Nota": [
+    "Note",
+    "Remarque",
+    "Hinweis"
+  ],
+  "Verificato oggi sulla fonte ufficiale": [
+    "Checked today against the official source",
+    "Vérifié aujourd’hui sur la source officielle",
+    "Heute anhand der offiziellen Quelle geprüft"
+  ],
+  "Verifica orari": [
+    "Check hours",
+    "Vérifier les horaires",
+    "Zeiten prüfen"
+  ],
+  "Verifica prezzi": [
+    "Check prices",
+    "Vérifier les prix",
+    "Preise prüfen"
+  ],
+  "Verifica accessibilità": [
+    "Check accessibility",
+    "Vérifier l’accessibilité",
+    "Zugänglichkeit prüfen"
+  ],
+  "Nascondi": [
+    "Hide",
+    "Masquer",
+    "Ausblenden"
+  ],
+  "Annulla modifiche": [
+    "Discard changes",
+    "Annuler les modifications",
+    "Änderungen verwerfen"
+  ],
+  "Eccezione registrata.": [
+    "Exception recorded.",
+    "Exception enregistrée.",
+    "Ausnahme gespeichert."
+  ],
+  "ogni": [
+    "every",
+    "chaque",
+    "jede"
+  ],
+  "· eccezioni:": [
+    "· exceptions:",
+    "· exceptions :",
+    "· Ausnahmen:"
+  ],
+  "sessioni": [
+    "sessions",
+    "séances",
+    "Termine"
+  ],
+  "Evento ricorrente": [
+    "Recurring event",
+    "Événement récurrent",
+    "Wiederkehrende Veranstaltung"
+  ],
+  "Evento ricorrente…": [
+    "Recurring event…",
+    "Événement récurrent…",
+    "Wiederkehrende Veranstaltung…"
+  ],
+  "Stato": [
+    "Status",
+    "État",
+    "Status"
+  ],
+  "annullato": [
+    "cancelled",
+    "annulé",
+    "abgesagt"
+  ],
+  "esaurito": [
+    "sold out",
+    "complet",
+    "ausverkauft"
+  ],
+  "rinviato": [
+    "postponed",
+    "reporté",
+    "verschoben"
+  ],
+  "ripristina": [
+    "restore",
+    "rétablir",
+    "wiederherstellen"
+  ],
+  "nota": [
+    "note",
+    "remarque",
+    "Hinweis"
+  ],
+  "Registra": [
+    "Record",
+    "Enregistrer",
+    "Erfassen"
+  ],
+  "Nessuna segnalazione.": [
+    "No reports.",
+    "Aucun signalement.",
+    "Keine Meldungen."
+  ],
+  "risolta": [
+    "resolved",
+    "résolu",
+    "erledigt"
+  ],
+  "respinta": [
+    "rejected",
+    "rejeté",
+    "abgelehnt"
+  ],
+  "Pianificazioni richieste": [
+    "Planning requests",
+    "Demandes de planification",
+    "Planungsanfragen"
+  ],
+  "Pianificazioni con proposte": [
+    "Plans with proposals",
+    "Planifications avec propositions",
+    "Planungen mit Vorschlägen"
+  ],
+  "Pianificazioni impossibili": [
+    "Infeasible plans",
+    "Planifications impossibles",
+    "Nicht mögliche Planungen"
+  ],
+  "Contraddizioni da risolvere": [
+    "Contradictions to resolve",
+    "Contradictions à résoudre",
+    "Zu klärende Widersprüche"
+  ],
+  "Pianificazioni interrotte per tempo": [
+    "Planning timeouts",
+    "Planifications interrompues par délai",
+    "Planungen mit Zeitüberschreitung"
+  ],
+  "Errori di pianificazione": [
+    "Planning errors",
+    "Erreurs de planification",
+    "Planungsfehler"
+  ],
+  "Pianificazioni annullate": [
+    "Cancelled planning",
+    "Planifications annulées",
+    "Abgebrochene Planungen"
+  ],
+  "Link di condivisione creati": [
+    "Sharing links created",
+    "Liens de partage créés",
+    "Erstellte Freigabelinks"
+  ],
+  "Link revocati": [
+    "Revoked links",
+    "Liens révoqués",
+    "Widerrufene Links"
+  ],
+  "Voti ricevuti": [
+    "Votes received",
+    "Votes reçus",
+    "Erhaltene Stimmen"
+  ],
+  "Simulazioni avviate": [
+    "Simulations started",
+    "Simulations lancées",
+    "Gestartete Simulationen"
+  ],
+  "Simulazioni concluse": [
+    "Simulations completed",
+    "Simulations terminées",
+    "Abgeschlossene Simulationen"
+  ],
+  "Spostamenti saltati": [
+    "Skipped transfers",
+    "Trajets passés",
+    "Übersprungene Wege"
+  ],
+  "Decisioni prese": [
+    "Decisions made",
+    "Décisions prises",
+    "Getroffene Entscheidungen"
+  ],
+  "Salti a un checkpoint": [
+    "Checkpoint jumps",
+    "Sauts vers un point de contrôle",
+    "Sprünge zu Kontrollpunkten"
+  ],
+  "Ricalcoli richiesti": [
+    "Recalculations requested",
+    "Recalculs demandés",
+    "Angeforderte Neuberechnungen"
+  ],
+  "Ipotesi «E se…» richieste": [
+    "What-if scenarios requested",
+    "Hypothèses « Et si… » demandées",
+    "Angeforderte Was-wäre-wenn-Szenarien"
+  ],
+  "Rami creati": [
+    "Branches created",
+    "Branches créées",
+    "Erstellte Varianten"
+  ],
+  "Rami ipotetici creati": [
+    "Hypothetical branches created",
+    "Branches hypothétiques créées",
+    "Erstellte hypothetische Varianten"
+  ],
+  "Esportazioni calendario": [
+    "Calendar exports",
+    "Exports calendrier",
+    "Kalenderexporte"
+  ],
+  "Stampe": [
+    "Printouts",
+    "Impressions",
+    "Ausdrucke"
+  ],
+  "Cartoline": [
+    "Postcards",
+    "Cartes postales",
+    "Postkarten"
+  ],
+  "Salvati per l'uso offline": [
+    "Saved for offline use",
+    "Enregistrés hors ligne",
+    "Offline gespeichert"
+  ],
+  "Piani B meteo preparati": [
+    "Weather plan Bs prepared",
+    "Plans B météo préparés",
+    "Erstellte Wetteralternativen"
+  ],
+  "Esplorazioni libere": [
+    "Free explorations",
+    "Explorations libres",
+    "Freie Erkundungen"
+  ],
+  "Vista elenco attivata": [
+    "List view enabled",
+    "Vue en liste activée",
+    "Listenansicht aktiviert"
+  ],
+  "Movimento ridotto attivato": [
+    "Reduced motion enabled",
+    "Mouvements réduits activés",
+    "Reduzierte Bewegung aktiviert"
+  ],
+  "Vista senza WebGL": [
+    "View without WebGL",
+    "Vue sans WebGL",
+    "Ansicht ohne WebGL"
+  ],
+  "Posizione usata (su richiesta)": [
+    "Location used (on request)",
+    "Position utilisée (sur demande)",
+    "Standort verwendet (auf Anfrage)"
+  ],
+  "«Sorprendimi»": [
+    "“Surprise me”",
+    "« Surprenez-moi »",
+    "«Überrasch mich»"
+  ],
+  "Segnalazioni di errore": [
+    "Error reports",
+    "Signalements d’erreurs",
+    "Fehlermeldungen"
+  ],
+  "tappa obbligatoria non possibile": [
+    "required stop unavailable",
+    "étape obligatoire impossible",
+    "Pflichtstation nicht möglich"
+  ],
+  "finestra troppo breve": [
+    "time window too short",
+    "créneau trop court",
+    "Zeitfenster zu kurz"
+  ],
+  "nessuna combinazione valida": [
+    "no valid combination",
+    "aucune combinaison valide",
+    "keine gültige Kombination"
+  ],
+  "nessuna attività compatibile": [
+    "no matching activity",
+    "aucune activité adaptée",
+    "keine passende Aktivität"
+  ],
+  "combinazione di vincoli": [
+    "combination of constraints",
+    "combinaison de contraintes",
+    "Kombination von Vorgaben"
+  ],
+  "tappa bloccata non inseribile": [
+    "locked stop cannot be included",
+    "étape verrouillée impossible à inclure",
+    "fixierte Station nicht einfügbar"
+  ],
+  "Con proposte": [
+    "With proposals",
+    "Avec propositions",
+    "Mit Vorschlägen"
+  ],
+  "Condivisi": [
+    "Shared",
+    "Partagés",
+    "Geteilt"
+  ],
+  "Imbuto d'uso: ancora nessuna pianificazione registrata.": [
+    "Usage funnel: no planning requests recorded yet.",
+    "Parcours d’utilisation : aucune planification enregistrée.",
+    "Nutzungstrichter: noch keine Planung erfasst."
+  ],
+  "Imbuto d'uso": [
+    "Usage funnel",
+    "Parcours d’utilisation",
+    "Nutzungstrichter"
+  ],
+  "Imbuto d'uso (30 giorni)": [
+    "Usage funnel (30 days)",
+    "Parcours d’utilisation (30 jours)",
+    "Nutzungstrichter (30 Tage)"
+  ],
+  "Conteggi aggregati per giorno: non collegano fra loro le azioni di una stessa persona, quindi le percentuali sono indicative.": [
+    "Daily aggregate counts don’t link a person’s actions; percentages are indicative.",
+    "Les comptes quotidiens agrégés ne relient pas les actions d’une même personne ; les pourcentages sont indicatifs.",
+    "Tägliche Gesamtzahlen verknüpfen keine Aktionen einer Person; Prozentwerte sind Richtwerte."
+  ],
+  "Indicatore (30 giorni)": [
+    "Metric (30 days)",
+    "Indicateur (30 jours)",
+    "Kennzahl (30 Tage)"
+  ],
+  "Totale": [
+    "Total",
+    "Total",
+    "Gesamt"
+  ],
+  "Consumi AI": [
+    "AI usage",
+    "Consommation IA",
+    "KI-Verbrauch"
+  ],
+  "Token oggi:": [
+    "Tokens today:",
+    "Jetons aujourd’hui :",
+    "Tokens heute:"
+  ],
+  "Modello": [
+    "Model",
+    "Modèle",
+    "Modell"
+  ],
+  "Uso": [
+    "Usage",
+    "Usage",
+    "Nutzung"
+  ],
+  "Esito": [
+    "Outcome",
+    "Résultat",
+    "Ergebnis"
+  ],
+  "Chiamate": [
+    "Calls",
+    "Appels",
+    "Aufrufe"
+  ],
+  "ms medi": [
+    "average ms",
+    "ms moyens",
+    "Durchschnitt in ms"
+  ],
+  "Nessuna chiamata AI registrata.": [
+    "No AI calls recorded.",
+    "Aucun appel IA enregistré.",
+    "Keine KI-Aufrufe erfasst."
+  ],
+  "Alternative nelle zone vicine": [
+    "Alternatives in nearby areas",
+    "Alternatives dans les environs",
+    "Alternativen in der Nähe"
+  ],
+  "Distanze in linea d’aria dalla zona scelta all’attività più vicina. I collegamenti saranno verificati quando scegliete un’alternativa.": [
+    "Straight-line distances from the selected area to the nearest activity. Connections will be checked when you choose an alternative.",
+    "Distances à vol d’oiseau depuis la zone choisie jusqu’à l’activité la plus proche. Les trajets seront vérifiés lorsque vous choisirez une alternative.",
+    "Luftlinie vom gewählten Gebiet zur nächsten Aktivität. Verbindungen werden geprüft, wenn ihr eine Alternative auswählt."
+  ],
+  "ultimo ingresso {0}": [
+    "last admission {0}",
+    "dernière entrée {0}",
+    "letzter Einlass {0}"
+  ],
+  "Mostra altri luoghi": [
+    "Show more places",
+    "Afficher plus de lieux",
+    "Weitere Orte anzeigen"
+  ]
+}

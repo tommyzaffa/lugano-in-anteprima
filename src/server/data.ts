@@ -6,6 +6,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { DateTime } from 'luxon';
+import type { MapArea } from '../shared/area.ts';
 import { Place, CatalogEvent, Source, type EventOccurrence, type Evidence } from '../shared/types.ts';
 import { expandEvent } from '../shared/calendar.ts';
 import { Graph } from './routing/graph.ts';
@@ -30,6 +31,7 @@ export interface ExplorePoi { osm: string; cls: string; name: string; lon: numbe
 export class DataStore {
   readonly dir: string;
   perimeter: any;
+  areas: MapArea[] = [];
   sources: Source[] = [];
   private basePlaces: Place[] = [];
   conflicts: { kind: string; id: string; note: string }[] = [];
@@ -59,6 +61,7 @@ export class DataStore {
     const t0 = Date.now();
     const read = (f: string) => JSON.parse(readFileSync(join(this.dir, f), 'utf8'));
     this.perimeter = read('geo/perimeter.json');
+    this.areas = existsSync(join(this.dir, 'build/areas.json')) ? read('build/areas.json') : this.perimeter.references.filter((r: any) => r.kind === 'place').map((r: any) => ({ ...r, id: r.key }));
     const cat = read('build/catalog.json');
     this.baseVersion = cat.version;
     this.sources = cat.sources;

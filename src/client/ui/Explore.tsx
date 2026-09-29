@@ -1,9 +1,11 @@
+import { tx, getLocale } from '../locale.ts';
+import { safeUrl } from '../safe-url.ts';
 import { useEffect, useMemo, useState } from 'react';
 import { useApp, defaultDraft } from '../store.ts';
 import { get } from '../api.ts';
 import { Chip, Badge, Spinner, Empty } from './common.tsx';
 import { CATEGORY } from '../i18n.ts';
-import { getMap } from '../map/MapView.tsx';
+import { getMap, useMap } from '../map/map-state.ts';
 import type { GeoJSONSource } from 'maplibre-gl';
 import { placeIconFor, landmarkFor } from '../map/sprites.ts';
 import { hhmm } from '../../shared/time.ts';
@@ -19,6 +21,7 @@ const GROUPS: Record<string, string[]> = {
 };
 
 export default function Explore() {
+  const activeMap = useMap();
   const f = useApp((s) => s.exploreFilter);
   const set = useApp((s) => s.set);
   const meta = useApp((s) => s.meta);
@@ -35,15 +38,22 @@ export default function Explore() {
     const q = from && to ? `?date=${date}&from=${date}T${from}&to=${to <= from ? nextDay(date) : date}T${to}` : `?date=${date}`;
     get<{ places: any[] }>(`/api/places${q}`).then((r) => { setPlaces(r.places); setErr(null); }).catch((e) => setErr(e.message));
   }, [date, from, to]);
-  const cats = f.cats.flatMap((g) => GROUPS[g] ?? []);
+  const cats = useMemo(() => f.cats.flatMap((g) => GROUPS[g] ?? []), [f.cats]);
+  const [visibleCount, setVisibleCount] = useState(60);
+  useEffect(() => setVisibleCount(60), [f.q, f.cats, onlyFavs, from, to, date]);
   const shown = useMemo(() => (places ?? []).filter((p) => (!cats.length || cats.includes(p.category)) && (!f.q || p.name.toLowerCase().includes(f.q.toLowerCase())) && (!(from && to) || p.openDuring !== 'closed') && (!onlyFavs || favs.includes(p.id))), [places, cats, f.q, from, to, onlyFavs, favs]);
   // aggiorna i luoghi mostrati sulla mappa
   useEffect(() => {
     const map = getMap();
-    const src = map?.getSource('places') as GeoJSONSource | undefined;
-    if (!src || !places) return;
+    if (!map || !places) return;
+    const update = () => {
+    const src = map.getSource('places') as GeoJSONSource | undefined;
+    if (!src) return;
     src.setData({ type: 'FeatureCollection', features: shown.map((p) => ({ type: 'Feature', properties: { id: p.id, name: p.name.replace(/\s*\(.*?\)\s*/g, ''), icon: placeIconFor(p.category), ...(landmarkFor(p.id, p.category) ? { landmark: landmarkFor(p.id, p.category) } : {}) }, geometry: { type: 'Point', coordinates: [p.lon, p.lat] } })) });
-  }, [shown, places]);
+    };
+    if (map.isStyleLoaded()) update(); else map.once('load', update);
+    return () => { map.off('load', update); };
+  }, [shown, places, activeMap]);
   useEffect(() => () => {
     // ripristina tutti i luoghi uscendo dall'esplorazione
     const map = getMap();
@@ -52,42 +62,43 @@ export default function Explore() {
   }, []);
   return (
     <div className="explore">
-      <h2>Esplora</h2>
-      <input type="search" placeholder="Cerca un luogo…" value={f.q} onChange={(e) => setF({ q: e.target.value })} aria-label="Cerca un luogo" />
-      <div className="chips">{Object.keys(GROUPS).map((g) => <Chip key={g} on={f.cats.includes(g)} onClick={() => setF({ cats: f.cats.includes(g) ? f.cats.filter((x) => x !== g) : [...f.cats, g] })}>{g}</Chip>)}</div>
+      <h2>{tx("Esplora")}</h2>
+      <input type="search" placeholder={tx("Cerca un luogo…")} value={f.q} onChange={(e) => setF({ q: e.target.value })} aria-label={tx("Cerca un luogo")} />
+      <div className="chips">{Object.keys(GROUPS).map((g) => <Chip key={g} on={f.cats.includes(g)} onClick={() => setF({ cats: f.cats.includes(g) ? f.cats.filter((x) => x !== g) : [...f.cats, g] })}>{tx(g)}</Chip>)}</div>
       <details className="more open-during" open={!!(from || to)}>
-        <summary>Aperto quando ci andate <span className="muted">{from && to ? `· ${from}–${to}` : ''}</span></summary>
+        <summary>{tx("Aperto quando ci andate ")}<span className="muted">{tx(from && to ? `· ${from}–${to}` : '')}</span></summary>
         <div className="row">
-          <input type="date" value={date} min={today} onChange={(e) => setDate(e.target.value)} aria-label="Data" />
-          <input type="time" value={from} onChange={(e) => setFrom(e.target.value)} aria-label="Dalle" />
-          <input type="time" value={to} onChange={(e) => setTo(e.target.value)} aria-label="Alle" />
+          <input type="date" value={date} min={today} onChange={(e) => setDate(e.target.value)} aria-label={tx("Data")} />
+          <input type="time" value={from} onChange={(e) => setFrom(e.target.value)} aria-label={tx("Dalle")} />
+          <input type="time" value={to} onChange={(e) => setTo(e.target.value)} aria-label={tx("Alle")} />
         </div>
-        {from || to ? <button className="link" onClick={() => { setFrom(''); setTo(''); }}>azzera</button> : null}
+        {from || to ? <button className="link" onClick={() => { setFrom(''); setTo(''); }}>{tx("azzera")}</button> : null}
       </details>
       <details className="more">
-        <summary>Altre opzioni</summary>
-        <label className="check block"><input type="checkbox" checked={onlyFavs} onChange={(e) => setOnlyFavs(e.target.checked)} /> Solo i preferiti ({favs.length})</label>
-        <label className="check block"><input type="checkbox" checked={f.showOsm} onChange={(e) => setF({ showOsm: e.target.checked })} /> Anche i punti OpenStreetMap non curati</label>
+        <summary>{tx("Altre opzioni")}</summary>
+        <label className="check block"><input type="checkbox" checked={onlyFavs} onChange={(e) => setOnlyFavs(e.target.checked)} />{tx(" Solo i preferiti (")}{tx(favs.length)})</label>
+        <label className="check block"><input type="checkbox" checked={f.showOsm} onChange={(e) => setF({ showOsm: e.target.checked })} />{tx(" Anche i punti OpenStreetMap non curati")}</label>
         <div className="legend">
           <ul>
-            <li><span className="sw sw-yellow" aria-hidden /> sentiero escursionistico</li>
-            <li><span className="sw sw-red" aria-hidden /> di montagna (bianco-rosso-bianco)</li>
-            <li><span className="sw sw-blue" aria-hidden /> alpino (bianco-blu-bianco)</li>
+            <li><span className="sw sw-yellow" aria-hidden />{tx(" sentiero escursionistico")}</li>
+            <li><span className="sw sw-red" aria-hidden />{tx(" di montagna (bianco-rosso-bianco)")}</li>
+            <li><span className="sw sw-blue" aria-hidden />{tx(" alpino (bianco-blu-bianco)")}</li>
           </ul>
-          <p className="hint">Difficoltà da OpenStreetMap: sul posto vale la segnaletica. Le figurine nelle piazze sono decorative.</p>
+          <p className="hint">{tx("Difficoltà da OpenStreetMap: sul posto vale la segnaletica. Le figurine nelle piazze sono decorative.")}</p>
         </div>
       </details>
-      {err ? <div className="notice bad">{err}</div> : !places ? <Spinner /> : !shown.length ? <Empty title="Nessun luogo con questi filtri" /> : (
-        <ul className="place-list">
-          {shown.map((p) => (
+      {err ? <div className="notice bad">{tx(err)}</div> : !places ? <Spinner /> : !shown.length ? <Empty title={tx("Nessun luogo con questi filtri")} /> : (
+        <><ul className="place-list">
+          {shown.slice(0, visibleCount).map((p) => (
             <li key={p.id}>
               <button className="place-row" onClick={() => set({ placeCard: p.id })}>
-                <span className="pr-name">{favs.includes(p.id) ? '★ ' : ''}{p.name}{visited.includes(p.id) ? <span className="muted"> · visitato</span> : null}</span>
-                <span className="pr-meta">{CATEGORY[p.category] ?? p.category} · {p.hoursToday ?? 'orari non noti'} {from && to ? (p.openDuring === 'open' ? <Badge kind="ok">aperto</Badge> : p.openDuring === 'unknown' ? <Badge kind="warn">da verificare</Badge> : null) : null}</span>
+                <span className="pr-name">{tx(favs.includes(p.id) ? '★ ' : '')}{tx(p.name)}{visited.includes(p.id) ? <span className="muted">{tx(" · visitato")}</span> : null}</span>
+                <span className="pr-meta">{tx(CATEGORY[p.category] ?? p.category)} · {tx(p.hoursToday ?? 'orari non noti')} {tx(from && to ? (p.openDuring === 'open' ? <Badge kind="ok">{tx("aperto")}</Badge> : p.openDuring === 'unknown' ? <Badge kind="warn">{tx("da verificare")}</Badge> : null) : null)}</span>
               </button>
             </li>
           ))}
         </ul>
+        {shown.length > visibleCount && <button className="btn-ghost" onClick={() => setVisibleCount((n) => n + 60)}>{tx("Mostra altri luoghi")} ({shown.length - visibleCount})</button>}</>
       )}
     </div>
   );
@@ -152,26 +163,27 @@ export function EventsView() {
   const ongoing: any[] = data?.ongoing ?? [];
   return (
     <div className="events">
-      <h2>Eventi</h2>
+      <h2>{tx("Eventi")}</h2>
+      {getLocale() !== 'it' && <p className="hint">{tx("Descrizioni e titoli delle fonti restano nella lingua originale.")}</p>}
       <div className="seg" role="tablist">
-        {([['today', 'Oggi'], ['tomorrow', 'Domani'], ['week', 'Settimana']] as const).map(([k, v]) => <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{v}</button>)}
+        {([['today', 'Oggi'], ['tomorrow', 'Domani'], ['week', 'Settimana']] as const).map(([k, v]) => <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{tx(v)}</button>)}
       </div>
-      {data?.demo ? <div className="notice demo"><Badge kind="demo">DEMO</Badge> {data.notice}</div> : null}
-      <input type="search" placeholder="Cerca un evento o un luogo…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Cerca negli eventi" />
-      {categories.length > 1 ? <div className="chips">{categories.map((c) => <Chip key={c} on={cats.includes(c)} onClick={() => setCats((x) => x.includes(c) ? x.filter((y) => y !== c) : [...x, c])}>{EVENT_CAT[c] ?? c}</Chip>)}</div> : null}
-      {!data ? <Spinner /> : !shown.length ? <Empty title={data.occurrences.length ? 'Nessun evento con questi filtri' : 'Nessun evento in questo periodo'}>{data.occurrences.length ? 'Provate a togliere un filtro.' : 'Non inventiamo eventi per riempire una giornata vuota.'}</Empty> : byDay.map(([day, list]) => (
+      {data?.demo ? <div className="notice demo"><Badge kind="demo">{tx("DEMO")}</Badge> {tx(data.notice)}</div> : null}
+      <input type="search" placeholder={tx("Cerca un evento o un luogo…")} value={q} onChange={(e) => setQ(e.target.value)} aria-label={tx("Cerca negli eventi")} />
+      {categories.length > 1 ? <div className="chips">{categories.map((c) => <Chip key={c} on={cats.includes(c)} onClick={() => setCats((x) => x.includes(c) ? x.filter((y) => y !== c) : [...x, c])}>{tx(EVENT_CAT[c] ?? c)}</Chip>)}</div> : null}
+      {!data ? <Spinner /> : !shown.length ? <Empty title={tx(data.occurrences.length ? 'Nessun evento con questi filtri' : 'Nessun evento in questo periodo')}>{tx(data.occurrences.length ? 'Provate a togliere un filtro.' : 'Non inventiamo eventi per riempire una giornata vuota.')}</Empty> : byDay.map(([day, list]) => (
         <div key={day}>
-          {tab === 'week' ? <h3 className="day-head">{new Date(`${day}T12:00:00Z`).toLocaleDateString('it-CH', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' })}</h3> : null}
+          {tab === 'week' ? <h3 className="day-head">{tx(new Date(`${day}T12:00:00Z`).toLocaleDateString(getLocale(), { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }))}</h3> : null}
           <ul className="event-list">
             {list.map((o: any) => (
               <li key={o.sessionId} className={o.status !== 'scheduled' ? 'off' : ''}>
-                <div className="ev-time">{o.timeCertain ? hhmm(o.start) : '—'}</div>
+                <div className="ev-time">{tx(o.timeCertain ? hhmm(o.start) : '—')}</div>
                 <div className="ev-body">
-                  <strong>{o.title}</strong>
-                  <div className="muted">{o.placeName ?? ''}{o.status !== 'scheduled' ? <> · <Badge kind="bad">{({ cancelled: 'annullato', sold_out: 'esaurito', postponed: 'rinviato' } as any)[o.status]}</Badge></> : null}</div>
+                  <strong>{tx(o.title)}</strong>
+                  <div className="muted">{tx(o.placeName ?? '')}{o.status !== 'scheduled' ? <> · <Badge kind="bad">{tx(({ cancelled: 'annullato', sold_out: 'esaurito', postponed: 'rinviato' } as any)[o.status])}</Badge></> : null}</div>
                   <div className="ev-actions">
-                    {o.status === 'scheduled' && Date.parse(o.start) > Date.now() ? <button className="link" onClick={() => planWith(o)}>Organizza la giornata</button> : null}
-                    {o.url ? <a href={o.url} target="_blank" rel="noopener noreferrer">Scheda ufficiale</a> : <button className="link" onClick={() => set({ placeCard: o.placeId })}>Il luogo</button>}
+                    {o.status === 'scheduled' && Date.parse(o.start) > Date.now() ? <button className="link" onClick={() => planWith(o)}>{tx("Organizza la giornata")}</button> : null}
+                    {o.url ? <a href={safeUrl(o.url)} target="_blank" rel="noopener noreferrer">{tx("Scheda ufficiale")}</a> : <button className="link" onClick={() => set({ placeCard: o.placeId })}>{tx("Il luogo")}</button>}
                   </div>
                 </div>
               </li>
@@ -179,24 +191,24 @@ export function EventsView() {
           </ul>
         </div>
       ))}
-      {ongoing.length ? (
+      {tx(ongoing.length ? (
         <details className="more">
-          <summary>Mostre in corso <span className="muted">· {ongoing.length}</span></summary>
+          <summary>{tx("Mostre in corso ")}<span className="muted">· {tx(ongoing.length)}</span></summary>
           <ul className="event-list">
             {ongoing.map((o) => (
               <li key={o.eventId}>
                 <div className="ev-time" aria-hidden>🖼</div>
                 <div className="ev-body">
-                  <strong>{o.title}</strong>
-                  <div className="muted">{o.placeName ?? ''} · fino al {o.to.slice(8, 10)}/{o.to.slice(5, 7)}</div>
-                  <div className="ev-actions">{o.url ? <a href={o.url} target="_blank" rel="noopener noreferrer">Scheda ufficiale</a> : null}{o.placeId ? <button className="link" onClick={() => set({ placeCard: o.placeId })}>Il luogo</button> : null}</div>
+                  <strong>{tx(o.title)}</strong>
+                  <div className="muted">{tx(o.placeName ?? '')}{tx(" · fino al ")}{tx(o.to.slice(8, 10))}/{tx(o.to.slice(5, 7))}</div>
+                  <div className="ev-actions">{o.url ? <a href={safeUrl(o.url)} target="_blank" rel="noopener noreferrer">{tx("Scheda ufficiale")}</a> : null}{o.placeId ? <button className="link" onClick={() => set({ placeCard: o.placeId })}>{tx("Il luogo")}</button> : null}</div>
                 </div>
               </li>
             ))}
           </ul>
         </details>
-      ) : null}
-      {data && !data.demo ? <p className="source-line">{data.notice}</p> : null}
+      ) : null)}
+      {data && !data.demo ? <p className="source-line">{tx(data.notice)}</p> : null}
     </div>
   );
 }

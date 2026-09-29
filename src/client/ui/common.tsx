@@ -1,3 +1,5 @@
+import { tx, getLocale } from '../locale.ts';
+import { safeUrl } from '../safe-url.ts';
 import { useEffect, useRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useApp } from '../store.ts';
@@ -5,13 +7,13 @@ import { STATUS } from '../i18n.ts';
 import { fmtRange } from '../../shared/pricing.ts';
 
 export function Badge({ kind = 'neutral', children, title }: { kind?: 'neutral' | 'ok' | 'warn' | 'bad' | 'demo' | 'info' | 'ai'; children: ReactNode; title?: string }) {
-  return <span className={`badge badge-${kind}`} title={title}>{children}</span>;
+  return <span className={`badge badge-${kind}`} title={tx(title)}>{tx(children)}</span>;
 }
 
 export function EvidenceBadge({ status }: { status?: string }) {
   const s = status ?? 'unknown';
   const kind = s === 'verified' || s === 'official_import' ? 'ok' : s === 'demo' ? 'demo' : s === 'unknown' ? 'bad' : s === 'estimate' ? 'info' : 'warn';
-  return <Badge kind={kind as any} title="Stato della verifica del dato">{STATUS[s] ?? s}</Badge>;
+  return <Badge kind={kind as any} title={tx("Stato della verifica del dato")}>{tx(STATUS[s] ?? s)}</Badge>;
 }
 
 /** Link alla fonte ufficiale di un dato verificato, con la data di consultazione. */
@@ -19,8 +21,8 @@ export function SourceLink({ evidence }: { evidence?: { url?: string; lastChecke
   if (!evidence?.url) return null;
   let host = evidence.url;
   try { host = new URL(evidence.url).hostname.replace(/^www\d?\./, ''); } catch { /* url non valido: si mostra com'è */ }
-  const when = evidence.lastCheckedAt ? new Date(`${evidence.lastCheckedAt.slice(0, 10)}T12:00:00Z`).toLocaleDateString('it-CH', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }) : null;
-  return <span className="source-link"> · <a href={evidence.url} target="_blank" rel="noopener noreferrer">{host}</a>{when ? `, consultato il ${when}` : ''}</span>;
+  const when = evidence.lastCheckedAt ? new Date(`${evidence.lastCheckedAt.slice(0, 10)}T12:00:00Z`).toLocaleDateString(getLocale(), { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }) : null;
+  return <span className="source-link"> · <a href={safeUrl(evidence.url)} target="_blank" rel="noopener noreferrer">{tx(host)}</a>{tx(when ? `, consultato il ${when}` : '')}</span>;
 }
 
 /** Chiusure straordinarie future (giorni consecutivi raggruppati). */
@@ -37,13 +39,13 @@ export function closureRanges(exceptions: { date: string; closed?: boolean; note
 }
 
 export function Cost({ min, max, unknown }: { min: number | null; max: number | null; unknown?: number }) {
-  return <span className="cost">{fmtRange(min, max)}{unknown ? <span className="muted"> + {unknown} sconosciut{unknown > 1 ? 'i' : 'o'}</span> : null}</span>;
+  return <span className="cost">{tx(fmtRange(min, max))}{unknown ? <span className="muted"> + {tx(`${unknown} costi sconosciuti`)}</span> : null}</span>;
 }
 
 export function Chip({ on, onClick, children, icon, disabled, title }: { on: boolean; onClick: () => void; children: ReactNode; icon?: string; disabled?: boolean; title?: string }) {
   return (
-    <button type="button" className={`chip ${on ? 'on' : ''}`} aria-pressed={on} onClick={onClick} disabled={disabled} title={title}>
-      {icon ? <span className="chip-icon" aria-hidden>{icon}</span> : null}{children}
+    <button type="button" className={`chip ${on ? 'on' : ''}`} aria-pressed={on} onClick={onClick} disabled={disabled} title={tx(title)}>
+      {icon ? <span className="chip-icon" aria-hidden>{tx(icon)}</span> : null}{tx(children)}
     </button>
   );
 }
@@ -51,8 +53,8 @@ export function Chip({ on, onClick, children, icon, disabled, title }: { on: boo
 export function Section({ title, children, right, id }: { title: string; children: ReactNode; right?: ReactNode; id?: string }) {
   return (
     <section className="section" aria-labelledby={id}>
-      <div className="section-head"><h3 id={id}>{title}</h3>{right}</div>
-      {children}
+      <div className="section-head"><h3 id={id}>{tx(title)}</h3>{tx(right)}</div>
+      {tx(children)}
     </section>
   );
 }
@@ -89,8 +91,8 @@ export function Modal({ title, onClose, children, wide, labelledBy }: { title: s
   return createPortal(
     <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) closeRef.current(); }}>
       <div className={`modal ${wide ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby={hid} ref={ref}>
-        <div className="modal-head"><h2 id={hid}>{title}</h2><button className="icon-btn" onClick={onClose} aria-label="Chiudi">✕</button></div>
-        <div className="modal-body">{children}</div>
+        <div className="modal-head"><h2 id={hid}>{tx(title)}</h2><button className="icon-btn" onClick={onClose} aria-label={tx("Chiudi")}>✕</button></div>
+        <div className="modal-body">{tx(children)}</div>
       </div>
     </div>,
     document.body,
@@ -106,25 +108,25 @@ export function Toast() {
     return () => clearTimeout(id);
   }, [toast, set]);
   if (!toast) return null;
-  return <div className={`toast toast-${toast.kind}`} role={toast.kind === 'error' ? 'alert' : 'status'} onClick={() => set({ toast: null })}>{toast.text}</div>;
+  return <div className={`toast toast-${toast.kind}`} role={toast.kind === 'error' ? 'alert' : 'status'} onClick={() => set({ toast: null })}>{tx(toast.text)}</div>;
 }
 
 export function Spinner({ label }: { label?: string }) {
-  return <span className="spinner" role="status" aria-label={label ?? 'Caricamento'}><span /></span>;
+  return <span className="spinner" role="status" aria-label={tx(label ?? 'Caricamento')}><span /></span>;
 }
 
 export function Field({ label, children, hint, htmlFor }: { label: string; children: ReactNode; hint?: string; htmlFor?: string }) {
   return (
     <div className="field">
-      <label htmlFor={htmlFor}>{label}</label>
-      {children}
-      {hint ? <div className="hint">{hint}</div> : null}
+      <label htmlFor={htmlFor}>{tx(label)}</label>
+      {tx(children)}
+      {hint ? <div className="hint">{tx(hint)}</div> : null}
     </div>
   );
 }
 
 export function Empty({ title, children }: { title: string; children?: ReactNode }) {
-  return <div className="empty"><strong>{title}</strong>{children ? <div>{children}</div> : null}</div>;
+  return <div className="empty"><strong>{tx(title)}</strong>{children ? <div>{tx(children)}</div> : null}</div>;
 }
 
 export function copy(text: string) {

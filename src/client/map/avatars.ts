@@ -24,6 +24,9 @@ function shade(hex: string, f: number) {
 
 /** Pedina da gioco in SVG (DOM): testa, collare, corpo a campana e base. */
 export function pawnSvg(color: string, size = 34, child = false): string {
+  if (/^#[0-9a-f]{3}$/i.test(color)) color = '#' + [...color.slice(1)].map((c) => c + c).join('');
+  color = /^#[0-9a-f]{6}$/i.test(color) ? color : PAWN_COLORS[0];
+  size = Number.isFinite(size) ? Math.max(1, Math.min(200, size)) : 34;
   const s = child ? 0.8 : 1;
   const w = Math.round(size * 0.74 * s), h = Math.round(size * s);
   const dark = shade(color, 0.72);

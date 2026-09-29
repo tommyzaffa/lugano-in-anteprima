@@ -41,5 +41,5 @@ export default defineConfig({
   },
   preview: { port: 4173, proxy: { '/api': 'http://127.0.0.1:8787' } },
   optimizeDeps: { exclude: ['maplibre-gl'] },
-  build: { target: 'es2022', sourcemap: true, chunkSizeWarningLimit: 2000 },
+  build: { target: 'es2022', sourcemap: false, chunkSizeWarningLimit: 2000 },
 });

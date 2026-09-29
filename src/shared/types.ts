@@ -55,7 +55,7 @@ export type Source = z.infer<typeof Source>;
 // ---------------------------------------------------------------- orari
 const HHMM = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'formato HH:mm');
 const MMDD = z.string().regex(/^(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, 'formato MM-DD');
-const YMD = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'formato YYYY-MM-DD');
+const YMD = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'formato YYYY-MM-DD').refine((s) => { const d = new Date(`${s}T00:00:00Z`); return Number.isFinite(d.getTime()) && d.toISOString().slice(0, 10) === s; }, 'data non valida');
 
 export const OpeningRule = z.object({
   /** giorni ISO: 1 = lunedì … 7 = domenica */
@@ -239,13 +239,13 @@ export interface EventOccurrence {
 
 // ---------------------------------------------------------------- richiesta
 export const AvatarStyle = z.object({
-  color: z.string(),
-  accent: z.string(),
+  color: z.string().regex(/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/),
+  accent: z.string().regex(/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/),
   hat: z.enum(['none', 'cap', 'beret', 'sunhat', 'beanie']).default('none'),
   accessory: z.enum(['none', 'backpack', 'camera', 'scarf', 'umbrella', 'balloon']).default('none'),
   hair: z.enum(['short', 'long', 'curly', 'bun', 'none']).default('short'),
   /** tono del volto scelto liberamente (palette stilizzata) */
-  tone: z.string().default('#f0cfa8'),
+  tone: z.string().regex(/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/).default('#f0cfa8'),
 });
 export const Person = z.object({
   id: z.string(),
@@ -253,15 +253,15 @@ export const Person = z.object({
   kind: z.enum(['adult', 'child']),
   ageBand: z.enum(['0-5', '6-11', '12-15', '16-17', '18-25', '26-64', '65+']).optional(),
   avatar: AvatarStyle,
-  interests: z.array(z.string()).default([]),
+  interests: z.array(z.string().max(100)).max(30).default([]),
 });
 export type Person = z.infer<typeof Person>;
 
 export const Location = z.object({
   kind: z.enum(['place', 'stop', 'point', 'address', 'geolocation']),
-  label: z.string(),
-  lon: z.number(),
-  lat: z.number(),
+  label: z.string().max(200),
+  lon: z.number().min(-180).max(180),
+  lat: z.number().min(-90).max(90),
   placeId: z.string().optional(),
   stopId: z.string().optional(),
   sensitive: z.boolean().optional(), // alloggio/posizione privata: non condividere
@@ -277,6 +277,7 @@ export const GroupRequest = z.object({
   startTime: HHMM,
   endTime: HHMM,
   start: Location,
+  area: z.object({ center: Location, radiusKm: z.number().min(0.5).max(15) }).nullable().optional(),
   end: z.object({ mode: z.enum(['same', 'accommodation', 'station', 'custom', 'free']), location: Location.optional() }),
   occasion: Occasion,
   moods: z.array(Mood).default([]),
@@ -290,16 +291,16 @@ export const GroupRequest = z.object({
   diet: z.array(z.enum(['vegetarian', 'vegan', 'gluten_free', 'lactose_free', 'halal', 'kosher'])).default([]),
   environment: z.enum(['indoor', 'outdoor', 'any']).default('any'),
   rainTolerance: z.enum(['low', 'medium', 'high']).default('medium'),
-  mustSee: z.array(z.string()).default([]),
-  locked: z.array(z.object({ placeId: z.string().optional(), eventId: z.string().optional(), start: HHMM, end: HHMM, note: z.string().optional() })).default([]),
+  mustSee: z.array(z.string().max(160)).max(16).default([]),
+  locked: z.array(z.object({ placeId: z.string().optional(), eventId: z.string().optional(), start: HHMM, end: HHMM, note: z.string().max(300).optional() })).max(16).default([]),
   passes: z.array(z.enum(['ga', 'half_fare', 'arcobaleno', 'ticino_ticket', 'lugano_card'])).default([]),
-  exclude: z.array(z.string()).default([]),
+  exclude: z.array(z.string().max(160)).max(500).default([]),
   /** luoghi segnati come preferiti su questo dispositivo (preferenza morbida) */
-  favorites: z.array(z.string()).default([]),
+  favorites: z.array(z.string().max(160)).max(500).default([]),
   freeText: z.string().max(1000).optional(),
   /** risoluzioni esplicite dell'utente a contraddizioni col testo libero */
   resolutions: z.record(z.string(), z.string()).default({}),
-  locale: z.enum(['it', 'en', 'de']).default('it'),
+  locale: z.enum(['it', 'en', 'fr', 'de']).default('en'),
   surprise: z.boolean().default(false),
 });
 export type GroupRequest = z.infer<typeof GroupRequest>;
@@ -494,12 +495,12 @@ export const DecisionKind = z.enum([
 export type DecisionKind = z.infer<typeof DecisionKind>;
 export const Decision = z.object({
   kind: DecisionKind,
-  atTime: z.string(),
+  atTime: z.string().max(40).refine((s) => Number.isFinite(Date.parse(s))),
   stopId: z.string().optional(),
-  minutes: z.number().optional(),
+  minutes: z.number().min(0).max(1440).optional(),
   placeId: z.string().optional(),
-  budget: z.number().optional(),
-  endTime: z.string().optional(),
+  budget: z.number().min(0).max(100000).optional(),
+  endTime: HHMM.optional(),
   endLocation: Location.optional(),
   decisionId: z.string().optional(),
   optionId: z.string().optional(),

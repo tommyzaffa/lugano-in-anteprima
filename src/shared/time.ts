@@ -109,8 +109,8 @@ export function addDaysToDate(date: string, n: number): string {
 export function todayZurich(): string {
   return DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd');
 }
-export function formatDateIt(date: string): string {
-  return DateTime.fromISO(date, { zone: TZ }).setLocale('it').toFormat('cccc d LLLL yyyy');
+export function formatDateIt(date: string, locale = 'it'): string {
+  return DateTime.fromISO(date, { zone: TZ }).setLocale(locale).toFormat('cccc d LLLL yyyy');
 }
 export function offsetLabel(iso: string): string {
   return parseISO(iso).toFormat('ZZ');

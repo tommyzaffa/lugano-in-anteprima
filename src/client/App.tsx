@@ -1,7 +1,9 @@
+import LanguagePicker from './ui/LanguagePicker.tsx';
+import { tx, getLocale, useLocale } from './locale.ts';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useApp, useSim, type View } from './store.ts';
 import { get, track } from './api.ts';
-import MapView from './map/MapView.tsx';
+const MapView = lazy(() => import('./map/MapView.tsx'));
 import Landing from './ui/Home.tsx';
 import Wizard from './ui/Wizard.tsx';
 import Planning from './ui/Planning.tsx';
@@ -23,7 +25,11 @@ const Admin = lazy(() => import('./ui/Admin.tsx'));
 const SHEET_FOR: Partial<Record<View, 'peek' | 'half' | 'full'>> = { wizard: 'full', planning: 'half', results: 'half', sim: 'peek', summary: 'full', explore: 'half', events: 'half', about: 'full', settings: 'full', saved: 'full', share: 'half' };
 
 export default function App() {
+  const locale = useLocale();
+  useEffect(() => { const skip = document.querySelector<HTMLAnchorElement>('.skip-link'); if (skip) skip.textContent = tx('Vai al pannello'); }, [locale]);
   const view = useApp((s) => s.view);
+  const [mapStarted, setMapStarted] = useState(false);
+  useEffect(() => { if (view !== 'home') setMapStarted(true); }, [view]);
   const meta = useApp((s) => s.meta);
   const metaError = useApp((s) => s.metaError);
   const set = useApp((s) => s.set);
@@ -79,35 +85,36 @@ export default function App() {
 
   return (
     <div className={`app view-${view} sheet-${sheet}`}>
+      {view !== 'home' && <LanguagePicker />}
       <header className="topbar" {...behind}>
-        <button className="brand" onClick={() => nav('home')} aria-label="Torna all'inizio">
+        <button className="brand" onClick={() => nav('home')} aria-label={tx("Torna all'inizio")}>
           <svg viewBox="0 0 64 64" width="32" height="32" aria-hidden><circle cx="32" cy="32" r="30" fill="#fbf8f2" stroke="#2a2622" strokeWidth="3" /><path d="M8 38 C18 30 24 30 30 24 C36 17 42 14 48 22 C52 28 56 32 58 36" fill="none" stroke="#2a2622" strokeWidth="3" strokeLinecap="round" /><path d="M10 46 h14 M30 48 h18 M18 54 h22" stroke="#2f6f7e" strokeWidth="3" strokeLinecap="round" /><circle cx="44" cy="17" r="5" fill="#c24a31" stroke="#2a2622" strokeWidth="2.5" /></svg>
-          <span>Lugano in anteprima</span>
+          <span>{tx("Lugano in anteprima")}</span>
         </button>
         <TopNav view={view} nav={nav} />
       </header>
-      {!online ? <div className="offline-banner" role="status">Siete offline</div> : null}
+      {!online ? <div className="offline-banner" role="status">{tx("Siete offline")}</div> : null}
       <main className="stage" {...behind}>
-        {metaError ? <div className="fatal"><h2>Servizio non raggiungibile</h2><p>{metaError}</p><button className="btn" onClick={() => location.reload()}>Riprova</button></div>
+        {metaError ? <div className="fatal"><h2>{tx("Servizio non raggiungibile")}</h2><p>{tx(metaError)}</p><button className="btn" onClick={() => location.reload()}>{tx("Riprova")}</button></div>
           : !meta ? <div className="loading-map"><Spinner /></div>
-          : showMap ? <MapView onFallback={() => { /* il componente segnala lo stato webgl */ }} /> : <Fallback />}
+          : showMap ? (mapStarted && <Suspense fallback={<Spinner />}><MapView onFallback={() => { /* il componente segnala lo stato webgl */ }} /></Suspense>) : <Fallback />}
         <Cutscene />
       </main>
-      <aside id="panel" className={`panel ${view === 'admin' ? 'panel-wide' : ''}`} aria-label="Pannello" {...behind}>
+      <aside id="panel" className={`panel ${view === 'admin' ? 'panel-wide' : ''}`} aria-label={tx("Pannello")} {...behind}>
         <SheetHandle />
         <div className="panel-body" ref={bodyRef}>
-          {view === 'wizard' && <Wizard />}
-          {view === 'planning' && <Planning />}
-          {view === 'results' && <Results />}
-          {view === 'sim' && <SimPanel />}
-          {view === 'summary' && <Summary />}
-          {view === 'explore' && <Explore />}
-          {view === 'events' && <EventsView />}
-          {view === 'saved' && <Saved />}
-          {view === 'settings' && <Settings />}
-          {view === 'about' && <About />}
-          {view === 'share' && shareToken && <ShareView token={shareToken} />}
-          {view === 'admin' && <Suspense fallback={<Spinner />}><Admin /></Suspense>}
+          {tx(view === 'wizard' && <Wizard />)}
+          {tx(view === 'planning' && <Planning />)}
+          {tx(view === 'results' && <Results />)}
+          {tx(view === 'sim' && <SimPanel />)}
+          {tx(view === 'summary' && <Summary />)}
+          {tx(view === 'explore' && <Explore />)}
+          {tx(view === 'events' && <EventsView />)}
+          {tx(view === 'saved' && <Saved />)}
+          {tx(view === 'settings' && <Settings />)}
+          {tx(view === 'about' && <About />)}
+          {tx(view === 'share' && shareToken && <ShareView token={shareToken} />)}
+          {tx(view === 'admin' && <Suspense fallback={<Spinner />}><Admin /></Suspense>)}
         </div>
       </aside>
       {view === 'sim' ? <SimControls /> : null}
@@ -133,20 +140,22 @@ function TopNav({ view, nav }: { view: View; nav: (v: View) => void }) {
   const pick = (fn: () => void) => { setOpen(false); fn(); };
   return (
     <div className="nav-wrap" ref={ref}>
-      <nav className="topnav" aria-label="Navigazione principale">
-        <button onClick={() => nav('explore')} aria-current={view === 'explore'}>Esplora</button>
-        <button onClick={() => nav('events')} aria-current={view === 'events'}>Eventi</button>
-        <button className="more" onClick={() => setOpen(!open)} aria-expanded={open} aria-haspopup="menu" aria-label="Altro">⋯</button>
+      <nav className="topnav" aria-label={tx("Navigazione principale")}>
+        <button className="nav-desktop" onClick={() => nav('explore')} aria-current={view === 'explore'}>{tx("Esplora")}</button>
+        <button className="nav-desktop" onClick={() => nav('events')} aria-current={view === 'events'}>{tx("Eventi")}</button>
+        <button className="more" onClick={() => setOpen(!open)} aria-expanded={open} aria-haspopup="menu" aria-label={tx("Altro")}>⋯</button>
       </nav>
-      {open ? (
+      {tx(open ? (
         <div className="menu-pop" role="menu">
-          <button role="menuitem" onClick={() => pick(() => nav('wizard'))}>Organizza una giornata</button>
-          {sharing ? <button role="menuitem" onClick={() => pick(() => nav('saved'))}>Programmi salvati</button> : null}
-          <button role="menuitem" onClick={() => pick(() => useApp.getState().setSettings({ listView: !listView }))}>{listView ? 'Torna alla mappa' : 'Vista elenco (senza mappa)'}</button>
-          <button role="menuitem" onClick={() => pick(() => nav('settings'))}>Impostazioni</button>
-          <button role="menuitem" onClick={() => pick(() => nav('about'))}>Dati, fonti e limiti</button>
+          <button className="mobile-nav" role="menuitem" onClick={() => pick(() => nav('explore'))}>{tx("Esplora")}</button>
+          <button className="mobile-nav" role="menuitem" onClick={() => pick(() => nav('events'))}>{tx("Eventi")}</button>
+          <button role="menuitem" onClick={() => pick(() => nav('wizard'))}>{tx("Organizza una giornata")}</button>
+          {sharing ? <button role="menuitem" onClick={() => pick(() => nav('saved'))}>{tx("Programmi salvati")}</button> : null}
+          <button role="menuitem" onClick={() => pick(() => useApp.getState().setSettings({ listView: !listView }))}>{tx(listView ? 'Torna alla mappa' : 'Vista elenco (senza mappa)')}</button>
+          <button role="menuitem" onClick={() => pick(() => nav('settings'))}>{tx("Impostazioni")}</button>
+          <button role="menuitem" onClick={() => pick(() => nav('about'))}>{tx("Dati, fonti e limiti")}</button>
         </div>
-      ) : null}
+      ) : null)}
     </div>
   );
 }
@@ -162,7 +171,7 @@ function SheetHandle() {
   return (
     <div className="sheet-handle">
       <button
-        aria-label={sheet === 'full' ? 'Riduci il pannello' : 'Espandi il pannello'}
+        aria-label={tx(sheet === 'full' ? 'Riduci il pannello' : 'Espandi il pannello')}
         onPointerDown={(e) => { start.current = e.clientY; dragged.current = false; }}
         onPointerUp={(e) => {
           const s = start.current; start.current = null;
@@ -183,10 +192,10 @@ function Cutscene() {
   const c = useSim((s) => s.cutscene);
   if (!c) return null;
   return (
-    <button className="cutscene" onClick={() => useSim.getState().set({ cutscene: null })} aria-label="Salta la scena (Esc)">
-      <span className="cs-time">{c.subtitle}</span>
-      <span className="cs-title">{c.title}</span>
-      <span className="cs-skip">tocca per saltare</span>
+    <button className="cutscene" onClick={() => useSim.getState().set({ cutscene: null })} aria-label={tx("Salta la scena (Esc)")}>
+      <span className="cs-time">{tx(c.subtitle)}</span>
+      <span className="cs-title">{tx(c.title)}</span>
+      <span className="cs-skip">{tx("tocca per saltare")}</span>
     </button>
   );
 }

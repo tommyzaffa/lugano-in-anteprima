@@ -122,8 +122,10 @@ export function search(ctx: PlanContext, cands: Candidate[], est: Estimator, opt
   };
   for (let depth = 0; depth < opts.maxStops && beam.length; depth++) {
     checkAbort(ctx);
+    if (Date.now() >= (ctx.searchDeadline ?? Infinity)) break;
     const next: SearchNode[] = [];
     for (const node of beam) {
+      if (Date.now() >= (ctx.searchDeadline ?? Infinity)) break;
       const night = node.t >= ctx.duskAt;
       const o = night ? ctx.nightTravel : ctx.travel;
       const avail = cands.filter((c) => !node.used.has(c.key) && !node.usedPlaces.has(c.place.id) && !opts.banned?.has(c.key));

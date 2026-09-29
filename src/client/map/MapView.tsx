@@ -1,3 +1,4 @@
+import { translate, useLocale } from '../locale.ts';
 import { useEffect, useRef, useState } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import type { Map as MLMap, GeoJSONSource, LngLatBoundsLike } from 'maplibre-gl';
@@ -13,8 +14,7 @@ import { get } from '../api.ts';
 
 maplibregl.setWorkerUrl('/vendor/maplibre/maplibre-gl-worker.mjs');
 
-let mapInstance: MLMap | null = null;
-export function getMap() { return mapInstance; }
+import { mapInstance, setMapInstance, planRouteGeoJSON, planStopsGeoJSON, boundsOf, planCoords, fitPadding } from './map-state.ts';
 
 let contourSource: any = null;
 function contourUrl(origin: string) {
@@ -32,54 +32,10 @@ export function hasWebGL(): boolean {
   } catch { return false; }
 }
 
-// percorso a «matita colorata»: rosso per il cammino, toni distinti ma armonici per i mezzi
-const MODE_COLOR: Record<string, string> = { walk: '#d2553a', hike: '#a3402b', bus: '#d99a2b', train: '#8e3b2e', funicular: '#b04a35', boat: '#2f6f7e', cable_car: '#6c5a8e', wait: '#999' };
-
-export function planRouteGeoJSON(plan: Plan | null, t: number | null): GeoJSON.FeatureCollection {
-  const features: GeoJSON.Feature[] = [];
-  if (!plan) return { type: 'FeatureCollection', features };
-  plan.trips.forEach((trip, ti) => trip.legs.forEach((l, li) => {
-    if (l.mode === 'wait' || l.geometry.length < 2) return;
-    const done = t != null && Date.parse(l.arrival) <= t;
-    features.push({ type: 'Feature', properties: { mode: l.mode, color: MODE_COLOR[l.mode] ?? '#333', done: done ? 1 : 0, trip: ti, leg: li, ride: l.transit ? 1 : 0 }, geometry: { type: 'LineString', coordinates: l.geometry } });
-  }));
-  plan.stops.forEach((s) => {
-    if (s.activityPath && s.activityPath.coords.length > 1) {
-      const done = t != null && Date.parse(s.end) <= t;
-      features.push({ type: 'Feature', properties: { mode: s.activityPath.mode, color: MODE_COLOR[s.activityPath.mode], done: done ? 1 : 0, activity: 1 }, geometry: { type: 'LineString', coordinates: s.activityPath.coords } });
-    }
-  });
-  return { type: 'FeatureCollection', features };
-}
-
-export function planStopsGeoJSON(plan: Plan | null): GeoJSON.FeatureCollection {
-  const features: GeoJSON.Feature[] = [];
-  if (!plan) return { type: 'FeatureCollection', features };
-  plan.stops.forEach((s, i) => features.push({ type: 'Feature', properties: { kind: 'stop', n: i + 1, icon: `stop-${Math.min(12, i + 1)}`, name: s.name, id: s.placeId, time: s.start.slice(11, 16) }, geometry: { type: 'Point', coordinates: [s.lon, s.lat] } }));
-  const first = plan.trips[0];
-  if (first && first.from.lon) features.push({ type: 'Feature', properties: { kind: 'start', icon: 'flag-start', name: first.from.label }, geometry: { type: 'Point', coordinates: [first.from.lon, first.from.lat] } });
-  if (plan.trips.length > plan.stops.length && plan.end.lon) features.push({ type: 'Feature', properties: { kind: 'end', icon: 'flag-end', name: plan.end.label }, geometry: { type: 'Point', coordinates: [plan.end.lon, plan.end.lat] } });
-  for (const d of plan.decisions) {
-    if (d.chosen) continue;
-    const s = plan.stops[d.afterStop];
-    if (s) features.push({ type: 'Feature', properties: { kind: 'decision', icon: 'decision', name: d.prompt }, geometry: { type: 'Point', coordinates: [(s.exit ?? s).lon + 0.00025, (s.exit ?? s).lat + 0.00018] } });
-  }
-  return { type: 'FeatureCollection', features };
-}
-
-export function boundsOf(coords: [number, number][]): LngLatBoundsLike | null {
-  if (!coords.length) return null;
-  let w = 180, s = 90, e = -180, n = -90;
-  for (const [x, y] of coords) { if (!x && !y) continue; w = Math.min(w, x); e = Math.max(e, x); s = Math.min(s, y); n = Math.max(n, y); }
-  return w > e ? null : [[w, s], [e, n]];
-}
-export function planCoords(plan: Plan): [number, number][] {
-  return [...plan.trips.flatMap((t) => t.legs.flatMap((l) => l.geometry)), ...plan.stops.map((s) => [s.lon, s.lat] as [number, number])];
-}
-
 interface Props { onFallback: () => void }
 
 export default function MapView({ onFallback }: Props) {
+  const locale = useLocale();
   const ref = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
   const meta = useApp((s) => s.meta);
@@ -94,6 +50,10 @@ export default function MapView({ onFallback }: Props) {
   const tlRef = useRef<Timeline | null>(null);
   const planRef = useRef<Plan | null>(null);
   const markersRef = useRef<{ group: maplibregl.Marker; people: maplibregl.Marker[]; vehicle: maplibregl.Marker; els: HTMLElement[]; groupEl: HTMLElement; vehicleEl: HTMLElement; spacing: number } | null>(null);
+  useEffect(() => {
+    const labels: Record<string, string> = { '.maplibregl-ctrl-zoom-in': 'Ingrandisci', '.maplibregl-ctrl-zoom-out': 'Riduci', '.maplibregl-ctrl-compass': 'Ripristina il nord', '.maplibregl-ctrl-attrib-button': 'Mostra attribuzioni' };
+    for (const [selector, label] of Object.entries(labels)) for (const el of ref.current?.querySelectorAll(selector) ?? []) { el.setAttribute('aria-label', translate(label)); el.setAttribute('title', translate(label)); }
+  }, [locale, ready]);
   const lastPaletteRef = useRef<number>(-1);
 
   // ------------------------------------------------------------ creazione mappa
@@ -127,7 +87,7 @@ export default function MapView({ onFallback }: Props) {
       onFallback();
       return;
     }
-    mapInstance = map;
+    setMapInstance(map);
     // fitBounds con margini asimmetrici sposta davvero il centro nella parte visibile
     // (le opzioni del costruttore non lo fanno): su telefono il foglio copre la metà bassa
     if (window.innerWidth < 760) {
@@ -219,7 +179,7 @@ export default function MapView({ onFallback }: Props) {
       disposing = true;
       canvas.removeEventListener('webglcontextlost', onLost);
       canvas.removeEventListener('webglcontextrestored', onRestored);
-      map.remove(); mapInstance = null; markersRef.current = null; setReady(false);
+      map.remove(); setMapInstance(null); markersRef.current = null; setReady(false);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [meta, settings.threeD]);
@@ -337,7 +297,7 @@ export default function MapView({ onFallback }: Props) {
     }).catch(() => useApp.getState().notify('POI OSM non disponibili', 'error'));
   }, [showOsm, ready]);
 
-  return <div ref={ref} className="map" role="application" aria-label="Mappa illustrata di Lugano e dintorni. Usate il pannello o la vista elenco per le stesse informazioni in forma testuale." />;
+  return <div ref={ref} className="map" role="application" aria-label={translate("Mappa illustrata di Lugano e dintorni. Usate il pannello o la vista elenco per le stesse informazioni in forma testuale.")} />;
 
   // ------------------------------------------------------------ gestione marker
   function ensureCharacters(map: MLMap, p: Plan | null) {
@@ -414,7 +374,7 @@ export default function MapView({ onFallback }: Props) {
       el.classList.toggle('flip', Math.cos(((st.bearing - 90) * Math.PI) / 180) < 0);
       const b = bubbles.find((x) => x.speaker === el.dataset.name && x.until > now);
       const bub = el.querySelector('.bubble') as HTMLElement;
-      if (b && useApp.getState().settings.dialogues) { bub.hidden = false; if (bub.textContent !== b.text) bub.textContent = b.text; } else bub.hidden = true;
+      if (b && useApp.getState().settings.dialogues) { bub.hidden = false; const text = translate(b.text); if (bub.textContent !== text) bub.textContent = text; } else bub.hidden = true;
     });
   }
 }
@@ -467,11 +427,6 @@ function formation(i: number, n: number, spacing: number): [number, number] {
 }
 
 function escapeHtml(s: string) { return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!)); }
-
-export function fitPadding() {
-  const mobile = window.innerWidth < 760;
-  return mobile ? { top: 70, bottom: Math.round(window.innerHeight * 0.45), left: 30, right: 30 } : { top: 80, bottom: 150, left: 440, right: 60 };
-}
 
 /** Livelli di dettaglio: 0 pieno, 1 senza rilievo 3D e curve di livello, 2 anche senza edifici 3D e a risoluzione 1×. */
 export function applyDetail(map: MLMap, level: number) {

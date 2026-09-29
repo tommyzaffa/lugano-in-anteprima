@@ -6,6 +6,7 @@ process.env.TZ ??= 'Europe/Zurich';
 import { serve } from '@hono/node-server';
 import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono';
+import { secureHeaders } from 'hono/secure-headers';
 import { compress } from 'hono/compress';
 import { existsSync, readFileSync } from 'node:fs';
 import { config, ensureAdminToken, aiConfigured } from './config.ts';
@@ -22,6 +23,9 @@ setCatalogNames([...data.places.values()].map((p) => ({ id: p.id, name: p.name }
 config.demoMode = !aiConfigured() || config.weather.provider !== 'open-meteo' || config.transitLive.provider === 'none';
 
 const app = new Hono();
+app.use('*', secureHeaders({ referrerPolicy: 'no-referrer', xFrameOptions: 'DENY',
+  contentSecurityPolicy: { defaultSrc: ["'self'"], scriptSrc: ["'self'"], workerSrc: ["'self'", 'blob:'], styleSrc: ["'self'", "'unsafe-inline'"], imgSrc: ["'self'", 'data:', 'blob:'], fontSrc: ["'self'", 'data:'], connectSrc: ["'self'"], objectSrc: ["'none'"], baseUri: ["'self'"], frameAncestors: ["'none'"], formAction: ["'self'"] },
+}));
 // prototipo: fuori dai motori di ricerca (vedi ALLOW_INDEXING in .env.example)
 if (!config.allowIndexing) {
   app.use('*', async (c, next) => { await next(); c.header('X-Robots-Tag', 'noindex, nofollow'); });
@@ -33,7 +37,9 @@ app.route('/', createApi(data, db));
 
 // glifi mancanti: risposta vuota valida invece di un 404 (evita errori di rendering delle etichette)
 app.get('/glyphs/:stack/:range', async (c, next) => {
-  const file = `public/glyphs/${decodeURIComponent(c.req.param('stack'))}/${c.req.param('range')}`;
+  const stack = c.req.param('stack'), range = c.req.param('range');
+  if (!/^[\w ,.-]{1,160}$/.test(stack) || !/^\d+-\d+\.pbf$/.test(range) || stack.includes('..')) return c.body(null, 400);
+  const file = `public/glyphs/${stack}/${range}`;
   if (existsSync(file)) return next();
   return new Response(new Uint8Array(0), { headers: { 'Content-Type': 'application/x-protobuf', 'Cache-Control': 'public, max-age=86400' } });
 });

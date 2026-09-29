@@ -1,3 +1,5 @@
+import LanguagePicker from './LanguagePicker.tsx';
+import { tx, getLocale } from '../locale.ts';
 import { useState } from 'react';
 import { useApp, defaultDraft, makePerson, type Draft } from '../store.ts';
 import { track } from '../api.ts';
@@ -72,31 +74,32 @@ export default function Landing() {
   return (
     <div className={`landing ${leaving ? 'leaving' : ''}`} role="dialog" aria-modal="true" aria-labelledby="landing-title">
       <div className="landing-inner">
+        <LanguagePicker />
         <LandingArt />
-        <h1 id="landing-title">Lugano in anteprima</h1>
-        <p className="tagline">Prova la giornata sulla mappa. Poi vivila davvero.</p>
-        {metaError ? (
-          <div className="notice bad" role="alert">Il servizio non risponde ({metaError}). <button className="link" onClick={() => location.reload()}>Riprova</button></div>
+        <h1 id="landing-title">{tx("Lugano in anteprima")}</h1>
+        <p className="tagline">{tx("Prova la giornata sulla mappa. Poi vivila davvero.")}</p>
+        {tx(metaError ? (
+          <div className="notice bad" role="alert">{tx("Il servizio non risponde (")}{tx(metaError)}). <button className="link" onClick={() => location.reload()}>{tx("Riprova")}</button></div>
         ) : !meta ? (
-          <div className="landing-loading" role="status"><span className="pencil" aria-hidden>✎</span> Disegno la mappa…</div>
+          <div className="landing-loading" role="status"><span className="pencil" aria-hidden>✎</span>{tx(" Disegno la mappa…")}</div>
         ) : (
           <>
             <div className="landing-cta">
-              <button className="btn primary big block" onClick={plan}>Organizza una giornata</button>
-              <button className="btn-ghost big block" onClick={explore}>Esplora la mappa</button>
+              <button className="btn primary big block" onClick={plan}>{tx("Organizza una giornata")}</button>
+              <button className="btn-ghost big block" onClick={explore}>{tx("Esplora la mappa")}</button>
             </div>
             <div className="landing-ideas">
-              <p className="label">oppure parti da un'idea</p>
+              <p className="label">{tx("oppure parti da un'idea")}</p>
               <div className="idea-chips">
-                {IDEAS.map((i) => <button key={i.id} className="idea-chip" onClick={() => idea(i.apply)}><span aria-hidden>{i.icon}</span>{i.title}</button>)}
-                <button className="idea-chip here" onClick={here}><span aria-hidden>📍</span>Siamo già in giro</button>
+                {IDEAS.map((i) => <button key={i.id} className="idea-chip" onClick={() => idea(i.apply)}><span aria-hidden>{tx(i.icon)}</span>{tx(i.title)}</button>)}
+                <button className="idea-chip here" onClick={here}><span aria-hidden>📍</span>{tx("Siamo già in giro")}</button>
               </div>
             </div>
           </>
-        )}
+        ))}
         <div className="landing-foot">
-          <span>Prototipo indipendente, non ufficiale</span>
-          {meta ? <button className="link" onClick={() => go(() => set({ view: 'about' }))}>Dati e fonti</button> : null}
+          <span>{tx("Prototipo indipendente, non ufficiale")}</span>
+          {meta ? <button className="link" onClick={() => go(() => set({ view: 'about' }))}>{tx("Dati e fonti")}</button> : null}
         </div>
       </div>
     </div>

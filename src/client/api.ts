@@ -32,10 +32,10 @@ export async function send<T>(method: string, url: string, body: unknown, opts: 
   return json<T>(res);
 }
 
-export type PlanResult =
+export type PlanResult = (
   | { type: 'result'; status: 'ok'; alternatives: Plan[]; understood: string[]; notices: string[]; plannerSource: 'ai-live' | 'deterministic'; stats: Record<string, number>; demoMode: boolean }
   | { type: 'result'; status: 'needs_resolution'; contradictions: Contradiction[]; understood: string[] }
-  | { type: 'result'; status: 'infeasible'; infeasible: InfeasibleResult; understood: string[]; notices: string[] };
+  | { type: 'result'; status: 'infeasible'; infeasible: InfeasibleResult; understood: string[]; notices: string[] }) & { areaAdvice?: import('../shared/area.ts').AreaAdvice };
 
 /** Pianificazione in streaming NDJSON: callback di avanzamento, annullabile. */
 export async function planStream(req: GroupRequest, onProgress: (step: string) => void, signal: AbortSignal): Promise<PlanResult> {
@@ -74,5 +74,5 @@ export interface ReplanResponse { plan: Plan | null; diff: PlanDiff | null; expl
 export const replan = (plan: Plan, decision: Decision) => send<ReplanResponse>('POST', '/api/replan', { plan, decision });
 
 export function track(key: string) {
-  try { void fetch('/api/stats', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key }), keepalive: true }); } catch { /* statistiche non essenziali */ }
+  try { void fetch('/api/stats', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key }), keepalive: true }).catch(() => {}); } catch { /* statistiche non essenziali */ }
 }

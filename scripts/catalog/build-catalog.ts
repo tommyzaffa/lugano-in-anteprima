@@ -179,6 +179,41 @@ function nearestStops(lon: number, lat: number) {
 
 // ------------------------------------------------------------------ luoghi
 const rawPlaces: any[] = YAML.parse(readFileSync('data/catalog/places.yaml', 'utf8'));
+// Import every supported, named public POI across the product area. Editorial
+// entries take precedence; imported hours, access and prices retain their provenance.
+const pois: any[] = JSON.parse(readFileSync('data/build/osm/pois.json', 'utf8'));
+const settlements = [...index.values()].filter((f) => f.geometry.type === 'Point' && f.properties.name && ['city', 'town', 'village', 'suburb', 'quarter', 'neighbourhood', 'hamlet'].includes(f.properties.place))
+  .map((f) => ({ id: `osm-n${f.properties['@id']}`, label: f.properties.name as string, lon: f.geometry.coordinates[0] as number, lat: f.geometry.coordinates[1] as number }))
+  .filter((p) => p.lon >= perimeter.perimeter.west && p.lon <= perimeter.perimeter.east && p.lat >= perimeter.perimeter.south && p.lat <= perimeter.perimeter.north);
+const nearestArea = (lon: number, lat: number) => settlements.reduce((a, b) => haversine(lon, lat, a.lon, a.lat) < haversine(lon, lat, b.lon, b.lat) ? a : b).label;
+const importedCategories: Record<string, string> = { restaurant: 'restaurant', fast_food: 'restaurant', cafe: 'cafe', bar: 'bar', ice_cream: 'gelato', museum: 'museum', gallery: 'culture', theatre: 'culture', cinema: 'culture', park: 'park', playground: 'playground', viewpoint: 'viewpoint', picnic: 'park', attraction: 'attraction', lido: 'lido', worship: 'church', artwork: 'culture', historic: 'attraction', nightclub: 'nightlife' };
+const editorialOsm = new Set(rawPlaces.map((p) => p.osm));
+const accepted: { name: string; lon: number; lat: number }[] = [];
+for (const p of pois) {
+  const cat = importedCategories[p.cls];
+  if (!cat || !p.tags.name || editorialOsm.has(p.osm) || !index.has(p.osm)) continue;
+  if (p.lon < perimeter.perimeter.west || p.lon > perimeter.perimeter.east || p.lat < perimeter.perimeter.south || p.lat > perimeter.perimeter.north) continue;
+  if (['private', 'no', 'customers', 'permit'].includes(p.tags.access) || p.tags.disused === 'yes' || p.tags.abandoned === 'yes') continue;
+  // OSM sometimes describes the same venue as both a building and a node.
+  const name = p.tags.name.toLocaleLowerCase().trim();
+  if (accepted.some((a) => a.name === name && haversine(a.lon, a.lat, p.lon, p.lat) < 80)) continue;
+  if (rawPlaces.some((a) => !a.imported && String(a.name).toLocaleLowerCase().trim() === name && index.has(a.osm) && haversine(...representativePoint(index.get(a.osm)), p.lon, p.lat) < 100)) continue;
+  accepted.push({ name, lon: p.lon, lat: p.lat });
+  const food = ['restaurant', 'cafe', 'bar', 'gelato'].includes(cat);
+  const outside = ['park', 'playground', 'viewpoint'].includes(cat) || p.cls === 'artwork' || p.cls === 'historic';
+  rawPlaces.push({ id: `osm-${p.osm}`, osm: p.osm, name: p.tags.name, cat, imported: true,
+    area: nearestArea(p.lon, p.lat), desc: 'Luogo importato da OpenStreetMap. Orari, prezzi e accessibilità vanno verificati con il gestore.',
+    hours: p.tags.opening_hours ? 'osm' : 'unknown',
+    prices: food ? (cat === 'restaurant' ? 'osteria' : cat) : p.tags.fee === 'no' ? [{ label: 'Accesso libero', min: 0, max: 0, unit: 'free', status: 'known' }] : undefined,
+    visit: cat === 'restaurant' ? [40, 70, 100] : ['museum', 'culture', 'lido', 'attraction'].includes(cat) ? [25, 50, 90] : [15, 30, 60],
+    moods: food ? ['food'] : outside ? ['nature', 'chill'] : ['cultural'], tags: [p.cls, ...(cat === 'playground' ? ['famiglia', 'bambini'] : [])],
+    occ: [], indoor: outside ? false : p.tags.indoor === 'yes', weather: outside ? 'dry' : 'any',
+    meal: cat === 'restaurant' ? 'any' : food ? 'snack' : undefined,
+    alcohol: ['bar', 'nightlife'].includes(cat) ? 'central' : 'none', minAge: cat === 'nightlife' ? 18 : undefined,
+    access: { wheelchair: 'osm' },
+  });
+}
+writeFileSync('data/build/areas.json', JSON.stringify(settlements.sort((a, b) => a.label.localeCompare(b.label))));
 const places: Place[] = [];
 const ids = new Set<string>();
 for (const y of rawPlaces) {
@@ -233,22 +268,23 @@ for (const y of rawPlaces) {
     mountain: y.mountain ? { ...y.mountain, conditionsVerified: y.mountain.conditionsVerified ?? false } : undefined,
     meal: y.meal,
     walkTo: y.walkTo,
-    plannable: y.plannable ?? 'yes',
+    plannable: y.imported && hoursStatus === 'unparsed' ? 'no' : y.plannable ?? 'yes',
     diet: y.diet ?? (tags['diet:vegetarian'] === 'yes' || tags['diet:vegetarian'] === 'only' ? ['vegetarian'] : []),
     nearestStops: nearestStops(entrance.lon, entrance.lat),
     sponsored: false,
     demo: false,
     evidence: [
       ev('coordinates', 'osm', 'osm', { note: `Oggetto ${y.osm}${tags.name ? ` «${tags.name}»` : ''}` }),
-      ev('description', 'editorial-2026-09', 'editorial'),
+      ev('description', y.imported ? 'osm' : 'editorial-2026-09', y.imported ? 'osm' : 'editorial'),
       ...(hoursStatus === 'unknown' || hoursStatus === 'unparsed' ? [ev('hours', 'editorial-2026-09', 'unknown', { note: hoursStatus === 'unparsed' ? `Orario OSM presente ma non convertibile: "${tags.opening_hours}"` : 'Orari non disponibili nel catalogo.' })] : []),
       ...(muni.country === '?' ? [] : [ev('municipality', 'osm', 'osm', { note: `Confini amministrativi OSM: ${muni.name} (${muni.country})` })]),
     ],
-    sources: ['osm', 'editorial-2026-09'],
-    lastEditorialCheck: '2026-09-28',
+    sources: y.imported ? ['osm', 'estimate'] : ['osm', 'editorial-2026-09'],
+    lastEditorialCheck: y.imported ? undefined : '2026-09-28',
   };
   const parsed = Place.safeParse(place);
   if (!parsed.success) throw new Error(`${y.id}: ${JSON.stringify(parsed.error.issues, null, 1)}`);
+  if (y.imported && tags.fee === 'no' && !['restaurant', 'cafe', 'bar', 'gelato'].includes(y.cat)) for (const price of parsed.data.prices) price.evidence = ev('price', 'osm', 'osm', { note: 'fee=no su OpenStreetMap' });
   places.push(parsed.data);
 }
 for (const p of places) if (p.walkTo && !ids.has(p.walkTo)) throw new Error(`${p.id}: walkTo sconosciuto ${p.walkTo}`);
@@ -272,7 +308,6 @@ const events: CatalogEvent[] = rawEvents.map((e) => {
 const sources = (YAML.parse(readFileSync('data/catalog/sources.yaml', 'utf8')) as any[]).map((s) => Source.parse({ ...s, acquiredAt: s.acquiredAt ?? TODAY }));
 
 // ------------------------------------------------------------------ esplorazione libera (POI OSM non curati)
-const pois: any[] = JSON.parse(readFileSync('data/build/osm/pois.json', 'utf8'));
 const curatedOsm = new Set(places.map((p) => p.osm));
 const P = perimeter.buffer;
 const explore = pois

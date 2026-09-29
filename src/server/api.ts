@@ -1,3 +1,6 @@
+import { bodyLimit } from 'hono/body-limit';
+import { isIP } from 'node:net';
+import { parsePlan } from './plan-input.ts';
 /**
  * API HTTP (Hono). Tutte le chiavi restano lato server. Gli input sono validati
  * con schemi runtime; le chiamate costose hanno limiti di frequenza e timeout.
@@ -27,14 +30,15 @@ const STAT_KEYS = new Set(['sim_started', 'sim_finished', 'sim_skip', 'sim_decis
 // ------------------------------------------------------------------ limiti di frequenza
 const buckets = new Map<string, number[]>();
 function limited(c: Context, key: string, perMinute: number): boolean {
-  const ip = c.req.header('x-forwarded-for')?.split(',')[0].trim() || (c.env as any)?.incoming?.socket?.remoteAddress || 'local';
+  const forwarded = (process.env.RENDER === 'true' || process.env.TRUST_PROXY === 'true') ? c.req.header('x-forwarded-for')?.split(',').at(-1)?.trim() : undefined;
+  const ip = forwarded && isIP(forwarded) ? forwarded : (c.env as any)?.incoming?.socket?.remoteAddress || 'local';
   const k = `${key}:${ip}`;
   const now = Date.now();
   const arr = (buckets.get(k) ?? []).filter((t) => now - t < 60_000);
   if (arr.length >= perMinute) { buckets.set(k, arr); return true; }
   arr.push(now);
   buckets.set(k, arr);
-  if (buckets.size > 10000) buckets.clear();
+  if (buckets.size > 10000) for (const [key, times] of buckets) if (!times.some((t) => now - t < 60_000)) buckets.delete(key);
   return false;
 }
 
@@ -44,6 +48,15 @@ const badDate = (c: Context) => c.json({ error: 'invalid_date', message: 'Data n
 
 export function createApi(data: DataStore, db: Db) {
   const app = new Hono();
+  app.use('/api/*', bodyLimit({ maxSize: 6_500_000, onError: (c) => c.json({ error: 'too_large', message: 'Richiesta troppo grande.' }, 413) }));
+  app.use('/api/plan', bodyLimit({ maxSize: 64_000, onError: (c) => c.json({ error: 'too_large', message: 'Richiesta troppo grande.' }, 413) }));
+  let activePlans = 0;
+  for (const path of ['/api/replan', '/api/planb', '/api/revalidate']) app.use(path, async (c, next) => {
+    if (activePlans >= 2) { c.header('Retry-After', '5'); return c.json({ error: 'busy', message: 'Il server sta preparando altri itinerari. Riprovate fra pochi secondi.' }, 503); }
+    if (limited(c, 'plan', config.rateLimit.planPerMinute * 3)) return c.json({ error: 'rate_limited', message: 'Troppe richieste.' }, 429);
+    activePlans++;
+    try { await next(); } finally { activePlans--; }
+  });
 
   // limiti solo sull'API: tile, glifi e file statici non sono conteggiati
   app.use('/api/*', async (c, next) => {
@@ -51,6 +64,20 @@ export function createApi(data: DataStore, db: Db) {
     await next();
     c.header('X-Content-Type-Options', 'nosniff');
     c.header('Referrer-Policy', 'no-referrer');
+  });
+
+  const responseCache = new Map<string, { until: number; body: string }>();
+  for (const path of ['/api/places', '/api/stops', '/api/explore']) app.use(path, async (c, next) => {
+    if (c.req.method !== 'GET') return next();
+    const key = `${data.catalogVersion}:${c.req.url}`;
+    const cached = responseCache.get(key);
+    if (cached && cached.until > Date.now()) return c.body(cached.body, 200, { 'Content-Type': 'application/json; charset=UTF-8', 'Cache-Control': 'private, max-age=30' });
+    await next();
+    if (c.res.status === 200) {
+      const body = await c.res.clone().text();
+      if (responseCache.size >= 24) responseCache.delete(responseCache.keys().next().value!);
+      responseCache.set(key, { body, until: Date.now() + 30_000 });
+    }
   });
 
   // salvataggi e condivisione: disattivati per scelta (SAVE_AND_SHARE=true per riattivarli)
@@ -84,6 +111,7 @@ export function createApi(data: DataStore, db: Db) {
     weather: config.weather.provider,
     today: DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd'),
     quickStarts: quickStarts(data),
+    areas: data.areas,
     hosting: { ephemeralStorage: config.ephemeralStorage },
     features: { sharing: config.sharing },
   }));
@@ -176,23 +204,31 @@ export function createApi(data: DataStore, db: Db) {
     return c.json({ feed: data.transit.feedVersion, stops: [...byName.values()] });
   });
 
+  const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  let searchVersion = '';
+  let searchIndex: { text: string; result: Record<string, unknown> }[] = [];
   app.get('/api/search', (c) => {
-    const q = (c.req.query('q') ?? '').trim().toLowerCase();
+    const q = (c.req.query('q') ?? '').trim().slice(0, 160);
     if (q.length < 2) return c.json({ results: [] });
-    const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-    const nq = norm(q);
-    const results: any[] = [];
-    for (const p of data.places.values()) if (norm(p.name).includes(nq) || norm(p.area ?? '').includes(nq)) results.push({ kind: 'place', id: p.id, label: p.name, sub: p.area ?? p.municipality.name, lon: p.entrance.lon, lat: p.entrance.lat });
-    const seen = new Set<string>();
-    for (const s of data.transit.d.stops) if (norm(s.name).includes(nq) && !seen.has(s.name)) { seen.add(s.name); results.push({ kind: 'stop', id: s.id, label: s.name, sub: `Fermata · ${[...s.modes].join(', ')}`, lon: s.lon, lat: s.lat }); }
-    let n = 0;
-    for (const [label, lon, lat] of data.addresses) { if (n > 12) break; if (norm(label).includes(nq)) { results.push({ kind: 'address', id: `${lon},${lat}`, label, sub: 'Indirizzo (OSM)', lon, lat }); n++; } }
-    for (const p of data.explore) if (results.length < 60 && norm(p.name).includes(nq)) results.push({ kind: 'poi', id: p.osm, label: p.name, sub: `OSM · ${p.cls}`, lon: p.lon, lat: p.lat });
-    return c.json({ results: results.slice(0, 40) });
+    if (searchVersion !== data.catalogVersion) {
+      searchIndex = [];
+      const add = (text: string, result: Record<string, unknown>) => searchIndex.push({ text: norm(text), result });
+      for (const a of data.areas) add(a.label, { kind: 'poi', id: a.id, label: a.label, sub: 'Zona', lon: a.lon, lat: a.lat });
+      for (const p of data.places.values()) add(`${p.name} ${p.area ?? ''}`, { kind: 'place', id: p.id, label: p.name, sub: p.area ?? p.municipality.name, lon: p.entrance.lon, lat: p.entrance.lat });
+      const seen = new Set<string>();
+      for (const t of data.transit.d.stops) if (!seen.has(t.name)) { seen.add(t.name); add(t.name, { kind: 'stop', id: t.id, label: t.name, sub: `Fermata · ${[...t.modes].join(', ')}`, lon: t.lon, lat: t.lat }); }
+      for (const [label, lon, lat] of data.addresses) add(label, { kind: 'address', id: `${lon},${lat}`, label, sub: 'Indirizzo (OSM)', lon, lat });
+      for (const p of data.explore) add(p.name, { kind: 'poi', id: p.osm, label: p.name, sub: `OSM · ${p.cls}`, lon: p.lon, lat: p.lat });
+      searchVersion = data.catalogVersion;
+    }
+    const nq = norm(q), results = [];
+    for (const entry of searchIndex) { if (entry.text.includes(nq)) results.push(entry.result); if (results.length === 40) break; }
+    return c.json({ results });
   });
 
   app.get('/api/weather', async (c) => {
     const date = c.req.query('date') ?? DateTime.now().setZone(TZ).toFormat('yyyy-MM-dd');
+    if (!isDate(date)) return badDate(c);
     return c.json(await weatherFor({ date }, (s, d) => db.setSourceHealth('weather', s, d)));
   });
 
@@ -205,6 +241,8 @@ export function createApi(data: DataStore, db: Db) {
     }
     const parsed = GroupRequest.safeParse(body);
     if (!parsed.success) return c.json({ error: 'invalid_request', message: 'Richiesta non valida', issues: parsed.error.issues.slice(0, 10) }, 400);
+    if (activePlans >= 2) { c.header('Retry-After', '5'); return c.json({ error: 'busy', message: 'Il server sta preparando altri itinerari. Riprovate fra pochi secondi.' }, 503); }
+    activePlans++;
     db.count('plan_requested');
     return stream(c, async (s) => {
       const ctrl = new AbortController();
@@ -229,6 +267,7 @@ export function createApi(data: DataStore, db: Db) {
         await write({ type: 'error', message: aborted ? 'Ricerca annullata o troppo lunga.' : slow ? 'La ricerca ha richiesto troppo tempo e si è fermata prima di trovare un programma: non significa che la richiesta sia impossibile. Riprovate fra qualche secondo (il server potrebbe essere occupato o appena riavviato).' : 'Errore durante la pianificazione.' });
       } finally {
         clearTimeout(timer);
+        activePlans--;
       }
     });
   });
@@ -238,7 +277,8 @@ export function createApi(data: DataStore, db: Db) {
     const body = await c.req.json().catch(() => null);
     const dec = Decision.safeParse(body?.decision);
     if (!dec.success || !body?.plan) return c.json({ error: 'invalid_request', message: 'Decisione non valida' }, 400);
-    const plan = body.plan as Plan;
+    const plan = parsePlan(body.plan);
+    if (!plan) return c.json({ error: 'invalid_plan', message: 'Piano non valido' }, 400);
     const req = GroupRequest.safeParse(plan.request);
     if (!req.success) return c.json({ error: 'invalid_plan', message: 'Piano non valido' }, 400);
     const t0 = Date.now();
@@ -250,24 +290,27 @@ export function createApi(data: DataStore, db: Db) {
 
   app.post('/api/transit/live-check', async (c) => {
     const b = await c.req.json().catch(() => null);
-    if (!b?.from || !b?.to || !b?.departure) return c.json({ error: 'invalid_request' }, 400);
-    const r = await ojpTrip(b.from, b.to, b.departure);
+    const point = z.object({ label: z.string().max(200).default(''), lon: z.number().min(-180).max(180), lat: z.number().min(-90).max(90) });
+    const input = z.object({ from: point, to: point, departure: z.string().max(40).refine((s) => Number.isFinite(Date.parse(s))) }).safeParse(b);
+    if (!input.success) return c.json({ error: 'invalid_request' }, 400);
+    const r = await ojpTrip(input.data.from, input.data.to, new Date(input.data.departure).toISOString());
     db.setSourceHealth('ojp', r.status, r.message ?? '');
     return c.json(r);
   });
 
   app.post('/api/planb', async (c) => {
     const body = await c.req.json().catch(() => null);
-    const req = GroupRequest.safeParse(body?.plan?.request);
-    if (!req.success || !Array.isArray(body?.plan?.stops)) return c.json({ error: 'invalid_request', message: 'Piano non valido' }, 400);
+    const plan = parsePlan(body?.plan);
+    if (!plan) return c.json({ error: 'invalid_request', message: 'Piano non valido' }, 400);
     db.count('planb');
-    return c.json(planB({ ...(body.plan as Plan), request: req.data }, data));
+    return c.json(planB(plan, data));
   });
 
   app.post('/api/revalidate', async (c) => {
     const body = await c.req.json().catch(() => null);
-    if (!body?.plan) return c.json({ error: 'invalid_request' }, 400);
-    return c.json(revalidate(body.plan as Plan, data));
+    const plan = parsePlan(body?.plan);
+    if (!plan) return c.json({ error: 'invalid_request' }, 400);
+    return c.json(revalidate(plan, data));
   });
 
   // ---------------------------------------------------------------- salvataggio

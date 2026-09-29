@@ -1,3 +1,4 @@
+import { tx, getLocale } from '../locale.ts';
 import { useEffect, useMemo, useState } from 'react';
 import { useApp, useSim } from '../store.ts';
 import { buildTimeline, stateAt } from '../../shared/simulation.ts';
@@ -28,58 +29,58 @@ export default function SimPanel() {
 
   return (
     <div className="sim-panel">
-      <div className="sim-title"><h2><PlanTitle title={plan.title} /></h2></div>
+      <div className="sim-title"><h2><PlanTitle title={tx(plan.title)} /></h2></div>
 
-      {st.pendingDecision ? (
+      {tx(st.pendingDecision ? (
         <div className="decision-box" role="alertdialog" aria-labelledby="dec-t">
-          <h3 id="dec-t">{st.pendingDecision.prompt}</h3>
+          <h3 id="dec-t">{tx(st.pendingDecision.prompt)}</h3>
           {st.pendingDecision.options.map((o) => (
             <button key={o.id} className="decision-opt" onClick={() => chooseDecision(st.pendingDecision!, o.id)}>
-              <strong>{o.label}</strong><span>{o.detail}</span>
+              <strong>{tx(o.label)}</strong><span>{tx(o.detail)}</span>
             </button>
           ))}
         </div>
       ) : (
         <div className="now-card">
-          <span className="now-k">{st.finished ? 'Fine della giornata' : 'Adesso'}</span>
-          <span className="now-what">{st.label}</span>
-          {next && !st.finished ? <span className="now-next">Poi: {hhmm(next.start)} · {next.name}</span> : null}
-          <span className="now-next muted">Spesi finora: {fmtRange(st.spent.min, st.spent.max)}{st.spent.unknown ? ' + ?' : ''}</span>
+          <span className="now-k">{tx(st.finished ? 'Fine della giornata' : 'Adesso')}</span>
+          <span className="now-what">{tx(st.label)}</span>
+          {next && !st.finished ? <span className="now-next">{tx("Poi: ")}{tx(hhmm(next.start))} · {tx(next.name)}</span> : null}
+          <span className="now-next muted">{tx("Spesi finora: ")}{tx(fmtRange(st.spent.min, st.spent.max))}{tx(st.spent.unknown ? ' + ?' : '')}</span>
           <div className="now-row">
-            {curStop ? <button className="btn-ghost" onClick={() => requestChange({ kind: 'extend', minutes: 30, stopId: curStop.id })}>+30 min qui</button> : null}
-            <button className="btn-ghost" onClick={() => setMenu(!menu)} aria-expanded={menu} data-focus-return>Cambia idea</button>
+            {curStop ? <button className="btn-ghost" onClick={() => requestChange({ kind: 'extend', minutes: 30, stopId: curStop.id })}>{tx("+30 min qui")}</button> : null}
+            <button className="btn-ghost" onClick={() => setMenu(!menu)} aria-expanded={menu} data-focus-return>{tx("Cambia idea")}</button>
           </div>
         </div>
-      )}
+      ))}
       {menu ? <ChangeMenu plan={plan} curStopId={curStop?.id} nextStopId={next?.id} futureStops={futureStops} onClose={() => setMenu(false)} /> : null}
 
-      <ol className="stop-list" aria-label="Tappe">
+      <ol className="stop-list" aria-label={tx("Tappe")}>
         {plan.stops.map((s, i) => {
           const done = Date.parse(s.end) <= t;
           const cur = curStop?.id === s.id;
           return (
             <li key={s.id} className={cur ? 'current' : done ? 'done' : ''}>
-              <span className="t">{hhmm(s.start)}</span>
-              <span className="n" aria-hidden>{done ? '✓' : i + 1}</span>
-              <button onClick={() => s.placeId && set({ placeCard: s.placeId })}>{s.name}</button>
+              <span className="t">{tx(hhmm(s.start))}</span>
+              <span className="n" aria-hidden>{tx(done ? '✓' : i + 1)}</span>
+              <button onClick={() => s.placeId && set({ placeCard: s.placeId })}>{tx(s.name)}</button>
             </li>
           );
         })}
       </ol>
 
-      {branches.length > 1 ? (
+      {tx(branches.length > 1 ? (
         <details className="more branches">
-          <summary>Versioni <span className="muted">· {branches.length}</span></summary>
+          <summary>{tx("Versioni ")}<span className="muted">· {tx(branches.length)}</span></summary>
           <ul>
             {branches.map((b) => (
               <li key={b.id} className={b.id === current ? 'current' : ''}>
-                <button className="link" onClick={() => switchBranch(b.id)} aria-current={b.id === current}>{b.label}</button>
-                <span className="muted"> · rientro {hhmm(b.plan.totals.endsAt)}</span>
+                <button className="link" onClick={() => switchBranch(b.id)} aria-current={b.id === current}>{tx(b.label)}</button>
+                <span className="muted">{tx(" · rientro ")}{tx(hhmm(b.plan.totals.endsAt))}</span>
               </li>
             ))}
           </ul>
         </details>
-      ) : null}
+      ) : null)}
 
       {pending ? <PendingDialog /> : null}
     </div>
@@ -94,35 +95,35 @@ function ChangeMenu({ plan, curStopId, nextStopId, futureStops, onClose }: { pla
   const run = (d: Parameters<typeof requestChange>[0]) => { onClose(); void requestChange(d); };
   const nextName = futureStops[0]?.name;
   return (
-    <div className="change-menu" role="group" aria-label="Cambia idea">
-      {nextStopId ? <button onClick={() => run({ kind: 'skip', stopId: nextStopId })}><span className="ci" aria-hidden>⏭</span>Saltiamo {nextName}</button> : null}
-      {nextStopId ? <button onClick={() => run({ kind: 'replace', stopId: nextStopId })}><span className="ci" aria-hidden>🔄</span>Al posto di {nextName}…</button> : null}
-      <button onClick={() => run({ kind: 'add_pause', minutes: 20 })}><span className="ci" aria-hidden>☕</span>Una pausa</button>
-      <button onClick={() => run({ kind: 'less_walking' })}><span className="ci" aria-hidden>🚶</span>Meno cammino</button>
-      <button onClick={() => run({ kind: 'whatif_rain' })}><span className="ci" aria-hidden>☂</span>E se piove?</button>
-      <button onClick={() => setMore(!more)} aria-expanded={more}><span className="ci" aria-hidden>⋯</span>Altro</button>
-      {more ? (
+    <div className="change-menu" role="group" aria-label={tx("Cambia idea")}>
+      {nextStopId ? <button onClick={() => run({ kind: 'skip', stopId: nextStopId })}><span className="ci" aria-hidden>⏭</span>{tx("Saltiamo ")}{tx(nextName)}</button> : null}
+      {nextStopId ? <button onClick={() => run({ kind: 'replace', stopId: nextStopId })}><span className="ci" aria-hidden>🔄</span>{tx("Al posto di ")}{tx(nextName)}…</button> : null}
+      <button onClick={() => run({ kind: 'add_pause', minutes: 20 })}><span className="ci" aria-hidden>☕</span>{tx("Una pausa")}</button>
+      <button onClick={() => run({ kind: 'less_walking' })}><span className="ci" aria-hidden>🚶</span>{tx("Meno cammino")}</button>
+      <button onClick={() => run({ kind: 'whatif_rain' })}><span className="ci" aria-hidden>☂</span>{tx("E se piove?")}</button>
+      <button onClick={() => setMore(!more)} aria-expanded={more}><span className="ci" aria-hidden>⋯</span>{tx("Altro")}</button>
+      {tx(more ? (
         <div className="cm-extra">
           <div className="row">
-            <select value={stop} onChange={(e) => setStop(e.target.value)} aria-label="Tappa">{futureStops.map((s) => <option key={s.id} value={s.id}>{s.name}{s.locked ? ' 🔒' : ''}</option>)}</select>
-            <button className="btn-ghost" disabled={!stop} onClick={() => run({ kind: 'lock', stopId: stop })}>Blocca</button>
-            <button className="btn-ghost" disabled={!stop} onClick={() => run({ kind: 'whatif_unavailable', stopId: stop })}>E se è chiusa?</button>
+            <select value={stop} onChange={(e) => setStop(e.target.value)} aria-label={tx("Tappa")}>{futureStops.map((s) => <option key={s.id} value={s.id}>{tx(s.name)}{tx(s.locked ? ' 🔒' : '')}</option>)}</select>
+            <button className="btn-ghost" disabled={!stop} onClick={() => run({ kind: 'lock', stopId: stop })}>{tx("Blocca")}</button>
+            <button className="btn-ghost" disabled={!stop} onClick={() => run({ kind: 'whatif_unavailable', stopId: stop })}>{tx("E se è chiusa?")}</button>
           </div>
           <div className="row">
-            <input type="number" min={0} placeholder={`budget residuo CHF ${plan.request.budget.per === 'group' ? 'totale' : 'a persona'}`} value={budget} onChange={(e) => setBudget(e.target.value)} aria-label="Nuovo budget residuo" />
-            <button className="btn-ghost" disabled={budget === ''} onClick={() => run({ kind: 'reduce_budget', budget: Number(budget) })}>Riduci budget</button>
+            <input type="number" min={0} placeholder={tx(`budget residuo CHF ${plan.request.budget.per === 'group' ? 'totale' : 'a persona'}`)} value={budget} onChange={(e) => setBudget(e.target.value)} aria-label={tx("Nuovo budget residuo")} />
+            <button className="btn-ghost" disabled={budget === ''} onClick={() => run({ kind: 'reduce_budget', budget: Number(budget) })}>{tx("Riduci budget")}</button>
           </div>
           <div className="row">
-            <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} aria-label="Nuovo orario di rientro" />
-            <button className="btn-ghost" disabled={!endTime} onClick={() => run({ kind: 'change_return', endTime })}>Cambia rientro</button>
+            <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} aria-label={tx("Nuovo orario di rientro")} />
+            <button className="btn-ghost" disabled={!endTime} onClick={() => run({ kind: 'change_return', endTime })}>{tx("Cambia rientro")}</button>
           </div>
           <div className="row wrap">
-            <button className="btn-ghost" onClick={() => run({ kind: 'indoor' })}>Solo al coperto</button>
-            <button className="btn-ghost" onClick={() => run({ kind: 'whatif_missed_bus' })}>E se perdiamo la corsa?</button>
-            {curStopId ? <button className="btn-ghost" onClick={() => run({ kind: 'whatif_stay_30' })}>E se restiamo di più?</button> : null}
+            <button className="btn-ghost" onClick={() => run({ kind: 'indoor' })}>{tx("Solo al coperto")}</button>
+            <button className="btn-ghost" onClick={() => run({ kind: 'whatif_missed_bus' })}>{tx("E se perdiamo la corsa?")}</button>
+            {curStopId ? <button className="btn-ghost" onClick={() => run({ kind: 'whatif_stay_30' })}>{tx("E se restiamo di più?")}</button> : null}
           </div>
         </div>
-      ) : null}
+      ) : null)}
     </div>
   );
 }
@@ -134,7 +135,7 @@ export function DiffLine({ diff }: { diff: PlanDiff }) {
   if (Math.abs(diff.walkDeltaM) >= 100) parts.push(`${diff.walkDeltaM > 0 ? '+' : ''}${(diff.walkDeltaM / 1000).toFixed(1)} km a piedi`);
   if (diff.added.length) parts.push(`+ ${diff.added.join(', ')}`);
   if (diff.removed.length) parts.push(`− ${diff.removed.join(', ')}`);
-  return <span className="diff-line">{parts.join(' · ') || 'nessuna differenza rilevante'}</span>;
+  return <span className="diff-line">{tx(parts.join(' · ') || 'nessuna differenza rilevante')}</span>;
 }
 
 function PendingDialog() {
@@ -143,23 +144,23 @@ function PendingDialog() {
   const before = useApp((s) => s.plan());
   const loading = !pending.plan && pending.explanation[0]?.includes('corso');
   return (
-    <Modal title={pending.label} onClose={() => set({ pending: null })}>
-      {pending.hypothetical ? <p className="hint">Scenario ipotetico: non è una notizia reale.</p> : null}
-      {loading ? <p><Spinner /> Ricalcolo il resto della giornata…</p> : null}
-      <ul className="explain">{pending.explanation.filter((e) => !e.includes('corso')).map((e, i) => <li key={i}>{e}</li>)}</ul>
-      {pending.plan && pending.diff && before ? (
+    <Modal title={tx(pending.label)} onClose={() => set({ pending: null })}>
+      {pending.hypothetical ? <p className="hint">{tx("Scenario ipotetico: non è una notizia reale.")}</p> : null}
+      {loading ? <p><Spinner />{tx(" Ricalcolo il resto della giornata…")}</p> : null}
+      <ul className="explain">{pending.explanation.filter((e) => !e.includes('corso')).map((e, i) => <li key={i}>{tx(e)}</li>)}</ul>
+      {tx(pending.plan && pending.diff && before ? (
         <>
           <p><DiffLine diff={pending.diff} /></p>
           <BranchCompare a={before} b={pending.plan} />
-          {pending.diff.lostConnections.length ? <div className="notice warn">Coincidenze perse: {pending.diff.lostConnections.join('; ')}</div> : null}
+          {pending.diff.lostConnections.length ? <div className="notice warn">{tx("Coincidenze perse: ")}{tx(pending.diff.lostConnections.join('; '))}</div> : null}
           <div className="row">
-            <button className="btn primary" onClick={() => { applyPending(); play(); }}>Va bene, continuiamo</button>
-            <button className="btn-ghost" onClick={() => set({ pending: null })}>Annulla</button>
+            <button className="btn primary" onClick={() => { applyPending(); play(); }}>{tx("Va bene, continuiamo")}</button>
+            <button className="btn-ghost" onClick={() => set({ pending: null })}>{tx("Annulla")}</button>
           </div>
         </>
       ) : !loading ? (
-        <div className="row"><button className="btn-ghost" onClick={() => set({ pending: null })}>Chiudi</button></div>
-      ) : null}
+        <div className="row"><button className="btn-ghost" onClick={() => set({ pending: null })}>{tx("Chiudi")}</button></div>
+      ) : null)}
     </Modal>
   );
 }
@@ -174,8 +175,8 @@ export function BranchCompare({ a, b }: { a: Plan; b: Plan }) {
   return (
     <div className="table-wrap">
       <table className="branch-compare">
-        <thead><tr><th scope="col"></th><th scope="col">Prima</th><th scope="col">Dopo</th></tr></thead>
-        <tbody>{rows.map(([k, x, y]) => <tr key={k} className={x !== y ? 'changed' : ''}><th scope="row">{k}</th><td>{x}</td><td>{y}</td></tr>)}</tbody>
+        <thead><tr><th scope="col"></th><th scope="col">{tx("Prima")}</th><th scope="col">{tx("Dopo")}</th></tr></thead>
+        <tbody>{rows.map(([k, x, y]) => <tr key={k} className={x !== y ? 'changed' : ''}><th scope="row">{tx(k)}</th><td>{tx(x)}</td><td>{tx(y)}</td></tr>)}</tbody>
       </table>
     </div>
   );

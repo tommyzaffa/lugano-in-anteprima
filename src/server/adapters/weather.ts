@@ -84,6 +84,7 @@ export async function weatherFor(req: Pick<GroupRequest, 'date'>, onHealth?: (st
   if (hit && Date.now() - hit.at < 3 * 3600_000) return hit.snap;
   try {
     const snap = await p.forecast(req.date);
+    if (cache.size >= 64) cache.delete(cache.keys().next().value!);
     cache.set(key, { at: Date.now(), snap });
     onHealth?.('ok', `${p.name}: ${snap.status}`);
     return snap;

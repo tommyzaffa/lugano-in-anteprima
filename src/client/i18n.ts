@@ -1,28 +1,5 @@
-/**
- * Testi dell'interfaccia. L'italiano è la lingua di prodotto; l'architettura
- * consente altre lingue aggiungendo un dizionario (qui un esempio parziale in inglese).
- */
-const it = {
-  'app.name': 'Lugano in anteprima',
-  'app.promise': 'Racconta la giornata che vuoi vivere. Provala nella piccola Lugano. Poi esci davvero.',
-  'home.plan': 'Organizza una giornata',
-  'home.plan.sub': 'Modulo guidato, tre proposte, simulazione sulla mappa',
-  'home.explore': 'Esplora liberamente',
-  'home.explore.sub': 'Luoghi, orari, eventi e percorsi',
-  'demo.badge': 'DEMO',
-  'demo.text': 'Modalità dimostrativa: eventi e meteo sono esempi, i prezzi sono stime. Orari dei mezzi dall\'orario ufficiale statico, senza tempo reale.',
-  'sim.play': 'Avvia', 'sim.pause': 'Pausa', 'sim.skipMove': 'Salta spostamento', 'sim.nextDecision': 'Prossima decisione', 'sim.summary': 'Vai al riepilogo',
-  'sim.follow': 'Segui il gruppo', 'sim.free': 'Camera libera', 'sim.overview': 'Tutto il percorso',
-};
-const en: Partial<typeof it> = {
-  'app.promise': 'Describe the day you want. Try it in tiny Lugano. Then go out for real.',
-  'home.plan': 'Plan a day', 'home.explore': 'Explore freely',
-};
-const dicts: Record<string, Partial<typeof it>> = { it, en };
-let lang = 'it';
-export function setLang(l: string) { lang = dicts[l] ? l : 'it'; }
-export function t(k: keyof typeof it): string { return (dicts[lang] as any)[k] ?? it[k]; }
-
+/** Display labels use the shared translation catalog at the rendering boundary. */
+export { setLocale as setLang } from './locale.ts';
 export const MOODS: Record<string, string> = { chill: 'Chill', lively: 'Vivace', romantic: 'Romantica', cultural: 'Culturale', nature: 'Natura', views: 'Panorami', food: 'Gastronomia', adventure: 'Avventura leggera' };
 export const MOOD_ICON: Record<string, string> = { chill: '☁︎', lively: '♫', romantic: '♡', cultural: '🏛', nature: '🌿', views: '⛰', food: '🍝', adventure: '🥾' };
 export const OCCASIONS: Record<string, string> = { friends: 'Amici', date: 'Appuntamento', family: 'Famiglia', sightseeing: 'Visita turistica', birthday: 'Compleanno', guests: 'Ospiti', leisure: 'Tempo libero', custom: 'Altro' };

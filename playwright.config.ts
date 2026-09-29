@@ -9,6 +9,7 @@ export default defineConfig({
   workers: 1,
   reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
   use: {
+    locale: 'it-CH',
     baseURL: `http://127.0.0.1:${PORT}`,
     channel: 'chrome',
     launchOptions: { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] },

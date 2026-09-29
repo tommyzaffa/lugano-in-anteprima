@@ -1,7 +1,7 @@
 {
   "description": "Perimetro di prodotto di «Lugano in anteprima». Copertura territoriale: include comuni distinti (non sono tutti quartieri del Comune di Lugano).",
   "crs": "EPSG:4326 (WGS84, gradi decimali). Margini espressi in metri e convertiti con approssimazione sferica locale.",
-  "generatedAt": "2026-09-28T01:38:22.269Z",
+  "generatedAt": "2026-09-29T00:15:52.867Z",
   "source": {
     "name": "OpenStreetMap via Overpass API",
     "license": "ODbL 1.0",
@@ -13,55 +13,385 @@
     "bufferMeters": 2500
   },
   "core": {
-    "south": 45.954435,
-    "north": 46.036656,
-    "west": 8.914855,
+    "south": 45.931263,
+    "north": 46.067382,
+    "west": 8.869119,
     "east": 9.007556
   },
   "perimeter": {
-    "south": 45.94096,
-    "west": 8.89546,
-    "north": 46.05013,
+    "south": 45.91779,
+    "west": 8.84972,
+    "north": 46.08086,
     "east": 9.02695
   },
   "buffer": {
-    "south": 45.9185,
-    "west": 8.86313,
-    "north": 46.07259,
+    "south": 45.89533,
+    "west": 8.81739,
+    "north": 46.10332,
     "east": 9.05928
   },
   "sizeKm": {
-    "width": 10.2,
-    "height": 12.2
+    "width": 13.7,
+    "height": 18.2
   },
   "polygon": {
     "type": "Polygon",
     "coordinates": [
       [
         [
-          8.89546,
-          45.94096
+          8.84972,
+          45.91779
         ],
         [
           9.02695,
-          45.94096
+          45.91779
         ],
         [
           9.02695,
-          46.05013
+          46.08086
         ],
         [
-          8.89546,
-          46.05013
+          8.84972,
+          46.08086
         ],
         [
-          8.89546,
-          45.94096
+          8.84972,
+          45.91779
         ]
       ]
     ]
   },
   "references": [
+    {
+      "key": "bissone",
+      "label": "Bissone",
+      "kind": "place",
+      "osm": "node/32457650",
+      "osmName": "Bissone",
+      "lon": 8.965181,
+      "lat": 45.950654,
+      "ele": 273,
+      "candidates": 1
+    },
+    {
+      "key": "ponte-capriasca",
+      "label": "Ponte Capriasca",
+      "kind": "place",
+      "osm": "node/240023746",
+      "osmName": "Ponte Capriasca",
+      "lon": 8.949513,
+      "lat": 46.059948,
+      "ele": 447,
+      "candidates": 1
+    },
+    {
+      "key": "savosa",
+      "label": "Savosa",
+      "kind": "place",
+      "osm": "node/240030301",
+      "osmName": "Savosa",
+      "lon": 8.94114,
+      "lat": 46.018122,
+      "ele": 437,
+      "candidates": 1
+    },
+    {
+      "key": "porza",
+      "label": "Porza",
+      "kind": "place",
+      "osm": "node/240037919",
+      "osmName": "Porza",
+      "lon": 8.953444,
+      "lat": 46.027073,
+      "ele": 483,
+      "candidates": 1
+    },
+    {
+      "key": "magliaso",
+      "label": "Magliaso",
+      "kind": "place",
+      "osm": "node/240044243",
+      "osmName": "Magliaso",
+      "lon": 8.888544,
+      "lat": 45.981819,
+      "ele": 287,
+      "candidates": 1
+    },
+    {
+      "key": "vezia",
+      "label": "Vezia",
+      "kind": "place",
+      "osm": "node/240048246",
+      "osmName": "Vezia",
+      "lon": 8.936741,
+      "lat": 46.024654,
+      "ele": 370,
+      "candidates": 1
+    },
+    {
+      "key": "bedano",
+      "label": "Bedano",
+      "kind": "place",
+      "osm": "node/240049575",
+      "osmName": "Bedano",
+      "lon": 8.920079,
+      "lat": 46.050739,
+      "ele": 387,
+      "candidates": 1
+    },
+    {
+      "key": "torricella-taverne",
+      "label": "Torricella-Taverne",
+      "kind": "place",
+      "osm": "node/240056519",
+      "osmName": "Torricella-Taverne",
+      "lon": 8.924762,
+      "lat": 46.065677,
+      "ele": 427,
+      "candidates": 1
+    },
+    {
+      "key": "villa-luganese",
+      "label": "Villa Luganese",
+      "kind": "place",
+      "osm": "node/240062533",
+      "osmName": "Villa Luganese",
+      "lon": 8.99283,
+      "lat": 46.051631,
+      "ele": 603,
+      "candidates": 1
+    },
+    {
+      "key": "cademario",
+      "label": "Cademario",
+      "kind": "place",
+      "osm": "node/240083175",
+      "osmName": "Cademario",
+      "lon": 8.894258,
+      "lat": 46.021195,
+      "ele": 792,
+      "candidates": 1
+    },
+    {
+      "key": "barbengo",
+      "label": "Barbengo",
+      "kind": "place",
+      "osm": "node/240097323",
+      "osmName": "Barbengo",
+      "lon": 8.913817,
+      "lat": 45.96,
+      "ele": 370,
+      "candidates": 1
+    },
+    {
+      "key": "origlio",
+      "label": "Origlio",
+      "kind": "place",
+      "osm": "node/240106810",
+      "osmName": "Origlio",
+      "lon": 8.947169,
+      "lat": 46.051418,
+      "ele": 432,
+      "candidates": 1
+    },
+    {
+      "key": "grancia",
+      "label": "Grancia",
+      "kind": "place",
+      "osm": "node/240112584",
+      "osmName": "Grancia",
+      "lon": 8.927485,
+      "lat": 45.967454,
+      "ele": 320,
+      "candidates": 1
+    },
+    {
+      "key": "vico-morcote",
+      "label": "Vico Morcote",
+      "kind": "place",
+      "osm": "node/240115987",
+      "osmName": "Vico Morcote",
+      "lon": 8.924205,
+      "lat": 45.931263,
+      "ele": 442,
+      "candidates": 1
+    },
+    {
+      "key": "lamone",
+      "label": "Lamone",
+      "kind": "place",
+      "osm": "node/240126407",
+      "osmName": "Lamone",
+      "lon": 8.932545,
+      "lat": 46.044713,
+      "ele": 337,
+      "candidates": 1
+    },
+    {
+      "key": "carabbia",
+      "label": "Carabbia",
+      "kind": "place",
+      "osm": "node/240127658",
+      "osmName": "Carabbia",
+      "lon": 8.938285,
+      "lat": 45.972065,
+      "ele": 523,
+      "candidates": 1
+    },
+    {
+      "key": "caslano",
+      "label": "Caslano",
+      "kind": "place",
+      "osm": "node/279734796",
+      "osmName": "Caslano",
+      "lon": 8.883654,
+      "lat": 45.970872,
+      "ele": 272,
+      "candidates": 1
+    },
+    {
+      "key": "arogno",
+      "label": "Arogno",
+      "kind": "place",
+      "osm": "node/279737582",
+      "osmName": "Arogno",
+      "lon": 8.986511,
+      "lat": 45.959638,
+      "ele": 606,
+      "candidates": 1
+    },
+    {
+      "key": "comano",
+      "label": "Comano",
+      "kind": "place",
+      "osm": "node/386235437",
+      "osmName": "Comano",
+      "lon": 8.953325,
+      "lat": 46.038073,
+      "ele": 511,
+      "candidates": 1
+    },
+    {
+      "key": "pura",
+      "label": "Pura",
+      "kind": "place",
+      "osm": "node/392428791",
+      "osmName": "Pura",
+      "lon": 8.869119,
+      "lat": 45.985096,
+      "ele": 387,
+      "candidates": 1
+    },
+    {
+      "key": "sonvico",
+      "label": "Sonvico",
+      "kind": "place",
+      "osm": "node/415631838",
+      "osmName": "Sonvico",
+      "lon": 8.990532,
+      "lat": 46.058447,
+      "ele": 603,
+      "candidates": 1
+    },
+    {
+      "key": "cadempino",
+      "label": "Cadempino",
+      "kind": "place",
+      "osm": "node/437971566",
+      "osmName": "Cadempino",
+      "lon": 8.931462,
+      "lat": 46.033392,
+      "ele": 315,
+      "candidates": 1
+    },
+    {
+      "key": "tesserete",
+      "label": "Tesserete",
+      "kind": "place",
+      "osm": "node/441785427",
+      "osmName": "Tesserete",
+      "lon": 8.966453,
+      "lat": 46.067382,
+      "ele": 522,
+      "candidates": 1
+    },
+    {
+      "key": "manno",
+      "label": "Manno",
+      "kind": "place",
+      "osm": "node/442529652",
+      "osmName": "Manno",
+      "lon": 8.919503,
+      "lat": 46.033989,
+      "ele": 341,
+      "candidates": 1
+    },
+    {
+      "key": "pazzallo",
+      "label": "Pazzallo",
+      "kind": "place",
+      "osm": "node/1656946258",
+      "osmName": "Pazzallo",
+      "lon": 8.94201,
+      "lat": 45.983846,
+      "ele": 423,
+      "candidates": 1
+    },
+    {
+      "key": "gravesano",
+      "label": "Gravesano",
+      "kind": "place",
+      "osm": "node/2268345523",
+      "osmName": "Gravesano",
+      "lon": 8.919617,
+      "lat": 46.041467,
+      "ele": 387,
+      "candidates": 1
+    },
+    {
+      "key": "agno",
+      "label": "Agno",
+      "kind": "place",
+      "osm": "node/3161437126",
+      "osmName": "Agno",
+      "lon": 8.900221,
+      "lat": 45.996859,
+      "ele": 280,
+      "candidates": 1
+    },
+    {
+      "key": "bioggio",
+      "label": "Bioggio",
+      "kind": "place",
+      "osm": "node/3503955029",
+      "osmName": "Bioggio",
+      "lon": 8.907617,
+      "lat": 46.014105,
+      "ele": 314,
+      "candidates": 1
+    },
+    {
+      "key": "cureglia",
+      "label": "Cureglia",
+      "kind": "place",
+      "osm": "node/3506853552",
+      "osmName": "Cureglia",
+      "lon": 8.944541,
+      "lat": 46.037316,
+      "ele": 435,
+      "candidates": 1
+    },
+    {
+      "key": "cadro",
+      "label": "Cadro",
+      "kind": "place",
+      "osm": "node/13075229509",
+      "osmName": "Cadro",
+      "lon": 8.984286,
+      "lat": 46.044915,
+      "ele": 473,
+      "candidates": 1
+    },
     {
       "key": "lugano-centro",
       "label": "Lugano (centro)",

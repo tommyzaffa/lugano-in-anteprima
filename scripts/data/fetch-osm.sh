@@ -5,9 +5,11 @@ set -euo pipefail
 cd "$(dirname "$0")/../.."
 mkdir -p data/raw/osm
 cd data/raw/osm
+if [[ "${OSM_USE_CACHED:-0}" != "1" ]]; then
 echo "→ download estratti Geofabrik (CH + IT nord-ovest, ~1.1 GB)"
 curl -L -z switzerland-latest.osm.pbf -o switzerland-latest.osm.pbf https://download.geofabrik.de/europe/switzerland-latest.osm.pbf
 curl -L -z italy-nord-ovest-latest.osm.pbf -o italy-nord-ovest-latest.osm.pbf https://download.geofabrik.de/europe/italy/nord-ovest-latest.osm.pbf
+fi
 B=$(python3 -c "import json;b=json.load(open('../../geo/perimeter.json'))['buffer'];print(f\"{b['west']},{b['south']},{b['east']},{b['north']}\")")
 echo "→ ritaglio area buffer $B"
 osmium extract -b "$B" --strategy=smart -S types=multipolygon,boundary -O -o ch-buffer.osm.pbf switzerland-latest.osm.pbf

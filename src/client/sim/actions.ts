@@ -3,7 +3,7 @@ import { replan, ApiError, track } from '../api.ts';
 import type { Decision, Plan, Branch, DecisionPoint } from '../../shared/types.ts';
 import { buildTimeline, skipMoveTarget, nextDecisionTarget, summaryTarget, skipSceneTarget, stateAt } from '../../shared/simulation.ts';
 import { isoFromMs, hhmm } from '../../shared/time.ts';
-import { getMap, boundsOf, planCoords, fitPadding } from '../map/MapView.tsx';
+import { getMap, boundsOf, planCoords, fitPadding } from '../map/map-state.ts';
 
 const LABEL: Record<string, string> = {
   extend: 'Restiamo di più', skip: 'Saltiamo una tappa', replace: 'Sostituiamo una tappa', reduce_budget: 'Budget ridotto', less_walking: 'Meno cammino',

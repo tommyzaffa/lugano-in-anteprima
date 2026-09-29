@@ -1,3 +1,5 @@
+import { areaAdvice as getAreaAdvice } from './areas.ts';
+import { distanceKm, type AreaAdvice } from '../../shared/area.ts';
 /**
  * Orchestratore del pianificatore (§8.2 del brief):
  * 1. valida la richiesta e normalizza i vincoli;
@@ -18,10 +20,10 @@ import { search, THEMES, type Theme, type SearchNode } from './search.ts';
 import { buildPlan, type PlannedStep, type PastState } from './build.ts';
 import { narrate, whyThis, tradeoffs, explainInfeasible, diffPlans } from './explain.ts';
 
-export type PlanResponse =
+export type PlanResponse = (
   | { status: 'ok'; alternatives: Plan[]; understood: string[]; notices: string[]; plannerSource: 'ai-live' | 'deterministic'; stats: Record<string, number> }
   | { status: 'needs_resolution'; contradictions: Contradiction[]; understood: string[] }
-  | { status: 'infeasible'; infeasible: InfeasibleResult; understood: string[]; notices: string[] };
+  | { status: 'infeasible'; infeasible: InfeasibleResult; understood: string[]; notices: string[] }) & { areaAdvice?: AreaAdvice };
 
 export interface AiHooks {
   interpret?: (req: GroupRequest, hints: TextHints, signal?: AbortSignal) => Promise<Partial<TextHints> | null>;
@@ -159,12 +161,28 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
   }
   progress('Cerco attività compatibili');
   const report = selectCandidates(ctx, data);
+  const areaAdvice = getAreaAdvice(ctx, data, report);
+  ctx.searchDeadline = t0 + (deps.timeLimitMs ?? 18000) * 0.55;
   if (!report.candidates.length || report.excludedMustSee.length) {
-    return { status: 'infeasible', infeasible: explainInfeasible(ctx, report, []), understood: hints.understood, notices };
+    return { status: 'infeasible', infeasible: explainInfeasible(ctx, report, []), understood: hints.understood, notices, areaAdvice };
   }
   // limita il numero di candidati per contenere le combinazioni (i migliori per punteggio + obbligatori)
-  const sorted = [...report.candidates].sort((a, b) => b.base - a.base);
-  const pool = sorted.filter((c, i) => c.mustSee || c.kind === 'event' || i < 40);
+  const origin = req.area?.center ?? ctx.startPoint;
+  const rank = (c: Candidate) => c.base - Math.min(12, distanceKm(origin, c.place.entrance)) * 0.65;
+  const sorted = [...report.candidates].sort((a, b) => rank(b) - rank(a));
+  const pool = sorted.filter((c) => c.mustSee);
+  const counts = new Map<string, number>();
+  // Preserve variety without letting repeated cinema screenings or hundreds of
+  // restaurants turn the beam search into an unbounded request.
+  for (const c of sorted) {
+    if (c.mustSee) continue;
+    const bucket = c.kind === 'event' ? `event:${c.place.id}` : c.place.category;
+    const limit = c.kind === 'event' ? 3 : c.place.category === 'restaurant' ? 10 : 7;
+    if ((counts.get(bucket) ?? 0) >= limit) continue;
+    counts.set(bucket, (counts.get(bucket) ?? 0) + 1);
+    pool.push(c);
+    if (pool.length >= 64) break;
+  }
   progress('Verifico i collegamenti');
   const est = new Estimator(data.router);
   const themes = chooseThemes(ctx);
@@ -203,7 +221,7 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
   const ordered = [...sequences.filter((s) => s.source === 'ai'), ...themes.map((t) => sequences.find((s) => s.theme.id === t.id && s.source === 'search')).filter(Boolean) as typeof sequences, ...sequences];
   const tried = new Set<string>();
   const timeLimitMs = deps.timeLimitMs ?? 18000;
-  let timedOut = false;
+  let timedOut = !sequences.length && Date.now() >= (ctx.searchDeadline ?? Infinity);
   for (const s of ordered) {
     if (accepted.length >= 3) break;
     const key = s.node.seq.map((x) => x.cand.key).join('>');
@@ -230,7 +248,7 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
   if (!accepted.length) {
     // senza tempo sufficiente non sappiamo se i vincoli siano davvero incompatibili: non lo diciamo
     if (timedOut) throw new PlanningTimeout();
-    return { status: 'infeasible', infeasible: explainInfeasible(ctx, report, problems), understood: hints.understood, notices };
+    return { status: 'infeasible', infeasible: explainInfeasible(ctx, report, problems), understood: hints.understood, notices, areaAdvice };
   }
   progress('Preparo le alternative');
   tradeoffs(accepted);
@@ -243,6 +261,8 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
   // punti di decisione pre-validati
   for (const p of accepted) {
     checkAbort(ctx);
+    if (Date.now() - t0 > timeLimitMs * 0.85) break;
+    ctx.searchDeadline = t0 + timeLimitMs * 0.9;
     const d = buildDecision(ctx, data, p, pool, est);
     if (d) p.decisions = [d];
   }
@@ -256,7 +276,7 @@ export async function planAlternatives(reqIn: GroupRequest, deps: PlanDeps): Pro
   }
   plannerSource = accepted.some((p) => p.plannerSource === 'ai-live') ? 'ai-live' : 'deterministic';
   const stats = { candidates: report.candidates.length, sequences: sequences.length, estimatorCalls: est.calls, ms: Date.now() - t0 };
-  return { status: 'ok', alternatives: accepted, understood: hints.understood, notices, plannerSource, stats };
+  return { status: 'ok', alternatives: accepted, understood: hints.understood, notices, plannerSource, stats, areaAdvice };
 }
 
 /** Crea una scelta a metà programma con due proseguimenti entrambi validati. */

@@ -4,7 +4,7 @@
    La pagina (navigazione) va prima in rete, così dopo un aggiornamento del server si vede
    subito la versione nuova; la copia in cache serve solo senza rete. Script e stili hanno
    un nome con impronta (immutabili), tile e glifi cambiano solo con un nuovo import dei dati. */
-const CACHE = 'lia-v3';
+const CACHE = 'lia-v4';
 self.addEventListener('install', (e) => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['/', '/icon.svg', '/manifest.webmanifest']))); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k))))); self.clients.claim(); });
 self.addEventListener('fetch', (e) => {

@@ -1,10 +1,11 @@
+import { getLocale, translate } from '../locale.ts';
 /**
  * Cartolina illustrata del percorso: istantanea della mappa + cornice, titolo,
  * tappe e personaggi. Nessun dettaglio privato (partenza e alloggio esclusi).
  */
 import type { Plan } from '../../shared/types.ts';
 import type { GeoJSONSource } from 'maplibre-gl';
-import { getMap, boundsOf, planCoords, planRouteGeoJSON, planStopsGeoJSON } from '../map/MapView.tsx';
+import { getMap, boundsOf, planCoords, planRouteGeoJSON, planStopsGeoJSON } from '../map/map-state.ts';
 import { redactPlan } from '../../shared/export.ts';
 import { avatarSvg } from '../map/avatars.ts';
 import { hhmm, formatDateIt } from '../../shared/time.ts';
@@ -49,7 +50,7 @@ export async function makePostcard(plan: Plan) {
   g.font = 'bold 38px Georgia, serif';
   wrap(g, plan.title, 1110, 170, 440, 44);
   g.font = '22px Georgia, serif'; g.fillStyle = '#5d574c';
-  g.fillText(formatDateIt(plan.request.date), 1110, 290);
+  g.fillText(formatDateIt(plan.request.date, getLocale()), 1110, 290);
   g.font = '21px system-ui, sans-serif'; g.fillStyle = '#2b2a27';
   plan.stops.slice(0, 9).forEach((s, i) => { g.fillText(`${hhmm(s.start)}  ${s.name.replace(/\s*\(.*?\)\s*/g, '').slice(0, 30)}`, 1110, 350 + i * 40); });
   let x = 1110;

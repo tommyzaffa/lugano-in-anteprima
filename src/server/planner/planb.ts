@@ -1,3 +1,4 @@
+import { inArea } from '../../shared/area.ts';
 /**
  * Piano B per meteo (§12): per ogni tappa all'aperto propone fino a due
  * alternative al coperto vicine, aperte nella stessa fascia oraria secondo i
@@ -57,6 +58,7 @@ export function planB(plan: Plan, data: DataStore): PlanB {
     const origins = p!.mountain ? [byPrev, byStart].filter((x) => !!x)
       : [{ pt: { lon: p!.entrance.lon, lat: p!.entrance.lat }, near: '' }, byPrev].filter((x) => !!x);
     const pool = [...data.places.values()].filter((q) => {
+      if (!inArea(q.entrance, req.area)) return false;
       if (!q.suitability.indoor || q.plannable !== 'yes' || inPlan.has(q.id) || excluded.has(q.id)) return false;
       if (req.mobility.wheelchair && q.accessibility.wheelchair === 'no') return false;
       if (req.mobility.stroller && q.accessibility.stroller === 'no') return false;

@@ -57,6 +57,8 @@ export const DEFAULT_REDACTION: Redaction = { hideLocations: true, hideNames: fa
 export function redactPlan(plan: Plan, r: Redaction): Plan {
   const p: Plan = structuredClone(plan);
   const req: GroupRequest = p.request;
+  // The search centre may itself be a home address or a precise geolocation.
+  if (r.hideLocations) req.area = null;
   const startSensitive = r.hideLocations && (req.start.kind === 'address' || req.start.kind === 'geolocation' || req.start.kind === 'point' || req.start.sensitive || req.end.mode === 'accommodation');
   if (startSensitive) {
     req.start = { ...req.start, label: 'Punto di partenza (nascosto)', lon: 0, lat: 0, placeId: undefined, stopId: undefined };

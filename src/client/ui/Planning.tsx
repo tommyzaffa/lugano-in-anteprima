@@ -1,3 +1,5 @@
+import { tx, getLocale } from '../locale.ts';
+import AreaNotice from './AreaNotice.tsx';
 import { useEffect, useState } from 'react';
 import { useApp } from '../store.ts';
 import { cancelPlanning, resolveContradiction, runPlanning } from './planning-actions.ts';
@@ -16,12 +18,12 @@ export default function Planning() {
   if (contradictions?.length) {
     return (
       <div className="planning">
-        <h2>Una cosa da chiarire</h2>
+        <h2>{tx("Una cosa da chiarire")}</h2>
         {contradictions.map((c) => (
           <div key={c.id} className="contradiction">
-            <p><strong>{c.message}</strong></p>
-            <div className="cmp"><div><span className="muted">Modulo</span><br />{c.structured}</div><div><span className="muted">Testo</span><br />{c.fromText}</div></div>
-            <div className="row wrap">{c.options.map((o) => <button key={o.id} className={o.id === 'keep_form' ? 'btn-ghost' : 'btn'} onClick={() => resolveContradiction(c.id, o.id)}>{o.label}</button>)}</div>
+            <p><strong>{tx(c.message)}</strong></p>
+            <div className="cmp"><div><span className="muted">{tx("Modulo")}</span><br />{tx(c.structured)}</div><div><span className="muted">{tx("Testo")}</span><br />{tx(c.fromText)}</div></div>
+            <div className="row wrap">{c.options.map((o) => <button key={o.id} className={o.id === 'keep_form' ? 'btn-ghost' : 'btn'} onClick={() => resolveContradiction(c.id, o.id)}>{tx(o.label)}</button>)}</div>
           </div>
         ))}
       </div>
@@ -30,13 +32,14 @@ export default function Planning() {
   if (infeasible) {
     return (
       <div className="planning">
-        <h2>Così non ci sta</h2>
-        <ul className="reasons">{infeasible.reasons.map((r, i) => <li key={i}>{r.message}</li>)}</ul>
-        {result?.notices?.length ? <ul className="notices">{result.notices.map((n, i) => <li key={i}>{n}</li>)}</ul> : null}
-        <span className="label">Provate così:</span>
+        <h2>{tx("Così non ci sta")}</h2>
+        <AreaNotice />
+        <ul className="reasons">{infeasible.reasons.map((r, i) => <li key={i}>{tx(r.message)}</li>)}</ul>
+        {result?.notices?.length ? <ul className="notices">{result.notices.map((n, i) => <li key={i}>{tx(n)}</li>)}</ul> : null}
+        <span className="label">{tx("Provate così:")}</span>
         <div className="suggestions">
-          {infeasible.suggestions.map((s) => <button key={s.id} className="btn-ghost" onClick={() => void runPlanning(false, s.patch)}>{s.label}</button>)}
-          <button className="btn-ghost" onClick={() => set({ view: 'wizard', wizardStep: 0, infeasible: null })}>Cambia la richiesta</button>
+          {infeasible.suggestions.map((s) => <button key={s.id} className="btn-ghost" onClick={() => void runPlanning(false, s.patch)}>{tx(s.label)}</button>)}
+          <button className="btn-ghost" onClick={() => set({ view: 'wizard', wizardStep: 0, infeasible: null })}>{tx("Cambia la richiesta")}</button>
         </div>
       </div>
     );
@@ -44,10 +47,10 @@ export default function Planning() {
   if (error) {
     return (
       <div className="planning">
-        <h2>Qualcosa non ha funzionato</h2>
-        <div className="notice bad" role="alert">{error}</div>
-        {!online ? <p className="hint">Sembra che la rete non sia disponibile.</p> : null}
-        <div className="row"><button className="btn primary" onClick={() => void runPlanning(false)}>Riprova</button><button className="btn-ghost" onClick={() => set({ view: 'wizard' })}>Cambia la richiesta</button></div>
+        <h2>{tx("Qualcosa non ha funzionato")}</h2>
+        <div className="notice bad" role="alert">{tx(error)}</div>
+        {!online ? <p className="hint">{tx("Sembra che la rete non sia disponibile.")}</p> : null}
+        <div className="row"><button className="btn primary" onClick={() => void runPlanning(false)}>{tx("Riprova")}</button><button className="btn-ghost" onClick={() => set({ view: 'wizard' })}>{tx("Cambia la richiesta")}</button></div>
       </div>
     );
   }
@@ -70,9 +73,9 @@ export default function Planning() {
           ))}
         </svg>
       </div>
-      <p className="planning-status" role="status" aria-live="polite">{last ?? 'Preparo le proposte…'}</p>
-      {slow ? <p className="hint" style={{ textAlign: 'center' }}>Il server della demo è lento: può volerci fino a mezzo minuto.</p> : null}
-      <div className="row" style={{ justifyContent: 'center' }}><button className="btn-ghost" onClick={cancelPlanning}>Annulla</button></div>
+      <p className="planning-status" role="status" aria-live="polite">{tx(last ?? 'Preparo le proposte…')}</p>
+      {slow ? <p className="hint" style={{ textAlign: 'center' }}>{tx("Il server della demo è lento: può volerci fino a mezzo minuto.")}</p> : null}
+      <div className="row" style={{ justifyContent: 'center' }}><button className="btn-ghost" onClick={cancelPlanning}>{tx("Annulla")}</button></div>
     </div>
   );
 }

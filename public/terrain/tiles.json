@@ -5,18 +5,11 @@
   "minzoom": 8,
   "maxzoom": 14,
   "bounds": [
-    8.86313,
-    45.9185,
+    8.81739,
+    45.89533,
     9.05928,
-    46.07259
+    46.10332
   ],
-  "attribution": "swissALTI3D © swisstopo (territorio svizzero, 2 m); altrove Terrain Tiles (Mapzen/AWS Open Data): SRTM, GMTED2010, ETOPO1 e altre fonti",
-  "fetchedAt": "2026-09-28T10:54:23.114Z",
-  "swissalti3d": {
-    "tiles": 397,
-    "years": [
-      2022
-    ],
-    "fusedAt": "2026-09-28T12:35:10.880Z"
-  }
+  "attribution": "Terrain Tiles (Mapzen/AWS Open Data): SRTM, GMTED2010, ETOPO1 e altre fonti",
+  "fetchedAt": "2026-09-29T00:17:20.669Z"
 }
