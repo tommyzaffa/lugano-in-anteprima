@@ -1,7 +1,7 @@
 {
   "source": "Geofabrik extracts: europe/switzerland-latest.osm.pbf + europe/italy/nord-ovest-latest.osm.pbf, ritagliati con osmium extract --strategy=smart",
   "license": "ODbL 1.0 — © OpenStreetMap contributors",
-  "builtAt": "2026-09-29T00:17:38.565Z",
+  "builtAt": "2026-10-02T09:42:58.750Z",
   "bbox": {
     "south": 45.89533,
     "west": 8.81739,
